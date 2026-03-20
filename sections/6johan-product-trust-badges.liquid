@@ -1,13 +1,6 @@
-{% comment %}
-  6JOHAN Product Trust Badges Section
-  Displays trust badges (delivery, return, assembly) on product pages.
-  Add via Shopify customizer: Product page > Add section > 6JOHAN Trust Badges
-{% endcomment %}
-
 {{ '6johan-custom.css' | asset_url | stylesheet_tag }}
 
 <style>
-  /* Kill all spacing around trust badges section */
   .sixj-product-trust {
     padding: 0 !important;
     margin: 0 !important;
@@ -16,28 +9,30 @@
     padding: 4px 0 8px;
     margin: 0;
   }
-  /* Target parent .shopify-section via adjacent selectors won't work,
-     so we use JS below to add a class */
   .shopify-section--6j-trust {
     padding: 0 !important;
     margin: 0 !important;
+  }
+  .sixj-trust-badge--instock {
+    background: #F2FDF5;
+    color: #6B9E6B;
+  }
+  .sixj-trust-badge--order {
+    background: #FDF8F2;
+    color: #B5935A;
   }
 </style>
 
 <div class="sixj-trust-badges">
   {%- if section.settings.show_delivery -%}
-    {%- assign delivery_days = product.metafields.custom.delivery_days | default: section.settings.default_delivery_days -%}
-    {%- assign made_to_order = product.metafields.custom.made_to_order -%}
-    <span class="sixj-trust-badge">
-      🚚
-      {%- if product.available -%}
-        {%- if made_to_order -%}
-          受注生産 — 約{{ delivery_days }}日
-        {%- else -%}
-          在庫あり — {{ delivery_days }}日でお届け
-        {%- endif -%}
+    {%- assign current_variant = product.selected_or_first_available_variant -%}
+    <span class="sixj-trust-badge {% if current_variant.inventory_quantity > 0 %}sixj-trust-badge--instock{% else %}sixj-trust-badge--order{% endif %}">
+      {%- if current_variant.inventory_quantity > 0 -%}
+        🚚 在庫あり — 7日以内に発送
+      {%- elsif product.available -%}
+        📋 受注生産 — お届けまで約3ヶ月
       {%- else -%}
-        入荷待ち
+        現在取り扱いなし
       {%- endif -%}
     </span>
   {%- endif -%}
@@ -67,15 +62,48 @@
 </div>
 
 <script>
-  // Remove spacing from parent .shopify-section wrapper
+  // Update badges when variant changes
   (function() {
     var el = document.querySelector('.sixj-product-trust');
     if (el) {
       var parent = el.closest('.shopify-section');
-      if (parent) {
-        parent.classList.add('shopify-section--6j-trust');
-      }
+      if (parent) parent.classList.add('shopify-section--6j-trust');
     }
+
+    // Listen for variant change
+    document.addEventListener('change', function(e) {
+      if (!e.target.closest('[name="id"]') && !e.target.closest('.product-form__input')) return;
+
+      // Small delay to let Shopify update
+      setTimeout(function() {
+        var variantId = document.querySelector('[name="id"]');
+        if (!variantId) return;
+
+        var selected = variantId.value;
+        var productJson = document.querySelector('[data-product-json]');
+        if (!productJson) return;
+
+        try {
+          var product = JSON.parse(productJson.textContent);
+          var variant = product.variants.find(function(v) { return v.id == selected; });
+          if (!variant) return;
+
+          var badge = document.querySelector('.sixj-trust-badges .sixj-trust-badge:first-child');
+          if (!badge) return;
+
+          if (variant.inventory_quantity > 0) {
+            badge.className = 'sixj-trust-badge sixj-trust-badge--instock';
+            badge.innerHTML = '🚚 在庫あり — 7日以内に発送';
+          } else if (variant.available) {
+            badge.className = 'sixj-trust-badge sixj-trust-badge--order';
+            badge.innerHTML = '📋 受注生産 — お届けまで約3ヶ月';
+          } else {
+            badge.className = 'sixj-trust-badge';
+            badge.innerHTML = '現在取り扱いなし';
+          }
+        } catch(err) {}
+      }, 100);
+    });
   })();
 </script>
 
@@ -90,13 +118,6 @@
       "id": "show_delivery",
       "label": "配送目安を表示",
       "default": true
-    },
-    {
-      "type": "number",
-      "id": "default_delivery_days",
-      "label": "デフォルト配送日数",
-      "default": 5,
-      "info": "商品のメタフィールドが未設定の場合に使用"
     },
     {
       "type": "checkbox",
