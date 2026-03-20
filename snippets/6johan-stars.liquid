@@ -1,0 +1,28 @@
+{% comment %}
+  6JOHAN Star Rating Snippet
+  Usage: {% render '6johan-stars', rating: 4.6, count: 34 %}
+{% endcomment %}
+
+{%- assign full_stars = rating | floor -%}
+{%- assign remainder = rating | minus: full_stars -%}
+{%- if remainder >= 0.8 -%}
+  {%- assign full_stars = full_stars | plus: 1 -%}
+{%- endif -%}
+
+<div class="sixj-rating">
+  <div class="sixj-stars" aria-label="{{ rating }}点（5点満点中）">
+    {%- for i in (1..5) -%}
+      {%- if i <= full_stars -%}
+        <span class="sixj-star" aria-hidden="true">★</span>
+      {%- else -%}
+        <span class="sixj-star sixj-star--empty" aria-hidden="true">★</span>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+  {%- if show_score -%}
+    <span class="sixj-rating__score">{{ rating }}</span>
+  {%- endif -%}
+  {%- if count and count > 0 -%}
+    <span class="sixj-rating__count">({{ count }}件)</span>
+  {%- endif -%}
+</div>

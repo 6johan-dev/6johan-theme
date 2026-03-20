@@ -1,0 +1,147 @@
+{% comment %}
+  6JOHAN Starter Set Banner
+  Promotes curated furniture sets on the top page.
+  Drives AOV through set purchases.
+{% endcomment %}
+
+{{ '6johan-custom.css' | asset_url | stylesheet_tag }}
+
+<style>
+  .sixj-set-banner {
+    padding: var(--6j-space-2xl) 0;
+    background: var(--6j-parchment);
+  }
+  .sixj-set-banner__inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--6j-space-xl);
+    align-items: center;
+  }
+  .sixj-set-banner__image {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: var(--6j-radius-lg);
+    background: var(--6j-sand);
+  }
+  .sixj-set-banner__placeholder {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    border-radius: var(--6j-radius-lg);
+    background: linear-gradient(135deg, var(--6j-sand) 0%, #D4CFC6 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--6j-stone);
+    font-size: 13px;
+  }
+  @media (max-width: 749px) {
+    .sixj-set-banner__inner {
+      grid-template-columns: 1fr;
+      gap: var(--6j-space-lg);
+    }
+  }
+</style>
+
+<div class="sixj-set-banner">
+  <div class="sixj-container">
+    <div class="sixj-set-banner__inner">
+      <div>
+        {%- if section.settings.image != blank -%}
+          <img
+            class="sixj-set-banner__image"
+            src="{{ section.settings.image | img_url: '800x600' }}"
+            alt="{{ section.settings.heading | escape }}"
+            loading="lazy"
+          >
+        {%- else -%}
+          <div class="sixj-set-banner__placeholder">📷 セット商品の写真</div>
+        {%- endif -%}
+      </div>
+      <div>
+        <p class="sixj-label">{{ section.settings.label }}</p>
+        <h3 class="sixj-heading" style="font-size: 22px; margin-bottom: var(--6j-space-sm);">{{ section.settings.heading }}</h3>
+        <p class="sixj-text-earth" style="font-size: 13px; margin-bottom: var(--6j-space-md);">{{ section.settings.description }}</p>
+
+        <div class="sixj-price-group" style="margin-bottom: var(--6j-space-md);">
+          <span class="sixj-price--current">{{ section.settings.price }}</span>
+          {%- if section.settings.original_price != blank -%}
+            <span class="sixj-price--original">{{ section.settings.original_price }}</span>
+          {%- endif -%}
+          {%- if section.settings.discount_badge != blank -%}
+            <span class="sixj-price--badge">{{ section.settings.discount_badge }}</span>
+          {%- endif -%}
+        </div>
+
+        <a href="{{ section.settings.cta_url }}" class="sixj-btn sixj-btn--accent">
+          {{ section.settings.cta_text }}
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "6JOHAN セットバナー",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "ラベル",
+      "default": "Starter Set"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "セット名",
+      "default": "はじめての一人暮らしセット"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "説明",
+      "default": "テーブル + チェア + ミラーの3点セット。初めてのお部屋づくりにちょうどいい組み合わせです。"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "セット画像"
+    },
+    {
+      "type": "text",
+      "id": "price",
+      "label": "セット価格",
+      "default": "¥72,000"
+    },
+    {
+      "type": "text",
+      "id": "original_price",
+      "label": "元の価格"
+    },
+    {
+      "type": "text",
+      "id": "discount_badge",
+      "label": "割引バッジ",
+      "default": "10% OFF"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "ボタンテキスト",
+      "default": "セットを見る →"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "ボタンリンク先"
+    }
+  ],
+  "presets": [
+    {
+      "name": "6JOHAN セットバナー"
+    }
+  ]
+}
+{% endschema %}

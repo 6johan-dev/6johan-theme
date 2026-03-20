@@ -1,0 +1,23 @@
+{% comment %}
+  6JOHAN Delivery Estimate Snippet
+  Usage: {% render '6johan-delivery-estimate', product: product %}
+  Shows in-stock/made-to-order status and estimated delivery days.
+  Uses metafield: product.metafields.custom.delivery_days (number)
+  Uses metafield: product.metafields.custom.made_to_order (boolean)
+{% endcomment %}
+
+{%- assign delivery_days = product.metafields.custom.delivery_days | default: 5 -%}
+{%- assign made_to_order = product.metafields.custom.made_to_order -%}
+
+<div class="sixj-delivery">
+  <span class="sixj-delivery__icon">🚚</span>
+  {%- if product.available -%}
+    {%- if made_to_order -%}
+      <span>受注生産 — 約{{ delivery_days }}日でお届け</span>
+    {%- else -%}
+      <span>在庫あり — {{ delivery_days }}日以内にお届け</span>
+    {%- endif -%}
+  {%- else -%}
+    <span style="color: var(--6j-stone);">現在在庫切れ</span>
+  {%- endif -%}
+</div>

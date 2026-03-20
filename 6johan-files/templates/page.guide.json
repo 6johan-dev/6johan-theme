@@ -1,0 +1,33 @@
+{
+  "sections": {
+    "main": {
+      "type": "6johan-guide-first-visit",
+      "settings": {
+        "hero_label": "First Visit",
+        "hero_heading": "はじめまして、\n6JOHANです。",
+        "hero_text": "一人暮らしの家具選び、何から始めたらいいか迷いますよね。",
+        "nav_label": "あなたに合った選び方",
+        "show_starter_set": true,
+        "set_label": "Popular Starter Set",
+        "set_heading": "ナチュラル1Kセット",
+        "set_description": "テーブル + チェア + ミラーの3点セット",
+        "set_price": "¥72,000",
+        "set_original_price": "¥80,000",
+        "set_discount": "10% OFF",
+        "set_cta": "セットを見る →",
+        "cta_text": "人気商品を見る →",
+        "cta_url": "/collections/all"
+      },
+      "blocks": {
+        "n1": { "type": "nav_card", "settings": { "icon": "🏠", "title": "部屋の広さから選ぶ", "subtitle": "6畳 / 8畳 / 10畳〜" } },
+        "n2": { "type": "nav_card", "settings": { "icon": "🎨", "title": "スタイルから選ぶ", "subtitle": "ナチュラル / モダン / ミックス" } },
+        "n3": { "type": "nav_card", "settings": { "icon": "💰", "title": "予算から選ぶ", "subtitle": "5万円〜 / 10万円〜 / 20万円〜" } },
+        "t1": { "type": "trust_item", "settings": { "icon": "🚚", "text": "最短3日配送" } },
+        "t2": { "type": "trust_item", "settings": { "icon": "↩️", "text": "30日返品OK" } },
+        "t3": { "type": "trust_item", "settings": { "icon": "💬", "text": "チャット相談" } }
+      },
+      "block_order": ["n1", "n2", "n3", "t1", "t2", "t3"]
+    }
+  },
+  "order": ["main"]
+}

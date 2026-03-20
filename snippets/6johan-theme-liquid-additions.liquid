@@ -1,0 +1,52 @@
+{% comment %}
+  =====================================================
+  6JOHAN theme.liquid に追加する内容
+  =====================================================
+
+  以下の3箇所を layout/theme.liquid に追加してください。
+
+  ① </head> の直前に追加 → Google Fonts + カスタムCSS
+  ② {% section 'footer' %} の直前に追加 → 信頼バー
+  ③ </body> の直前に追加 → 商品カード改善JS
+
+  =====================================================
+{% endcomment %}
+
+{% comment %} ===== ① </head> の直前に追加 ===== {% endcomment %}
+
+<!-- 6JOHAN: Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Sans+JP:wght@300;400;500;600&family=Noto+Serif+JP:wght@300;400;500&display=swap" rel="stylesheet">
+
+<!-- 6JOHAN: Custom Styles -->
+<link rel="stylesheet" href="{{ '6johan-custom.css' | asset_url }}?v=1">
+
+
+{% comment %} ===== ② {% section 'footer' %} の直前に追加 ===== {% endcomment %}
+
+{% section '6johan-global-trust-bar' %}
+
+
+{% comment %} ===== ③ </body> の直前に追加（商品カードに★+配送情報を追加するJS） ===== {% endcomment %}
+
+<script>
+(function() {
+  // Skip if not a collection or search page
+  if (!document.querySelector('.collection, .search, [class*="product-grid"]')) return;
+
+  // Find all product cards and add delivery badge
+  document.querySelectorAll('.card-wrapper, .grid__item .card').forEach(function(card) {
+    var info = card.querySelector('.card__information, .card-information');
+    if (!info) return;
+    // Avoid adding twice
+    if (info.querySelector('.sixj-delivery')) return;
+
+    var badge = document.createElement('div');
+    badge.className = 'sixj-delivery';
+    badge.style.marginTop = '6px';
+    badge.innerHTML = '<span class="sixj-delivery__icon">🚚</span><span>在庫あり・3-5日</span>';
+    info.appendChild(badge);
+  });
+})();
+</script>

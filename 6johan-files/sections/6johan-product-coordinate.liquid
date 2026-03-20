@@ -1,0 +1,112 @@
+{% comment %}
+  6JOHAN Coordinate Suggestion Section
+  Shows related products as "coordinates" with optional set purchase CTA.
+  Uses metafield: product.metafields.custom.coordinate_products (list.product_reference)
+  Fallback: shows products from same collection.
+{% endcomment %}
+
+{{ '6johan-custom.css' | asset_url | stylesheet_tag }}
+
+{%- assign coordinate_products = product.metafields.custom.coordinate_products.value -%}
+{%- assign has_coordinates = false -%}
+{%- if coordinate_products and coordinate_products.size > 0 -%}
+  {%- assign has_coordinates = true -%}
+{%- endif -%}
+
+{%- unless has_coordinates -%}
+  {%- assign fallback_collection = product.collections | first -%}
+  {%- if fallback_collection -%}
+    {%- assign coordinate_products = fallback_collection.products -%}
+    {%- assign has_coordinates = true -%}
+  {%- endif -%}
+{%- endunless -%}
+
+{%- if has_coordinates -%}
+<div style="border-top: 1px solid var(--6j-sand); padding: var(--6j-space-lg) 0;">
+  <div class="sixj-container">
+    <p class="sixj-label">{{ section.settings.label }}</p>
+    <h3 class="sixj-heading" style="font-size: 18px; margin-bottom: var(--6j-space-md);">{{ section.settings.heading }}</h3>
+
+    <div class="sixj-coordinate">
+      {%- for item in coordinate_products limit: section.settings.max_products -%}
+        {%- if item.id != product.id -%}
+          <a href="{{ item.url }}" class="sixj-coordinate__item">
+            {%- if item.featured_image -%}
+              <img
+                class="sixj-coordinate__image"
+                src="{{ item.featured_image | img_url: '400x400' }}"
+                alt="{{ item.featured_image.alt | escape }}"
+                loading="lazy"
+              >
+            {%- else -%}
+              <div class="sixj-coordinate__image"></div>
+            {%- endif -%}
+            <div class="sixj-coordinate__name">{{ item.title }}</div>
+            <div class="sixj-coordinate__price">{{ item.price | money }}</div>
+          </a>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+
+    {%- if section.settings.show_set_cta and section.settings.set_url != blank -%}
+      <div style="margin-top: var(--6j-space-md);">
+        <a href="{{ section.settings.set_url }}" class="sixj-btn sixj-btn--accent sixj-btn--full">
+          {{ section.settings.set_cta_text }}
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "6JOHAN コーディネート提案",
+  "tag": "div",
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "ラベル",
+      "default": "Coordinate"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "見出し",
+      "default": "この商品に合わせて"
+    },
+    {
+      "type": "range",
+      "id": "max_products",
+      "label": "表示する商品数",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "checkbox",
+      "id": "show_set_cta",
+      "label": "セット購入ボタンを表示",
+      "default": false
+    },
+    {
+      "type": "url",
+      "id": "set_url",
+      "label": "セット商品ページURL"
+    },
+    {
+      "type": "text",
+      "id": "set_cta_text",
+      "label": "セットCTAテキスト",
+      "default": "セットで購入 — 10% OFF →"
+    }
+  ],
+  "presets": [
+    {
+      "name": "6JOHAN コーディネート提案"
+    }
+  ]
+}
+{% endschema %}

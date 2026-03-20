@@ -1,0 +1,138 @@
+{% comment %}
+  6JOHAN Product Trust Badges Section
+  Displays trust badges (delivery, return, assembly) on product pages.
+  Add via Shopify customizer: Product page > Add section > 6JOHAN Trust Badges
+{% endcomment %}
+
+{{ '6johan-custom.css' | asset_url | stylesheet_tag }}
+
+<style>
+  /* Kill all spacing around trust badges section */
+  .sixj-product-trust {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  .sixj-product-trust .sixj-trust-badges {
+    padding: 4px 0 8px;
+    margin: 0;
+  }
+  /* Target parent .shopify-section via adjacent selectors won't work,
+     so we use JS below to add a class */
+  .shopify-section--6j-trust {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+</style>
+
+<div class="sixj-trust-badges">
+  {%- if section.settings.show_delivery -%}
+    {%- assign delivery_days = product.metafields.custom.delivery_days | default: section.settings.default_delivery_days -%}
+    {%- assign made_to_order = product.metafields.custom.made_to_order -%}
+    <span class="sixj-trust-badge">
+      🚚
+      {%- if product.available -%}
+        {%- if made_to_order -%}
+          受注生産 — 約{{ delivery_days }}日
+        {%- else -%}
+          在庫あり — {{ delivery_days }}日でお届け
+        {%- endif -%}
+      {%- else -%}
+        入荷待ち
+      {%- endif -%}
+    </span>
+  {%- endif -%}
+
+  {%- if section.settings.show_return -%}
+    <span class="sixj-trust-badge">
+      ↩️ {{ section.settings.return_days }}日間返品OK
+    </span>
+  {%- endif -%}
+
+  {%- if section.settings.show_assembly -%}
+    {%- assign needs_assembly = product.metafields.custom.needs_assembly -%}
+    <span class="sixj-trust-badge">
+      {%- if needs_assembly -%}
+        🔧 組立あり（{{ product.metafields.custom.assembly_time | default: '約15分' }}）
+      {%- else -%}
+        ✓ 完成品 — 組立不要
+      {%- endif -%}
+    </span>
+  {%- endif -%}
+
+  {%- if section.settings.show_warranty -%}
+    <span class="sixj-trust-badge">
+      🛡️ {{ section.settings.warranty_period }}
+    </span>
+  {%- endif -%}
+</div>
+
+<script>
+  // Remove spacing from parent .shopify-section wrapper
+  (function() {
+    var el = document.querySelector('.sixj-product-trust');
+    if (el) {
+      var parent = el.closest('.shopify-section');
+      if (parent) {
+        parent.classList.add('shopify-section--6j-trust');
+      }
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "6JOHAN 信頼バッジ",
+  "tag": "div",
+  "class": "sixj-product-trust",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_delivery",
+      "label": "配送目安を表示",
+      "default": true
+    },
+    {
+      "type": "number",
+      "id": "default_delivery_days",
+      "label": "デフォルト配送日数",
+      "default": 5,
+      "info": "商品のメタフィールドが未設定の場合に使用"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_return",
+      "label": "返品ポリシーを表示",
+      "default": true
+    },
+    {
+      "type": "number",
+      "id": "return_days",
+      "label": "返品可能日数",
+      "default": 30
+    },
+    {
+      "type": "checkbox",
+      "id": "show_assembly",
+      "label": "組立情報を表示",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_warranty",
+      "label": "品質保証を表示",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "warranty_period",
+      "label": "保証期間",
+      "default": "1年間品質保証"
+    }
+  ],
+  "presets": [
+    {
+      "name": "6JOHAN 信頼バッジ"
+    }
+  ]
+}
+{% endschema %}

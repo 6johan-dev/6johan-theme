@@ -1,0 +1,276 @@
+{% comment %}
+  6JOHAN About Story Section
+  Hero + Founder + Process + Stats + Review + CTA
+  All content editable via Shopify customizer.
+{% endcomment %}
+
+{{ '6johan-custom.css' | asset_url | stylesheet_tag }}
+
+{%- comment -%} Hero {%- endcomment -%}
+<div class="sixj-section sixj-section--bordered sixj-text-center" style="padding: var(--6j-space-3xl) var(--6j-space-lg);">
+  <p class="sixj-label">{{ section.settings.hero_label }}</p>
+  <h1 class="sixj-heading" style="font-size: clamp(24px, 5vw, 36px); margin-bottom: var(--6j-space-md);">
+    {{ section.settings.hero_heading }}
+  </h1>
+  <p class="sixj-text-earth" style="font-size: 14px; line-height: 1.8; max-width: 480px; margin: 0 auto;">
+    {{ section.settings.hero_text }}
+  </p>
+</div>
+
+{%- comment -%} Founder {%- endcomment -%}
+<div class="sixj-section sixj-section--bordered">
+  <div class="sixj-container" style="max-width: 640px;">
+    <div style="display: flex; gap: var(--6j-space-md); align-items: flex-start;">
+      {%- if section.settings.founder_image != blank -%}
+        <img
+          src="{{ section.settings.founder_image | img_url: '128x128' }}"
+          alt="{{ section.settings.founder_name }}"
+          width="64"
+          height="64"
+          style="border-radius: 50%; object-fit: cover; flex-shrink: 0;"
+          loading="lazy"
+        >
+      {%- else -%}
+        <div style="width: 64px; height: 64px; border-radius: 50%; background: var(--6j-parchment); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 24px;">👤</div>
+      {%- endif -%}
+      <div>
+        <p class="sixj-label">{{ section.settings.founder_label }}</p>
+        <p style="font-size: 15px; font-weight: 500; margin-bottom: var(--6j-space-sm);">{{ section.settings.founder_name }}</p>
+        <p style="font-size: 13px; color: var(--6j-earth); line-height: 1.8;">{{ section.settings.founder_message }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+{%- comment -%} Process {%- endcomment -%}
+<div class="sixj-section sixj-section--bordered">
+  <div class="sixj-container" style="max-width: 640px;">
+    <p class="sixj-label">{{ section.settings.process_label }}</p>
+    <div class="sixj-process">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'process_step' -%}
+          <div class="sixj-process__step" {{ block.shopify_attributes }}>
+            <span class="sixj-process__number">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+            <div>
+              <div class="sixj-process__title">{{ block.settings.title }}</div>
+              <div class="sixj-process__desc">{{ block.settings.description }}</div>
+            </div>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+
+    {%- if section.settings.process_image != blank -%}
+      <div style="margin-top: var(--6j-space-lg);">
+        <img
+          src="{{ section.settings.process_image | img_url: '800x' }}"
+          alt="作業プロセス"
+          style="width: 100%; border-radius: var(--6j-radius-md); object-fit: cover; max-height: 300px;"
+          loading="lazy"
+        >
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{%- comment -%} Stats {%- endcomment -%}
+<div class="sixj-section sixj-section--bordered">
+  <div class="sixj-container">
+    <div class="sixj-stats">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'stat' -%}
+          <div {{ block.shopify_attributes }}>
+            <div class="sixj-stat__number">{{ block.settings.number }}</div>
+            <div class="sixj-stat__label">{{ block.settings.label }}</div>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{%- comment -%} Customer Review {%- endcomment -%}
+{%- if section.settings.review_text != blank -%}
+<div class="sixj-section sixj-section--bordered">
+  <div class="sixj-container" style="max-width: 640px;">
+    <p class="sixj-label">{{ section.settings.review_label }}</p>
+    <div class="sixj-review">
+      <div class="sixj-stars">
+        {%- for i in (1..5) -%}
+          <span class="sixj-star">★</span>
+        {%- endfor -%}
+      </div>
+      <p class="sixj-review__text">"{{ section.settings.review_text }}"</p>
+      <div class="sixj-review__author">— {{ section.settings.review_author }}</div>
+    </div>
+  </div>
+</div>
+{%- endif -%}
+
+{%- comment -%} CTA {%- endcomment -%}
+<div class="sixj-section sixj-text-center">
+  <a href="{{ section.settings.cta_url }}" class="sixj-btn sixj-btn--primary">
+    {{ section.settings.cta_text }}
+  </a>
+</div>
+
+{% schema %}
+{
+  "name": "6JOHAN About ストーリー",
+  "tag": "div",
+  "settings": [
+    {
+      "type": "header",
+      "content": "ヒーロー"
+    },
+    {
+      "type": "text",
+      "id": "hero_label",
+      "label": "ラベル",
+      "default": "Our Story"
+    },
+    {
+      "type": "textarea",
+      "id": "hero_heading",
+      "label": "見出し",
+      "default": "北欧の暮らしを、\nあなたの六畳半に。"
+    },
+    {
+      "type": "textarea",
+      "id": "hero_text",
+      "label": "本文",
+      "default": "世界中から本当にいいものだけを選び、一人暮らしのあなたの部屋にちょうどいいサイズとデザインでお届けします。"
+    },
+    {
+      "type": "header",
+      "content": "創業者"
+    },
+    {
+      "type": "text",
+      "id": "founder_label",
+      "label": "ラベル",
+      "default": "Founder"
+    },
+    {
+      "type": "text",
+      "id": "founder_name",
+      "label": "代表者名",
+      "default": "代表者名"
+    },
+    {
+      "type": "image_picker",
+      "id": "founder_image",
+      "label": "代表者写真"
+    },
+    {
+      "type": "textarea",
+      "id": "founder_message",
+      "label": "代表者メッセージ",
+      "default": "初めて北欧を訪れた時、シンプルだけど温かい暮らしの在り方に心を打たれました。あの空気感を、日本の一人暮らしの部屋にも届けたい — それが6JOHANの始まりです。"
+    },
+    {
+      "type": "header",
+      "content": "ものづくりプロセス"
+    },
+    {
+      "type": "text",
+      "id": "process_label",
+      "label": "ラベル",
+      "default": "How We Work"
+    },
+    {
+      "type": "image_picker",
+      "id": "process_image",
+      "label": "プロセス写真"
+    },
+    {
+      "type": "header",
+      "content": "レビュー"
+    },
+    {
+      "type": "text",
+      "id": "review_label",
+      "label": "ラベル",
+      "default": "Customer Voice"
+    },
+    {
+      "type": "textarea",
+      "id": "review_text",
+      "label": "レビュー本文",
+      "default": "初めてのネット家具購入で不安でしたが、写真通りの品質で安心しました。梱包も丁寧で、傷ひとつありませんでした。"
+    },
+    {
+      "type": "text",
+      "id": "review_author",
+      "label": "レビュー投稿者",
+      "default": "M様・東京都（30代女性）"
+    },
+    {
+      "type": "header",
+      "content": "CTA"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "ボタンテキスト",
+      "default": "コレクションを見る →"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "ボタンリンク先"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "process_step",
+      "name": "プロセスステップ",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "タイトル",
+          "default": "世界中からセレクト"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "説明",
+          "default": "北欧・アジアの信頼できる工房から、デザインと品質の基準を満たすものだけを厳選しています。"
+        }
+      ]
+    },
+    {
+      "type": "stat",
+      "name": "実績数値",
+      "settings": [
+        {
+          "type": "text",
+          "id": "number",
+          "label": "数値",
+          "default": "3,000+"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "ラベル",
+          "default": "出荷実績"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "6JOHAN About ストーリー",
+      "blocks": [
+        { "type": "process_step", "settings": { "title": "世界中からセレクト", "description": "北欧・アジアの信頼できる工房から、デザインと品質の基準を満たすものだけを厳選しています。" } },
+        { "type": "process_step", "settings": { "title": "全品検品", "description": "自社倉庫で全商品を検品。傷、がたつき、仕上がりを一点ずつ確認します。" } },
+        { "type": "process_step", "settings": { "title": "丁寧に梱包・発送", "description": "家具専用の梱包材で保護し、佐川急便にて全国へ。追跡番号をメールでお知らせします。" } },
+        { "type": "stat", "settings": { "number": "3,000+", "label": "出荷実績" } },
+        { "type": "stat", "settings": { "number": "4.7", "label": "顧客満足度" } },
+        { "type": "stat", "settings": { "number": "2019〜", "label": "創業" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

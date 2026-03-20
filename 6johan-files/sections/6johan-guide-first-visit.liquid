@@ -1,0 +1,242 @@
+{% comment %}
+  6JOHAN First Visit Guide Section
+  Welcome + Style Navigation + Starter Set + Trust + CTA
+{% endcomment %}
+
+{{ '6johan-custom.css' | asset_url | stylesheet_tag }}
+
+{%- comment -%} Hero {%- endcomment -%}
+<div class="sixj-section sixj-section--bordered sixj-text-center" style="padding: var(--6j-space-3xl) var(--6j-space-lg);">
+  <p class="sixj-label">{{ section.settings.hero_label }}</p>
+  <h1 class="sixj-heading" style="font-size: clamp(22px, 4vw, 32px); margin-bottom: var(--6j-space-md);">
+    {{ section.settings.hero_heading }}
+  </h1>
+  <p class="sixj-text-earth" style="font-size: 14px; line-height: 1.8;">
+    {{ section.settings.hero_text }}
+  </p>
+</div>
+
+{%- comment -%} Style Navigation {%- endcomment -%}
+<div class="sixj-section sixj-section--bordered">
+  <div class="sixj-container" style="max-width: 640px;">
+    <p class="sixj-label sixj-mb-lg">{{ section.settings.nav_label }}</p>
+    <div style="display: flex; flex-direction: column; gap: var(--6j-space-sm);">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'nav_card' -%}
+          <a href="{{ block.settings.url }}" class="sixj-style-card" {{ block.shopify_attributes }}>
+            <span class="sixj-style-card__icon">{{ block.settings.icon }}</span>
+            <div class="sixj-style-card__content">
+              <div class="sixj-style-card__title">{{ block.settings.title }}</div>
+              <div class="sixj-style-card__sub">{{ block.settings.subtitle }}</div>
+            </div>
+            <span class="sixj-style-card__arrow">→</span>
+          </a>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{%- comment -%} Starter Set {%- endcomment -%}
+{%- if section.settings.show_starter_set -%}
+<div class="sixj-section sixj-section--bordered sixj-section--muted">
+  <div class="sixj-container" style="max-width: 640px;">
+    <p class="sixj-label">{{ section.settings.set_label }}</p>
+    <h3 class="sixj-heading sixj-mb-sm" style="font-size: 20px;">{{ section.settings.set_heading }}</h3>
+    <p class="sixj-text-earth sixj-mb-md" style="font-size: 13px;">{{ section.settings.set_description }}</p>
+
+    {%- if section.settings.set_image != blank -%}
+      <img
+        src="{{ section.settings.set_image | img_url: '800x' }}"
+        alt="{{ section.settings.set_heading }}"
+        style="width: 100%; border-radius: var(--6j-radius-md); margin-bottom: var(--6j-space-md); object-fit: cover; max-height: 240px;"
+        loading="lazy"
+      >
+    {%- endif -%}
+
+    <div class="sixj-price-group sixj-mb-md">
+      <span class="sixj-price--current">{{ section.settings.set_price }}</span>
+      {%- if section.settings.set_original_price != blank -%}
+        <span class="sixj-price--original">{{ section.settings.set_original_price }}</span>
+      {%- endif -%}
+      {%- if section.settings.set_discount != blank -%}
+        <span class="sixj-price--badge">{{ section.settings.set_discount }}</span>
+      {%- endif -%}
+    </div>
+
+    <a href="{{ section.settings.set_url }}" class="sixj-btn sixj-btn--accent sixj-btn--full">
+      {{ section.settings.set_cta }}
+    </a>
+  </div>
+</div>
+{%- endif -%}
+
+{%- comment -%} Trust Bar {%- endcomment -%}
+<div class="sixj-section sixj-section--bordered">
+  <div class="sixj-container">
+    <div class="sixj-trust-bar" style="border-top: none; padding-top: 0;">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'trust_item' -%}
+          <div class="sixj-trust-bar__item" {{ block.shopify_attributes }}>
+            <span class="sixj-trust-bar__icon">{{ block.settings.icon }}</span>
+            <span class="sixj-trust-bar__text">{{ block.settings.text }}</span>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{%- comment -%} CTA {%- endcomment -%}
+<div class="sixj-section sixj-text-center">
+  <a href="{{ section.settings.cta_url }}" class="sixj-btn sixj-btn--primary">
+    {{ section.settings.cta_text }}
+  </a>
+</div>
+
+{% schema %}
+{
+  "name": "6JOHAN はじめての方",
+  "tag": "div",
+  "settings": [
+    {
+      "type": "header",
+      "content": "ヒーロー"
+    },
+    {
+      "type": "text",
+      "id": "hero_label",
+      "label": "ラベル",
+      "default": "First Visit"
+    },
+    {
+      "type": "textarea",
+      "id": "hero_heading",
+      "label": "見出し",
+      "default": "はじめまして、\n6JOHANです。"
+    },
+    {
+      "type": "textarea",
+      "id": "hero_text",
+      "label": "本文",
+      "default": "一人暮らしの家具選び、何から始めたらいいか迷いますよね。"
+    },
+    {
+      "type": "text",
+      "id": "nav_label",
+      "label": "ナビラベル",
+      "default": "あなたに合った選び方"
+    },
+    {
+      "type": "header",
+      "content": "スターターセット"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_starter_set",
+      "label": "スターターセットを表示",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "set_label",
+      "label": "セットラベル",
+      "default": "Popular Starter Set"
+    },
+    {
+      "type": "text",
+      "id": "set_heading",
+      "label": "セット名",
+      "default": "ナチュラル1Kセット"
+    },
+    {
+      "type": "text",
+      "id": "set_description",
+      "label": "セット説明",
+      "default": "テーブル + チェア + ミラーの3点セット"
+    },
+    {
+      "type": "image_picker",
+      "id": "set_image",
+      "label": "セット画像"
+    },
+    {
+      "type": "text",
+      "id": "set_price",
+      "label": "セット価格",
+      "default": "¥72,000"
+    },
+    {
+      "type": "text",
+      "id": "set_original_price",
+      "label": "元の価格（任意）",
+      "default": "¥80,000"
+    },
+    {
+      "type": "text",
+      "id": "set_discount",
+      "label": "割引バッジ（任意）",
+      "default": "10% OFF"
+    },
+    {
+      "type": "url",
+      "id": "set_url",
+      "label": "セットリンク先"
+    },
+    {
+      "type": "text",
+      "id": "set_cta",
+      "label": "セットCTAテキスト",
+      "default": "セットを見る →"
+    },
+    {
+      "type": "header",
+      "content": "CTA"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "ボタンテキスト",
+      "default": "人気商品を見る →"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "ボタンリンク先"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "nav_card",
+      "name": "選び方カード",
+      "settings": [
+        { "type": "text", "id": "icon", "label": "アイコン", "default": "🏠" },
+        { "type": "text", "id": "title", "label": "タイトル", "default": "部屋の広さから選ぶ" },
+        { "type": "text", "id": "subtitle", "label": "サブタイトル", "default": "6畳 / 8畳 / 10畳〜" },
+        { "type": "url", "id": "url", "label": "リンク先" }
+      ]
+    },
+    {
+      "type": "trust_item",
+      "name": "信頼項目",
+      "settings": [
+        { "type": "text", "id": "icon", "label": "アイコン", "default": "🚚" },
+        { "type": "text", "id": "text", "label": "テキスト", "default": "最短3日配送" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "6JOHAN はじめての方",
+      "blocks": [
+        { "type": "nav_card", "settings": { "icon": "🏠", "title": "部屋の広さから選ぶ", "subtitle": "6畳 / 8畳 / 10畳〜" } },
+        { "type": "nav_card", "settings": { "icon": "🎨", "title": "スタイルから選ぶ", "subtitle": "ナチュラル / モダン / ミックス" } },
+        { "type": "nav_card", "settings": { "icon": "💰", "title": "予算から選ぶ", "subtitle": "5万円〜 / 10万円〜 / 20万円〜" } },
+        { "type": "trust_item", "settings": { "icon": "🚚", "text": "最短3日配送" } },
+        { "type": "trust_item", "settings": { "icon": "↩️", "text": "30日返品OK" } },
+        { "type": "trust_item", "settings": { "icon": "💬", "text": "チャット相談" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

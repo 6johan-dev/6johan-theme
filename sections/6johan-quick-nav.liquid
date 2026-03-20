@@ -1,0 +1,50 @@
+{% comment %}
+  6JOHAN Quick Navigation Pills
+  Horizontal scrolling navigation for top page.
+{% endcomment %}
+
+{{ '6johan-custom.css' | asset_url | stylesheet_tag }}
+
+<div class="sixj-container">
+  <nav class="sixj-quick-nav" aria-label="クイックナビゲーション">
+    {%- for block in section.blocks -%}
+      <a href="{{ block.settings.url }}" class="sixj-quick-nav__item" {{ block.shopify_attributes }}>
+        {%- if block.settings.icon != blank -%}
+          <span>{{ block.settings.icon }}</span>
+        {%- endif -%}
+        {{ block.settings.text }}
+      </a>
+    {%- endfor -%}
+  </nav>
+</div>
+
+{% schema %}
+{
+  "name": "6JOHAN クイックナビ",
+  "tag": "div",
+  "class": "sixj-section--bordered",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "nav_item",
+      "name": "ナビ項目",
+      "settings": [
+        { "type": "text", "id": "icon", "label": "アイコン", "default": "🏠" },
+        { "type": "text", "id": "text", "label": "テキスト", "default": "部屋別で選ぶ" },
+        { "type": "url", "id": "url", "label": "リンク先" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "6JOHAN クイックナビ",
+      "blocks": [
+        { "type": "nav_item", "settings": { "icon": "🏠", "text": "部屋別で選ぶ" } },
+        { "type": "nav_item", "settings": { "icon": "🎨", "text": "スタイル別" } },
+        { "type": "nav_item", "settings": { "icon": "👋", "text": "初めての方" } },
+        { "type": "nav_item", "settings": { "icon": "💰", "text": "予算別" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

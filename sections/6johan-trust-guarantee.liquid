@@ -1,0 +1,187 @@
+{% comment %}
+  6JOHAN Trust & Guarantee Section
+  Guarantees + Shipping + Return + Warranty + FAQ
+{% endcomment %}
+
+{{ '6johan-custom.css' | asset_url | stylesheet_tag }}
+
+{%- comment -%} Hero {%- endcomment -%}
+<div class="sixj-section sixj-section--bordered sixj-text-center" style="padding: var(--6j-space-3xl) var(--6j-space-lg);">
+  <p class="sixj-label">{{ section.settings.hero_label }}</p>
+  <h1 class="sixj-heading" style="font-size: clamp(22px, 4vw, 32px);">
+    {{ section.settings.hero_heading }}
+  </h1>
+</div>
+
+{%- comment -%} 3 Guarantee Badges {%- endcomment -%}
+<div class="sixj-section sixj-section--bordered">
+  <div class="sixj-container">
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--6j-space-sm);">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'guarantee' -%}
+          <div class="sixj-card--muted sixj-text-center" style="padding: var(--6j-space-md);" {{ block.shopify_attributes }}>
+            <div style="font-size: 24px; margin-bottom: var(--6j-space-sm);">{{ block.settings.icon }}</div>
+            <div style="font-size: 14px; font-weight: 500; color: var(--6j-sage);">{{ block.settings.title }}</div>
+            <div style="font-size: 12px; color: var(--6j-stone);">{{ block.settings.subtitle }}</div>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{%- comment -%} Policy Sections {%- endcomment -%}
+{%- for block in section.blocks -%}
+  {%- if block.type == 'policy' -%}
+    <div class="sixj-section sixj-section--bordered" {{ block.shopify_attributes }}>
+      <div class="sixj-container" style="max-width: 640px;">
+        <div style="display: flex; align-items: center; gap: var(--6j-space-sm); margin-bottom: var(--6j-space-md);">
+          <span style="font-size: 20px;">{{ block.settings.icon }}</span>
+          <h3 style="font-size: 16px; font-weight: 500;">{{ block.settings.title }}</h3>
+        </div>
+        <div style="font-size: 13px; color: var(--6j-earth); line-height: 1.9; padding-left: 32px;">
+          {{ block.settings.content }}
+        </div>
+      </div>
+    </div>
+  {%- endif -%}
+{%- endfor -%}
+
+{%- comment -%} Payment Methods {%- endcomment -%}
+{%- if section.settings.show_payment -%}
+<div class="sixj-section sixj-section--bordered">
+  <div class="sixj-container" style="max-width: 640px;">
+    <div style="display: flex; align-items: center; gap: var(--6j-space-sm); margin-bottom: var(--6j-space-md);">
+      <span style="font-size: 20px;">💳</span>
+      <h3 style="font-size: 16px; font-weight: 500;">お支払い方法</h3>
+    </div>
+    <div style="font-size: 13px; color: var(--6j-earth); line-height: 1.9; padding-left: 32px;">
+      {{ section.settings.payment_text }}
+    </div>
+  </div>
+</div>
+{%- endif -%}
+
+{%- comment -%} FAQ Accordion {%- endcomment -%}
+<div class="sixj-section sixj-section--bordered">
+  <div class="sixj-container" style="max-width: 640px;">
+    <p class="sixj-label sixj-mb-lg">{{ section.settings.faq_label }}</p>
+    <div>
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'faq' -%}
+          <div class="sixj-faq-item" {{ block.shopify_attributes }}>
+            <button class="sixj-faq-question" onclick="this.parentElement.classList.toggle('is-open')">
+              <span>{{ block.settings.question }}</span>
+              <span class="sixj-faq-icon">+</span>
+            </button>
+            <div class="sixj-faq-answer">
+              {{ block.settings.answer }}
+            </div>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{%- comment -%} CTA {%- endcomment -%}
+<div class="sixj-section sixj-text-center">
+  <a href="{{ section.settings.cta_url }}" class="sixj-btn sixj-btn--outline">
+    {{ section.settings.cta_text }}
+  </a>
+</div>
+
+{% schema %}
+{
+  "name": "6JOHAN 安心ガイド",
+  "tag": "div",
+  "settings": [
+    {
+      "type": "text",
+      "id": "hero_label",
+      "label": "ヒーローラベル",
+      "default": "Shopping Guide"
+    },
+    {
+      "type": "textarea",
+      "id": "hero_heading",
+      "label": "ヒーロー見出し",
+      "default": "安心してお買い物\nいただくために"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_payment",
+      "label": "お支払い方法セクションを表示",
+      "default": true
+    },
+    {
+      "type": "textarea",
+      "id": "payment_text",
+      "label": "お支払い方法テキスト",
+      "default": "クレジットカード（Visa / Mastercard / American Express / JCB）、Apple Pay、Google Pay、コンビニ後払い、銀行振込をご利用いただけます。"
+    },
+    {
+      "type": "text",
+      "id": "faq_label",
+      "label": "FAQラベル",
+      "default": "よくある質問"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "CTAテキスト",
+      "default": "お問い合わせ →"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "CTAリンク先"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "guarantee",
+      "name": "保証バッジ",
+      "settings": [
+        { "type": "text", "id": "icon", "label": "アイコン", "default": "🚚" },
+        { "type": "text", "id": "title", "label": "タイトル", "default": "最短3日" },
+        { "type": "text", "id": "subtitle", "label": "サブタイトル", "default": "お届け" }
+      ]
+    },
+    {
+      "type": "policy",
+      "name": "ポリシーセクション",
+      "settings": [
+        { "type": "text", "id": "icon", "label": "アイコン", "default": "📦" },
+        { "type": "text", "id": "title", "label": "タイトル", "default": "配送について" },
+        { "type": "richtext", "id": "content", "label": "本文", "default": "<p><strong>在庫品:</strong> ご注文から3〜5営業日でお届け<br><strong>受注生産品:</strong> 2〜4週間（商品ページに明記）<br>佐川急便にて全国配送<br>追跡番号は出荷時にメールでお知らせします</p>" }
+      ]
+    },
+    {
+      "type": "faq",
+      "name": "FAQ項目",
+      "settings": [
+        { "type": "text", "id": "question", "label": "質問", "default": "送料はいくらですか？" },
+        { "type": "richtext", "id": "answer", "label": "回答", "default": "<p>全国一律送料をいただいております。一部大型商品は別途送料がかかる場合がございます。商品ページに記載しておりますのでご確認ください。</p>" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "6JOHAN 安心ガイド",
+      "blocks": [
+        { "type": "guarantee", "settings": { "icon": "🚚", "title": "最短3日", "subtitle": "お届け" } },
+        { "type": "guarantee", "settings": { "icon": "↩️", "title": "30日間", "subtitle": "返品OK" } },
+        { "type": "guarantee", "settings": { "icon": "🛡️", "title": "1年間", "subtitle": "品質保証" } },
+        { "type": "policy", "settings": { "icon": "📦", "title": "配送について", "content": "<p><strong>在庫品:</strong> ご注文から3〜5営業日でお届け<br><strong>受注生産品:</strong> 2〜4週間（商品ページに明記）<br>佐川急便にて全国配送<br>追跡番号は出荷時にメールでお知らせします</p>" } },
+        { "type": "policy", "settings": { "icon": "↩️", "title": "返品・交換", "content": "<p>商品到着から<strong>30日以内</strong>は理由を問わず返品OK<br>不良品の場合: 送料当社負担で交換<br>イメージ違いの場合: 返送料のみお客様負担<br>お手続きはメールまたはチャットで承ります</p>" } },
+        { "type": "policy", "settings": { "icon": "🔧", "title": "品質保証", "content": "<p>全商品<strong>1年間の品質保証</strong>付き<br>通常使用での破損は無償修理・交換<br>初期不良は到着後7日以内にご連絡ください</p>" } },
+        { "type": "faq", "settings": { "question": "送料はいくらですか？", "answer": "<p>全国一律送料をいただいております。一部大型商品は別途送料がかかる場合がございます。</p>" } },
+        { "type": "faq", "settings": { "question": "届くまでどのくらいかかりますか？", "answer": "<p>在庫品はご注文から3〜5営業日でお届けします。受注生産品は2〜4週間いただいております。</p>" } },
+        { "type": "faq", "settings": { "question": "組み立ては必要ですか？", "answer": "<p>多くの商品は完成品でお届けしますので組立不要です。組立が必要な商品は商品ページに記載しています。</p>" } },
+        { "type": "faq", "settings": { "question": "支払い方法は何がありますか？", "answer": "<p>クレジットカード、Apple Pay、Google Pay、コンビニ後払い、銀行振込をご利用いただけます。</p>" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

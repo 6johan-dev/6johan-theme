@@ -1,0 +1,10 @@
+{% comment %}
+  6JOHAN Trust Badge Snippet
+  Usage: {% render '6johan-trust-badge', icon: '🚚', text: '3〜5日でお届け', style: 'default' %}
+  Styles: default, dark
+{% endcomment %}
+
+<span class="sixj-trust-badge{% if style == 'dark' %} sixj-trust-badge--dark{% endif %}">
+  {%- if icon -%}<span>{{ icon }}</span>{%- endif -%}
+  {{ text }}
+</span>
