@@ -1,55 +1,41 @@
-{% comment %}
-  6JOHAN Global Trust Bar
-  Shows delivery, return, and chat support info above the footer.
-  Add to theme layout or individual templates.
-{% endcomment %}
-
 {{ '6johan-custom.css' | asset_url | stylesheet_tag }}
 
 <div class="sixj-trust-bar">
-  {%- for block in section.blocks -%}
-    <div class="sixj-trust-bar__item" {{ block.shopify_attributes }}>
-      <span class="sixj-trust-bar__icon">{{ block.settings.icon }}</span>
-      <span class="sixj-trust-bar__text">{{ block.settings.text }}</span>
-    </div>
-  {%- endfor -%}
+  <div class="sixj-trust-bar__item">
+    <span class="sixj-trust-bar__icon">🚚</span>
+    <span class="sixj-trust-bar__text">{{ section.settings.item1_text }}</span>
+  </div>
+  <div class="sixj-trust-bar__item">
+    <span class="sixj-trust-bar__icon">↩️</span>
+    <span class="sixj-trust-bar__text">{{ section.settings.item2_text }}</span>
+  </div>
+  <div class="sixj-trust-bar__item">
+    <span class="sixj-trust-bar__icon">💬</span>
+    <span class="sixj-trust-bar__text">{{ section.settings.item3_text }}</span>
+  </div>
 </div>
 
 {% schema %}
 {
   "name": "6JOHAN 信頼バー",
-  "tag": "section",
-  "class": "sixj-global-trust",
-  "max_blocks": 4,
-  "settings": [],
-  "blocks": [
+  "settings": [
     {
-      "type": "item",
-      "name": "項目",
-      "settings": [
-        {
-          "type": "text",
-          "id": "icon",
-          "label": "アイコン（絵文字）",
-          "default": "🚚"
-        },
-        {
-          "type": "text",
-          "id": "text",
-          "label": "テキスト",
-          "default": "最短3日配送"
-        }
-      ]
-    }
-  ],
-  "presets": [
+      "type": "text",
+      "id": "item1_text",
+      "label": "項目1テキスト",
+      "default": "最短3日配送"
+    },
     {
-      "name": "6JOHAN 信頼バー",
-      "blocks": [
-        { "type": "item", "settings": { "icon": "🚚", "text": "最短3日配送" } },
-        { "type": "item", "settings": { "icon": "↩️", "text": "30日返品OK" } },
-        { "type": "item", "settings": { "icon": "💬", "text": "チャット相談" } }
-      ]
+      "type": "text",
+      "id": "item2_text",
+      "label": "項目2テキスト",
+      "default": "30日返品OK"
+    },
+    {
+      "type": "text",
+      "id": "item3_text",
+      "label": "項目3テキスト",
+      "default": "チャット相談"
     }
   ]
 }
