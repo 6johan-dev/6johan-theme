@@ -1,115 +1,10 @@
-{{ '6johan-custom.css' | asset_url | stylesheet_tag }}
-
-<style>
-  .sixj-journal {
-    padding: var(--6j-space-2xl) 0;
-    border-top: 1px solid var(--6j-sand);
-  }
-  .sixj-journal__grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--6j-space-lg);
-  }
-  .sixj-journal__card {
-    text-decoration: none;
-    color: inherit;
-    display: block;
-    transition: opacity 0.2s;
-  }
-  .sixj-journal__card:hover {
-    opacity: 0.85;
-  }
-  .sixj-journal__image {
-    width: 100%;
-    aspect-ratio: 3 / 2;
-    object-fit: cover;
-    border-radius: var(--6j-radius-md);
-    margin-bottom: var(--6j-space-md);
-    background: var(--6j-parchment);
-  }
-  .sixj-journal__tag {
-    font-size: 11px;
-    font-weight: 500;
-    color: var(--6j-amber);
-    margin-bottom: 4px;
-  }
-  .sixj-journal__title {
-    font-family: var(--6j-font-heading);
-    font-size: 17px;
-    font-weight: 400;
-    line-height: 1.4;
-    color: var(--6j-charcoal);
-    margin-bottom: 6px;
-  }
-  .sixj-journal__meta {
-    font-size: 12px;
-    color: var(--6j-stone);
-  }
-  .sixj-journal__more {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    margin-top: var(--6j-space-lg);
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--6j-amber);
-    text-decoration: none;
-  }
-  .sixj-journal__more:hover {
-    color: var(--6j-terracotta);
-  }
-  @media (max-width: 749px) {
-    .sixj-journal__grid {
-      grid-template-columns: 1fr;
-    }
-  }
-</style>
-
-<div class="sixj-journal">
-  <div class="sixj-container">
-    <p class="sixj-label">{{ section.settings.label }}</p>
-    <h2 class="sixj-heading" style="font-size: 22px; margin-bottom: var(--6j-space-lg);">{{ section.settings.heading }}</h2>
-
-    {% if section.settings.blog != blank %}
-      {% assign target_blog = blogs[section.settings.blog] %}
-      {% if target_blog.articles_count > 0 %}
-        <div class="sixj-journal__grid">
-          {% for article in target_blog.articles limit: section.settings.max_articles %}
-            <a href="{{ article.url }}" class="sixj-journal__card">
-              {% if article.image %}
-                <img
-                  class="sixj-journal__image"
-                  src="{{ article.image | img_url: '600x400' }}"
-                  alt="{{ article.image.alt | escape }}"
-                  loading="lazy"
-                >
-              {% else %}
-                <div class="sixj-journal__image"></div>
-              {% endif %}
-              {% if article.tags.size > 0 %}
-                <div class="sixj-journal__tag">{{ article.tags | first }}</div>
-              {% endif %}
-              <div class="sixj-journal__title">{{ article.title }}</div>
-              <div class="sixj-journal__meta">{{ article.published_at | date: "%Y.%m.%d" }}</div>
-            </a>
-          {% endfor %}
-        </div>
-
-        {% if section.settings.show_more %}
-          <a href="{{ target_blog.url }}" class="sixj-journal__more">
-            {{ section.settings.more_text }} →
-          </a>
-        {% endif %}
-      {% else %}
-        <div style="padding: var(--6j-space-xl); background: var(--6j-parchment); border-radius: var(--6j-radius-md); text-align: center;">
-          <p style="font-size: 13px; color: var(--6j-stone);">ブログに記事を投稿すると、ここに表示されます。</p>
-        </div>
-      {% endif %}
-    {% else %}
-      <div style="padding: var(--6j-space-xl); background: var(--6j-parchment); border-radius: var(--6j-radius-md); text-align: center;">
-        <p style="font-size: 13px; color: var(--6j-stone);">カスタマイザーでブログを選択してください。</p>
-      </div>
-    {% endif %}
+<div style="padding: 48px 0; border-top: 1px solid #E8E5DC;">
+  <div style="max-width: 1200px; margin: 0 auto; padding: 0 24px;">
+    <p style="font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; color: #8A8A7A; margin-bottom: 6px;">{{ section.settings.label }}</p>
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 22px; margin-bottom: 24px;">{{ section.settings.heading }}</h2>
+    <div style="padding: 32px; background: #F5F4F0; border-radius: 12px; text-align: center;">
+      <p style="font-size: 13px; color: #8A8A7A;">ブログを作成して記事を投稿すると、ここに最新記事が表示されます。</p>
+    </div>
   </div>
 </div>
 
@@ -128,32 +23,6 @@
       "id": "heading",
       "label": "見出し",
       "default": "暮らしのヒント"
-    },
-    {
-      "type": "blog",
-      "id": "blog",
-      "label": "ブログを選択"
-    },
-    {
-      "type": "range",
-      "id": "max_articles",
-      "label": "表示する記事数",
-      "min": 2,
-      "max": 4,
-      "step": 2,
-      "default": 2
-    },
-    {
-      "type": "checkbox",
-      "id": "show_more",
-      "label": "もっと見るリンクを表示",
-      "default": true
-    },
-    {
-      "type": "text",
-      "id": "more_text",
-      "label": "もっと見るテキスト",
-      "default": "すべての記事を見る"
     }
   ],
   "presets": [
