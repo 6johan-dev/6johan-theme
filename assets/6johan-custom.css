@@ -838,3 +838,24 @@ section:has(.sixj-coordinate) {
 .sixj-mb-md { margin-bottom: var(--6j-space-md); }
 .sixj-mb-lg { margin-bottom: var(--6j-space-lg); }
 .sixj-mb-xl { margin-bottom: var(--6j-space-xl); }
+
+
+/* ---- Dawn Default Overrides (Added) ---- */
+
+/* "View all" button on featured collection */
+.button--secondary,
+.collection-list a,
+a.full-unstyled-link.button {
+  background: transparent !important;
+  color: var(--6j-charcoal) !important;
+  border: 1px solid var(--6j-charcoal) !important;
+  border-radius: var(--6j-radius-full) !important;
+  font-family: var(--6j-font-body) !important;
+  font-size: 13px !important;
+}
+
+.button--secondary:hover,
+a.full-unstyled-link.button:hover {
+  background: var(--6j-charcoal) !important;
+  color: var(--6j-linen) !important;
+}
