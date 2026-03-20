@@ -1,9 +1,3 @@
-{% comment %}
-  6JOHAN Journal Section
-  Shows latest blog articles on the top page.
-  Integrates editorial content with e-commerce (Floyd "Lived In" pattern).
-{% endcomment %}
-
 {{ '6johan-custom.css' | asset_url | stylesheet_tag }}
 
 <style>
@@ -71,54 +65,57 @@
   }
 </style>
 
-{%- assign blog_handle = section.settings.blog | default: 'journal' -%}
-{%- assign target_blog = blogs[blog_handle] -%}
-
 <div class="sixj-journal">
   <div class="sixj-container">
     <p class="sixj-label">{{ section.settings.label }}</p>
     <h2 class="sixj-heading" style="font-size: 22px; margin-bottom: var(--6j-space-lg);">{{ section.settings.heading }}</h2>
 
-    {%- if target_blog and target_blog.articles_count > 0 -%}
-      <div class="sixj-journal__grid">
-        {%- for article in target_blog.articles limit: section.settings.max_articles -%}
-          <a href="{{ article.url }}" class="sixj-journal__card">
-            {%- if article.image -%}
-              <img
-                class="sixj-journal__image"
-                src="{{ article.image | img_url: '600x400', crop: 'center' }}"
-                alt="{{ article.image.alt | escape }}"
-                loading="lazy"
-              >
-            {%- else -%}
-              <div class="sixj-journal__image"></div>
-            {%- endif -%}
-            {%- if article.tags.size > 0 -%}
-              <div class="sixj-journal__tag">{{ article.tags | first }}</div>
-            {%- endif -%}
-            <div class="sixj-journal__title">{{ article.title }}</div>
-            <div class="sixj-journal__meta">{{ article.published_at | date: "%Y.%m.%d" }}</div>
-          </a>
-        {%- endfor -%}
-      </div>
+    {% if section.settings.blog != blank %}
+      {% assign target_blog = blogs[section.settings.blog] %}
+      {% if target_blog.articles_count > 0 %}
+        <div class="sixj-journal__grid">
+          {% for article in target_blog.articles limit: section.settings.max_articles %}
+            <a href="{{ article.url }}" class="sixj-journal__card">
+              {% if article.image %}
+                <img
+                  class="sixj-journal__image"
+                  src="{{ article.image | img_url: '600x400' }}"
+                  alt="{{ article.image.alt | escape }}"
+                  loading="lazy"
+                >
+              {% else %}
+                <div class="sixj-journal__image"></div>
+              {% endif %}
+              {% if article.tags.size > 0 %}
+                <div class="sixj-journal__tag">{{ article.tags | first }}</div>
+              {% endif %}
+              <div class="sixj-journal__title">{{ article.title }}</div>
+              <div class="sixj-journal__meta">{{ article.published_at | date: "%Y.%m.%d" }}</div>
+            </a>
+          {% endfor %}
+        </div>
 
-      {%- if section.settings.show_more -%}
-        <a href="{{ target_blog.url }}" class="sixj-journal__more">
-          {{ section.settings.more_text }} →
-        </a>
-      {%- endif -%}
-    {%- else -%}
+        {% if section.settings.show_more %}
+          <a href="{{ target_blog.url }}" class="sixj-journal__more">
+            {{ section.settings.more_text }} →
+          </a>
+        {% endif %}
+      {% else %}
+        <div style="padding: var(--6j-space-xl); background: var(--6j-parchment); border-radius: var(--6j-radius-md); text-align: center;">
+          <p style="font-size: 13px; color: var(--6j-stone);">ブログに記事を投稿すると、ここに表示されます。</p>
+        </div>
+      {% endif %}
+    {% else %}
       <div style="padding: var(--6j-space-xl); background: var(--6j-parchment); border-radius: var(--6j-radius-md); text-align: center;">
-        <p class="sixj-text-stone" style="font-size: 13px;">ブログ「{{ blog_handle }}」を作成して記事を投稿すると、ここに表示されます。</p>
+        <p style="font-size: 13px; color: var(--6j-stone);">カスタマイザーでブログを選択してください。</p>
       </div>
-    {%- endif -%}
+    {% endif %}
   </div>
 </div>
 
 {% schema %}
 {
   "name": "6JOHAN Journal",
-  "tag": "div",
   "settings": [
     {
       "type": "text",
@@ -149,7 +146,7 @@
     {
       "type": "checkbox",
       "id": "show_more",
-      "label": "「もっと見る」リンクを表示",
+      "label": "もっと見るリンクを表示",
       "default": true
     },
     {
