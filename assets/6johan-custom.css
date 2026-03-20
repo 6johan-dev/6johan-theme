@@ -918,3 +918,84 @@ h3.card__heading {
   font-size: 20px !important;
   font-weight: 400 !important;
 }
+
+/* ---- Premium Card Design (Borderless) ---- */
+/* Remove card borders and background - let images breathe */
+.card--card,
+.card--standard,
+.card-wrapper .card {
+  border: none !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.card--card:hover,
+.card--standard:hover {
+  box-shadow: none !important;
+}
+
+/* Image - subtle rounded corners only */
+.card .media,
+.card__media,
+.card__inner {
+  border-radius: 8px !important;
+  overflow: hidden;
+  background: transparent !important;
+  border: none !important;
+}
+
+/* Tighten text area */
+.card__content,
+.card-information {
+  padding: 8px 0 0 0 !important;
+}
+
+/* Product name - clean and tight */
+.card__heading,
+.card__heading a,
+.card-information__text,
+.card-information__text a,
+h3.card__heading {
+  font-family: var(--6j-font-body) !important;
+  font-size: 12.5px !important;
+  font-weight: 400 !important;
+  line-height: 1.45 !important;
+  color: var(--6j-charcoal) !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  margin-bottom: 2px !important;
+}
+
+/* Price - smaller than name, muted */
+.price-item,
+.price-item--regular,
+.price-item--sale {
+  font-family: var(--6j-font-body) !important;
+  font-size: 12px !important;
+  font-weight: 400 !important;
+  color: var(--6j-earth) !important;
+}
+
+/* Remove extra price wrapper spacing */
+.price,
+.price__container {
+  margin-top: 0 !important;
+  padding: 0 !important;
+}
+
+.card-information > * + * {
+  margin-top: 0 !important;
+}
+
+/* Card inner - remove Dawn's default padding */
+.card__inner {
+  padding: 0 !important;
+}
+
+/* Grid gap - tighter on mobile */
+@media (max-width: 749px) {
+  .grid--2-col-tablet-down .grid__item {
+    padding-bottom: 8px !important;
+  }
+}
