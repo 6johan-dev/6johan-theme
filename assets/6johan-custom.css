@@ -859,3 +859,31 @@ a.full-unstyled-link.button:hover {
   background: var(--6j-charcoal) !important;
   color: var(--6j-linen) !important;
 }
+
+/* Force override Dawn's "View all" buttons */
+.button,
+.shopify-section .button,
+.collection-list .button,
+button.button,
+a.button {
+  background-color: transparent !important;
+  color: var(--6j-charcoal) !important;
+  border: 1px solid var(--6j-charcoal) !important;
+  border-radius: var(--6j-radius-full) !important;
+  font-family: var(--6j-font-body) !important;
+}
+
+.button:hover,
+a.button:hover {
+  background-color: var(--6j-charcoal) !important;
+  color: var(--6j-linen) !important;
+}
+
+/* Keep cart/buy buttons solid */
+.product-form__submit,
+.cart__submit-button,
+.shopify-payment-button__button {
+  background-color: var(--6j-charcoal) !important;
+  color: var(--6j-linen) !important;
+  border: none !important;
+}
