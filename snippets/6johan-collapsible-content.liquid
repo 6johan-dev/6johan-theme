@@ -1,0 +1,81 @@
+{% comment %}
+  6JOHAN Collapsible Content
+  折りたたみセクションのコンテンツ（共通テキスト＋メタフィールド上書き）
+  
+  使用方法: {% render '6johan-collapsible-content', heading: block.settings.heading, product: product %}
+{% endcomment %}
+
+{%- liquid
+  assign heading_text = heading | strip
+  assign content_output = ''
+-%}
+
+{%- case heading_text -%}
+
+  {%- when '素材について' -%}
+    {%- if product.metafields.custom.material != blank -%}
+      {%- capture content_output -%}
+        <p>{{ product.metafields.custom.material }}</p>
+      {%- endcapture -%}
+    {%- else -%}
+      {%- capture content_output -%}
+        <p>この商品には厳選された天然素材を使用しています。木材は北欧産のオーク材やウォールナット材を中心に、持続可能な森林から調達しています。</p>
+        <p>天然素材のため、木目や色味に個体差がございます。これは天然木ならではの特徴であり、品質上の問題ではございません。</p>
+      {%- endcapture -%}
+    {%- endif -%}
+
+  {%- when '配送・返品について' -%}
+    {%- capture content_output -%}
+      <p><strong>配送について</strong></p>
+      <ul>
+        <li>在庫がある商品：ご注文から7日以内に発送</li>
+        <li>受注生産品：ご注文から約3ヶ月でお届け</li>
+        <li>配送業者：佐川急便（大型家具便）</li>
+        <li>配送エリア：日本全国（一部離島を除く）</li>
+      </ul>
+      <p><strong>返品・交換について</strong></p>
+      <ul>
+        <li>到着から30日以内であれば返品OK</li>
+        <li>お客様都合の返品：返送料はお客様負担</li>
+        <li>不良品・誤配送：送料当社負担で交換対応</li>
+      </ul>
+      <p>詳しくは<a href="/pages/shipping-returns">配送・返品ポリシー</a>をご確認ください。</p>
+    {%- endcapture -%}
+
+  {%- when 'サイズ・寸法' -%}
+    {%- if product.metafields.custom.measurements != blank -%}
+      {%- capture content_output -%}
+        <p>{{ product.metafields.custom.measurements | newline_to_br }}</p>
+        {%- if product.metafields.custom._new != blank -%}
+          <p><strong>梱包サイズ：</strong>{{ product.metafields.custom._new }}</p>
+        {%- endif -%}
+      {%- endcapture -%}
+    {%- else -%}
+      {%- capture content_output -%}
+        <p>詳細なサイズ・寸法は商品画像または商品説明をご確認ください。</p>
+        <p>ご不明な点がございましたら、お気軽にチャットでお問い合わせください。</p>
+      {%- endcapture -%}
+    {%- endif -%}
+
+  {%- when 'お手入れ方法' -%}
+    {%- capture content_output -%}
+      <p><strong>日常のお手入れ</strong></p>
+      <ul>
+        <li>乾いた柔らかい布で優しく拭いてください</li>
+        <li>水拭きは固く絞った布で軽く行い、すぐに乾拭きしてください</li>
+      </ul>
+      <p><strong>長くお使いいただくために</strong></p>
+      <ul>
+        <li>直射日光やエアコンの風が直接当たる場所は避けてください</li>
+        <li>熱いもの・冷たいものを置く際はコースターやマットをご使用ください</li>
+        <li>重いものを長期間同じ場所に置くことは避けてください</li>
+      </ul>
+      <p>木製家具は適度な湿度（40〜60%）を保つと、より長く美しさを保てます。</p>
+    {%- endcapture -%}
+
+  {%- else -%}
+    {%- comment -%} その他の見出しの場合は空 {%- endcomment -%}
+
+{%- endcase -%}
+
+{{ content_output }}
