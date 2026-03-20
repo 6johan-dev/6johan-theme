@@ -1,152 +1,183 @@
-{{ '6johan-custom.css' | asset_url | stylesheet_tag }}
+{% comment %}
+  6JOHAN Product Specs Table
+  商品スペック表（メタフィールド連動）
+  
+  メタフィールドキー:
+  - custom.measurements (寸法詳細)
+  - custom.material (素材)
+  - custom._new (梱包サイズ)
+  - custom.is_assembly (組み立て有無)
+  - custom._shipping_cost (最低送料)
+  - custom.memo (備考欄)
+{% endcomment %}
+
+{%- liquid
+  assign measurements = product.metafields.custom.measurements
+  assign material = product.metafields.custom.material
+  assign package_size = product.metafields.custom._new
+  assign is_assembly = product.metafields.custom.is_assembly
+  assign shipping_cost = product.metafields.custom._shipping_cost
+  assign memo = product.metafields.custom.memo
+  
+  assign has_specs = false
+  if measurements != blank or material != blank or package_size != blank or is_assembly != blank or shipping_cost != blank
+    assign has_specs = true
+  endif
+-%}
+
+{% if has_specs %}
+<div class="product-specs-section">
+  <div class="product-specs-container">
+    {% if section.settings.show_heading %}
+      <h3 class="product-specs-heading">{{ section.settings.heading }}</h3>
+    {% endif %}
+    
+    <table class="product-specs-table">
+      <tbody>
+        {% if measurements != blank %}
+          <tr>
+            <th>サイズ</th>
+            <td>{{ measurements | newline_to_br }}</td>
+          </tr>
+        {% endif %}
+        
+        {% if material != blank %}
+          <tr>
+            <th>素材</th>
+            <td>{{ material }}</td>
+          </tr>
+        {% endif %}
+        
+        {% if package_size != blank %}
+          <tr>
+            <th>梱包サイズ</th>
+            <td>{{ package_size }}</td>
+          </tr>
+        {% endif %}
+        
+        {% if is_assembly != blank %}
+          <tr>
+            <th>組み立て</th>
+            <td>
+              {% if is_assembly == true %}
+                組み立てが必要です
+              {% else %}
+                完成品でお届け
+              {% endif %}
+            </td>
+          </tr>
+        {% endif %}
+        
+        {% if shipping_cost != blank and shipping_cost > 0 %}
+          <tr>
+            <th>送料目安</th>
+            <td>¥{{ shipping_cost | plus: 0 }}〜</td>
+          </tr>
+        {% endif %}
+        
+        {% if memo != blank %}
+          <tr>
+            <th>備考</th>
+            <td>{{ memo | newline_to_br }}</td>
+          </tr>
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+</div>
 
 <style>
-  .sixj-specs-section {
-    padding: 0 !important;
-    margin: 0 !important;
+  .product-specs-section {
+    margin: 2rem 0;
+    padding: 0;
   }
-  .sixj-specs-wrap {
-    padding: 16px 0;
-    border-top: 1px solid var(--6j-sand);
+  
+  .product-specs-container {
+    max-width: 100%;
   }
-  .sixj-specs-label {
-    font-size: 11px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--6j-stone);
-    margin-bottom: 12px;
+  
+  .product-specs-heading {
+    font-family: var(--6j-font-heading, 'Playfair Display', 'Noto Serif JP', serif);
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: var(--6j-charcoal, #2C2C24);
+    margin: 0 0 1rem 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--6j-sand, #E8E5DC);
   }
-  .sixj-specs td {
-    padding: 10px 0;
-    font-size: 13px;
-    vertical-align: top;
-    border-bottom: 1px solid var(--6j-sand);
+  
+  .product-specs-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9375rem;
+    line-height: 1.6;
   }
-  .sixj-specs tr:last-child td {
+  
+  .product-specs-table tr {
+    border-bottom: 1px solid var(--6j-sand, #E8E5DC);
+  }
+  
+  .product-specs-table tr:last-child {
     border-bottom: none;
   }
-  .sixj-specs td:first-child {
-    color: var(--6j-stone);
-    width: 70px;
-    font-size: 12px;
-    padding-right: 12px;
+  
+  .product-specs-table th {
+    font-family: var(--6j-font-body, 'Noto Sans JP', sans-serif);
+    font-weight: 500;
+    color: var(--6j-stone, #8A8A7A);
+    text-align: left;
+    vertical-align: top;
+    padding: 0.875rem 1rem 0.875rem 0;
+    width: 100px;
+    white-space: nowrap;
   }
-  .sixj-specs td:last-child {
-    color: var(--6j-charcoal);
+  
+  .product-specs-table td {
+    font-family: var(--6j-font-body, 'Noto Sans JP', sans-serif);
+    font-weight: 400;
+    color: var(--6j-earth, #6B6B5E);
+    text-align: left;
+    vertical-align: top;
+    padding: 0.875rem 0;
   }
-  .sixj-specs__note {
-    display: block;
-    font-size: 11px;
-    color: var(--6j-sage);
-    margin-top: 2px;
+  
+  /* Mobile adjustments */
+  @media screen and (max-width: 749px) {
+    .product-specs-table th {
+      width: 80px;
+      padding-right: 0.75rem;
+      font-size: 0.875rem;
+    }
+    
+    .product-specs-table td {
+      font-size: 0.875rem;
+    }
   }
 </style>
-
-{% assign p_size = product.metafields.custom.spec_size %}
-{% assign p_material = product.metafields.custom.spec_material %}
-{% assign p_weight = product.metafields.custom.spec_weight %}
-{% assign p_assembly = product.metafields.custom.spec_assembly %}
-{% assign p_delivery = product.metafields.custom.spec_delivery %}
-{% assign p_size_note = product.metafields.custom.spec_size_note %}
-{% assign p_weight_note = product.metafields.custom.spec_weight_note %}
-{% assign p_care = product.metafields.custom.spec_care %}
-
-{% if p_size or p_material or p_weight %}
-<div class="sixj-specs-wrap">
-  <p class="sixj-specs-label">{{ section.settings.label }}</p>
-  <table class="sixj-specs">
-    {% if p_size %}
-    <tr>
-      <td>サイズ</td>
-      <td>
-        {{ p_size }}
-        {% if p_size_note %}<span class="sixj-specs__note">{{ p_size_note }}</span>{% endif %}
-      </td>
-    </tr>
-    {% endif %}
-    {% if p_material %}
-    <tr>
-      <td>素材</td>
-      <td>{{ p_material }}</td>
-    </tr>
-    {% endif %}
-    {% if p_weight %}
-    <tr>
-      <td>重さ</td>
-      <td>
-        {{ p_weight }}
-        {% if p_weight_note %}<span class="sixj-specs__note">{{ p_weight_note }}</span>{% endif %}
-      </td>
-    </tr>
-    {% endif %}
-    {% if p_assembly %}
-    <tr>
-      <td>組立</td>
-      <td>{{ p_assembly }}</td>
-    </tr>
-    {% endif %}
-    <tr>
-      <td>お届け</td>
-      <td>
-        {% if product.selected_or_first_available_variant.inventory_quantity > 0 %}
-          在庫あり → 7日以内に発送
-        {% elsif product.available %}
-          受注生産 → 約3ヶ月
-        {% else %}
-          現在取り扱いなし
-        {% endif %}
-      </td>
-    </tr>
-    {% if p_care %}
-    <tr>
-      <td>お手入れ</td>
-      <td>{{ p_care }}</td>
-    </tr>
-    {% endif %}
-  </table>
-</div>
-{% else %}
-<div class="sixj-specs-wrap">
-  <p class="sixj-specs-label">{{ section.settings.label }}</p>
-  <table class="sixj-specs">
-    <tr>
-      <td>お届け</td>
-      <td>
-        {% if product.selected_or_first_available_variant.inventory_quantity > 0 %}
-          在庫あり → 7日以内に発送
-        {% elsif product.available %}
-          受注生産 → 約3ヶ月
-        {% else %}
-          現在取り扱いなし
-        {% endif %}
-      </td>
-    </tr>
-    <tr>
-      <td>返品</td>
-      <td>到着から30日以内 返品OK</td>
-    </tr>
-    <tr>
-      <td>保証</td>
-      <td>1年間品質保証</td>
-    </tr>
-  </table>
-</div>
 {% endif %}
 
 {% schema %}
 {
-  "name": "6JOHAN スペック表",
+  "name": "商品スペック表",
+  "tag": "section",
+  "class": "section-product-specs",
   "settings": [
     {
+      "type": "checkbox",
+      "id": "show_heading",
+      "label": "見出しを表示",
+      "default": true
+    },
+    {
       "type": "text",
-      "id": "label",
-      "label": "ラベル",
-      "default": "Specifications"
+      "id": "heading",
+      "label": "見出しテキスト",
+      "default": "商品仕様"
     }
   ],
   "presets": [
     {
-      "name": "6JOHAN スペック表"
+      "name": "商品スペック表"
     }
   ]
 }
