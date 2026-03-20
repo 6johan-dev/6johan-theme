@@ -855,3 +855,66 @@ section:has(.sixj-coordinate) {
   --color-button: 44, 44, 36;
   --color-button-text: 250, 250, 247;
 }
+
+/* ---- Product Card Refinements ---- */
+/* Product name - smaller, lighter weight */
+.card__heading,
+.card__heading a,
+.card-information__text,
+.card-information__text a,
+h3.card__heading {
+  font-family: var(--6j-font-body) !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+  color: var(--6j-charcoal) !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+}
+
+/* Price - refined */
+.price-item,
+.price-item--regular,
+.price-item--sale {
+  font-family: var(--6j-font-body) !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  color: var(--6j-charcoal) !important;
+}
+
+/* Card container - softer edges */
+.card--card,
+.card--standard {
+  border: 1px solid var(--6j-sand) !important;
+  border-radius: var(--6j-radius-md) !important;
+  background: var(--6j-white) !important;
+  box-shadow: none !important;
+}
+
+.card--card:hover,
+.card--standard:hover {
+  box-shadow: var(--6j-shadow-md) !important;
+}
+
+/* Card content padding */
+.card__content,
+.card-information {
+  padding: 12px !important;
+}
+
+/* "View all" button - thinner border */
+.button--secondary {
+  border-width: 1px !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.03em !important;
+}
+
+/* Section headings on home page */
+.featured-collection h2,
+.collection-list h2,
+.shopify-section .title {
+  font-family: var(--6j-font-heading) !important;
+  font-size: 20px !important;
+  font-weight: 400 !important;
+}
