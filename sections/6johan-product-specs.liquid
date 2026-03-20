@@ -1,0 +1,153 @@
+{{ '6johan-custom.css' | asset_url | stylesheet_tag }}
+
+<style>
+  .sixj-specs-section {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  .sixj-specs-wrap {
+    padding: 16px 0;
+    border-top: 1px solid var(--6j-sand);
+  }
+  .sixj-specs-label {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--6j-stone);
+    margin-bottom: 12px;
+  }
+  .sixj-specs td {
+    padding: 10px 0;
+    font-size: 13px;
+    vertical-align: top;
+    border-bottom: 1px solid var(--6j-sand);
+  }
+  .sixj-specs tr:last-child td {
+    border-bottom: none;
+  }
+  .sixj-specs td:first-child {
+    color: var(--6j-stone);
+    width: 70px;
+    font-size: 12px;
+    padding-right: 12px;
+  }
+  .sixj-specs td:last-child {
+    color: var(--6j-charcoal);
+  }
+  .sixj-specs__note {
+    display: block;
+    font-size: 11px;
+    color: var(--6j-sage);
+    margin-top: 2px;
+  }
+</style>
+
+{% assign p_size = product.metafields.custom.spec_size %}
+{% assign p_material = product.metafields.custom.spec_material %}
+{% assign p_weight = product.metafields.custom.spec_weight %}
+{% assign p_assembly = product.metafields.custom.spec_assembly %}
+{% assign p_delivery = product.metafields.custom.spec_delivery %}
+{% assign p_size_note = product.metafields.custom.spec_size_note %}
+{% assign p_weight_note = product.metafields.custom.spec_weight_note %}
+{% assign p_care = product.metafields.custom.spec_care %}
+
+{% if p_size or p_material or p_weight %}
+<div class="sixj-specs-wrap">
+  <p class="sixj-specs-label">{{ section.settings.label }}</p>
+  <table class="sixj-specs">
+    {% if p_size %}
+    <tr>
+      <td>サイズ</td>
+      <td>
+        {{ p_size }}
+        {% if p_size_note %}<span class="sixj-specs__note">{{ p_size_note }}</span>{% endif %}
+      </td>
+    </tr>
+    {% endif %}
+    {% if p_material %}
+    <tr>
+      <td>素材</td>
+      <td>{{ p_material }}</td>
+    </tr>
+    {% endif %}
+    {% if p_weight %}
+    <tr>
+      <td>重さ</td>
+      <td>
+        {{ p_weight }}
+        {% if p_weight_note %}<span class="sixj-specs__note">{{ p_weight_note }}</span>{% endif %}
+      </td>
+    </tr>
+    {% endif %}
+    {% if p_assembly %}
+    <tr>
+      <td>組立</td>
+      <td>{{ p_assembly }}</td>
+    </tr>
+    {% endif %}
+    <tr>
+      <td>お届け</td>
+      <td>
+        {% if product.selected_or_first_available_variant.inventory_quantity > 0 %}
+          在庫あり → 7日以内に発送
+        {% elsif product.available %}
+          受注生産 → 約3ヶ月
+        {% else %}
+          現在取り扱いなし
+        {% endif %}
+      </td>
+    </tr>
+    {% if p_care %}
+    <tr>
+      <td>お手入れ</td>
+      <td>{{ p_care }}</td>
+    </tr>
+    {% endif %}
+  </table>
+</div>
+{% else %}
+<div class="sixj-specs-wrap">
+  <p class="sixj-specs-label">{{ section.settings.label }}</p>
+  <table class="sixj-specs">
+    <tr>
+      <td>お届け</td>
+      <td>
+        {% if product.selected_or_first_available_variant.inventory_quantity > 0 %}
+          在庫あり → 7日以内に発送
+        {% elsif product.available %}
+          受注生産 → 約3ヶ月
+        {% else %}
+          現在取り扱いなし
+        {% endif %}
+      </td>
+    </tr>
+    <tr>
+      <td>返品</td>
+      <td>到着から30日以内 返品OK</td>
+    </tr>
+    <tr>
+      <td>保証</td>
+      <td>1年間品質保証</td>
+    </tr>
+  </table>
+</div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "6JOHAN スペック表",
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "ラベル",
+      "default": "Specifications"
+    }
+  ],
+  "presets": [
+    {
+      "name": "6JOHAN スペック表"
+    }
+  ]
+}
+{% endschema %}
