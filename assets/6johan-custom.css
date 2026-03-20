@@ -1008,3 +1008,36 @@ h3.card__heading {
 [data-tax-line] {
   display: none !important;
 }
+
+/* ---- Breadcrumb ---- */
+.sixj-breadcrumb {
+  padding: 12px 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.sixj-breadcrumb__list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--6j-stone);
+}
+.sixj-breadcrumb__item a {
+  color: var(--6j-stone);
+  text-decoration: none;
+}
+.sixj-breadcrumb__item a:hover {
+  color: var(--6j-charcoal);
+}
+.sixj-breadcrumb__item + .sixj-breadcrumb__item::before {
+  content: "›";
+  margin-right: 4px;
+  color: var(--6j-sand);
+}
+.sixj-breadcrumb__current {
+  color: var(--6j-earth);
+}

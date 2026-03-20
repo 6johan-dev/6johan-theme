@@ -1,0 +1,69 @@
+{% unless template == 'index' %}
+<nav class="sixj-breadcrumb" aria-label="パンくずリスト">
+  <ol class="sixj-breadcrumb__list" itemscope itemtype="https://schema.org/BreadcrumbList">
+    <li class="sixj-breadcrumb__item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+      <a href="/" itemprop="item"><span itemprop="name">ホーム</span></a>
+      <meta itemprop="position" content="1" />
+    </li>
+
+    {%- if template contains 'product' -%}
+      {%- if product.collections.size > 0 -%}
+        {%- assign col = product.collections | first -%}
+        <li class="sixj-breadcrumb__item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href="{{ col.url }}" itemprop="item"><span itemprop="name">{{ col.title }}</span></a>
+          <meta itemprop="position" content="2" />
+        </li>
+        <li class="sixj-breadcrumb__item sixj-breadcrumb__current" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <span itemprop="name">{{ product.title }}</span>
+          <meta itemprop="position" content="3" />
+        </li>
+      {%- else -%}
+        <li class="sixj-breadcrumb__item sixj-breadcrumb__current" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <span itemprop="name">{{ product.title }}</span>
+          <meta itemprop="position" content="2" />
+        </li>
+      {%- endif -%}
+
+    {%- elsif template contains 'collection' -%}
+      <li class="sixj-breadcrumb__item sixj-breadcrumb__current" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <span itemprop="name">{{ collection.title }}</span>
+        <meta itemprop="position" content="2" />
+      </li>
+
+    {%- elsif template contains 'page' -%}
+      <li class="sixj-breadcrumb__item sixj-breadcrumb__current" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <span itemprop="name">{{ page.title }}</span>
+        <meta itemprop="position" content="2" />
+      </li>
+
+    {%- elsif template contains 'blog' -%}
+      <li class="sixj-breadcrumb__item sixj-breadcrumb__current" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <span itemprop="name">{{ blog.title }}</span>
+        <meta itemprop="position" content="2" />
+      </li>
+
+    {%- elsif template contains 'article' -%}
+      <li class="sixj-breadcrumb__item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a href="{{ blog.url }}" itemprop="item"><span itemprop="name">{{ blog.title }}</span></a>
+        <meta itemprop="position" content="2" />
+      </li>
+      <li class="sixj-breadcrumb__item sixj-breadcrumb__current" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <span itemprop="name">{{ article.title }}</span>
+        <meta itemprop="position" content="3" />
+      </li>
+
+    {%- elsif template == 'cart' -%}
+      <li class="sixj-breadcrumb__item sixj-breadcrumb__current" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <span itemprop="name">カート</span>
+        <meta itemprop="position" content="2" />
+      </li>
+
+    {%- elsif template == 'search' -%}
+      <li class="sixj-breadcrumb__item sixj-breadcrumb__current" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <span itemprop="name">検索結果</span>
+        <meta itemprop="position" content="2" />
+      </li>
+    {%- endif -%}
+  </ol>
+</nav>
+{% endunless %}
