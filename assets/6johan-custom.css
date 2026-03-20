@@ -999,3 +999,12 @@ h3.card__heading {
     padding-bottom: 8px !important;
   }
 }
+
+/* Hide "税込。" text on product page */
+.tax-note,
+.product__tax,
+.price .tax-note,
+.rte--product .tax-note,
+[data-tax-line] {
+  display: none !important;
+}
