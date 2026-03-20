@@ -841,14 +841,17 @@ section:has(.sixj-coordinate) {
 
 
 
+
 /* ---- Dawn Button Overrides ---- */
-/* "View all" link-style buttons only */
-.featured-collection .button,
-.collection-list .button,
 .button--secondary {
-  --color-button: 44, 44, 36 !important;
-  --color-button-text: 44, 44, 36 !important;
-  --alpha-button-background: 0 !important;
-  border: 1px solid rgba(44, 44, 36, 1) !important;
+  --color-button: 250, 250, 247;
+  --color-button-text: 44, 44, 36;
+  --alpha-button-background: 0;
+  border: 1px solid rgba(44, 44, 36, 0.3) !important;
   border-radius: 999px !important;
+}
+.button--secondary:hover {
+  --alpha-button-background: 1;
+  --color-button: 44, 44, 36;
+  --color-button-text: 250, 250, 247;
 }
