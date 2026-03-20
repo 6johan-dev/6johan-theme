@@ -840,72 +840,15 @@ section:has(.sixj-coordinate) {
 .sixj-mb-xl { margin-bottom: var(--6j-space-xl); }
 
 
-/* ---- Dawn Default Overrides (Added) ---- */
 
-/* "View all" button on featured collection */
-.button--secondary,
-.collection-list a,
-a.full-unstyled-link.button {
-  background: transparent !important;
-  color: var(--6j-charcoal) !important;
-  border: 1px solid var(--6j-charcoal) !important;
-  border-radius: var(--6j-radius-full) !important;
-  font-family: var(--6j-font-body) !important;
-  font-size: 13px !important;
-}
-
-.button--secondary:hover,
-a.full-unstyled-link.button:hover {
-  background: var(--6j-charcoal) !important;
-  color: var(--6j-linen) !important;
-}
-
-/* Force override Dawn's "View all" buttons */
-.button,
-.shopify-section .button,
+/* ---- Dawn Button Overrides ---- */
+/* "View all" link-style buttons only */
+.featured-collection .button,
 .collection-list .button,
-button.button,
-a.button {
-  background-color: transparent !important;
-  color: var(--6j-charcoal) !important;
-  border: 1px solid var(--6j-charcoal) !important;
-  border-radius: var(--6j-radius-full) !important;
-  font-family: var(--6j-font-body) !important;
-}
-
-.button:hover,
-a.button:hover {
-  background-color: var(--6j-charcoal) !important;
-  color: var(--6j-linen) !important;
-}
-
-/* Keep cart/buy buttons solid */
-.product-form__submit,
-.cart__submit-button,
-.shopify-payment-button__button {
-  background-color: var(--6j-charcoal) !important;
-  color: var(--6j-linen) !important;
-  border: none !important;
-}
-
-/* Fix: Clean override for Dawn view-all buttons */
 .button--secondary {
-  background-color: transparent !important;
-  color: var(--6j-charcoal) !important;
-  border: 1px solid var(--6j-charcoal) !important;
-  border-radius: var(--6j-radius-full) !important;
-  font-family: var(--6j-font-body) !important;
-  box-shadow: none !important;
-  outline: none !important;
+  --color-button: 44, 44, 36 !important;
+  --color-button-text: 44, 44, 36 !important;
   --alpha-button-background: 0 !important;
-  --color-button: var(--6j-charcoal) !important;
-  --color-button-text: var(--6j-charcoal) !important;
-}
-
-/* Remove earlier broad .button overrides that broke things */
-.button {
-  background-color: unset;
-  color: unset;
-  border: unset;
-  border-radius: unset;
+  border: 1px solid rgba(44, 44, 36, 1) !important;
+  border-radius: 999px !important;
 }
