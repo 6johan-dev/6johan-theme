@@ -107,25 +107,25 @@
       "type": "text",
       "id": "hero_label",
       "label": "ラベル",
-      "default": "First Visit"
+      "default": "ABOUT 6JOHAN"
     },
     {
       "type": "textarea",
       "id": "hero_heading",
       "label": "見出し",
-      "default": "はじめまして、\n6JOHANです。"
+      "default": "暮らしに馴染む、\n北欧×和の家具。"
     },
     {
       "type": "textarea",
       "id": "hero_text",
       "label": "本文",
-      "default": "一人暮らしの家具選び、何から始めたらいいか迷いますよね。"
+      "default": "シンプルで上質な家具を、あなたの暮らしに。"
     },
     {
       "type": "text",
       "id": "nav_label",
       "label": "ナビラベル",
-      "default": "あなたに合った選び方"
+      "default": "商品の探し方"
     },
     {
       "type": "header",
@@ -135,25 +135,25 @@
       "type": "checkbox",
       "id": "show_starter_set",
       "label": "スターターセットを表示",
-      "default": true
+      "default": false
     },
     {
       "type": "text",
       "id": "set_label",
       "label": "セットラベル",
-      "default": "Popular Starter Set"
+      "default": "RECOMMEND SET"
     },
     {
       "type": "text",
       "id": "set_heading",
       "label": "セット名",
-      "default": "ナチュラル1Kセット"
+      "default": "リビングダイニングセット"
     },
     {
       "type": "text",
       "id": "set_description",
       "label": "セット説明",
-      "default": "テーブル + チェア + ミラーの3点セット"
+      "default": "テーブル + チェア + 収納の3点セット"
     },
     {
       "type": "image_picker",
@@ -197,7 +197,7 @@
       "type": "text",
       "id": "cta_text",
       "label": "ボタンテキスト",
-      "default": "人気商品を見る →"
+      "default": "すべての商品を見る →"
     },
     {
       "type": "url",
@@ -210,9 +210,9 @@
       "type": "nav_card",
       "name": "選び方カード",
       "settings": [
-        { "type": "text", "id": "icon", "label": "アイコン", "default": "🏠" },
-        { "type": "text", "id": "title", "label": "タイトル", "default": "部屋の広さから選ぶ" },
-        { "type": "text", "id": "subtitle", "label": "サブタイトル", "default": "6畳 / 8畳 / 10畳〜" },
+        { "type": "text", "id": "icon", "label": "アイコン", "default": "🪑" },
+        { "type": "text", "id": "title", "label": "タイトル", "default": "アイテムで探す" },
+        { "type": "text", "id": "subtitle", "label": "サブタイトル", "default": "チェア / テーブル / 収納" },
         { "type": "url", "id": "url", "label": "リンク先" }
       ]
     },
@@ -221,7 +221,7 @@
       "name": "信頼項目",
       "settings": [
         { "type": "text", "id": "icon", "label": "アイコン", "default": "🚚" },
-        { "type": "text", "id": "text", "label": "テキスト", "default": "最短3日配送" }
+        { "type": "text", "id": "text", "label": "テキスト", "default": "在庫品は7日以内に発送" }
       ]
     }
   ],
@@ -229,12 +229,13 @@
     {
       "name": "6JOHAN はじめての方",
       "blocks": [
-        { "type": "nav_card", "settings": { "icon": "🏠", "title": "部屋の広さから選ぶ", "subtitle": "6畳 / 8畳 / 10畳〜" } },
-        { "type": "nav_card", "settings": { "icon": "🎨", "title": "スタイルから選ぶ", "subtitle": "ナチュラル / モダン / ミックス" } },
-        { "type": "nav_card", "settings": { "icon": "💰", "title": "予算から選ぶ", "subtitle": "5万円〜 / 10万円〜 / 20万円〜" } },
-        { "type": "trust_item", "settings": { "icon": "🚚", "text": "最短3日配送" } },
-        { "type": "trust_item", "settings": { "icon": "↩️", "text": "30日返品OK" } },
-        { "type": "trust_item", "settings": { "icon": "💬", "text": "チャット相談" } }
+        { "type": "nav_card", "settings": { "icon": "🪑", "title": "アイテムで探す", "subtitle": "チェア / テーブル / 収納" } },
+        { "type": "nav_card", "settings": { "icon": "💰", "title": "予算で探す", "subtitle": "〜5万 / 〜10万 / 10万円〜" } },
+        { "type": "nav_card", "settings": { "icon": "🏠", "title": "用途で探す", "subtitle": "リビング / ワークスペース / ダイニング" } },
+        { "type": "trust_item", "settings": { "icon": "🚚", "text": "在庫品は7日以内に発送" } },
+        { "type": "trust_item", "settings": { "icon": "↩️", "text": "30日間返品OK" } },
+        { "type": "trust_item", "settings": { "icon": "🛡️", "text": "1年間品質保証" } },
+        { "type": "trust_item", "settings": { "icon": "💬", "text": "チャットで相談" } }
       ]
     }
   ]

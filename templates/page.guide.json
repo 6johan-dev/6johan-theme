@@ -3,30 +3,31 @@
     "main": {
       "type": "6johan-guide-first-visit",
       "settings": {
-        "hero_label": "First Visit",
-        "hero_heading": "はじめまして、\n6JOHANです。",
-        "hero_text": "一人暮らしの家具選び、何から始めたらいいか迷いますよね。",
-        "nav_label": "あなたに合った選び方",
-        "show_starter_set": true,
-        "set_label": "Popular Starter Set",
-        "set_heading": "ナチュラル1Kセット",
-        "set_description": "テーブル + チェア + ミラーの3点セット",
+        "hero_label": "ABOUT 6JOHAN",
+        "hero_heading": "暮らしに馴染む、\n北欧×和の家具。",
+        "hero_text": "シンプルで上質な家具を、あなたの暮らしに。",
+        "nav_label": "商品の探し方",
+        "show_starter_set": false,
+        "set_label": "RECOMMEND SET",
+        "set_heading": "リビングダイニングセット",
+        "set_description": "テーブル + チェア + 収納の3点セット",
         "set_price": "¥72,000",
         "set_original_price": "¥80,000",
         "set_discount": "10% OFF",
         "set_cta": "セットを見る →",
-        "cta_text": "人気商品を見る →",
+        "cta_text": "すべての商品を見る →",
         "cta_url": "/collections/all"
       },
       "blocks": {
-        "n1": { "type": "nav_card", "settings": { "icon": "🏠", "title": "部屋の広さから選ぶ", "subtitle": "6畳 / 8畳 / 10畳〜" } },
-        "n2": { "type": "nav_card", "settings": { "icon": "🎨", "title": "スタイルから選ぶ", "subtitle": "ナチュラル / モダン / ミックス" } },
-        "n3": { "type": "nav_card", "settings": { "icon": "💰", "title": "予算から選ぶ", "subtitle": "5万円〜 / 10万円〜 / 20万円〜" } },
-        "t1": { "type": "trust_item", "settings": { "icon": "🚚", "text": "最短3日配送" } },
-        "t2": { "type": "trust_item", "settings": { "icon": "↩️", "text": "30日返品OK" } },
-        "t3": { "type": "trust_item", "settings": { "icon": "💬", "text": "チャット相談" } }
+        "n1": { "type": "nav_card", "settings": { "icon": "🪑", "title": "アイテムで探す", "subtitle": "チェア / テーブル / 収納", "url": "/collections" } },
+        "n2": { "type": "nav_card", "settings": { "icon": "💰", "title": "予算で探す", "subtitle": "〜5万 / 〜10万 / 10万円〜", "url": "/collections/5万円以下" } },
+        "n3": { "type": "nav_card", "settings": { "icon": "🏠", "title": "用途で探す", "subtitle": "リビング / ワークスペース / ダイニング", "url": "/collections" } },
+        "t1": { "type": "trust_item", "settings": { "icon": "🚚", "text": "在庫品は7日以内に発送" } },
+        "t2": { "type": "trust_item", "settings": { "icon": "↩️", "text": "30日間返品OK" } },
+        "t3": { "type": "trust_item", "settings": { "icon": "🛡️", "text": "1年間品質保証" } },
+        "t4": { "type": "trust_item", "settings": { "icon": "💬", "text": "チャットで相談" } }
       },
-      "block_order": ["n1", "n2", "n3", "t1", "t2", "t3"]
+      "block_order": ["n1", "n2", "n3", "t1", "t2", "t3", "t4"]
     }
   },
   "order": ["main"]

@@ -14,10 +14,10 @@
       "name": "6JOHAN ヒーロー",
       "settings": {
         "image_alt": "6JOHANの家具がある暮らし",
-        "label": "New Collection",
-        "heading": "六畳半から始まる、自分らしい暮らし。",
+        "label": "Nordic × Japanese",
+        "heading": "暮らしに馴染む、\n上質な家具を。",
         "cta_text": "コレクションを見る →",
-        "cta_url": ""
+        "cta_url": "/collections/all"
       }
     },
     "6johan_quick_nav_38RNf9": {
@@ -26,33 +26,33 @@
         "nav_item_LPEqBh": {
           "type": "nav_item",
           "settings": {
-            "icon": "🏠",
-            "text": "部屋別で選ぶ",
-            "url": ""
+            "icon": "👋",
+            "text": "はじめての方へ",
+            "url": "/pages/guide"
           }
         },
         "nav_item_YKzhtV": {
           "type": "nav_item",
           "settings": {
-            "icon": "🎨",
-            "text": "スタイル別",
-            "url": ""
+            "icon": "🪑",
+            "text": "アイテムで探す",
+            "url": "/collections"
           }
         },
         "nav_item_GByhGF": {
           "type": "nav_item",
           "settings": {
-            "icon": "👋",
-            "text": "初めての方",
-            "url": ""
+            "icon": "💰",
+            "text": "5万円以下",
+            "url": "/collections/5万円以下"
           }
         },
         "nav_item_Br6h7e": {
           "type": "nav_item",
           "settings": {
-            "icon": "💰",
-            "text": "予算別",
-            "url": ""
+            "icon": "⚡",
+            "text": "すぐ届く",
+            "url": "/collections/即納商品"
           }
         }
       },
@@ -99,8 +99,8 @@
       "name": "6JOHAN セットバナー",
       "settings": {
         "label": "Starter Set",
-        "heading": "はじめての一人暮らしセット",
-        "description": "テーブル + チェア + ミラーの3点セット。初めてのお部屋づくりにちょうどいい組み合わせです。",
+        "heading": "コーディネートセット",
+        "description": "テーブル + チェア + ミラーの3点セット。統一感のあるお部屋づくりに。",
         "price": "¥72,000",
         "original_price": "",
         "discount_badge": "10% OFF",
