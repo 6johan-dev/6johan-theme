@@ -1,0 +1,467 @@
+{% comment %}
+  6JOHAN Customer Voice / Delivery Examples
+  お客様の声・納品事例セクション
+{% endcomment %}
+
+{%- style -%}
+.customer-voice {
+  padding: 60px 0;
+  background-color: var(--6j-parchment, #F5F4F0);
+}
+
+.customer-voice__container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.customer-voice__header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.customer-voice__label {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--6j-amber, #C4956A);
+  margin-bottom: 8px;
+}
+
+.customer-voice__title {
+  font-family: 'Playfair Display', 'Noto Serif JP', serif;
+  font-size: 28px;
+  font-weight: 500;
+  color: var(--6j-charcoal, #2C2C24);
+  margin: 0 0 12px;
+}
+
+.customer-voice__subtitle {
+  font-size: 14px;
+  color: var(--6j-earth, #6B6B5E);
+  margin: 0;
+}
+
+.customer-voice__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.customer-voice__card {
+  background-color: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.customer-voice__card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}
+
+.customer-voice__image-wrap {
+  position: relative;
+  aspect-ratio: 4/3;
+  overflow: hidden;
+}
+
+.customer-voice__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s;
+}
+
+.customer-voice__card:hover .customer-voice__image {
+  transform: scale(1.05);
+}
+
+.customer-voice__badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 10px;
+  background-color: rgba(255,255,255,0.95);
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--6j-charcoal, #2C2C24);
+}
+
+.customer-voice__badge svg {
+  width: 14px;
+  height: 14px;
+  color: var(--6j-gold, #D4A843);
+}
+
+.customer-voice__content {
+  padding: 20px;
+}
+
+.customer-voice__stars {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 12px;
+}
+
+.customer-voice__star {
+  width: 16px;
+  height: 16px;
+  color: var(--6j-gold, #D4A843);
+}
+
+.customer-voice__star--empty {
+  color: var(--6j-sand, #E8E5DC);
+}
+
+.customer-voice__quote {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--6j-charcoal, #2C2C24);
+  margin: 0 0 16px;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.customer-voice__meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-top: 16px;
+  border-top: 1px solid var(--6j-sand, #E8E5DC);
+}
+
+.customer-voice__avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--6j-parchment, #F5F4F0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--6j-earth, #6B6B5E);
+}
+
+.customer-voice__info {
+  flex: 1;
+}
+
+.customer-voice__name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--6j-charcoal, #2C2C24);
+  margin: 0 0 2px;
+}
+
+.customer-voice__detail {
+  font-size: 11px;
+  color: var(--6j-stone, #8A8A7A);
+  margin: 0;
+}
+
+.customer-voice__products {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.customer-voice__product-tag {
+  font-size: 10px;
+  padding: 4px 8px;
+  background-color: var(--6j-parchment, #F5F4F0);
+  border-radius: 3px;
+  color: var(--6j-earth, #6B6B5E);
+}
+
+.customer-voice__view-all {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.customer-voice__view-all-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 32px;
+  border: 1px solid var(--6j-charcoal, #2C2C24);
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--6j-charcoal, #2C2C24);
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.customer-voice__view-all-link:hover {
+  background-color: var(--6j-charcoal, #2C2C24);
+  color: #fff;
+}
+
+@media (max-width: 899px) {
+  .customer-voice__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .customer-voice__card:nth-child(3) {
+    display: none;
+  }
+}
+
+@media (max-width: 599px) {
+  .customer-voice {
+    padding: 40px 0;
+  }
+  
+  .customer-voice__title {
+    font-size: 22px;
+  }
+  
+  .customer-voice__grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .customer-voice__card:nth-child(3) {
+    display: block;
+  }
+}
+{%- endstyle -%}
+
+<section class="customer-voice">
+  <div class="customer-voice__container">
+    <header class="customer-voice__header">
+      <span class="customer-voice__label">{{ section.settings.label }}</span>
+      <h2 class="customer-voice__title">{{ section.settings.heading }}</h2>
+      {% if section.settings.subtitle != blank %}
+        <p class="customer-voice__subtitle">{{ section.settings.subtitle }}</p>
+      {% endif %}
+    </header>
+    
+    <div class="customer-voice__grid">
+      {% for block in section.blocks %}
+        <article class="customer-voice__card" {{ block.shopify_attributes }}>
+          {% if block.settings.image %}
+            <div class="customer-voice__image-wrap">
+              <img
+                src="{{ block.settings.image | image_url: width: 600 }}"
+                alt="{{ block.settings.customer_name | default: 'お客様の声' }}"
+                class="customer-voice__image"
+                loading="lazy"
+                width="400"
+                height="300"
+              >
+              {% if block.settings.room_type != blank %}
+                <span class="customer-voice__badge">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+                    <polyline points="9 22 9 12 15 12 15 22"/>
+                  </svg>
+                  {{ block.settings.room_type }}
+                </span>
+              {% endif %}
+            </div>
+          {% endif %}
+          
+          <div class="customer-voice__content">
+            {% if block.settings.rating > 0 %}
+              <div class="customer-voice__stars" aria-label="評価: {{ block.settings.rating }}点">
+                {% for i in (1..5) %}
+                  {% if i <= block.settings.rating %}
+                    <svg class="customer-voice__star" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                    </svg>
+                  {% else %}
+                    <svg class="customer-voice__star customer-voice__star--empty" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                    </svg>
+                  {% endif %}
+                {% endfor %}
+              </div>
+            {% endif %}
+            
+            <p class="customer-voice__quote">{{ block.settings.quote }}</p>
+            
+            <div class="customer-voice__meta">
+              <span class="customer-voice__avatar">
+                {{ block.settings.customer_name | slice: 0 }}
+              </span>
+              <div class="customer-voice__info">
+                <p class="customer-voice__name">{{ block.settings.customer_name }}</p>
+                <p class="customer-voice__detail">{{ block.settings.customer_detail }}</p>
+              </div>
+            </div>
+            
+            {% if block.settings.products != blank %}
+              <div class="customer-voice__products">
+                {% assign product_list = block.settings.products | split: ',' %}
+                {% for product_name in product_list %}
+                  <span class="customer-voice__product-tag">{{ product_name | strip }}</span>
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+    
+    {% if section.settings.show_view_all and section.settings.view_all_url != blank %}
+      <div class="customer-voice__view-all">
+        <a href="{{ section.settings.view_all_url }}" class="customer-voice__view-all-link">
+          {{ section.settings.view_all_text }}
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "6JOHAN お客様の声",
+  "tag": "section",
+  "class": "section-customer-voice",
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "ラベル",
+      "default": "CUSTOMER VOICE"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "見出し",
+      "default": "お客様の声"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "サブタイトル",
+      "default": "実際にご購入いただいたお客様からのレビューをご紹介します"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "「すべて見る」リンクを表示",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "view_all_text",
+      "label": "「すべて見る」テキスト",
+      "default": "すべてのレビューを見る"
+    },
+    {
+      "type": "url",
+      "id": "view_all_url",
+      "label": "「すべて見る」リンク先"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "レビュー",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "写真"
+        },
+        {
+          "type": "text",
+          "id": "room_type",
+          "label": "部屋タイプ",
+          "placeholder": "リビング / ワークスペース"
+        },
+        {
+          "type": "range",
+          "id": "rating",
+          "label": "評価",
+          "min": 0,
+          "max": 5,
+          "step": 1,
+          "default": 5
+        },
+        {
+          "type": "textarea",
+          "id": "quote",
+          "label": "レビュー本文",
+          "default": "北欧らしいシンプルなデザインがとても気に入っています。部屋に置くだけで雰囲気が変わりました。"
+        },
+        {
+          "type": "text",
+          "id": "customer_name",
+          "label": "お客様名",
+          "default": "T.K様"
+        },
+        {
+          "type": "text",
+          "id": "customer_detail",
+          "label": "詳細（任意）",
+          "placeholder": "30代・東京都"
+        },
+        {
+          "type": "text",
+          "id": "products",
+          "label": "購入商品（カンマ区切り）",
+          "placeholder": "ダイニングチェア, サイドテーブル"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "6JOHAN お客様の声",
+      "blocks": [
+        {
+          "type": "review",
+          "settings": {
+            "room_type": "リビング",
+            "rating": 5,
+            "quote": "北欧らしいシンプルなデザインがとても気に入っています。部屋に置くだけで雰囲気が変わりました。組み立ても簡単で、すぐに使い始められました。",
+            "customer_name": "T.K様",
+            "customer_detail": "30代・東京都",
+            "products": "ダイニングチェア"
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "room_type": "ワークスペース",
+            "rating": 5,
+            "quote": "在宅ワーク用に購入しましたが、座り心地が良く、長時間作業しても疲れません。デザインも部屋に馴染んで満足です。",
+            "customer_name": "M.S様",
+            "customer_detail": "40代・神奈川県",
+            "products": "ワークチェア, デスク"
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "room_type": "ダイニング",
+            "rating": 4,
+            "quote": "木の質感が写真通りで、高級感があります。家族みんなで使っていますが、子どもも気に入っています。",
+            "customer_name": "Y.A様",
+            "customer_detail": "30代・大阪府",
+            "products": "ダイニングテーブル, チェア×4"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,237 @@
+{% comment %}
+  6JOHAN Announcement Ticker
+  お知らせティッカー（スクロール表示）
+{% endcomment %}
+
+{%- style -%}
+.announcement-ticker {
+  background-color: var(--6j-charcoal, #2C2C24);
+  color: #fff;
+  overflow: hidden;
+  position: relative;
+}
+
+.announcement-ticker__wrapper {
+  display: flex;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  min-height: 36px;
+}
+
+.announcement-ticker__label {
+  flex-shrink: 0;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background-color: var(--6j-amber, #C4956A);
+  color: #fff;
+  padding: 4px 10px;
+  margin-right: 16px;
+  border-radius: 2px;
+}
+
+.announcement-ticker__track {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+  height: 36px;
+}
+
+.announcement-ticker__items {
+  display: flex;
+  flex-direction: column;
+  animation: ticker-scroll {{ section.settings.scroll_speed }}s linear infinite;
+  animation-play-state: running;
+}
+
+.announcement-ticker__track:hover .announcement-ticker__items {
+  animation-play-state: paused;
+}
+
+.announcement-ticker__item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  white-space: nowrap;
+}
+
+.announcement-ticker__item a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 13px;
+  transition: opacity 0.2s;
+}
+
+.announcement-ticker__item a:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
+.announcement-ticker__date {
+  font-size: 11px;
+  opacity: 0.7;
+  margin-right: 12px;
+}
+
+.announcement-ticker__close {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  padding: 8px;
+  margin-left: 12px;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.announcement-ticker__close:hover {
+  opacity: 1;
+}
+
+@keyframes ticker-scroll {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-50%);
+  }
+}
+
+@media (max-width: 749px) {
+  .announcement-ticker__label {
+    display: none;
+  }
+  
+  .announcement-ticker__item a {
+    font-size: 12px;
+  }
+  
+  .announcement-ticker__date {
+    display: none;
+  }
+}
+{%- endstyle -%}
+
+{% if section.blocks.size > 0 %}
+<div class="announcement-ticker" id="announcement-ticker" role="region" aria-label="お知らせ">
+  <div class="announcement-ticker__wrapper">
+    <span class="announcement-ticker__label">{{ section.settings.label }}</span>
+    
+    <div class="announcement-ticker__track">
+      <div class="announcement-ticker__items">
+        {% for block in section.blocks %}
+          <div class="announcement-ticker__item" {{ block.shopify_attributes }}>
+            {% if block.settings.date != blank %}
+              <span class="announcement-ticker__date">{{ block.settings.date }}</span>
+            {% endif %}
+            <a href="{{ block.settings.url | default: '#' }}">
+              {{ block.settings.text }}
+            </a>
+          </div>
+        {% endfor %}
+        {%- comment -%} Duplicate for seamless loop {%- endcomment -%}
+        {% for block in section.blocks %}
+          <div class="announcement-ticker__item">
+            {% if block.settings.date != blank %}
+              <span class="announcement-ticker__date">{{ block.settings.date }}</span>
+            {% endif %}
+            <a href="{{ block.settings.url | default: '#' }}">
+              {{ block.settings.text }}
+            </a>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+    
+    {% if section.settings.show_close %}
+      <button class="announcement-ticker__close" onclick="this.closest('.announcement-ticker').style.display='none'" aria-label="閉じる">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M12 4L4 12M4 4l8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </button>
+    {% endif %}
+  </div>
+</div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "6JOHAN お知らせティッカー",
+  "tag": "section",
+  "class": "section-announcement-ticker",
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "ラベル",
+      "default": "NEWS"
+    },
+    {
+      "type": "range",
+      "id": "scroll_speed",
+      "label": "スクロール速度（秒）",
+      "min": 3,
+      "max": 15,
+      "step": 1,
+      "default": 6
+    },
+    {
+      "type": "checkbox",
+      "id": "show_close",
+      "label": "閉じるボタンを表示",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "announcement",
+      "name": "お知らせ",
+      "settings": [
+        {
+          "type": "text",
+          "id": "date",
+          "label": "日付",
+          "placeholder": "2026.03.20"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "テキスト",
+          "default": "お知らせ内容をここに入力"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "リンクURL"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "6JOHAN お知らせティッカー",
+      "blocks": [
+        {
+          "type": "announcement",
+          "settings": {
+            "date": "2026.03.20",
+            "text": "春の新作コレクションが入荷しました"
+          }
+        },
+        {
+          "type": "announcement",
+          "settings": {
+            "date": "2026.03.15",
+            "text": "【重要】配送料改定のお知らせ"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

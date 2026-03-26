@@ -1,0 +1,306 @@
+{% comment %}
+  6JOHAN Category Icons
+  カテゴリアイコンナビゲーション（横スクロール）
+{% endcomment %}
+
+{%- style -%}
+.category-icons {
+  background-color: #fff;
+  border-bottom: 1px solid var(--6j-sand, #E8E5DC);
+  overflow: hidden;
+}
+
+.category-icons__container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 20px;
+}
+
+.category-icons__scroll {
+  display: flex;
+  gap: 32px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding: 8px 0;
+}
+
+.category-icons__scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.category-icons__item {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  min-width: 80px;
+}
+
+.category-icons__icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: var(--6j-parchment, #F5F4F0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  overflow: hidden;
+}
+
+.category-icons__item:hover .category-icons__icon {
+  background-color: var(--6j-sand, #E8E5DC);
+  transform: translateY(-2px);
+}
+
+.category-icons__icon svg {
+  width: 28px;
+  height: 28px;
+  color: var(--6j-charcoal, #2C2C24);
+}
+
+.category-icons__icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.category-icons__label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--6j-earth, #6B6B5E);
+  text-align: center;
+  white-space: nowrap;
+  transition: color 0.2s;
+}
+
+.category-icons__item:hover .category-icons__label {
+  color: var(--6j-charcoal, #2C2C24);
+}
+
+/* Pre-defined icons */
+.category-icons__icon--chair svg { }
+.category-icons__icon--table svg { }
+.category-icons__icon--storage svg { }
+.category-icons__icon--sofa svg { }
+.category-icons__icon--mirror svg { }
+.category-icons__icon--rug svg { }
+.category-icons__icon--all svg { }
+
+@media (max-width: 749px) {
+  .category-icons__container {
+    padding: 16px;
+  }
+  
+  .category-icons__scroll {
+    gap: 20px;
+  }
+  
+  .category-icons__item {
+    min-width: 64px;
+  }
+  
+  .category-icons__icon {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .category-icons__icon svg {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .category-icons__label {
+    font-size: 11px;
+  }
+}
+{%- endstyle -%}
+
+<nav class="category-icons" aria-label="カテゴリナビゲーション">
+  <div class="category-icons__container">
+    <div class="category-icons__scroll">
+      {% for block in section.blocks %}
+        <a href="{{ block.settings.url | default: '#' }}" class="category-icons__item" {{ block.shopify_attributes }}>
+          <span class="category-icons__icon category-icons__icon--{{ block.settings.icon_type }}">
+            {% if block.settings.custom_image %}
+              <img
+                src="{{ block.settings.custom_image | image_url: width: 120 }}"
+                alt="{{ block.settings.label }}"
+                loading="lazy"
+                width="60"
+                height="60"
+              >
+            {% else %}
+              {% case block.settings.icon_type %}
+                {% when 'chair' %}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M5 11V5a2 2 0 012-2h10a2 2 0 012 2v6M5 11h14M5 11v8M19 11v8M8 19v2M16 19v2M5 15h14"/>
+                  </svg>
+                {% when 'table' %}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <rect x="3" y="8" width="18" height="3" rx="1"/>
+                    <path d="M5 11v10M19 11v10M8 11v6M16 11v6"/>
+                  </svg>
+                {% when 'storage' %}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <rect x="3" y="3" width="18" height="18" rx="2"/>
+                    <path d="M3 9h18M3 15h18M12 3v18"/>
+                    <circle cx="7.5" cy="6" r="0.5" fill="currentColor"/>
+                    <circle cx="16.5" cy="6" r="0.5" fill="currentColor"/>
+                    <circle cx="7.5" cy="12" r="0.5" fill="currentColor"/>
+                    <circle cx="16.5" cy="12" r="0.5" fill="currentColor"/>
+                  </svg>
+                {% when 'sofa' %}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M4 12V9a2 2 0 012-2h12a2 2 0 012 2v3"/>
+                    <path d="M2 12v4a2 2 0 002 2h16a2 2 0 002-2v-4a2 2 0 00-2-2H4a2 2 0 00-2 2z"/>
+                    <path d="M6 18v2M18 18v2"/>
+                  </svg>
+                {% when 'mirror' %}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <ellipse cx="12" cy="10" rx="7" ry="8"/>
+                    <path d="M12 18v4M8 22h8"/>
+                  </svg>
+                {% when 'rug' %}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <rect x="3" y="6" width="18" height="12" rx="1"/>
+                    <path d="M7 6v12M17 6v12M3 10h18M3 14h18"/>
+                  </svg>
+                {% when 'lighting' %}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M9 18h6M10 22h4"/>
+                    <path d="M12 2v2M4.93 4.93l1.41 1.41M2 12h2M4.93 19.07l1.41-1.41M19.07 4.93l-1.41 1.41M22 12h-2M19.07 19.07l-1.41-1.41"/>
+                    <circle cx="12" cy="12" r="4"/>
+                  </svg>
+                {% when 'all' %}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <rect x="3" y="3" width="7" height="7" rx="1"/>
+                    <rect x="14" y="3" width="7" height="7" rx="1"/>
+                    <rect x="3" y="14" width="7" height="7" rx="1"/>
+                    <rect x="14" y="14" width="7" height="7" rx="1"/>
+                  </svg>
+                {% else %}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <rect x="3" y="3" width="18" height="18" rx="2"/>
+                  </svg>
+              {% endcase %}
+            {% endif %}
+          </span>
+          <span class="category-icons__label">{{ block.settings.label }}</span>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</nav>
+
+{% schema %}
+{
+  "name": "6JOHAN カテゴリアイコン",
+  "tag": "section",
+  "class": "section-category-icons",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "カテゴリ",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "ラベル",
+          "default": "チェア"
+        },
+        {
+          "type": "select",
+          "id": "icon_type",
+          "label": "アイコンタイプ",
+          "options": [
+            { "value": "chair", "label": "チェア" },
+            { "value": "table", "label": "テーブル" },
+            { "value": "storage", "label": "収納" },
+            { "value": "sofa", "label": "ソファ" },
+            { "value": "mirror", "label": "ミラー" },
+            { "value": "rug", "label": "ラグ" },
+            { "value": "lighting", "label": "照明" },
+            { "value": "all", "label": "すべて" },
+            { "value": "custom", "label": "カスタム画像" }
+          ],
+          "default": "chair"
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_image",
+          "label": "カスタム画像",
+          "info": "アイコンタイプが「カスタム画像」の場合に使用"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "リンク先"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "6JOHAN カテゴリアイコン",
+      "blocks": [
+        {
+          "type": "category",
+          "settings": {
+            "label": "チェア・椅子",
+            "icon_type": "chair"
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "label": "テーブル・デスク",
+            "icon_type": "table"
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "label": "収納家具",
+            "icon_type": "storage"
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "label": "ソファ",
+            "icon_type": "sofa"
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "label": "ミラー・鏡",
+            "icon_type": "mirror"
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "label": "ラグ",
+            "icon_type": "rug"
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "label": "すべて見る",
+            "icon_type": "all"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

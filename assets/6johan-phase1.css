@@ -1,0 +1,126 @@
+/* ==========================================================================
+   6JOHAN Phase 1 Additions
+   新規セクション用の追加CSS
+   ========================================================================== */
+
+/* CSS Variables - 既存の6johan-custom.cssに追加する場合は重複に注意 */
+:root {
+  --6j-linen: #FAFAF7;
+  --6j-parchment: #F5F4F0;
+  --6j-sand: #E8E5DC;
+  --6j-stone: #8A8A7A;
+  --6j-earth: #6B6B5E;
+  --6j-charcoal: #2C2C24;
+  --6j-amber: #C4956A;
+  --6j-sage: #8BA889;
+  --6j-gold: #D4A843;
+}
+
+/* ==========================================================================
+   Product Card Enhancements
+   商品カードの拡張スタイル
+   ========================================================================== */
+
+/* バッジの配置 */
+.card__inner .product-badge {
+  margin-bottom: 4px;
+}
+
+/* カラースウォッチの配置 */
+.card__content .color-swatches {
+  margin-top: 8px;
+}
+
+/* Featured Collectionセクション内の商品カードにバッジを追加する場合 */
+.featured-collection .card__media {
+  position: relative;
+}
+
+.featured-collection .product-badges-container {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 2;
+}
+
+/* ==========================================================================
+   Global Enhancements
+   グローバルな拡張スタイル
+   ========================================================================== */
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Focus styles for accessibility */
+*:focus-visible {
+  outline: 2px solid var(--6j-amber);
+  outline-offset: 2px;
+}
+
+/* Selection color */
+::selection {
+  background-color: var(--6j-amber);
+  color: white;
+}
+
+/* ==========================================================================
+   Animation Utilities
+   アニメーションユーティリティ
+   ========================================================================== */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out;
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft 0.4s ease-out;
+}
+
+/* ==========================================================================
+   Print Styles
+   印刷用スタイル
+   ========================================================================== */
+
+@media print {
+  .announcement-ticker,
+  .newsletter-bar,
+  .color-swatches {
+    display: none !important;
+  }
+}

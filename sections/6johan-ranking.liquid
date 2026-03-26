@@ -1,0 +1,459 @@
+{% comment %}
+  6JOHAN Ranking Section
+  タブ切り替えランキングセクション
+{% endcomment %}
+
+{%- style -%}
+.ranking-section {
+  padding: 60px 0;
+  background-color: var(--6j-linen, #FAFAF7);
+}
+
+.ranking-section__container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.ranking-section__header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.ranking-section__label {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--6j-amber, #C4956A);
+  margin-bottom: 8px;
+}
+
+.ranking-section__title {
+  font-family: 'Playfair Display', 'Noto Serif JP', serif;
+  font-size: 28px;
+  font-weight: 500;
+  color: var(--6j-charcoal, #2C2C24);
+  margin: 0;
+}
+
+.ranking-section__tabs {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+}
+
+.ranking-section__tab {
+  padding: 10px 20px;
+  background: none;
+  border: 1px solid var(--6j-sand, #E8E5DC);
+  border-radius: 24px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--6j-earth, #6B6B5E);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.ranking-section__tab:hover {
+  border-color: var(--6j-charcoal, #2C2C24);
+  color: var(--6j-charcoal, #2C2C24);
+}
+
+.ranking-section__tab.is-active {
+  background-color: var(--6j-charcoal, #2C2C24);
+  border-color: var(--6j-charcoal, #2C2C24);
+  color: #fff;
+}
+
+.ranking-section__content {
+  display: none;
+}
+
+.ranking-section__content.is-active {
+  display: block;
+}
+
+.ranking-section__grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 20px;
+}
+
+.ranking-section__item {
+  position: relative;
+}
+
+.ranking-section__rank {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 28px;
+  height: 28px;
+  background-color: var(--6j-charcoal, #2C2C24);
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  z-index: 2;
+}
+
+.ranking-section__rank--1 {
+  background: linear-gradient(135deg, #D4A843 0%, #B8932E 100%);
+}
+
+.ranking-section__rank--2 {
+  background: linear-gradient(135deg, #A8A8A8 0%, #8A8A8A 100%);
+}
+
+.ranking-section__rank--3 {
+  background: linear-gradient(135deg, #CD7F32 0%, #A66528 100%);
+}
+
+.ranking-section__image-wrap {
+  position: relative;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 8px;
+  background-color: var(--6j-parchment, #F5F4F0);
+  margin-bottom: 12px;
+}
+
+.ranking-section__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+
+.ranking-section__item:hover .ranking-section__image {
+  transform: scale(1.05);
+}
+
+.ranking-section__badges {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 2;
+}
+
+.ranking-section__info {
+  padding: 0 4px;
+}
+
+.ranking-section__name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--6j-charcoal, #2C2C24);
+  margin: 0 0 6px;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.ranking-section__name a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.ranking-section__name a:hover {
+  text-decoration: underline;
+}
+
+.ranking-section__price {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--6j-charcoal, #2C2C24);
+}
+
+.ranking-section__view-all {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.ranking-section__view-all-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 32px;
+  border: 1px solid var(--6j-charcoal, #2C2C24);
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--6j-charcoal, #2C2C24);
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.ranking-section__view-all-link:hover {
+  background-color: var(--6j-charcoal, #2C2C24);
+  color: #fff;
+}
+
+@media (max-width: 999px) {
+  .ranking-section__grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  
+  .ranking-section__item:nth-child(5) {
+    display: none;
+  }
+}
+
+@media (max-width: 749px) {
+  .ranking-section {
+    padding: 40px 0;
+  }
+  
+  .ranking-section__title {
+    font-size: 22px;
+  }
+  
+  .ranking-section__tabs {
+    gap: 6px;
+    padding: 0 10px;
+  }
+  
+  .ranking-section__tab {
+    padding: 8px 14px;
+    font-size: 12px;
+  }
+  
+  .ranking-section__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  
+  .ranking-section__item:nth-child(5) {
+    display: block;
+  }
+  
+  .ranking-section__item:nth-child(n+5) {
+    display: none;
+  }
+}
+{%- endstyle -%}
+
+<section class="ranking-section">
+  <div class="ranking-section__container">
+    <header class="ranking-section__header">
+      <span class="ranking-section__label">{{ section.settings.label }}</span>
+      <h2 class="ranking-section__title">{{ section.settings.heading }}</h2>
+    </header>
+    
+    {% if section.blocks.size > 0 %}
+      <div class="ranking-section__tabs" role="tablist">
+        {% for block in section.blocks %}
+          <button
+            class="ranking-section__tab{% if forloop.first %} is-active{% endif %}"
+            role="tab"
+            aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+            aria-controls="ranking-panel-{{ block.id }}"
+            data-tab="{{ block.id }}"
+            {{ block.shopify_attributes }}
+          >
+            {{ block.settings.tab_label }}
+          </button>
+        {% endfor %}
+      </div>
+      
+      {% for block in section.blocks %}
+        {% assign collection = collections[block.settings.collection] %}
+        <div
+          class="ranking-section__content{% if forloop.first %} is-active{% endif %}"
+          role="tabpanel"
+          id="ranking-panel-{{ block.id }}"
+          aria-labelledby="ranking-tab-{{ block.id }}"
+        >
+          <div class="ranking-section__grid">
+            {% assign products_to_show = block.settings.products_to_show | default: 5 %}
+            {% for product in collection.products limit: products_to_show %}
+              <article class="ranking-section__item">
+                <span class="ranking-section__rank ranking-section__rank--{{ forloop.index }}">
+                  {{ forloop.index }}
+                </span>
+                
+                <a href="{{ product.url }}" class="ranking-section__image-wrap">
+                  {% if product.featured_image %}
+                    <img
+                      src="{{ product.featured_image | image_url: width: 400 }}"
+                      alt="{{ product.featured_image.alt | escape }}"
+                      class="ranking-section__image"
+                      loading="lazy"
+                      width="400"
+                      height="400"
+                    >
+                  {% else %}
+                    {{ 'product-1' | placeholder_svg_tag: 'ranking-section__image' }}
+                  {% endif %}
+                  
+                  <div class="ranking-section__badges">
+                    {% render '6johan-product-badge', product: product %}
+                  </div>
+                </a>
+                
+                <div class="ranking-section__info">
+                  <h3 class="ranking-section__name">
+                    <a href="{{ product.url }}">{{ product.title }}</a>
+                  </h3>
+                  <p class="ranking-section__price">
+                    {{ product.price | money }}
+                  </p>
+                </div>
+              </article>
+            {% endfor %}
+          </div>
+        </div>
+      {% endfor %}
+    {% endif %}
+    
+    {% if section.settings.show_view_all and section.settings.view_all_url != blank %}
+      <div class="ranking-section__view-all">
+        <a href="{{ section.settings.view_all_url }}" class="ranking-section__view-all-link">
+          {{ section.settings.view_all_text }}
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const tabs = document.querySelectorAll('.ranking-section__tab');
+    const panels = document.querySelectorAll('.ranking-section__content');
+    
+    tabs.forEach(function(tab) {
+      tab.addEventListener('click', function() {
+        const targetId = this.getAttribute('data-tab');
+        
+        // Update tabs
+        tabs.forEach(function(t) {
+          t.classList.remove('is-active');
+          t.setAttribute('aria-selected', 'false');
+        });
+        this.classList.add('is-active');
+        this.setAttribute('aria-selected', 'true');
+        
+        // Update panels
+        panels.forEach(function(panel) {
+          panel.classList.remove('is-active');
+          if (panel.id === 'ranking-panel-' + targetId) {
+            panel.classList.add('is-active');
+          }
+        });
+      });
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "6JOHAN ランキング",
+  "tag": "section",
+  "class": "section-ranking",
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "ラベル",
+      "default": "RANKING"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "見出し",
+      "default": "人気ランキング"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "「すべて見る」リンクを表示",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "view_all_text",
+      "label": "「すべて見る」テキスト",
+      "default": "ランキングをもっと見る"
+    },
+    {
+      "type": "url",
+      "id": "view_all_url",
+      "label": "「すべて見る」リンク先"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "tab",
+      "name": "タブ",
+      "settings": [
+        {
+          "type": "text",
+          "id": "tab_label",
+          "label": "タブラベル",
+          "default": "すべて"
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "コレクション"
+        },
+        {
+          "type": "range",
+          "id": "products_to_show",
+          "label": "表示する商品数",
+          "min": 3,
+          "max": 10,
+          "step": 1,
+          "default": 5
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "6JOHAN ランキング",
+      "blocks": [
+        {
+          "type": "tab",
+          "settings": {
+            "tab_label": "すべて"
+          }
+        },
+        {
+          "type": "tab",
+          "settings": {
+            "tab_label": "チェア"
+          }
+        },
+        {
+          "type": "tab",
+          "settings": {
+            "tab_label": "テーブル"
+          }
+        },
+        {
+          "type": "tab",
+          "settings": {
+            "tab_label": "収納"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

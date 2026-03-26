@@ -1,0 +1,187 @@
+{% comment %}
+  6JOHAN Product Badge
+  商品バッジ（即納/受注生産/人気/NEW/SALE）
+  
+  Usage:
+  {% render '6johan-product-badge', product: product %}
+  {% render '6johan-product-badge', product: product, show_sale: true %}
+{% endcomment %}
+
+{%- style -%}
+.product-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+
+/* 即納（在庫あり） - Green */
+.product-badge--in-stock {
+  background-color: var(--6j-sage, #8BA889);
+  color: #fff;
+}
+
+/* 受注生産 - Stone */
+.product-badge--made-to-order {
+  background-color: var(--6j-stone, #8A8A7A);
+  color: #fff;
+}
+
+/* 人気 - Amber */
+.product-badge--popular {
+  background-color: var(--6j-amber, #C4956A);
+  color: #fff;
+}
+
+/* NEW - Charcoal */
+.product-badge--new {
+  background-color: var(--6j-charcoal, #2C2C24);
+  color: #fff;
+}
+
+/* SALE - Red */
+.product-badge--sale {
+  background-color: #C75050;
+  color: #fff;
+}
+
+/* 残りわずか - Orange */
+.product-badge--low-stock {
+  background-color: #D4804A;
+  color: #fff;
+}
+
+/* SOLD OUT - Gray */
+.product-badge--sold-out {
+  background-color: var(--6j-earth, #6B6B5E);
+  color: #fff;
+}
+
+/* 予約受付中 - Blue */
+.product-badge--preorder {
+  background-color: #5A7A9A;
+  color: #fff;
+}
+
+/* WEB限定 - Purple */
+.product-badge--web-only {
+  background-color: #7A5A8A;
+  color: #fff;
+}
+
+.product-badge__icon {
+  width: 12px;
+  height: 12px;
+}
+{%- endstyle -%}
+
+{% comment %} Determine badge conditions {% endcomment %}
+{% assign show_sale = show_sale | default: false %}
+{% assign show_new = true %}
+{% assign show_popular = true %}
+{% assign show_stock_status = true %}
+
+{% comment %} Check if product is new (within last 30 days) {% endcomment %}
+{% assign now = 'now' | date: '%s' %}
+{% assign product_date = product.created_at | date: '%s' %}
+{% assign diff_seconds = now | minus: product_date %}
+{% assign thirty_days = 2592000 %}
+{% assign is_new = false %}
+{% if diff_seconds < thirty_days %}
+  {% assign is_new = true %}
+{% endif %}
+
+{% comment %} Check if product is on sale {% endcomment %}
+{% assign is_on_sale = false %}
+{% if product.compare_at_price > product.price %}
+  {% assign is_on_sale = true %}
+{% endif %}
+
+{% comment %} Check stock status via tags or availability {% endcomment %}
+{% assign is_in_stock = false %}
+{% assign is_made_to_order = false %}
+{% assign is_popular = false %}
+{% assign is_preorder = false %}
+{% assign is_web_only = false %}
+{% assign is_low_stock = false %}
+
+{% for tag in product.tags %}
+  {% assign tag_lower = tag | downcase %}
+  {% if tag_lower == '即納' or tag_lower == 'in-stock' or tag_lower == 'in_stock' %}
+    {% assign is_in_stock = true %}
+  {% endif %}
+  {% if tag_lower == '受注生産' or tag_lower == 'made-to-order' or tag_lower == 'made_to_order' %}
+    {% assign is_made_to_order = true %}
+  {% endif %}
+  {% if tag_lower == '人気' or tag_lower == 'popular' or tag_lower == 'bestseller' %}
+    {% assign is_popular = true %}
+  {% endif %}
+  {% if tag_lower == '予約' or tag_lower == 'preorder' or tag_lower == 'pre-order' %}
+    {% assign is_preorder = true %}
+  {% endif %}
+  {% if tag_lower == 'web限定' or tag_lower == 'web-only' or tag_lower == 'online-only' %}
+    {% assign is_web_only = true %}
+  {% endif %}
+  {% if tag_lower == '残りわずか' or tag_lower == 'low-stock' or tag_lower == 'limited' %}
+    {% assign is_low_stock = true %}
+  {% endif %}
+{% endfor %}
+
+{% comment %} Also check if in 即納商品 collection {% endcomment %}
+{% for collection in product.collections %}
+  {% if collection.handle == '即納商品' or collection.handle == 'in-stock' %}
+    {% assign is_in_stock = true %}
+  {% endif %}
+  {% if collection.handle == 'pick-up' or collection.handle == 'bestsellers' %}
+    {% assign is_popular = true %}
+  {% endif %}
+{% endfor %}
+
+{% comment %} Output badges {% endcomment %}
+{% if product.available == false %}
+  <span class="product-badge product-badge--sold-out">SOLD OUT</span>
+{% else %}
+  
+  {% if is_new and show_new %}
+    <span class="product-badge product-badge--new">NEW</span>
+  {% endif %}
+  
+  {% if is_on_sale and show_sale %}
+    {% assign discount_percent = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price %}
+    <span class="product-badge product-badge--sale">{{ discount_percent }}% OFF</span>
+  {% endif %}
+  
+  {% if is_popular and show_popular %}
+    <span class="product-badge product-badge--popular">
+      <svg class="product-badge__icon" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+      </svg>
+      人気
+    </span>
+  {% endif %}
+  
+  {% if is_preorder %}
+    <span class="product-badge product-badge--preorder">予約受付中</span>
+  {% elsif is_low_stock %}
+    <span class="product-badge product-badge--low-stock">残りわずか</span>
+  {% elsif is_in_stock and show_stock_status %}
+    <span class="product-badge product-badge--in-stock">
+      <svg class="product-badge__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M5 12l5 5L20 7"/>
+      </svg>
+      即納
+    </span>
+  {% elsif is_made_to_order and show_stock_status %}
+    <span class="product-badge product-badge--made-to-order">受注生産</span>
+  {% endif %}
+  
+  {% if is_web_only %}
+    <span class="product-badge product-badge--web-only">WEB限定</span>
+  {% endif %}
+  
+{% endif %}

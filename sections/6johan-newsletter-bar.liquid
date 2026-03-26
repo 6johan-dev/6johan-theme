@@ -1,0 +1,281 @@
+{% comment %}
+  6JOHAN Newsletter Bar
+  メルマガ登録バー（インセンティブ付き）
+{% endcomment %}
+
+{%- style -%}
+.newsletter-bar {
+  background: linear-gradient(135deg, var(--6j-parchment, #F5F4F0) 0%, var(--6j-linen, #FAFAF7) 100%);
+  border-bottom: 1px solid var(--6j-sand, #E8E5DC);
+}
+
+.newsletter-bar__wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 12px 20px;
+  flex-wrap: wrap;
+}
+
+.newsletter-bar__icon {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  background-color: var(--6j-amber, #C4956A);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.newsletter-bar__icon svg {
+  width: 16px;
+  height: 16px;
+  color: #fff;
+}
+
+.newsletter-bar__content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.newsletter-bar__badge {
+  background-color: var(--6j-amber, #C4956A);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 2px;
+  letter-spacing: 0.05em;
+}
+
+.newsletter-bar__text {
+  font-size: 14px;
+  color: var(--6j-charcoal, #2C2C24);
+}
+
+.newsletter-bar__text strong {
+  font-weight: 600;
+}
+
+.newsletter-bar__form {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.newsletter-bar__input {
+  width: 220px;
+  padding: 10px 14px;
+  border: 1px solid var(--6j-sand, #E8E5DC);
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: #fff;
+  transition: border-color 0.2s;
+}
+
+.newsletter-bar__input:focus {
+  outline: none;
+  border-color: var(--6j-amber, #C4956A);
+}
+
+.newsletter-bar__input::placeholder {
+  color: var(--6j-stone, #8A8A7A);
+}
+
+.newsletter-bar__button {
+  padding: 10px 20px;
+  background-color: var(--6j-charcoal, #2C2C24);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  white-space: nowrap;
+}
+
+.newsletter-bar__button:hover {
+  background-color: var(--6j-earth, #6B6B5E);
+}
+
+.newsletter-bar__close {
+  position: absolute;
+  right: 16px;
+  background: none;
+  border: none;
+  color: var(--6j-stone, #8A8A7A);
+  cursor: pointer;
+  padding: 4px;
+  transition: color 0.2s;
+}
+
+.newsletter-bar__close:hover {
+  color: var(--6j-charcoal, #2C2C24);
+}
+
+.newsletter-bar__success {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  color: var(--6j-sage, #8BA889);
+  font-size: 14px;
+}
+
+.newsletter-bar__success svg {
+  width: 20px;
+  height: 20px;
+}
+
+.newsletter-bar.is-success .newsletter-bar__form {
+  display: none;
+}
+
+.newsletter-bar.is-success .newsletter-bar__success {
+  display: flex;
+}
+
+@media (max-width: 899px) {
+  .newsletter-bar__wrapper {
+    flex-direction: column;
+    text-align: center;
+    padding: 16px 20px;
+  }
+  
+  .newsletter-bar__form {
+    width: 100%;
+    max-width: 360px;
+  }
+  
+  .newsletter-bar__input {
+    flex: 1;
+    width: auto;
+  }
+}
+
+@media (max-width: 549px) {
+  .newsletter-bar__icon {
+    display: none;
+  }
+  
+  .newsletter-bar__form {
+    flex-direction: column;
+  }
+  
+  .newsletter-bar__input {
+    width: 100%;
+  }
+  
+  .newsletter-bar__button {
+    width: 100%;
+  }
+}
+{%- endstyle -%}
+
+<div class="newsletter-bar" id="newsletter-bar" role="region" aria-label="メールマガジン登録">
+  <div class="newsletter-bar__wrapper">
+    <div class="newsletter-bar__icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+        <polyline points="22,6 12,13 2,6"/>
+      </svg>
+    </div>
+    
+    <div class="newsletter-bar__content">
+      {% if section.settings.badge_text != blank %}
+        <span class="newsletter-bar__badge">{{ section.settings.badge_text }}</span>
+      {% endif %}
+      <p class="newsletter-bar__text">{{ section.settings.text }}</p>
+    </div>
+    
+    {% form 'customer', id: 'newsletter-form-bar' %}
+      <div class="newsletter-bar__form">
+        <input type="hidden" name="contact[tags]" value="newsletter">
+        <input
+          type="email"
+          name="contact[email]"
+          class="newsletter-bar__input"
+          placeholder="{{ section.settings.placeholder }}"
+          required
+          autocomplete="email"
+        >
+        <button type="submit" class="newsletter-bar__button">
+          {{ section.settings.button_text }}
+        </button>
+      </div>
+      
+      <div class="newsletter-bar__success">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+          <polyline points="22 4 12 14.01 9 11.01"/>
+        </svg>
+        <span>{{ section.settings.success_message }}</span>
+      </div>
+    {% endform %}
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('newsletter-form-bar');
+    if (form) {
+      form.addEventListener('submit', function(e) {
+        // Show success state after form submission
+        setTimeout(function() {
+          document.querySelector('.newsletter-bar').classList.add('is-success');
+        }, 100);
+      });
+    }
+  });
+</script>
+
+{% schema %}
+{
+  "name": "6JOHAN メルマガ登録バー",
+  "tag": "section",
+  "class": "section-newsletter-bar",
+  "settings": [
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "バッジテキスト",
+      "default": "初回10%OFF"
+    },
+    {
+      "type": "text",
+      "id": "text",
+      "label": "説明テキスト",
+      "default": "メルマガ登録で<strong>初回ご購入10%OFF</strong>クーポンをプレゼント"
+    },
+    {
+      "type": "text",
+      "id": "placeholder",
+      "label": "入力欄プレースホルダー",
+      "default": "メールアドレス"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "ボタンテキスト",
+      "default": "登録する"
+    },
+    {
+      "type": "text",
+      "id": "success_message",
+      "label": "登録完了メッセージ",
+      "default": "ご登録ありがとうございます！クーポンをお送りしました。"
+    }
+  ],
+  "presets": [
+    {
+      "name": "6JOHAN メルマガ登録バー"
+    }
+  ]
+}
+{% endschema %}
