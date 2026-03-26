@@ -1,12 +1,13 @@
 {% comment %}
   6JOHAN Category Icons
-  カテゴリアイコンナビゲーション（横スクロール）
+  カテゴリアイコンナビゲーション（グリッド表示・中央揃え）
+  修正: 横スクロール → グリッド折り返し表示
 {% endcomment %}
 
 {%- style -%}
 .category-icons {
-  background-color: #fff;
-  border-bottom: 1px solid var(--6j-sand, #E8E5DC);
+  background-color: var(--6j-bg, #fff);
+  border-bottom: 1px solid var(--6j-border, #E8E5E0);
   overflow: hidden;
 }
 
@@ -16,36 +17,27 @@
   padding: 24px 20px;
 }
 
-.category-icons__scroll {
+.category-icons__grid {
   display: flex;
-  gap: 32px;
-  overflow-x: auto;
-  scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  padding: 8px 0;
-}
-
-.category-icons__scroll::-webkit-scrollbar {
-  display: none;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 24px 32px;
 }
 
 .category-icons__item {
-  flex-shrink: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 10px;
   text-decoration: none;
-  min-width: 80px;
+  width: 80px;
 }
 
 .category-icons__icon {
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background-color: var(--6j-parchment, #F5F4F0);
+  background-color: var(--6j-bg-sub, #FAF9F7);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -54,14 +46,14 @@
 }
 
 .category-icons__item:hover .category-icons__icon {
-  background-color: var(--6j-sand, #E8E5DC);
+  background-color: var(--6j-border, #E8E5E0);
   transform: translateY(-2px);
 }
 
 .category-icons__icon svg {
   width: 28px;
   height: 28px;
-  color: var(--6j-charcoal, #2C2C24);
+  color: var(--6j-text, #292724);
 }
 
 .category-icons__icon img {
@@ -73,41 +65,62 @@
 .category-icons__label {
   font-size: 12px;
   font-weight: 500;
-  color: var(--6j-earth, #6B6B5E);
+  color: var(--6j-text-sub, #807C76);
   text-align: center;
   white-space: nowrap;
   transition: color 0.2s;
 }
 
 .category-icons__item:hover .category-icons__label {
-  color: var(--6j-charcoal, #2C2C24);
+  color: var(--6j-text, #292724);
 }
 
-/* Pre-defined icons */
-.category-icons__icon--chair svg { }
-.category-icons__icon--table svg { }
-.category-icons__icon--storage svg { }
-.category-icons__icon--sofa svg { }
-.category-icons__icon--mirror svg { }
-.category-icons__icon--rug svg { }
-.category-icons__icon--all svg { }
-
-@media (max-width: 749px) {
-  .category-icons__container {
-    padding: 16px;
-  }
-  
-  .category-icons__scroll {
-    gap: 20px;
+/* PC: 7個まで1行、それ以上は折り返し */
+@media (min-width: 750px) {
+  .category-icons__grid {
+    gap: 20px 40px;
   }
   
   .category-icons__item {
-    min-width: 64px;
+    width: 90px;
   }
   
   .category-icons__icon {
-    width: 50px;
-    height: 50px;
+    width: 64px;
+    height: 64px;
+  }
+  
+  .category-icons__icon svg {
+    width: 30px;
+    height: 30px;
+  }
+  
+  .category-icons__label {
+    font-size: 13px;
+  }
+}
+
+/* スマホ: 4列グリッド */
+@media (max-width: 749px) {
+  .category-icons__container {
+    padding: 20px 16px;
+  }
+  
+  .category-icons__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px 8px;
+    justify-items: center;
+  }
+  
+  .category-icons__item {
+    width: auto;
+    min-width: 0;
+  }
+  
+  .category-icons__icon {
+    width: 52px;
+    height: 52px;
   }
   
   .category-icons__icon svg {
@@ -116,14 +129,14 @@
   }
   
   .category-icons__label {
-    font-size: 11px;
+    font-size: 10px;
   }
 }
 {%- endstyle -%}
 
 <nav class="category-icons" aria-label="カテゴリナビゲーション">
   <div class="category-icons__container">
-    <div class="category-icons__scroll">
+    <div class="category-icons__grid">
       {% for block in section.blocks %}
         <a href="{{ block.settings.url | default: '#' }}" class="category-icons__item" {{ block.shopify_attributes }}>
           <span class="category-icons__icon category-icons__icon--{{ block.settings.icon_type }}">

@@ -1,41 +1,244 @@
-{{ '6johan-custom.css' | asset_url | stylesheet_tag }}
+{% comment %}
+  6JOHAN Global Trust Bar
+  信頼バー（SVGアイコン版）
+  修正: 絵文字 → SVGアイコン
+{% endcomment %}
 
-<div class="sixj-trust-bar">
-  <div class="sixj-trust-bar__item">
-    <span class="sixj-trust-bar__icon">🚚</span>
-    <span class="sixj-trust-bar__text">{{ section.settings.item1_text }}</span>
+{%- style -%}
+.trust-bar {
+  background-color: var(--6j-bg-sub, #FAF9F7);
+  border-top: 1px solid var(--6j-border, #E8E5E0);
+  padding: 24px 20px;
+}
+
+.trust-bar__container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.trust-bar__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.trust-bar__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 8px;
+}
+
+.trust-bar__icon {
+  width: 32px;
+  height: 32px;
+  color: var(--6j-accent, #6B5B4F);
+}
+
+.trust-bar__icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.trust-bar__text {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--6j-text, #292724);
+}
+
+.trust-bar__subtext {
+  font-size: 10px;
+  color: var(--6j-text-sub, #807C76);
+  margin-top: 2px;
+}
+
+/* PC */
+@media (min-width: 750px) {
+  .trust-bar {
+    padding: 32px 20px;
+  }
+  
+  .trust-bar__grid {
+    gap: 40px;
+  }
+  
+  .trust-bar__item {
+    flex-direction: row;
+    justify-content: center;
+    gap: 12px;
+    text-align: left;
+  }
+  
+  .trust-bar__icon {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .trust-bar__text {
+    font-size: 14px;
+  }
+  
+  .trust-bar__subtext {
+    font-size: 11px;
+  }
+}
+
+/* スマホ */
+@media (max-width: 749px) {
+  .trust-bar {
+    padding: 20px 16px;
+  }
+  
+  .trust-bar__grid {
+    gap: 12px;
+  }
+  
+  .trust-bar__icon {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .trust-bar__text {
+    font-size: 11px;
+  }
+}
+{%- endstyle -%}
+
+<section class="trust-bar">
+  <div class="trust-bar__container">
+    <div class="trust-bar__grid">
+      {% for block in section.blocks %}
+        <div class="trust-bar__item" {{ block.shopify_attributes }}>
+          <span class="trust-bar__icon">
+            {% case block.settings.icon_type %}
+              {% when 'shipping' %}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="1" y="3" width="15" height="13"/>
+                  <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+                  <circle cx="5.5" cy="18.5" r="2.5"/>
+                  <circle cx="18.5" cy="18.5" r="2.5"/>
+                </svg>
+              {% when 'return' %}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="1 4 1 10 7 10"/>
+                  <path d="M3.51 15a9 9 0 102.13-9.36L1 10"/>
+                </svg>
+              {% when 'chat' %}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+                </svg>
+              {% when 'quality' %}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                  <polyline points="9 12 11 14 15 10"/>
+                </svg>
+              {% when 'secure' %}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                  <path d="M7 11V7a5 5 0 0110 0v4"/>
+                </svg>
+              {% when 'support' %}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/>
+                </svg>
+              {% when 'gift' %}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 12 20 22 4 22 4 12"/>
+                  <rect x="2" y="7" width="20" height="5"/>
+                  <line x1="12" y1="22" x2="12" y2="7"/>
+                  <path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/>
+                  <path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/>
+                </svg>
+              {% else %}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"/>
+                  <polyline points="9 12 11 14 15 10"/>
+                </svg>
+            {% endcase %}
+          </span>
+          <div>
+            <div class="trust-bar__text">{{ block.settings.text }}</div>
+            {% if block.settings.subtext != blank %}
+              <div class="trust-bar__subtext">{{ block.settings.subtext }}</div>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
   </div>
-  <div class="sixj-trust-bar__item">
-    <span class="sixj-trust-bar__icon">↩️</span>
-    <span class="sixj-trust-bar__text">{{ section.settings.item2_text }}</span>
-  </div>
-  <div class="sixj-trust-bar__item">
-    <span class="sixj-trust-bar__icon">💬</span>
-    <span class="sixj-trust-bar__text">{{ section.settings.item3_text }}</span>
-  </div>
-</div>
+</section>
 
 {% schema %}
 {
   "name": "6JOHAN 信頼バー",
-  "settings": [
+  "tag": "section",
+  "class": "section-trust-bar",
+  "settings": [],
+  "blocks": [
     {
-      "type": "text",
-      "id": "item1_text",
-      "label": "項目1テキスト",
-      "default": "最短3日配送"
-    },
+      "type": "trust_item",
+      "name": "信頼項目",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon_type",
+          "label": "アイコン",
+          "options": [
+            { "value": "shipping", "label": "配送（トラック）" },
+            { "value": "return", "label": "返品（矢印）" },
+            { "value": "chat", "label": "チャット（吹き出し）" },
+            { "value": "quality", "label": "品質保証（盾）" },
+            { "value": "secure", "label": "セキュリティ（鍵）" },
+            { "value": "support", "label": "サポート（電話）" },
+            { "value": "gift", "label": "ギフト（プレゼント）" }
+          ],
+          "default": "shipping"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "テキスト",
+          "default": "最短3日配送"
+        },
+        {
+          "type": "text",
+          "id": "subtext",
+          "label": "サブテキスト",
+          "info": "任意。追加の説明文"
+        }
+      ]
+    }
+  ],
+  "presets": [
     {
-      "type": "text",
-      "id": "item2_text",
-      "label": "項目2テキスト",
-      "default": "30日返品OK"
-    },
-    {
-      "type": "text",
-      "id": "item3_text",
-      "label": "項目3テキスト",
-      "default": "チャット相談"
+      "name": "6JOHAN 信頼バー",
+      "blocks": [
+        {
+          "type": "trust_item",
+          "settings": {
+            "icon_type": "shipping",
+            "text": "最短3日配送",
+            "subtext": "在庫商品は7日以内に発送"
+          }
+        },
+        {
+          "type": "trust_item",
+          "settings": {
+            "icon_type": "return",
+            "text": "30日返品OK",
+            "subtext": "届いてからでも安心"
+          }
+        },
+        {
+          "type": "trust_item",
+          "settings": {
+            "icon_type": "chat",
+            "text": "チャット相談",
+            "subtext": "お気軽にご相談ください"
+          }
+        }
+      ]
     }
   ]
 }

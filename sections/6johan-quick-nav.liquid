@@ -1,37 +1,221 @@
 {% comment %}
-  6JOHAN Quick Navigation Pills
-  Horizontal scrolling navigation for top page.
+  6JOHAN Quick Nav
+  クイックナビゲーション（グリッド表示・SVGアイコン）
+  修正: 横スクロール → グリッド折り返し、絵文字 → SVGアイコン
 {% endcomment %}
 
-{{ '6johan-custom.css' | asset_url | stylesheet_tag }}
+{%- style -%}
+.quick-nav {
+  background-color: var(--6j-bg-sub, #FAF9F7);
+  border-bottom: 1px solid var(--6j-border, #E8E5E0);
+}
 
-<div class="sixj-container">
-  <nav class="sixj-quick-nav" aria-label="クイックナビゲーション">
-    {%- for block in section.blocks -%}
-      <a href="{{ block.settings.url }}" class="sixj-quick-nav__item" {{ block.shopify_attributes }}>
-        {%- if block.settings.icon != blank -%}
-          <span>{{ block.settings.icon }}</span>
-        {%- endif -%}
-        {{ block.settings.text }}
-      </a>
-    {%- endfor -%}
-  </nav>
-</div>
+.quick-nav__container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.quick-nav__grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+
+.quick-nav__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border: 1px solid var(--6j-border, #E8E5E0);
+  border-radius: 999px;
+  background-color: var(--6j-bg, #fff);
+  text-decoration: none;
+  color: var(--6j-text, #292724);
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.quick-nav__item:hover {
+  border-color: var(--6j-accent, #6B5B4F);
+  background-color: var(--6j-accent, #6B5B4F);
+  color: #fff;
+}
+
+.quick-nav__item:hover .quick-nav__icon {
+  color: #fff;
+}
+
+.quick-nav__icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  color: var(--6j-accent, #6B5B4F);
+  transition: color 0.2s;
+}
+
+.quick-nav__icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* PC: 中央揃え */
+@media (min-width: 750px) {
+  .quick-nav__container {
+    padding: 24px 20px;
+  }
+  
+  .quick-nav__grid {
+    gap: 16px;
+  }
+  
+  .quick-nav__item {
+    padding: 14px 24px;
+    font-size: 14px;
+  }
+  
+  .quick-nav__icon {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* スマホ: 2列グリッド */
+@media (max-width: 749px) {
+  .quick-nav__container {
+    padding: 16px;
+  }
+  
+  .quick-nav__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  
+  .quick-nav__item {
+    justify-content: center;
+    padding: 12px 16px;
+    font-size: 12px;
+  }
+  
+  .quick-nav__icon {
+    width: 16px;
+    height: 16px;
+  }
+}
+{%- endstyle -%}
+
+<nav class="quick-nav" aria-label="クイックナビゲーション">
+  <div class="quick-nav__container">
+    <div class="quick-nav__grid">
+      {% for block in section.blocks %}
+        <a href="{{ block.settings.url | default: '#' }}" class="quick-nav__item" {{ block.shopify_attributes }}>
+          <span class="quick-nav__icon">
+            {% case block.settings.icon_type %}
+              {% when 'room' %}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+                  <polyline points="9 22 9 12 15 12 15 22"/>
+                </svg>
+              {% when 'style' %}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="13.5" cy="6.5" r="2.5"/>
+                  <circle cx="19" cy="17" r="2"/>
+                  <circle cx="6" cy="12" r="3"/>
+                  <circle cx="12" cy="19" r="2"/>
+                </svg>
+              {% when 'beginner' %}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 9V5a3 3 0 00-6 0v4"/>
+                  <path d="M18 9h1a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2v-9a2 2 0 012-2h1"/>
+                  <path d="M8 9h8"/>
+                  <path d="M12 14v4"/>
+                  <path d="M10 16h4"/>
+                </svg>
+              {% when 'budget' %}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="12" y1="1" x2="12" y2="23"/>
+                  <path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
+                </svg>
+              {% when 'new' %}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                </svg>
+              {% when 'sale' %}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/>
+                  <line x1="7" y1="7" x2="7.01" y2="7"/>
+                </svg>
+              {% when 'guide' %}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 19.5A2.5 2.5 0 016.5 17H20"/>
+                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/>
+                  <line x1="12" y1="6" x2="12" y2="12"/>
+                  <line x1="9" y1="9" x2="15" y2="9"/>
+                </svg>
+              {% when 'stock' %}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="1" y="3" width="15" height="13"/>
+                  <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+                  <circle cx="5.5" cy="18.5" r="2.5"/>
+                  <circle cx="18.5" cy="18.5" r="2.5"/>
+                </svg>
+              {% else %}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="12" y1="8" x2="12" y2="12"/>
+                  <line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+            {% endcase %}
+          </span>
+          <span class="quick-nav__label">{{ block.settings.label }}</span>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</nav>
 
 {% schema %}
 {
   "name": "6JOHAN クイックナビ",
-  "tag": "div",
-  "class": "sixj-section--bordered",
+  "tag": "section",
+  "class": "section-quick-nav",
   "settings": [],
   "blocks": [
     {
       "type": "nav_item",
       "name": "ナビ項目",
       "settings": [
-        { "type": "text", "id": "icon", "label": "アイコン", "default": "🏠" },
-        { "type": "text", "id": "text", "label": "テキスト", "default": "部屋別で選ぶ" },
-        { "type": "url", "id": "url", "label": "リンク先" }
+        {
+          "type": "text",
+          "id": "label",
+          "label": "ラベル",
+          "default": "部屋別で選ぶ"
+        },
+        {
+          "type": "select",
+          "id": "icon_type",
+          "label": "アイコン",
+          "options": [
+            { "value": "room", "label": "部屋（家アイコン）" },
+            { "value": "style", "label": "スタイル（パレット）" },
+            { "value": "beginner", "label": "初めての方（ギフト）" },
+            { "value": "budget", "label": "予算（円マーク）" },
+            { "value": "new", "label": "新着（星）" },
+            { "value": "sale", "label": "セール（タグ）" },
+            { "value": "guide", "label": "ガイド（本）" },
+            { "value": "stock", "label": "即納（トラック）" }
+          ],
+          "default": "room"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "リンク先"
+        }
       ]
     }
   ],
@@ -39,10 +223,34 @@
     {
       "name": "6JOHAN クイックナビ",
       "blocks": [
-        { "type": "nav_item", "settings": { "icon": "🏠", "text": "部屋別で選ぶ" } },
-        { "type": "nav_item", "settings": { "icon": "🎨", "text": "スタイル別" } },
-        { "type": "nav_item", "settings": { "icon": "👋", "text": "初めての方" } },
-        { "type": "nav_item", "settings": { "icon": "💰", "text": "予算別" } }
+        {
+          "type": "nav_item",
+          "settings": {
+            "label": "部屋別で選ぶ",
+            "icon_type": "room"
+          }
+        },
+        {
+          "type": "nav_item",
+          "settings": {
+            "label": "スタイル別",
+            "icon_type": "style"
+          }
+        },
+        {
+          "type": "nav_item",
+          "settings": {
+            "label": "初めての方",
+            "icon_type": "beginner"
+          }
+        },
+        {
+          "type": "nav_item",
+          "settings": {
+            "label": "予算別",
+            "icon_type": "budget"
+          }
+        }
       ]
     }
   ]
