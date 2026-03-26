@@ -1,0 +1,812 @@
+{% comment %}
+  6JOHAN Scene Collection Section
+  シーン別コレクションページ用セクション
+{% endcomment %}
+
+{%- style -%}
+  .scene-collection {
+    background: var(--6j-bg);
+  }
+  
+  /* Hero */
+  .scene-collection__hero {
+    position: relative;
+    height: 50vh;
+    min-height: 350px;
+    max-height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: var(--6j-bg-sub);
+    overflow: hidden;
+  }
+  .scene-collection__hero-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .scene-collection__hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.3);
+  }
+  .scene-collection__hero-content {
+    position: relative;
+    z-index: 2;
+    color: #fff;
+    padding: 20px;
+  }
+  .scene-collection__hero-label {
+    font-size: var(--6j-font-size-xs);
+    letter-spacing: var(--6j-letter-spacing-label);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    opacity: 0.9;
+  }
+  .scene-collection__hero-title {
+    font-size: 32px;
+    font-weight: var(--6j-font-weight-medium);
+    margin-bottom: 12px;
+    line-height: 1.3;
+  }
+  .scene-collection__hero-desc {
+    font-size: var(--6j-font-size-md);
+    opacity: 0.9;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  /* Container */
+  .scene-collection__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 60px 20px;
+  }
+  
+  /* Scene Navigation */
+  .scene-collection__nav {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 48px;
+    flex-wrap: wrap;
+  }
+  .scene-collection__nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: var(--6j-text);
+    padding: 16px 24px;
+    border-radius: var(--6j-radius-xl);
+    background: var(--6j-bg-sub);
+    transition: all var(--6j-transition-base);
+    min-width: 120px;
+  }
+  .scene-collection__nav-item:hover,
+  .scene-collection__nav-item.active {
+    background: var(--6j-accent);
+    color: #fff;
+  }
+  .scene-collection__nav-icon {
+    font-size: 24px;
+    margin-bottom: 8px;
+  }
+  .scene-collection__nav-text {
+    font-size: var(--6j-font-size-sm);
+    font-weight: var(--6j-font-weight-medium);
+  }
+  
+  /* Scene Intro */
+  .scene-collection__intro {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto 48px;
+  }
+  .scene-collection__intro-text {
+    font-size: var(--6j-font-size-md);
+    color: var(--6j-text);
+    line-height: var(--6j-line-height-relaxed);
+  }
+  
+  /* Lifestyle Image */
+  .scene-collection__lifestyle {
+    margin-bottom: 48px;
+    border-radius: var(--6j-radius-xl);
+    overflow: hidden;
+  }
+  .scene-collection__lifestyle img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  
+  /* Filter Bar */
+  .scene-collection__filter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 0;
+    border-top: 1px solid var(--6j-border);
+    border-bottom: 1px solid var(--6j-border);
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .scene-collection__filter-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .scene-collection__count {
+    font-size: var(--6j-font-size-sm);
+    color: var(--6j-text-sub);
+  }
+  .scene-collection__filter-btn {
+    padding: 8px 16px;
+    border: 1px solid var(--6j-border);
+    border-radius: var(--6j-radius-base);
+    background: var(--6j-bg);
+    font-size: var(--6j-font-size-sm);
+    color: var(--6j-text);
+    cursor: pointer;
+  }
+  
+  /* Product Grid */
+  .scene-collection__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+  @media (max-width: 1024px) {
+    .scene-collection__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  @media (max-width: 768px) {
+    .scene-collection__grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+  }
+  
+  /* Product Card */
+  .scene-product-card {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+  .scene-product-card__image {
+    position: relative;
+    aspect-ratio: 1;
+    background: var(--6j-bg-sub);
+    border-radius: var(--6j-radius-lg);
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+  .scene-product-card__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--6j-transition-slow);
+  }
+  .scene-product-card:hover .scene-product-card__image img {
+    transform: scale(1.05);
+  }
+  .scene-product-card__badges {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .scene-product-card__badge {
+    padding: 4px 8px;
+    border-radius: var(--6j-radius-sm);
+    font-size: 10px;
+    font-weight: var(--6j-font-weight-medium);
+    color: #fff;
+  }
+  .scene-product-card__badge--stock { background: var(--6j-badge-stock); }
+  .scene-product-card__badge--new { background: var(--6j-badge-new); }
+  .scene-product-card__badge--popular { background: var(--6j-badge-popular); }
+  
+  .scene-product-card__name {
+    font-size: var(--6j-font-size-sm);
+    color: var(--6j-text);
+    margin-bottom: 4px;
+    line-height: var(--6j-line-height-base);
+  }
+  .scene-product-card__price {
+    font-size: var(--6j-font-size-base);
+    font-weight: var(--6j-font-weight-bold);
+    color: var(--6j-text);
+  }
+  .scene-product-card__swatches {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+  }
+  .scene-product-card__swatch {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 1px solid var(--6j-border);
+  }
+  
+  /* Coordination Set */
+  .scene-collection__set {
+    background: var(--6j-bg-sub);
+    border-radius: var(--6j-radius-xl);
+    padding: 40px;
+    margin: 48px 0;
+  }
+  .scene-collection__set-header {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  .scene-collection__set-label {
+    font-size: var(--6j-font-size-xs);
+    letter-spacing: var(--6j-letter-spacing-label);
+    color: var(--6j-label);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .scene-collection__set-title {
+    font-size: var(--6j-font-size-xl);
+    font-weight: var(--6j-font-weight-medium);
+    color: var(--6j-text);
+    margin-bottom: 8px;
+  }
+  .scene-collection__set-desc {
+    font-size: var(--6j-font-size-sm);
+    color: var(--6j-text-sub);
+  }
+  .scene-collection__set-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 32px;
+    align-items: center;
+  }
+  @media (max-width: 768px) {
+    .scene-collection__set-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  .scene-collection__set-image {
+    border-radius: var(--6j-radius-xl);
+    overflow: hidden;
+  }
+  .scene-collection__set-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  .scene-collection__set-products {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .scene-set-item {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    padding: 16px;
+    background: var(--6j-bg);
+    border-radius: var(--6j-radius-lg);
+  }
+  .scene-set-item__image {
+    width: 80px;
+    aspect-ratio: 1;
+    background: var(--6j-bg-sub);
+    border-radius: var(--6j-radius-md);
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .scene-set-item__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .scene-set-item__info {
+    flex: 1;
+  }
+  .scene-set-item__name {
+    font-size: var(--6j-font-size-sm);
+    font-weight: var(--6j-font-weight-medium);
+    color: var(--6j-text);
+    margin-bottom: 4px;
+  }
+  .scene-set-item__price {
+    font-size: var(--6j-font-size-sm);
+    color: var(--6j-text-sub);
+  }
+  .scene-collection__set-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 16px;
+    border-top: 1px solid var(--6j-border);
+    margin-top: 16px;
+  }
+  .scene-collection__set-total-label {
+    font-size: var(--6j-font-size-sm);
+    color: var(--6j-text-sub);
+  }
+  .scene-collection__set-total-price {
+    font-size: var(--6j-font-size-xl);
+    font-weight: var(--6j-font-weight-bold);
+    color: var(--6j-text);
+  }
+  .scene-collection__set-cta {
+    margin-top: 24px;
+  }
+  
+  /* Tips */
+  .scene-collection__tips {
+    margin-top: 48px;
+  }
+  .scene-collection__tips-header {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  .scene-collection__tips-label {
+    font-size: var(--6j-font-size-xs);
+    letter-spacing: var(--6j-letter-spacing-label);
+    color: var(--6j-label);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .scene-collection__tips-title {
+    font-size: var(--6j-font-size-lg);
+    font-weight: var(--6j-font-weight-medium);
+    color: var(--6j-text);
+  }
+  .scene-collection__tips-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  @media (max-width: 768px) {
+    .scene-collection__tips-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  .scene-tip-card {
+    background: var(--6j-bg-sub);
+    border-radius: var(--6j-radius-xl);
+    padding: 24px;
+  }
+  .scene-tip-card__number {
+    font-size: 28px;
+    font-weight: var(--6j-font-weight-bold);
+    color: var(--6j-accent);
+    margin-bottom: 12px;
+  }
+  .scene-tip-card__title {
+    font-size: var(--6j-font-size-md);
+    font-weight: var(--6j-font-weight-medium);
+    color: var(--6j-text);
+    margin-bottom: 8px;
+  }
+  .scene-tip-card__text {
+    font-size: var(--6j-font-size-sm);
+    color: var(--6j-text-sub);
+    line-height: var(--6j-line-height-relaxed);
+  }
+{%- endstyle -%}
+
+<section class="scene-collection">
+  <!-- Hero -->
+  <div class="scene-collection__hero">
+    {% if section.settings.hero_image != blank %}
+      <img src="{{ section.settings.hero_image | image_url: width: 1920 }}" 
+           alt="{{ section.settings.title }}"
+           class="scene-collection__hero-image"
+           loading="eager">
+    {% endif %}
+    <div class="scene-collection__hero-overlay"></div>
+    <div class="scene-collection__hero-content">
+      <p class="scene-collection__hero-label">{{ section.settings.label }}</p>
+      <h1 class="scene-collection__hero-title">{{ section.settings.title }}</h1>
+      <p class="scene-collection__hero-desc">{{ section.settings.description }}</p>
+    </div>
+  </div>
+  
+  <div class="scene-collection__container">
+    
+    <!-- Scene Navigation -->
+    {% if section.settings.show_nav %}
+    <nav class="scene-collection__nav">
+      <a href="#" class="scene-collection__nav-item active">
+        <span class="scene-collection__nav-icon">🛋</span>
+        <span class="scene-collection__nav-text">リビング</span>
+      </a>
+      <a href="#" class="scene-collection__nav-item">
+        <span class="scene-collection__nav-icon">🍽</span>
+        <span class="scene-collection__nav-text">ダイニング</span>
+      </a>
+      <a href="#" class="scene-collection__nav-item">
+        <span class="scene-collection__nav-icon">💼</span>
+        <span class="scene-collection__nav-text">ワークスペース</span>
+      </a>
+      <a href="#" class="scene-collection__nav-item">
+        <span class="scene-collection__nav-icon">🛏</span>
+        <span class="scene-collection__nav-text">寝室</span>
+      </a>
+      <a href="#" class="scene-collection__nav-item">
+        <span class="scene-collection__nav-icon">🚪</span>
+        <span class="scene-collection__nav-text">玄関</span>
+      </a>
+    </nav>
+    {% endif %}
+    
+    <!-- Intro -->
+    {% if section.settings.intro != blank %}
+    <div class="scene-collection__intro">
+      <p class="scene-collection__intro-text">{{ section.settings.intro }}</p>
+    </div>
+    {% endif %}
+    
+    <!-- Lifestyle Image -->
+    {% if section.settings.lifestyle_image != blank %}
+    <div class="scene-collection__lifestyle">
+      <img src="{{ section.settings.lifestyle_image | image_url: width: 1400 }}" 
+           alt="{{ section.settings.title }}"
+           loading="lazy">
+    </div>
+    {% endif %}
+    
+    <!-- Filter Bar -->
+    <div class="scene-collection__filter">
+      <div class="scene-collection__filter-left">
+        <span class="scene-collection__count">{{ collection.products_count }}件の商品</span>
+      </div>
+      <div>
+        <select class="scene-collection__filter-btn">
+          <option>おすすめ順</option>
+          <option>価格が安い順</option>
+          <option>価格が高い順</option>
+          <option>新着順</option>
+        </select>
+      </div>
+    </div>
+    
+    <!-- Product Grid -->
+    <div class="scene-collection__grid">
+      {% for product in collection.products limit: section.settings.products_per_page %}
+        <a href="{{ product.url }}" class="scene-product-card">
+          <div class="scene-product-card__image">
+            {% if product.featured_image != blank %}
+              <img src="{{ product.featured_image | image_url: width: 600 }}" 
+                   alt="{{ product.title }}"
+                   loading="lazy">
+            {% endif %}
+            <div class="scene-product-card__badges">
+              {% if product.available %}
+                {% if product.tags contains '即納' %}
+                  <span class="scene-product-card__badge scene-product-card__badge--stock">即納</span>
+                {% endif %}
+              {% endif %}
+              {% if product.tags contains '人気' %}
+                <span class="scene-product-card__badge scene-product-card__badge--popular">人気</span>
+              {% endif %}
+              {% assign now = 'now' | date: '%s' %}
+              {% assign created = product.created_at | date: '%s' %}
+              {% assign diff = now | minus: created %}
+              {% if diff < 2592000 %}
+                <span class="scene-product-card__badge scene-product-card__badge--new">NEW</span>
+              {% endif %}
+            </div>
+          </div>
+          <h3 class="scene-product-card__name">{{ product.title }}</h3>
+          <p class="scene-product-card__price">{{ product.price | money }}</p>
+          {% if product.variants.size > 1 %}
+            <div class="scene-product-card__swatches">
+              {% for variant in product.variants limit: 4 %}
+                {% if variant.option1 contains 'ナチュラル' %}
+                  <span class="scene-product-card__swatch" style="background:#D4C4A8"></span>
+                {% elsif variant.option1 contains 'ウォールナット' %}
+                  <span class="scene-product-card__swatch" style="background:#5C4033"></span>
+                {% elsif variant.option1 contains 'ブラック' %}
+                  <span class="scene-product-card__swatch" style="background:#292724"></span>
+                {% endif %}
+              {% endfor %}
+            </div>
+          {% endif %}
+        </a>
+      {% endfor %}
+    </div>
+    
+    <!-- Coordination Set -->
+    {% for block in section.blocks %}
+      {% if block.type == 'coordination_set' %}
+        <div class="scene-collection__set" {{ block.shopify_attributes }}>
+          <div class="scene-collection__set-header">
+            <p class="scene-collection__set-label">{{ block.settings.label }}</p>
+            <h2 class="scene-collection__set-title">{{ block.settings.title }}</h2>
+            <p class="scene-collection__set-desc">{{ block.settings.description }}</p>
+          </div>
+          <div class="scene-collection__set-grid">
+            <div class="scene-collection__set-image">
+              {% if block.settings.image != blank %}
+                <img src="{{ block.settings.image | image_url: width: 900 }}" 
+                     alt="{{ block.settings.title }}"
+                     loading="lazy">
+              {% endif %}
+            </div>
+            <div>
+              <div class="scene-collection__set-products">
+                {% if block.settings.product_1 != blank %}
+                  <div class="scene-set-item">
+                    <div class="scene-set-item__image">
+                      <img src="{{ block.settings.product_1.featured_image | image_url: width: 200 }}" alt="">
+                    </div>
+                    <div class="scene-set-item__info">
+                      <p class="scene-set-item__name">{{ block.settings.product_1.title }}</p>
+                      <p class="scene-set-item__price">{{ block.settings.product_1.price | money }}</p>
+                    </div>
+                  </div>
+                {% endif %}
+                {% if block.settings.product_2 != blank %}
+                  <div class="scene-set-item">
+                    <div class="scene-set-item__image">
+                      <img src="{{ block.settings.product_2.featured_image | image_url: width: 200 }}" alt="">
+                    </div>
+                    <div class="scene-set-item__info">
+                      <p class="scene-set-item__name">{{ block.settings.product_2.title }}</p>
+                      <p class="scene-set-item__price">{{ block.settings.product_2.price | money }}</p>
+                    </div>
+                  </div>
+                {% endif %}
+                {% if block.settings.product_3 != blank %}
+                  <div class="scene-set-item">
+                    <div class="scene-set-item__image">
+                      <img src="{{ block.settings.product_3.featured_image | image_url: width: 200 }}" alt="">
+                    </div>
+                    <div class="scene-set-item__info">
+                      <p class="scene-set-item__name">{{ block.settings.product_3.title }}</p>
+                      <p class="scene-set-item__price">{{ block.settings.product_3.price | money }}</p>
+                    </div>
+                  </div>
+                {% endif %}
+              </div>
+              <div class="scene-collection__set-total">
+                <span class="scene-collection__set-total-label">セット合計</span>
+                <span class="scene-collection__set-total-price">{{ block.settings.set_price }}</span>
+              </div>
+              <div class="scene-collection__set-cta">
+                <a href="{{ block.settings.link }}" class="btn-6j-primary" style="width:100%;text-align:center;display:block">セットを見る</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+    
+    <!-- Tips -->
+    {% if section.settings.show_tips %}
+    <div class="scene-collection__tips">
+      <div class="scene-collection__tips-header">
+        <p class="scene-collection__tips-label">Styling Tips</p>
+        <h2 class="scene-collection__tips-title">{{ section.settings.tips_title }}</h2>
+      </div>
+      <div class="scene-collection__tips-grid">
+        {% for block in section.blocks %}
+          {% if block.type == 'tip' %}
+            <div class="scene-tip-card" {{ block.shopify_attributes }}>
+              <div class="scene-tip-card__number">0{{ forloop.index }}</div>
+              <h3 class="scene-tip-card__title">{{ block.settings.title }}</h3>
+              <p class="scene-tip-card__text">{{ block.settings.text }}</p>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+    
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "シーン別コレクション",
+  "tag": "section",
+  "class": "section-scene-collection",
+  "settings": [
+    {
+      "type": "header",
+      "content": "ヒーロー"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "ヒーロー画像"
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "ラベル",
+      "default": "Living Room"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "タイトル",
+      "default": "リビングルーム"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "説明文",
+      "default": "家族が集まる、くつろぎの空間に"
+    },
+    {
+      "type": "header",
+      "content": "コンテンツ"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_nav",
+      "label": "シーンナビを表示",
+      "default": true
+    },
+    {
+      "type": "textarea",
+      "id": "intro",
+      "label": "イントロ文"
+    },
+    {
+      "type": "image_picker",
+      "id": "lifestyle_image",
+      "label": "ライフスタイル画像"
+    },
+    {
+      "type": "header",
+      "content": "商品表示"
+    },
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "label": "1ページの表示数",
+      "min": 8,
+      "max": 24,
+      "step": 4,
+      "default": 12
+    },
+    {
+      "type": "header",
+      "content": "スタイリングTips"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_tips",
+      "label": "Tipsを表示",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "tips_title",
+      "label": "Tipsタイトル",
+      "default": "リビングのコーディネートポイント"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "coordination_set",
+      "name": "コーディネートセット",
+      "limit": 2,
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "ラベル",
+          "default": "Coordination Set"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "タイトル",
+          "default": "リビング3点セット"
+        },
+        {
+          "type": "text",
+          "id": "description",
+          "label": "説明文",
+          "default": "統一感のあるコーディネートをお得に"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "セットイメージ"
+        },
+        {
+          "type": "product",
+          "id": "product_1",
+          "label": "商品1"
+        },
+        {
+          "type": "product",
+          "id": "product_2",
+          "label": "商品2"
+        },
+        {
+          "type": "product",
+          "id": "product_3",
+          "label": "商品3"
+        },
+        {
+          "type": "text",
+          "id": "set_price",
+          "label": "セット価格",
+          "default": "¥128,000"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "リンク先"
+        }
+      ]
+    },
+    {
+      "type": "tip",
+      "name": "スタイリングTip",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "タイトル",
+          "default": "動線を意識する"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "本文",
+          "default": "家具の配置は、歩きやすさを第一に考えましょう。"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "シーン別コレクション",
+      "blocks": [
+        {
+          "type": "coordination_set",
+          "settings": {
+            "label": "Coordination Set",
+            "title": "リビング3点セット",
+            "description": "統一感のあるコーディネートをお得に",
+            "set_price": "¥128,000"
+          }
+        },
+        {
+          "type": "tip",
+          "settings": {
+            "title": "動線を意識する",
+            "text": "家具の配置は、歩きやすさを第一に考えましょう。最低でも60cmの通路幅を確保することで、快適に過ごせます。"
+          }
+        },
+        {
+          "type": "tip",
+          "settings": {
+            "title": "高さを揃える",
+            "text": "テーブルとソファ、棚の高さを揃えることで、空間に統一感が生まれます。視線の抜けも大切です。"
+          }
+        },
+        {
+          "type": "tip",
+          "settings": {
+            "title": "光を取り入れる",
+            "text": "自然光を最大限に活かしながら、夜は間接照明で温かみのある空間を演出しましょう。"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

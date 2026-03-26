@@ -1,0 +1,81 @@
+{
+  "sections": {
+    "main": {
+      "type": "6johan-news-page",
+      "settings": {
+        "label": "News",
+        "title": "お知らせ",
+        "show_filters": true,
+        "show_pagination": true
+      },
+      "blocks": {
+        "news_1": {
+          "type": "news",
+          "settings": {
+            "date": "2026.03.25",
+            "category": "new",
+            "title": "春の新作コレクションが入荷しました"
+          }
+        },
+        "news_2": {
+          "type": "news",
+          "settings": {
+            "date": "2026.03.20",
+            "category": "important",
+            "title": "配送料改定のお知らせ（4月1日より適用）"
+          }
+        },
+        "news_3": {
+          "type": "news",
+          "settings": {
+            "date": "2026.03.15",
+            "category": "campaign",
+            "title": "春のまとめ買いキャンペーン開催中"
+          }
+        },
+        "news_4": {
+          "type": "news",
+          "settings": {
+            "date": "2026.03.10",
+            "category": "info",
+            "title": "ゴールデンウィーク期間中の配送について"
+          }
+        },
+        "news_5": {
+          "type": "news",
+          "settings": {
+            "date": "2026.03.05",
+            "category": "update",
+            "title": "商品ページをリニューアルしました"
+          }
+        },
+        "news_6": {
+          "type": "news",
+          "settings": {
+            "date": "2026.03.01",
+            "category": "new",
+            "title": "新商品「オーガニックコットンラグ」発売開始"
+          }
+        },
+        "news_7": {
+          "type": "news",
+          "settings": {
+            "date": "2026.02.25",
+            "category": "info",
+            "title": "カスタマーサポート営業時間変更のお知らせ"
+          }
+        },
+        "news_8": {
+          "type": "news",
+          "settings": {
+            "date": "2026.02.20",
+            "category": "campaign",
+            "title": "レビュー投稿で10%OFFクーポンプレゼント"
+          }
+        }
+      },
+      "block_order": ["news_1", "news_2", "news_3", "news_4", "news_5", "news_6", "news_7", "news_8"]
+    }
+  },
+  "order": ["main"]
+}

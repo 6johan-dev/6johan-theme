@@ -1,0 +1,100 @@
+{
+  "sections": {
+    "main": {
+      "type": "6johan-magazine-page",
+      "settings": {
+        "label": "Magazine",
+        "title": "マガジン",
+        "description": "インテリアのヒントや暮らしのアイデアをお届けします。",
+        "show_categories": true,
+        "show_pagination": true,
+        "show_featured": true,
+        "featured_category": "インテリア",
+        "featured_title": "北欧スタイルで作る、心地よいリビング空間",
+        "featured_date": "2026.03.25"
+      },
+      "blocks": {
+        "sub_1": {
+          "type": "featured_sub",
+          "settings": {
+            "category": "暮らし方",
+            "title": "朝の習慣で変わる、心地よい一日の始め方",
+            "date": "2026.03.22"
+          }
+        },
+        "sub_2": {
+          "type": "featured_sub",
+          "settings": {
+            "category": "お手入れ",
+            "title": "木製家具を長く使うためのお手入れ方法",
+            "date": "2026.03.18"
+          }
+        },
+        "sub_3": {
+          "type": "featured_sub",
+          "settings": {
+            "category": "スタッフ日記",
+            "title": "北欧出張レポート：コペンハーゲンの家具工房を訪ねて",
+            "date": "2026.03.15"
+          }
+        },
+        "article_1": {
+          "type": "article",
+          "settings": {
+            "category": "インテリア",
+            "title": "狭い部屋でも広く見せる、レイアウトの工夫",
+            "excerpt": "限られたスペースを最大限に活用するためのレイアウトテクニックをご紹介します。",
+            "date": "2026.03.12"
+          }
+        },
+        "article_2": {
+          "type": "article",
+          "settings": {
+            "category": "暮らし方",
+            "title": "在宅ワークを快適にする、デスク周りの整え方",
+            "excerpt": "集中力を高め、効率よく仕事を進めるためのデスク環境づくりのポイント。",
+            "date": "2026.03.08"
+          }
+        },
+        "article_3": {
+          "type": "article",
+          "settings": {
+            "category": "インテリア",
+            "title": "色の使い方で変わる、部屋の印象",
+            "excerpt": "北欧インテリアに学ぶ、心地よい色使いのコツをお伝えします。",
+            "date": "2026.03.05"
+          }
+        },
+        "article_4": {
+          "type": "article",
+          "settings": {
+            "category": "お手入れ",
+            "title": "ファブリックソファの汚れ落とし術",
+            "excerpt": "日常のお手入れから頑固な汚れまで、プロが教えるケア方法。",
+            "date": "2026.03.01"
+          }
+        },
+        "article_5": {
+          "type": "article",
+          "settings": {
+            "category": "暮らし方",
+            "title": "季節の模様替えで気分をリフレッシュ",
+            "excerpt": "大きな家具を動かさなくても、小物で季節感を演出する方法。",
+            "date": "2026.02.25"
+          }
+        },
+        "article_6": {
+          "type": "article",
+          "settings": {
+            "category": "スタッフ日記",
+            "title": "新作チェアができるまで：デザイナーインタビュー",
+            "excerpt": "6JOHANの新作チェアの開発秘話をデザイナーに聞きました。",
+            "date": "2026.02.20"
+          }
+        }
+      },
+      "block_order": ["sub_1", "sub_2", "sub_3", "article_1", "article_2", "article_3", "article_4", "article_5", "article_6"]
+    }
+  },
+  "order": ["main"]
+}

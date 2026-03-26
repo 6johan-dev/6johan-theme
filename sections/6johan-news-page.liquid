@@ -1,0 +1,365 @@
+{% comment %}
+  6JOHAN News Page Section
+  ニュース/お知らせ一覧ページ用セクション
+{% endcomment %}
+
+{%- style -%}
+  .news-page {
+    padding: 60px 0;
+    background: var(--6j-bg);
+  }
+  .news-page__container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  .news-page__header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+  .news-page__label {
+    font-size: var(--6j-font-size-xs);
+    letter-spacing: var(--6j-letter-spacing-label);
+    color: var(--6j-label);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .news-page__title {
+    font-size: var(--6j-font-size-2xl);
+    font-weight: var(--6j-font-weight-medium);
+    color: var(--6j-text);
+  }
+  
+  /* Filter Tabs */
+  .news-page__filters {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+  }
+  .news-page__filter {
+    padding: 8px 16px;
+    border: 1px solid var(--6j-border);
+    border-radius: var(--6j-radius-full);
+    background: var(--6j-bg);
+    color: var(--6j-text);
+    font-size: var(--6j-font-size-sm);
+    cursor: pointer;
+    transition: all var(--6j-transition-base);
+  }
+  .news-page__filter:hover,
+  .news-page__filter.active {
+    background: var(--6j-accent);
+    color: #fff;
+    border-color: var(--6j-accent);
+  }
+  
+  /* News List */
+  .news-page__list {
+    border-top: 1px solid var(--6j-border);
+  }
+  
+  /* News Item */
+  .news-item {
+    display: grid;
+    grid-template-columns: 100px auto 1fr;
+    gap: 16px;
+    align-items: center;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--6j-border);
+    text-decoration: none;
+    transition: background var(--6j-transition-base);
+  }
+  .news-item:hover {
+    background: var(--6j-bg-sub);
+    margin: 0 -20px;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  @media (max-width: 600px) {
+    .news-item {
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+  }
+  
+  .news-item__date {
+    font-size: var(--6j-font-size-sm);
+    color: var(--6j-text-sub);
+  }
+  .news-item__badge {
+    justify-self: start;
+  }
+  .news-item__badge span {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: var(--6j-radius-sm);
+    font-size: var(--6j-font-size-xs);
+    font-weight: var(--6j-font-weight-medium);
+    color: #fff;
+  }
+  .news-item__badge--new span { background: var(--6j-badge-new); }
+  .news-item__badge--important span { background: var(--6j-error); }
+  .news-item__badge--campaign span { background: var(--6j-badge-stock); }
+  .news-item__badge--info span { background: var(--6j-info); }
+  .news-item__badge--update span { background: var(--6j-badge-popular); }
+  
+  .news-item__title {
+    font-size: var(--6j-font-size-base);
+    color: var(--6j-text);
+    line-height: var(--6j-line-height-base);
+  }
+  
+  /* News Detail (for single news view) */
+  .news-detail {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  .news-detail__header {
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--6j-border);
+  }
+  .news-detail__meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .news-detail__date {
+    font-size: var(--6j-font-size-sm);
+    color: var(--6j-text-sub);
+  }
+  .news-detail__title {
+    font-size: var(--6j-font-size-xl);
+    font-weight: var(--6j-font-weight-medium);
+    color: var(--6j-text);
+    line-height: var(--6j-line-height-tight);
+  }
+  .news-detail__content {
+    font-size: var(--6j-font-size-base);
+    color: var(--6j-text);
+    line-height: var(--6j-line-height-relaxed);
+  }
+  .news-detail__content p {
+    margin-bottom: 1.5em;
+  }
+  .news-detail__content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--6j-radius-lg);
+    margin: 24px 0;
+  }
+  .news-detail__back {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--6j-border);
+  }
+  .news-detail__back a {
+    color: var(--6j-accent);
+    font-size: var(--6j-font-size-sm);
+    text-decoration: none;
+  }
+  .news-detail__back a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Pagination */
+  .news-page__pagination {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 40px;
+  }
+  .news-page__pagination a,
+  .news-page__pagination span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--6j-border);
+    border-radius: var(--6j-radius-base);
+    font-size: var(--6j-font-size-sm);
+    color: var(--6j-text);
+    text-decoration: none;
+    transition: all var(--6j-transition-base);
+  }
+  .news-page__pagination a:hover {
+    background: var(--6j-bg-sub);
+  }
+  .news-page__pagination .active {
+    background: var(--6j-accent);
+    color: #fff;
+    border-color: var(--6j-accent);
+  }
+{%- endstyle -%}
+
+<section class="news-page">
+  <div class="news-page__container">
+    <header class="news-page__header">
+      <p class="news-page__label">{{ section.settings.label }}</p>
+      <h1 class="news-page__title">{{ section.settings.title }}</h1>
+    </header>
+    
+    {% if section.settings.show_filters %}
+    <div class="news-page__filters">
+      <button class="news-page__filter active">すべて</button>
+      <button class="news-page__filter">新着</button>
+      <button class="news-page__filter">重要</button>
+      <button class="news-page__filter">キャンペーン</button>
+      <button class="news-page__filter">お知らせ</button>
+    </div>
+    {% endif %}
+    
+    <div class="news-page__list">
+      {% for block in section.blocks %}
+        <a href="{{ block.settings.link }}" class="news-item" {{ block.shopify_attributes }}>
+          <span class="news-item__date">{{ block.settings.date }}</span>
+          <span class="news-item__badge news-item__badge--{{ block.settings.category }}">
+            <span>
+              {% case block.settings.category %}
+                {% when 'new' %}新着
+                {% when 'important' %}重要
+                {% when 'campaign' %}キャンペーン
+                {% when 'info' %}お知らせ
+                {% when 'update' %}更新
+              {% endcase %}
+            </span>
+          </span>
+          <span class="news-item__title">{{ block.settings.title }}</span>
+        </a>
+      {% endfor %}
+    </div>
+    
+    {% if section.settings.show_pagination %}
+    <nav class="news-page__pagination">
+      <a href="#">←</a>
+      <span class="active">1</span>
+      <a href="#">2</a>
+      <a href="#">3</a>
+      <a href="#">→</a>
+    </nav>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "ニュースページ",
+  "tag": "section",
+  "class": "section-news-page",
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "ラベル",
+      "default": "News"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "タイトル",
+      "default": "お知らせ"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_filters",
+      "label": "フィルターを表示",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_pagination",
+      "label": "ページネーションを表示",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "news",
+      "name": "ニュース",
+      "settings": [
+        {
+          "type": "text",
+          "id": "date",
+          "label": "日付",
+          "default": "2026.03.20"
+        },
+        {
+          "type": "select",
+          "id": "category",
+          "label": "カテゴリ",
+          "options": [
+            { "value": "new", "label": "新着" },
+            { "value": "important", "label": "重要" },
+            { "value": "campaign", "label": "キャンペーン" },
+            { "value": "info", "label": "お知らせ" },
+            { "value": "update", "label": "更新" }
+          ],
+          "default": "new"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "タイトル",
+          "default": "春の新作コレクションが入荷しました"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "リンク先"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "ニュースページ",
+      "blocks": [
+        {
+          "type": "news",
+          "settings": {
+            "date": "2026.03.20",
+            "category": "new",
+            "title": "春の新作コレクションが入荷しました"
+          }
+        },
+        {
+          "type": "news",
+          "settings": {
+            "date": "2026.03.15",
+            "category": "important",
+            "title": "配送料改定のお知らせ（4月1日より適用）"
+          }
+        },
+        {
+          "type": "news",
+          "settings": {
+            "date": "2026.03.10",
+            "category": "campaign",
+            "title": "春のまとめ買いキャンペーン開催中"
+          }
+        },
+        {
+          "type": "news",
+          "settings": {
+            "date": "2026.03.05",
+            "category": "info",
+            "title": "ゴールデンウィーク期間中の配送について"
+          }
+        },
+        {
+          "type": "news",
+          "settings": {
+            "date": "2026.03.01",
+            "category": "update",
+            "title": "商品ページをリニューアルしました"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

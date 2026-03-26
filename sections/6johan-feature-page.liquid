@@ -1,0 +1,572 @@
+{% comment %}
+  6JOHAN Feature Page Section
+  特集ページ用セクション
+{% endcomment %}
+
+{%- style -%}
+  .feature-page {
+    background: var(--6j-bg);
+  }
+  
+  /* Hero */
+  .feature-page__hero {
+    position: relative;
+    height: 60vh;
+    min-height: 400px;
+    max-height: 600px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: var(--6j-bg-sub);
+    overflow: hidden;
+  }
+  .feature-page__hero-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .feature-page__hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.3);
+  }
+  .feature-page__hero-content {
+    position: relative;
+    z-index: 2;
+    color: #fff;
+    padding: 20px;
+  }
+  .feature-page__hero-label {
+    font-size: var(--6j-font-size-xs);
+    letter-spacing: var(--6j-letter-spacing-label);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    opacity: 0.9;
+  }
+  .feature-page__hero-title {
+    font-size: 36px;
+    font-weight: var(--6j-font-weight-medium);
+    margin-bottom: 16px;
+    line-height: 1.3;
+  }
+  .feature-page__hero-subtitle {
+    font-size: var(--6j-font-size-md);
+    opacity: 0.9;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  /* Container */
+  .feature-page__container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 60px 20px;
+  }
+  
+  /* Intro */
+  .feature-page__intro {
+    text-align: center;
+    margin-bottom: 60px;
+  }
+  .feature-page__intro-text {
+    font-size: var(--6j-font-size-md);
+    color: var(--6j-text);
+    line-height: var(--6j-line-height-relaxed);
+  }
+  
+  /* Content Blocks */
+  .feature-page__block {
+    margin-bottom: 60px;
+  }
+  .feature-page__block:last-child {
+    margin-bottom: 0;
+  }
+  
+  /* Text Block */
+  .feature-block-text__title {
+    font-size: var(--6j-font-size-xl);
+    font-weight: var(--6j-font-weight-medium);
+    color: var(--6j-text);
+    margin-bottom: 16px;
+  }
+  .feature-block-text__content {
+    font-size: var(--6j-font-size-base);
+    color: var(--6j-text);
+    line-height: var(--6j-line-height-relaxed);
+  }
+  
+  /* Image Block */
+  .feature-block-image {
+    border-radius: var(--6j-radius-xl);
+    overflow: hidden;
+  }
+  .feature-block-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  .feature-block-image__caption {
+    font-size: var(--6j-font-size-sm);
+    color: var(--6j-text-sub);
+    text-align: center;
+    margin-top: 12px;
+  }
+  
+  /* Image + Text Block */
+  .feature-block-image-text {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+  }
+  .feature-block-image-text--reverse {
+    direction: rtl;
+  }
+  .feature-block-image-text--reverse > * {
+    direction: ltr;
+  }
+  .feature-block-image-text__image {
+    border-radius: var(--6j-radius-xl);
+    overflow: hidden;
+  }
+  .feature-block-image-text__image img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  .feature-block-image-text__title {
+    font-size: var(--6j-font-size-lg);
+    font-weight: var(--6j-font-weight-medium);
+    color: var(--6j-text);
+    margin-bottom: 12px;
+  }
+  .feature-block-image-text__content {
+    font-size: var(--6j-font-size-base);
+    color: var(--6j-text);
+    line-height: var(--6j-line-height-relaxed);
+  }
+  @media (max-width: 768px) {
+    .feature-block-image-text {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+    .feature-block-image-text--reverse {
+      direction: ltr;
+    }
+  }
+  
+  /* Products Block */
+  .feature-block-products__title {
+    font-size: var(--6j-font-size-lg);
+    font-weight: var(--6j-font-weight-medium);
+    color: var(--6j-text);
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .feature-block-products__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  @media (max-width: 768px) {
+    .feature-block-products__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  .feature-product-card {
+    background: var(--6j-bg);
+    border-radius: var(--6j-radius-lg);
+    overflow: hidden;
+    border: 1px solid var(--6j-border);
+    transition: box-shadow var(--6j-transition-base);
+  }
+  .feature-product-card:hover {
+    box-shadow: var(--6j-shadow-md);
+  }
+  .feature-product-card__image {
+    aspect-ratio: 1;
+    background: var(--6j-bg-sub);
+  }
+  .feature-product-card__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .feature-product-card__body {
+    padding: 16px;
+  }
+  .feature-product-card__title {
+    font-size: var(--6j-font-size-sm);
+    color: var(--6j-text);
+    margin-bottom: 4px;
+  }
+  .feature-product-card__price {
+    font-size: var(--6j-font-size-base);
+    font-weight: var(--6j-font-weight-bold);
+    color: var(--6j-text);
+  }
+  
+  /* Quote Block */
+  .feature-block-quote {
+    background: var(--6j-bg-sub);
+    padding: 40px;
+    border-radius: var(--6j-radius-xl);
+    text-align: center;
+  }
+  .feature-block-quote__text {
+    font-size: var(--6j-font-size-lg);
+    color: var(--6j-text);
+    line-height: var(--6j-line-height-relaxed);
+    font-style: italic;
+    margin-bottom: 16px;
+  }
+  .feature-block-quote__author {
+    font-size: var(--6j-font-size-sm);
+    color: var(--6j-text-sub);
+  }
+  
+  /* CTA */
+  .feature-page__cta {
+    text-align: center;
+    padding: 60px 20px;
+    background: var(--6j-bg-sub);
+  }
+  .feature-page__cta-title {
+    font-size: var(--6j-font-size-xl);
+    font-weight: var(--6j-font-weight-medium);
+    color: var(--6j-text);
+    margin-bottom: 16px;
+  }
+  .feature-page__cta-text {
+    font-size: var(--6j-font-size-base);
+    color: var(--6j-text-sub);
+    margin-bottom: 24px;
+  }
+{%- endstyle -%}
+
+<section class="feature-page">
+  <!-- Hero -->
+  <div class="feature-page__hero">
+    {% if section.settings.hero_image != blank %}
+      <img src="{{ section.settings.hero_image | image_url: width: 1920 }}" 
+           alt="{{ section.settings.title }}"
+           class="feature-page__hero-image"
+           loading="eager">
+    {% endif %}
+    <div class="feature-page__hero-overlay"></div>
+    <div class="feature-page__hero-content">
+      <p class="feature-page__hero-label">{{ section.settings.label }}</p>
+      <h1 class="feature-page__hero-title">{{ section.settings.title }}</h1>
+      <p class="feature-page__hero-subtitle">{{ section.settings.subtitle }}</p>
+    </div>
+  </div>
+  
+  <!-- Content -->
+  <div class="feature-page__container">
+    {% if section.settings.intro != blank %}
+    <div class="feature-page__intro">
+      <p class="feature-page__intro-text">{{ section.settings.intro }}</p>
+    </div>
+    {% endif %}
+    
+    {% for block in section.blocks %}
+      <div class="feature-page__block" {{ block.shopify_attributes }}>
+        {% case block.type %}
+          
+          {% when 'text' %}
+            <div class="feature-block-text">
+              {% if block.settings.title != blank %}
+                <h2 class="feature-block-text__title">{{ block.settings.title }}</h2>
+              {% endif %}
+              <div class="feature-block-text__content">{{ block.settings.content }}</div>
+            </div>
+          
+          {% when 'image' %}
+            <figure class="feature-block-image">
+              {% if block.settings.image != blank %}
+                <img src="{{ block.settings.image | image_url: width: 1200 }}" 
+                     alt="{{ block.settings.caption }}"
+                     loading="lazy">
+              {% endif %}
+              {% if block.settings.caption != blank %}
+                <figcaption class="feature-block-image__caption">{{ block.settings.caption }}</figcaption>
+              {% endif %}
+            </figure>
+          
+          {% when 'image_text' %}
+            <div class="feature-block-image-text {% if block.settings.reverse %}feature-block-image-text--reverse{% endif %}">
+              <div class="feature-block-image-text__image">
+                {% if block.settings.image != blank %}
+                  <img src="{{ block.settings.image | image_url: width: 800 }}" 
+                       alt="{{ block.settings.title }}"
+                       loading="lazy">
+                {% endif %}
+              </div>
+              <div class="feature-block-image-text__text">
+                <h3 class="feature-block-image-text__title">{{ block.settings.title }}</h3>
+                <div class="feature-block-image-text__content">{{ block.settings.content }}</div>
+              </div>
+            </div>
+          
+          {% when 'products' %}
+            <div class="feature-block-products">
+              {% if block.settings.title != blank %}
+                <h3 class="feature-block-products__title">{{ block.settings.title }}</h3>
+              {% endif %}
+              <div class="feature-block-products__grid">
+                {% if block.settings.collection != blank %}
+                  {% for product in block.settings.collection.products limit: block.settings.limit %}
+                    <a href="{{ product.url }}" class="feature-product-card">
+                      <div class="feature-product-card__image">
+                        {% if product.featured_image != blank %}
+                          <img src="{{ product.featured_image | image_url: width: 400 }}" 
+                               alt="{{ product.title }}"
+                               loading="lazy">
+                        {% endif %}
+                      </div>
+                      <div class="feature-product-card__body">
+                        <h4 class="feature-product-card__title">{{ product.title }}</h4>
+                        <p class="feature-product-card__price">{{ product.price | money }}</p>
+                      </div>
+                    </a>
+                  {% endfor %}
+                {% endif %}
+              </div>
+            </div>
+          
+          {% when 'quote' %}
+            <blockquote class="feature-block-quote">
+              <p class="feature-block-quote__text">{{ block.settings.quote }}</p>
+              {% if block.settings.author != blank %}
+                <cite class="feature-block-quote__author">— {{ block.settings.author }}</cite>
+              {% endif %}
+            </blockquote>
+          
+        {% endcase %}
+      </div>
+    {% endfor %}
+  </div>
+  
+  <!-- CTA -->
+  {% if section.settings.show_cta %}
+  <div class="feature-page__cta">
+    <h2 class="feature-page__cta-title">{{ section.settings.cta_title }}</h2>
+    <p class="feature-page__cta-text">{{ section.settings.cta_text }}</p>
+    <a href="{{ section.settings.cta_link }}" class="btn-6j-primary">{{ section.settings.cta_button }}</a>
+  </div>
+  {% endif %}
+</section>
+
+{% schema %}
+{
+  "name": "特集ページ",
+  "tag": "section",
+  "class": "section-feature-page",
+  "settings": [
+    {
+      "type": "header",
+      "content": "ヒーロー"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "ヒーロー画像"
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "ラベル",
+      "default": "Special Feature"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "タイトル",
+      "default": "北欧スタイルの作り方"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "サブタイトル",
+      "default": "シンプルで心地よい空間づくりのヒント"
+    },
+    {
+      "type": "header",
+      "content": "イントロ"
+    },
+    {
+      "type": "textarea",
+      "id": "intro",
+      "label": "導入文"
+    },
+    {
+      "type": "header",
+      "content": "CTA"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cta",
+      "label": "CTAを表示",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "cta_title",
+      "label": "CTAタイトル",
+      "default": "特集アイテムを見る"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "CTA説明",
+      "default": "この特集で紹介したアイテムをチェック"
+    },
+    {
+      "type": "text",
+      "id": "cta_button",
+      "label": "ボタンテキスト",
+      "default": "コレクションを見る"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "リンク先"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "text",
+      "name": "テキスト",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "見出し"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "本文"
+        }
+      ]
+    },
+    {
+      "type": "image",
+      "name": "画像",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "画像"
+        },
+        {
+          "type": "text",
+          "id": "caption",
+          "label": "キャプション"
+        }
+      ]
+    },
+    {
+      "type": "image_text",
+      "name": "画像＋テキスト",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "画像"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "見出し"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "本文"
+        },
+        {
+          "type": "checkbox",
+          "id": "reverse",
+          "label": "画像を右に配置",
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "products",
+      "name": "商品グリッド",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "見出し",
+          "default": "おすすめアイテム"
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "コレクション"
+        },
+        {
+          "type": "range",
+          "id": "limit",
+          "label": "表示数",
+          "min": 2,
+          "max": 6,
+          "step": 1,
+          "default": 3
+        }
+      ]
+    },
+    {
+      "type": "quote",
+      "name": "引用",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "quote",
+          "label": "引用文"
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "出典"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "特集ページ",
+      "blocks": [
+        {
+          "type": "text",
+          "settings": {
+            "title": "北欧インテリアの魅力",
+            "content": "<p>北欧インテリアの特徴は、シンプルでありながら温かみのあるデザイン。自然素材を活かした家具と、光を大切にした空間づくりが特徴です。</p>"
+          }
+        },
+        {
+          "type": "image_text",
+          "settings": {
+            "title": "木の温もりを感じる",
+            "content": "<p>オーク、ウォールナットなど、厳選した無垢材を使用。経年変化を楽しめる素材選びにこだわっています。</p>",
+            "reverse": false
+          }
+        },
+        {
+          "type": "products",
+          "settings": {
+            "title": "この特集のおすすめアイテム",
+            "limit": 3
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

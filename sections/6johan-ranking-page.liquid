@@ -1,0 +1,563 @@
+{% comment %}
+  6JOHAN Ranking Page Section
+  カテゴリ別ランキングページ用セクション
+{% endcomment %}
+
+{%- style -%}
+  .ranking-page {
+    padding: 60px 0;
+    background: var(--6j-bg);
+  }
+  .ranking-page__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  .ranking-page__header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+  .ranking-page__label {
+    font-size: var(--6j-font-size-xs);
+    letter-spacing: var(--6j-letter-spacing-label);
+    color: var(--6j-label);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .ranking-page__title {
+    font-size: var(--6j-font-size-2xl);
+    font-weight: var(--6j-font-weight-medium);
+    color: var(--6j-text);
+    margin-bottom: 12px;
+  }
+  .ranking-page__desc {
+    font-size: var(--6j-font-size-base);
+    color: var(--6j-text-sub);
+  }
+  
+  /* Category Tabs */
+  .ranking-page__tabs {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+  }
+  .ranking-page__tab {
+    padding: 12px 24px;
+    border: 1px solid var(--6j-border);
+    border-radius: var(--6j-radius-full);
+    background: var(--6j-bg);
+    color: var(--6j-text);
+    font-size: var(--6j-font-size-sm);
+    cursor: pointer;
+    transition: all var(--6j-transition-base);
+  }
+  .ranking-page__tab:hover,
+  .ranking-page__tab.active {
+    background: var(--6j-accent);
+    color: #fff;
+    border-color: var(--6j-accent);
+  }
+  
+  /* Period Selector */
+  .ranking-page__period {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .ranking-page__period-btn {
+    padding: 8px 16px;
+    border: none;
+    background: transparent;
+    color: var(--6j-text-sub);
+    font-size: var(--6j-font-size-sm);
+    cursor: pointer;
+    position: relative;
+  }
+  .ranking-page__period-btn.active {
+    color: var(--6j-text);
+    font-weight: var(--6j-font-weight-medium);
+  }
+  .ranking-page__period-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--6j-accent);
+  }
+  
+  /* Ranking List */
+  .ranking-page__list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  /* Ranking Item */
+  .ranking-item {
+    display: grid;
+    grid-template-columns: 60px 160px 1fr auto;
+    gap: 20px;
+    align-items: center;
+    padding: 20px;
+    background: var(--6j-bg);
+    border: 1px solid var(--6j-border);
+    border-radius: var(--6j-radius-xl);
+    text-decoration: none;
+    color: inherit;
+    transition: all var(--6j-transition-base);
+  }
+  .ranking-item:hover {
+    border-color: var(--6j-accent);
+    box-shadow: var(--6j-shadow-md);
+  }
+  @media (max-width: 768px) {
+    .ranking-item {
+      grid-template-columns: 48px 100px 1fr;
+      gap: 12px;
+    }
+    .ranking-item__price {
+      grid-column: 2 / -1;
+      justify-self: start;
+    }
+  }
+  
+  /* Rank Number */
+  .ranking-item__rank {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: var(--6j-font-weight-bold);
+    color: #fff;
+  }
+  .ranking-item__rank--1 {
+    background: var(--6j-rank-gold);
+  }
+  .ranking-item__rank--2 {
+    background: var(--6j-rank-silver);
+  }
+  .ranking-item__rank--3 {
+    background: var(--6j-rank-bronze);
+  }
+  .ranking-item__rank--default {
+    background: var(--6j-text-sub);
+  }
+  
+  /* Product Image */
+  .ranking-item__image {
+    width: 120px;
+    aspect-ratio: 1;
+    background: var(--6j-bg-sub);
+    border-radius: var(--6j-radius-lg);
+    overflow: hidden;
+  }
+  .ranking-item__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  @media (max-width: 768px) {
+    .ranking-item__image {
+      width: 80px;
+    }
+  }
+  
+  /* Product Info */
+  .ranking-item__info {
+    flex: 1;
+  }
+  .ranking-item__badges {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+  .ranking-item__badge {
+    padding: 3px 8px;
+    border-radius: var(--6j-radius-sm);
+    font-size: 10px;
+    font-weight: var(--6j-font-weight-medium);
+    color: #fff;
+  }
+  .ranking-item__badge--stock { background: var(--6j-badge-stock); }
+  .ranking-item__badge--popular { background: var(--6j-badge-popular); }
+  .ranking-item__name {
+    font-size: var(--6j-font-size-md);
+    font-weight: var(--6j-font-weight-medium);
+    color: var(--6j-text);
+    margin-bottom: 4px;
+  }
+  .ranking-item__category {
+    font-size: var(--6j-font-size-sm);
+    color: var(--6j-text-sub);
+  }
+  .ranking-item__stars {
+    color: var(--6j-star);
+    font-size: var(--6j-font-size-sm);
+    margin-top: 4px;
+  }
+  
+  /* Price */
+  .ranking-item__price {
+    text-align: right;
+  }
+  .ranking-item__price-value {
+    font-size: var(--6j-font-size-lg);
+    font-weight: var(--6j-font-weight-bold);
+    color: var(--6j-text);
+  }
+  .ranking-item__price-tax {
+    font-size: var(--6j-font-size-xs);
+    color: var(--6j-text-sub);
+  }
+  
+  /* Top 3 Special */
+  .ranking-page__top3 {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr 1fr;
+    gap: 24px;
+    margin-bottom: 40px;
+    align-items: end;
+  }
+  @media (max-width: 900px) {
+    .ranking-page__top3 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  @media (max-width: 600px) {
+    .ranking-page__top3 {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+  }
+  
+  .ranking-top-card {
+    background: var(--6j-bg);
+    border-radius: var(--6j-radius-xl);
+    overflow: hidden;
+    border: 1px solid var(--6j-border);
+    text-decoration: none;
+    color: inherit;
+    transition: all var(--6j-transition-base);
+  }
+  .ranking-top-card:hover {
+    box-shadow: var(--6j-shadow-lg);
+    transform: translateY(-4px);
+  }
+  .ranking-top-card--1 {
+    border-color: #D4A843;
+    border-width: 2px;
+  }
+  .ranking-top-card--2 {
+    order: -1;
+  }
+  @media (max-width: 600px) {
+    .ranking-top-card--2 { order: 0; }
+  }
+  
+  .ranking-top-card__image {
+    aspect-ratio: 1;
+    background: var(--6j-bg-sub);
+    position: relative;
+  }
+  .ranking-top-card__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .ranking-top-card__rank {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: var(--6j-font-weight-bold);
+    color: #fff;
+  }
+  .ranking-top-card__body {
+    padding: 20px;
+  }
+  .ranking-top-card__name {
+    font-size: var(--6j-font-size-base);
+    font-weight: var(--6j-font-weight-medium);
+    color: var(--6j-text);
+    margin-bottom: 4px;
+  }
+  .ranking-top-card__price {
+    font-size: var(--6j-font-size-md);
+    font-weight: var(--6j-font-weight-bold);
+    color: var(--6j-text);
+  }
+  .ranking-top-card__stars {
+    color: var(--6j-star);
+    font-size: var(--6j-font-size-sm);
+    margin-top: 8px;
+  }
+{%- endstyle -%}
+
+<section class="ranking-page">
+  <div class="ranking-page__container">
+    <header class="ranking-page__header">
+      <p class="ranking-page__label">{{ section.settings.label }}</p>
+      <h1 class="ranking-page__title">{{ section.settings.title }}</h1>
+      <p class="ranking-page__desc">{{ section.settings.description }}</p>
+    </header>
+    
+    {% if section.settings.show_tabs %}
+    <div class="ranking-page__tabs">
+      <button class="ranking-page__tab active">すべて</button>
+      <button class="ranking-page__tab">チェア</button>
+      <button class="ranking-page__tab">テーブル</button>
+      <button class="ranking-page__tab">収納</button>
+      <button class="ranking-page__tab">照明</button>
+      <button class="ranking-page__tab">ラグ・雑貨</button>
+    </div>
+    {% endif %}
+    
+    {% if section.settings.show_period %}
+    <div class="ranking-page__period">
+      <button class="ranking-page__period-btn active">週間</button>
+      <button class="ranking-page__period-btn">月間</button>
+      <button class="ranking-page__period-btn">年間</button>
+    </div>
+    {% endif %}
+    
+    {% if section.settings.show_top3 and section.settings.collection != blank %}
+    <div class="ranking-page__top3">
+      {% for product in section.settings.collection.products limit: 3 %}
+        <a href="{{ product.url }}" class="ranking-top-card ranking-top-card--{{ forloop.index }}">
+          <div class="ranking-top-card__image">
+            {% if product.featured_image != blank %}
+              <img src="{{ product.featured_image | image_url: width: 600 }}" 
+                   alt="{{ product.title }}"
+                   loading="eager">
+            {% endif %}
+            <span class="ranking-top-card__rank" style="background: {% if forloop.index == 1 %}var(--6j-rank-gold){% elsif forloop.index == 2 %}var(--6j-rank-silver){% else %}var(--6j-rank-bronze){% endif %}">{{ forloop.index }}</span>
+          </div>
+          <div class="ranking-top-card__body">
+            <h3 class="ranking-top-card__name">{{ product.title }}</h3>
+            <p class="ranking-top-card__price">{{ product.price | money }}</p>
+            <div class="ranking-top-card__stars">★★★★☆ 4.5</div>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+    {% endif %}
+    
+    <div class="ranking-page__list">
+      {% if section.settings.collection != blank %}
+        {% for product in section.settings.collection.products offset: 3 limit: section.settings.limit %}
+          <a href="{{ product.url }}" class="ranking-item">
+            <span class="ranking-item__rank ranking-item__rank--default">{{ forloop.index | plus: 3 }}</span>
+            <div class="ranking-item__image">
+              {% if product.featured_image != blank %}
+                <img src="{{ product.featured_image | image_url: width: 300 }}" 
+                     alt="{{ product.title }}"
+                     loading="lazy">
+              {% endif %}
+            </div>
+            <div class="ranking-item__info">
+              <div class="ranking-item__badges">
+                {% if product.available %}
+                  <span class="ranking-item__badge ranking-item__badge--stock">即納</span>
+                {% endif %}
+              </div>
+              <h3 class="ranking-item__name">{{ product.title }}</h3>
+              <p class="ranking-item__category">{{ product.type }}</p>
+              <div class="ranking-item__stars">★★★★☆</div>
+            </div>
+            <div class="ranking-item__price">
+              <p class="ranking-item__price-value">{{ product.price | money }}</p>
+              <p class="ranking-item__price-tax">税込</p>
+            </div>
+          </a>
+        {% endfor %}
+      {% else %}
+        {% for block in section.blocks %}
+          <a href="{{ block.settings.link }}" class="ranking-item" {{ block.shopify_attributes }}>
+            <span class="ranking-item__rank {% if forloop.index <= 3 %}ranking-item__rank--{{ forloop.index }}{% else %}ranking-item__rank--default{% endif %}">{{ forloop.index }}</span>
+            <div class="ranking-item__image">
+              {% if block.settings.image != blank %}
+                <img src="{{ block.settings.image | image_url: width: 300 }}" 
+                     alt="{{ block.settings.name }}"
+                     loading="lazy">
+              {% endif %}
+            </div>
+            <div class="ranking-item__info">
+              <div class="ranking-item__badges">
+                {% if block.settings.badge != blank %}
+                  <span class="ranking-item__badge ranking-item__badge--{{ block.settings.badge }}">
+                    {% case block.settings.badge %}
+                      {% when 'stock' %}即納
+                      {% when 'popular' %}人気
+                    {% endcase %}
+                  </span>
+                {% endif %}
+              </div>
+              <h3 class="ranking-item__name">{{ block.settings.name }}</h3>
+              <p class="ranking-item__category">{{ block.settings.category }}</p>
+              <div class="ranking-item__stars">★★★★☆</div>
+            </div>
+            <div class="ranking-item__price">
+              <p class="ranking-item__price-value">{{ block.settings.price }}</p>
+              <p class="ranking-item__price-tax">税込</p>
+            </div>
+          </a>
+        {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "ランキングページ",
+  "tag": "section",
+  "class": "section-ranking-page",
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "ラベル",
+      "default": "Ranking"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "タイトル",
+      "default": "人気ランキング"
+    },
+    {
+      "type": "text",
+      "id": "description",
+      "label": "説明文",
+      "default": "今週の人気商品をランキングでご紹介"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_tabs",
+      "label": "カテゴリタブを表示",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_period",
+      "label": "期間切り替えを表示",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_top3",
+      "label": "TOP3を大きく表示",
+      "default": true
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "コレクション"
+    },
+    {
+      "type": "range",
+      "id": "limit",
+      "label": "4位以降の表示数",
+      "min": 3,
+      "max": 17,
+      "step": 1,
+      "default": 7
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product",
+      "name": "商品（手動）",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "画像"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "商品名",
+          "default": "ダイニングチェア オーク"
+        },
+        {
+          "type": "text",
+          "id": "category",
+          "label": "カテゴリ",
+          "default": "チェア"
+        },
+        {
+          "type": "text",
+          "id": "price",
+          "label": "価格",
+          "default": "¥34,800"
+        },
+        {
+          "type": "select",
+          "id": "badge",
+          "label": "バッジ",
+          "options": [
+            { "value": "", "label": "なし" },
+            { "value": "stock", "label": "即納" },
+            { "value": "popular", "label": "人気" }
+          ],
+          "default": ""
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "リンク先"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "ランキングページ",
+      "blocks": [
+        {
+          "type": "product",
+          "settings": {
+            "name": "ダイニングチェア オーク ナチュラル",
+            "category": "チェア",
+            "price": "¥34,800",
+            "badge": "stock"
+          }
+        },
+        {
+          "type": "product",
+          "settings": {
+            "name": "サイドテーブル ウォールナット",
+            "category": "テーブル",
+            "price": "¥28,600",
+            "badge": "popular"
+          }
+        },
+        {
+          "type": "product",
+          "settings": {
+            "name": "ワークチェア ナチュラル",
+            "category": "チェア",
+            "price": "¥42,800",
+            "badge": "stock"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

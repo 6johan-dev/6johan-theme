@@ -1,0 +1,672 @@
+{% comment %}
+  6JOHAN About Page Section
+  Aboutページ/ブランドストーリー用セクション
+{% endcomment %}
+
+{%- style -%}
+  .about-page {
+    background: var(--6j-bg);
+  }
+  
+  /* Hero */
+  .about-page__hero {
+    position: relative;
+    height: 50vh;
+    min-height: 350px;
+    max-height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: var(--6j-bg-sub);
+    overflow: hidden;
+  }
+  .about-page__hero-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .about-page__hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.25);
+  }
+  .about-page__hero-content {
+    position: relative;
+    z-index: 2;
+    color: #fff;
+    padding: 20px;
+  }
+  .about-page__hero-label {
+    font-size: var(--6j-font-size-xs);
+    letter-spacing: var(--6j-letter-spacing-label);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    opacity: 0.9;
+  }
+  .about-page__hero-title {
+    font-size: 32px;
+    font-weight: var(--6j-font-weight-medium);
+    line-height: 1.3;
+  }
+  
+  /* Container */
+  .about-page__container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 60px 20px;
+  }
+  
+  /* Section */
+  .about-section {
+    margin-bottom: 80px;
+  }
+  .about-section:last-child {
+    margin-bottom: 0;
+  }
+  
+  /* Mission */
+  .about-mission {
+    text-align: center;
+    padding: 40px 0;
+  }
+  .about-mission__label {
+    font-size: var(--6j-font-size-xs);
+    letter-spacing: var(--6j-letter-spacing-label);
+    color: var(--6j-label);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .about-mission__text {
+    font-size: var(--6j-font-size-xl);
+    color: var(--6j-text);
+    line-height: var(--6j-line-height-relaxed);
+    font-weight: var(--6j-font-weight-medium);
+  }
+  
+  /* Story */
+  .about-story {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: center;
+  }
+  .about-story--reverse {
+    direction: rtl;
+  }
+  .about-story--reverse > * {
+    direction: ltr;
+  }
+  @media (max-width: 768px) {
+    .about-story {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+    .about-story--reverse {
+      direction: ltr;
+    }
+  }
+  .about-story__image {
+    border-radius: var(--6j-radius-xl);
+    overflow: hidden;
+  }
+  .about-story__image img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  .about-story__label {
+    font-size: var(--6j-font-size-xs);
+    letter-spacing: var(--6j-letter-spacing-label);
+    color: var(--6j-label);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .about-story__title {
+    font-size: var(--6j-font-size-xl);
+    font-weight: var(--6j-font-weight-medium);
+    color: var(--6j-text);
+    margin-bottom: 16px;
+  }
+  .about-story__text {
+    font-size: var(--6j-font-size-base);
+    color: var(--6j-text);
+    line-height: var(--6j-line-height-relaxed);
+  }
+  
+  /* Values */
+  .about-values__header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .about-values__label {
+    font-size: var(--6j-font-size-xs);
+    letter-spacing: var(--6j-letter-spacing-label);
+    color: var(--6j-label);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .about-values__title {
+    font-size: var(--6j-font-size-xl);
+    font-weight: var(--6j-font-weight-medium);
+    color: var(--6j-text);
+  }
+  .about-values__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+  }
+  @media (max-width: 768px) {
+    .about-values__grid {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+  }
+  .about-value {
+    text-align: center;
+    padding: 32px 24px;
+    background: var(--6j-bg-sub);
+    border-radius: var(--6j-radius-xl);
+  }
+  .about-value__number {
+    font-size: 32px;
+    font-weight: var(--6j-font-weight-bold);
+    color: var(--6j-accent);
+    margin-bottom: 12px;
+  }
+  .about-value__title {
+    font-size: var(--6j-font-size-md);
+    font-weight: var(--6j-font-weight-medium);
+    color: var(--6j-text);
+    margin-bottom: 8px;
+  }
+  .about-value__text {
+    font-size: var(--6j-font-size-sm);
+    color: var(--6j-text-sub);
+    line-height: var(--6j-line-height-relaxed);
+  }
+  
+  /* Commitment */
+  .about-commitment {
+    background: var(--6j-bg-sub);
+    padding: 48px;
+    border-radius: var(--6j-radius-xl);
+  }
+  .about-commitment__header {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  .about-commitment__label {
+    font-size: var(--6j-font-size-xs);
+    letter-spacing: var(--6j-letter-spacing-label);
+    color: var(--6j-label);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .about-commitment__title {
+    font-size: var(--6j-font-size-xl);
+    font-weight: var(--6j-font-weight-medium);
+    color: var(--6j-text);
+  }
+  .about-commitment__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+  @media (max-width: 600px) {
+    .about-commitment__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  .about-commitment-item {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  .about-commitment-item__icon {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    background: var(--6j-bg);
+    border-radius: var(--6j-radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+  }
+  .about-commitment-item__title {
+    font-size: var(--6j-font-size-base);
+    font-weight: var(--6j-font-weight-medium);
+    color: var(--6j-text);
+    margin-bottom: 4px;
+  }
+  .about-commitment-item__text {
+    font-size: var(--6j-font-size-sm);
+    color: var(--6j-text-sub);
+    line-height: var(--6j-line-height-relaxed);
+  }
+  
+  /* CTA */
+  .about-cta {
+    text-align: center;
+    padding: 60px 20px;
+    background: var(--6j-bg-sub);
+    margin-top: 60px;
+  }
+  .about-cta__title {
+    font-size: var(--6j-font-size-xl);
+    font-weight: var(--6j-font-weight-medium);
+    color: var(--6j-text);
+    margin-bottom: 24px;
+  }
+{%- endstyle -%}
+
+<section class="about-page">
+  <!-- Hero -->
+  <div class="about-page__hero">
+    {% if section.settings.hero_image != blank %}
+      <img src="{{ section.settings.hero_image | image_url: width: 1920 }}" 
+           alt="{{ section.settings.title }}"
+           class="about-page__hero-image"
+           loading="eager">
+    {% endif %}
+    <div class="about-page__hero-overlay"></div>
+    <div class="about-page__hero-content">
+      <p class="about-page__hero-label">{{ section.settings.label }}</p>
+      <h1 class="about-page__hero-title">{{ section.settings.title }}</h1>
+    </div>
+  </div>
+  
+  <div class="about-page__container">
+    
+    <!-- Mission -->
+    {% if section.settings.mission != blank %}
+    <div class="about-section about-mission">
+      <p class="about-mission__label">Our Mission</p>
+      <p class="about-mission__text">{{ section.settings.mission }}</p>
+    </div>
+    {% endif %}
+    
+    <!-- Blocks -->
+    {% for block in section.blocks %}
+      {% case block.type %}
+        
+        {% when 'story' %}
+          <div class="about-section about-story {% if block.settings.reverse %}about-story--reverse{% endif %}" {{ block.shopify_attributes }}>
+            <div class="about-story__image">
+              {% if block.settings.image != blank %}
+                <img src="{{ block.settings.image | image_url: width: 800 }}" 
+                     alt="{{ block.settings.title }}"
+                     loading="lazy">
+              {% endif %}
+            </div>
+            <div class="about-story__content">
+              {% if block.settings.label != blank %}
+                <p class="about-story__label">{{ block.settings.label }}</p>
+              {% endif %}
+              <h2 class="about-story__title">{{ block.settings.title }}</h2>
+              <div class="about-story__text">{{ block.settings.text }}</div>
+            </div>
+          </div>
+        
+        {% when 'values' %}
+          <div class="about-section about-values" {{ block.shopify_attributes }}>
+            <div class="about-values__header">
+              <p class="about-values__label">{{ block.settings.label }}</p>
+              <h2 class="about-values__title">{{ block.settings.title }}</h2>
+            </div>
+            <div class="about-values__grid">
+              {% if block.settings.value1_title != blank %}
+              <div class="about-value">
+                <div class="about-value__number">01</div>
+                <h3 class="about-value__title">{{ block.settings.value1_title }}</h3>
+                <p class="about-value__text">{{ block.settings.value1_text }}</p>
+              </div>
+              {% endif %}
+              {% if block.settings.value2_title != blank %}
+              <div class="about-value">
+                <div class="about-value__number">02</div>
+                <h3 class="about-value__title">{{ block.settings.value2_title }}</h3>
+                <p class="about-value__text">{{ block.settings.value2_text }}</p>
+              </div>
+              {% endif %}
+              {% if block.settings.value3_title != blank %}
+              <div class="about-value">
+                <div class="about-value__number">03</div>
+                <h3 class="about-value__title">{{ block.settings.value3_title }}</h3>
+                <p class="about-value__text">{{ block.settings.value3_text }}</p>
+              </div>
+              {% endif %}
+            </div>
+          </div>
+        
+        {% when 'commitment' %}
+          <div class="about-section about-commitment" {{ block.shopify_attributes }}>
+            <div class="about-commitment__header">
+              <p class="about-commitment__label">{{ block.settings.label }}</p>
+              <h2 class="about-commitment__title">{{ block.settings.title }}</h2>
+            </div>
+            <div class="about-commitment__grid">
+              {% if block.settings.item1_title != blank %}
+              <div class="about-commitment-item">
+                <div class="about-commitment-item__icon">✓</div>
+                <div>
+                  <h3 class="about-commitment-item__title">{{ block.settings.item1_title }}</h3>
+                  <p class="about-commitment-item__text">{{ block.settings.item1_text }}</p>
+                </div>
+              </div>
+              {% endif %}
+              {% if block.settings.item2_title != blank %}
+              <div class="about-commitment-item">
+                <div class="about-commitment-item__icon">✓</div>
+                <div>
+                  <h3 class="about-commitment-item__title">{{ block.settings.item2_title }}</h3>
+                  <p class="about-commitment-item__text">{{ block.settings.item2_text }}</p>
+                </div>
+              </div>
+              {% endif %}
+              {% if block.settings.item3_title != blank %}
+              <div class="about-commitment-item">
+                <div class="about-commitment-item__icon">✓</div>
+                <div>
+                  <h3 class="about-commitment-item__title">{{ block.settings.item3_title }}</h3>
+                  <p class="about-commitment-item__text">{{ block.settings.item3_text }}</p>
+                </div>
+              </div>
+              {% endif %}
+              {% if block.settings.item4_title != blank %}
+              <div class="about-commitment-item">
+                <div class="about-commitment-item__icon">✓</div>
+                <div>
+                  <h3 class="about-commitment-item__title">{{ block.settings.item4_title }}</h3>
+                  <p class="about-commitment-item__text">{{ block.settings.item4_text }}</p>
+                </div>
+              </div>
+              {% endif %}
+            </div>
+          </div>
+        
+      {% endcase %}
+    {% endfor %}
+    
+  </div>
+  
+  <!-- CTA -->
+  {% if section.settings.show_cta %}
+  <div class="about-cta">
+    <h2 class="about-cta__title">{{ section.settings.cta_title }}</h2>
+    <a href="{{ section.settings.cta_link }}" class="btn-6j-primary">{{ section.settings.cta_button }}</a>
+  </div>
+  {% endif %}
+</section>
+
+{% schema %}
+{
+  "name": "Aboutページ",
+  "tag": "section",
+  "class": "section-about-page",
+  "settings": [
+    {
+      "type": "header",
+      "content": "ヒーロー"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "ヒーロー画像"
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "ラベル",
+      "default": "About Us"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "タイトル",
+      "default": "6JOHANについて"
+    },
+    {
+      "type": "header",
+      "content": "ミッション"
+    },
+    {
+      "type": "textarea",
+      "id": "mission",
+      "label": "ミッションステートメント",
+      "default": "北欧デザインの美しさと、日本の住空間に馴染む心地よさを。暮らしに寄り添う上質な家具をお届けします。"
+    },
+    {
+      "type": "header",
+      "content": "CTA"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cta",
+      "label": "CTAを表示",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "cta_title",
+      "label": "CTAタイトル",
+      "default": "6JOHANの家具を見る"
+    },
+    {
+      "type": "text",
+      "id": "cta_button",
+      "label": "ボタンテキスト",
+      "default": "コレクションを見る"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "リンク先"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "story",
+      "name": "ストーリー",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "画像"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "ラベル",
+          "default": "Our Story"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "タイトル",
+          "default": "北欧と日本を繋ぐ"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "本文",
+          "default": "<p>6JOHANは「北欧×日本」をコンセプトに、シンプルで機能的、そして温かみのある家具を提案しています。</p>"
+        },
+        {
+          "type": "checkbox",
+          "id": "reverse",
+          "label": "画像を右に配置",
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "values",
+      "name": "バリュー",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "ラベル",
+          "default": "Our Values"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "タイトル",
+          "default": "大切にしていること"
+        },
+        {
+          "type": "text",
+          "id": "value1_title",
+          "label": "バリュー1 タイトル",
+          "default": "品質へのこだわり"
+        },
+        {
+          "type": "text",
+          "id": "value1_text",
+          "label": "バリュー1 説明",
+          "default": "厳選した素材と熟練の職人技で、長く愛される家具を作ります。"
+        },
+        {
+          "type": "text",
+          "id": "value2_title",
+          "label": "バリュー2 タイトル",
+          "default": "デザインの美しさ"
+        },
+        {
+          "type": "text",
+          "id": "value2_text",
+          "label": "バリュー2 説明",
+          "default": "北欧デザインの洗練さと、日本の住空間に馴染む調和を追求しています。"
+        },
+        {
+          "type": "text",
+          "id": "value3_title",
+          "label": "バリュー3 タイトル",
+          "default": "持続可能性"
+        },
+        {
+          "type": "text",
+          "id": "value3_text",
+          "label": "バリュー3 説明",
+          "default": "環境に配慮した素材選びと、修理可能な設計で長く使える家具を目指します。"
+        }
+      ]
+    },
+    {
+      "type": "commitment",
+      "name": "コミットメント",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "ラベル",
+          "default": "Our Commitment"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "タイトル",
+          "default": "お客様へのお約束"
+        },
+        {
+          "type": "text",
+          "id": "item1_title",
+          "label": "項目1 タイトル",
+          "default": "7日以内発送"
+        },
+        {
+          "type": "text",
+          "id": "item1_text",
+          "label": "項目1 説明",
+          "default": "在庫商品は7日以内に発送いたします。"
+        },
+        {
+          "type": "text",
+          "id": "item2_title",
+          "label": "項目2 タイトル",
+          "default": "30日間返品保証"
+        },
+        {
+          "type": "text",
+          "id": "item2_text",
+          "label": "項目2 説明",
+          "default": "届いてから30日以内なら返品・交換を承ります。"
+        },
+        {
+          "type": "text",
+          "id": "item3_title",
+          "label": "項目3 タイトル",
+          "default": "1年間品質保証"
+        },
+        {
+          "type": "text",
+          "id": "item3_text",
+          "label": "項目3 説明",
+          "default": "製造上の欠陥は1年間無償で修理・交換いたします。"
+        },
+        {
+          "type": "text",
+          "id": "item4_title",
+          "label": "項目4 タイトル",
+          "default": "購入前相談OK"
+        },
+        {
+          "type": "text",
+          "id": "item4_text",
+          "label": "項目4 説明",
+          "default": "サイズや素材など、お気軽にご相談ください。"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Aboutページ",
+      "blocks": [
+        {
+          "type": "story",
+          "settings": {
+            "label": "Our Story",
+            "title": "北欧と日本を繋ぐ",
+            "text": "<p>6JOHANは「北欧×日本」をコンセプトに、シンプルで機能的、そして温かみのある家具を提案しています。北欧デザインの洗練された美しさと、日本の住空間に馴染む繊細さ。その両方を大切にしながら、暮らしに寄り添う家具づくりを続けています。</p>",
+            "reverse": false
+          }
+        },
+        {
+          "type": "values",
+          "settings": {
+            "label": "Our Values",
+            "title": "大切にしていること",
+            "value1_title": "品質へのこだわり",
+            "value1_text": "厳選した素材と熟練の職人技で、長く愛される家具を作ります。",
+            "value2_title": "デザインの美しさ",
+            "value2_text": "北欧デザインの洗練さと、日本の住空間に馴染む調和を追求しています。",
+            "value3_title": "持続可能性",
+            "value3_text": "環境に配慮した素材選びと、修理可能な設計で長く使える家具を目指します。"
+          }
+        },
+        {
+          "type": "commitment",
+          "settings": {
+            "label": "Our Commitment",
+            "title": "お客様へのお約束",
+            "item1_title": "7日以内発送",
+            "item1_text": "在庫商品は7日以内に発送いたします。",
+            "item2_title": "30日間返品保証",
+            "item2_text": "届いてから30日以内なら返品・交換を承ります。",
+            "item3_title": "1年間品質保証",
+            "item3_text": "製造上の欠陥は1年間無償で修理・交換いたします。",
+            "item4_title": "購入前相談OK",
+            "item4_text": "サイズや素材など、お気軽にご相談ください。"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,110 @@
+{
+  "sections": {
+    "main": {
+      "type": "6johan-ranking-page",
+      "settings": {
+        "label": "Ranking",
+        "title": "人気ランキング",
+        "description": "今週の人気商品をランキングでご紹介",
+        "show_tabs": true,
+        "show_period": true,
+        "show_top3": true,
+        "limit": 7
+      },
+      "blocks": {
+        "product_1": {
+          "type": "product",
+          "settings": {
+            "name": "ダイニングチェア オーク ナチュラル",
+            "category": "チェア",
+            "price": "¥34,800",
+            "badge": "stock"
+          }
+        },
+        "product_2": {
+          "type": "product",
+          "settings": {
+            "name": "サイドテーブル ウォールナット",
+            "category": "テーブル",
+            "price": "¥28,600",
+            "badge": "popular"
+          }
+        },
+        "product_3": {
+          "type": "product",
+          "settings": {
+            "name": "ワークチェア ナチュラル",
+            "category": "チェア",
+            "price": "¥42,800",
+            "badge": "stock"
+          }
+        },
+        "product_4": {
+          "type": "product",
+          "settings": {
+            "name": "キャビネット オーク",
+            "category": "収納",
+            "price": "¥68,000",
+            "badge": ""
+          }
+        },
+        "product_5": {
+          "type": "product",
+          "settings": {
+            "name": "ローテーブル ウォールナット",
+            "category": "テーブル",
+            "price": "¥54,800",
+            "badge": "popular"
+          }
+        },
+        "product_6": {
+          "type": "product",
+          "settings": {
+            "name": "ペンダントライト モダン",
+            "category": "照明",
+            "price": "¥24,800",
+            "badge": "stock"
+          }
+        },
+        "product_7": {
+          "type": "product",
+          "settings": {
+            "name": "ラグ ナチュラルコットン",
+            "category": "ラグ・雑貨",
+            "price": "¥18,800",
+            "badge": ""
+          }
+        },
+        "product_8": {
+          "type": "product",
+          "settings": {
+            "name": "ブックシェルフ オーク",
+            "category": "収納",
+            "price": "¥78,000",
+            "badge": ""
+          }
+        },
+        "product_9": {
+          "type": "product",
+          "settings": {
+            "name": "ダイニングテーブル オーク 4人用",
+            "category": "テーブル",
+            "price": "¥98,000",
+            "badge": "popular"
+          }
+        },
+        "product_10": {
+          "type": "product",
+          "settings": {
+            "name": "アームチェア ヴィンテージ",
+            "category": "チェア",
+            "price": "¥64,800",
+            "badge": ""
+          }
+        }
+      },
+      "block_order": ["product_1", "product_2", "product_3", "product_4", "product_5", "product_6", "product_7", "product_8", "product_9", "product_10"]
+    }
+  },
+  "order": ["main"]
+}

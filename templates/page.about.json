@@ -1,40 +1,65 @@
 {
   "sections": {
     "main": {
-      "type": "6johan-about-story",
+      "type": "6johan-about-page",
       "settings": {
-        "hero_label": "Our Story",
-        "hero_heading": "北欧の暮らしを、\nあなたの六畳半に。",
-        "hero_text": "世界中から本当にいいものだけを選び、一人暮らしのあなたの部屋にちょうどいいサイズとデザインでお届けします。",
-        "founder_label": "Founder",
-        "founder_name": "代表者名",
-        "founder_message": "初めて北欧を訪れた時、シンプルだけど温かい暮らしの在り方に心を打たれました。あの空気感を、日本の一人暮らしの部屋にも届けたい — それが6JOHANの始まりです。",
-        "process_label": "How We Work",
-        "review_label": "Customer Voice",
-        "review_text": "初めてのネット家具購入で不安でしたが、写真通りの品質で安心しました。梱包も丁寧で、傷ひとつありませんでした。",
-        "review_author": "M様・東京都（30代女性）",
-        "cta_text": "コレクションを見る →",
-        "cta_url": "/collections/all"
+        "label": "About Us",
+        "title": "6JOHANについて",
+        "mission": "北欧デザインの美しさと、日本の住空間に馴染む心地よさを。暮らしに寄り添う上質な家具をお届けします。",
+        "show_cta": true,
+        "cta_title": "6JOHANの家具を見る",
+        "cta_button": "コレクションを見る"
       },
       "blocks": {
-        "step_1": { "type": "process_step", "settings": { "title": "世界中からセレクト", "description": "北欧・アジアの信頼できる工房から、デザインと品質の基準を満たすものだけを厳選しています。" } },
-        "step_2": { "type": "process_step", "settings": { "title": "全品検品", "description": "自社倉庫で全商品を検品。傷、がたつき、仕上がりを一点ずつ確認します。" } },
-        "step_3": { "type": "process_step", "settings": { "title": "丁寧に梱包・発送", "description": "家具専用の梱包材で保護し、佐川急便にて全国へ。追跡番号をメールでお知らせします。" } },
-        "stat_1": { "type": "stat", "settings": { "number": "3,000+", "label": "出荷実績" } },
-        "stat_2": { "type": "stat", "settings": { "number": "4.7", "label": "顧客満足度" } },
-        "stat_3": { "type": "stat", "settings": { "number": "2019〜", "label": "創業" } }
+        "story_1": {
+          "type": "story",
+          "settings": {
+            "label": "Our Story",
+            "title": "北欧と日本を繋ぐ",
+            "text": "<p>6JOHANは「北欧×日本」をコンセプトに、シンプルで機能的、そして温かみのある家具を提案しています。</p><p>北欧デザインの洗練された美しさと、日本の住空間に馴染む繊細さ。その両方を大切にしながら、暮らしに寄り添う家具づくりを続けています。</p>",
+            "reverse": false
+          }
+        },
+        "story_2": {
+          "type": "story",
+          "settings": {
+            "label": "Quality",
+            "title": "素材へのこだわり",
+            "text": "<p>私たちが選ぶのは、オーク、ウォールナット、アッシュなど、厳選された無垢材です。</p><p>経年変化を楽しめる素材は、使うほどに味わいが増し、長く愛される家具になります。</p>",
+            "reverse": true
+          }
+        },
+        "values": {
+          "type": "values",
+          "settings": {
+            "label": "Our Values",
+            "title": "大切にしていること",
+            "value1_title": "品質へのこだわり",
+            "value1_text": "厳選した素材と熟練の職人技で、長く愛される家具を作ります。",
+            "value2_title": "デザインの美しさ",
+            "value2_text": "北欧デザインの洗練さと、日本の住空間に馴染む調和を追求しています。",
+            "value3_title": "持続可能性",
+            "value3_text": "環境に配慮した素材選びと、修理可能な設計で長く使える家具を目指します。"
+          }
+        },
+        "commitment": {
+          "type": "commitment",
+          "settings": {
+            "label": "Our Commitment",
+            "title": "お客様へのお約束",
+            "item1_title": "7日以内発送",
+            "item1_text": "在庫商品は7日以内に発送いたします。",
+            "item2_title": "30日間返品保証",
+            "item2_text": "届いてから30日以内なら返品・交換を承ります。",
+            "item3_title": "1年間品質保証",
+            "item3_text": "製造上の欠陥は1年間無償で修理・交換いたします。",
+            "item4_title": "購入前相談OK",
+            "item4_text": "サイズや素材など、お気軽にご相談ください。"
+          }
+        }
       },
-      "block_order": ["step_1", "step_2", "step_3", "stat_1", "stat_2", "stat_3"]
-    },
-    "trust-bar": {
-      "type": "6johan-global-trust-bar",
-      "blocks": {
-        "t1": { "type": "item", "settings": { "icon": "🚚", "text": "最短3日配送" } },
-        "t2": { "type": "item", "settings": { "icon": "↩️", "text": "30日返品OK" } },
-        "t3": { "type": "item", "settings": { "icon": "💬", "text": "チャット相談" } }
-      },
-      "block_order": ["t1", "t2", "t3"]
+      "block_order": ["story_1", "story_2", "values", "commitment"]
     }
   },
-  "order": ["main", "trust-bar"]
+  "order": ["main"]
 }

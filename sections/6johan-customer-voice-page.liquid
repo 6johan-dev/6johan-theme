@@ -1,0 +1,353 @@
+{% comment %}
+  6JOHAN Customer Voice Page Section
+  お客様の声・納品事例ページ用セクション
+{% endcomment %}
+
+{%- style -%}
+  .customer-voice-page {
+    padding: 60px 0;
+    background: var(--6j-bg);
+  }
+  .customer-voice-page__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  .customer-voice-page__header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+  .customer-voice-page__label {
+    font-size: var(--6j-font-size-xs);
+    letter-spacing: var(--6j-letter-spacing-label);
+    color: var(--6j-label);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .customer-voice-page__title {
+    font-size: var(--6j-font-size-2xl);
+    font-weight: var(--6j-font-weight-medium);
+    color: var(--6j-text);
+    margin-bottom: 16px;
+  }
+  .customer-voice-page__desc {
+    font-size: var(--6j-font-size-base);
+    color: var(--6j-text-sub);
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  /* Filter Tabs */
+  .customer-voice-page__filters {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+  }
+  .customer-voice-page__filter {
+    padding: 10px 20px;
+    border: 1px solid var(--6j-border);
+    border-radius: var(--6j-radius-full);
+    background: var(--6j-bg);
+    color: var(--6j-text);
+    font-size: var(--6j-font-size-sm);
+    cursor: pointer;
+    transition: all var(--6j-transition-base);
+  }
+  .customer-voice-page__filter:hover,
+  .customer-voice-page__filter.active {
+    background: var(--6j-accent);
+    color: #fff;
+    border-color: var(--6j-accent);
+  }
+  
+  /* Voice Grid */
+  .customer-voice-page__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  @media (max-width: 900px) {
+    .customer-voice-page__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 600px) {
+    .customer-voice-page__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  /* Voice Card */
+  .voice-card {
+    background: var(--6j-bg);
+    border-radius: var(--6j-radius-xl);
+    overflow: hidden;
+    box-shadow: var(--6j-shadow-base);
+    transition: box-shadow var(--6j-transition-base);
+  }
+  .voice-card:hover {
+    box-shadow: var(--6j-shadow-md);
+  }
+  .voice-card__image {
+    aspect-ratio: 4/3;
+    background: var(--6j-bg-sub);
+    position: relative;
+    overflow: hidden;
+  }
+  .voice-card__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .voice-card__room {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: rgba(255,255,255,0.95);
+    padding: 6px 12px;
+    border-radius: var(--6j-radius-sm);
+    font-size: var(--6j-font-size-xs);
+    color: var(--6j-text);
+    font-weight: var(--6j-font-weight-medium);
+  }
+  .voice-card__content {
+    padding: 20px;
+  }
+  .voice-card__stars {
+    color: var(--6j-star);
+    font-size: var(--6j-font-size-sm);
+    margin-bottom: 8px;
+  }
+  .voice-card__quote {
+    font-size: var(--6j-font-size-base);
+    color: var(--6j-text);
+    line-height: var(--6j-line-height-relaxed);
+    margin-bottom: 12px;
+  }
+  .voice-card__meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .voice-card__author {
+    font-size: var(--6j-font-size-sm);
+    color: var(--6j-text-sub);
+  }
+  .voice-card__product {
+    font-size: var(--6j-font-size-xs);
+    color: var(--6j-accent);
+  }
+  
+  /* Featured Voice (Large) */
+  .voice-card--featured {
+    grid-column: span 2;
+  }
+  .voice-card--featured .voice-card__image {
+    aspect-ratio: 16/9;
+  }
+  @media (max-width: 600px) {
+    .voice-card--featured {
+      grid-column: span 1;
+    }
+  }
+  
+  /* Load More */
+  .customer-voice-page__more {
+    text-align: center;
+    margin-top: 48px;
+  }
+{%- endstyle -%}
+
+<section class="customer-voice-page">
+  <div class="customer-voice-page__container">
+    <header class="customer-voice-page__header">
+      <p class="customer-voice-page__label">{{ section.settings.label }}</p>
+      <h1 class="customer-voice-page__title">{{ section.settings.title }}</h1>
+      <p class="customer-voice-page__desc">{{ section.settings.description }}</p>
+    </header>
+    
+    {% if section.settings.show_filters %}
+    <div class="customer-voice-page__filters">
+      <button class="customer-voice-page__filter active">すべて</button>
+      <button class="customer-voice-page__filter">リビング</button>
+      <button class="customer-voice-page__filter">ダイニング</button>
+      <button class="customer-voice-page__filter">ワークスペース</button>
+      <button class="customer-voice-page__filter">寝室</button>
+    </div>
+    {% endif %}
+    
+    <div class="customer-voice-page__grid">
+      {% for block in section.blocks %}
+        <article class="voice-card {% if block.settings.featured %}voice-card--featured{% endif %}" {{ block.shopify_attributes }}>
+          <div class="voice-card__image">
+            {% if block.settings.image != blank %}
+              <img src="{{ block.settings.image | image_url: width: 800 }}" 
+                   alt="{{ block.settings.author }}様のお部屋"
+                   loading="lazy">
+            {% endif %}
+            {% if block.settings.room_type != blank %}
+              <span class="voice-card__room">{{ block.settings.room_type }}</span>
+            {% endif %}
+          </div>
+          <div class="voice-card__content">
+            <div class="voice-card__stars">
+              {% for i in (1..5) %}
+                {% if i <= block.settings.rating %}★{% else %}☆{% endif %}
+              {% endfor %}
+            </div>
+            <p class="voice-card__quote">{{ block.settings.quote }}</p>
+            <div class="voice-card__meta">
+              <span class="voice-card__author">{{ block.settings.author }}様{% if block.settings.age != blank %}・{{ block.settings.age }}{% endif %}</span>
+              {% if block.settings.product != blank %}
+                <a href="{{ block.settings.product.url }}" class="voice-card__product">{{ block.settings.product.title }}</a>
+              {% endif %}
+            </div>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+    
+    {% if section.settings.show_load_more %}
+    <div class="customer-voice-page__more">
+      <button class="btn-6j-outline">もっと見る</button>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "お客様の声ページ",
+  "tag": "section",
+  "class": "section-customer-voice-page",
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "ラベル",
+      "default": "Customer Voice"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "タイトル",
+      "default": "お客様の声"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "説明文",
+      "default": "6JOHANの家具をお使いいただいているお客様からのレビューをご紹介します。"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_filters",
+      "label": "フィルターを表示",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_load_more",
+      "label": "もっと見るボタンを表示",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "voice",
+      "name": "お客様の声",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "お部屋の写真"
+        },
+        {
+          "type": "text",
+          "id": "room_type",
+          "label": "部屋タイプ",
+          "default": "リビング"
+        },
+        {
+          "type": "range",
+          "id": "rating",
+          "label": "評価",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "default": 5
+        },
+        {
+          "type": "textarea",
+          "id": "quote",
+          "label": "コメント",
+          "default": "北欧らしいシンプルなデザインが気に入っています。"
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "お名前（イニシャル）",
+          "default": "T.K"
+        },
+        {
+          "type": "text",
+          "id": "age",
+          "label": "年代",
+          "default": "30代"
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "関連商品"
+        },
+        {
+          "type": "checkbox",
+          "id": "featured",
+          "label": "大きく表示",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "お客様の声ページ",
+      "blocks": [
+        {
+          "type": "voice",
+          "settings": {
+            "room_type": "リビング",
+            "rating": 5,
+            "quote": "北欧らしいシンプルなデザインが気に入っています。部屋全体が明るくなりました。",
+            "author": "T.K",
+            "age": "30代",
+            "featured": true
+          }
+        },
+        {
+          "type": "voice",
+          "settings": {
+            "room_type": "ワークスペース",
+            "rating": 5,
+            "quote": "在宅ワーク用に購入しました。長時間座っても疲れにくいです。",
+            "author": "M.S",
+            "age": "40代"
+          }
+        },
+        {
+          "type": "voice",
+          "settings": {
+            "room_type": "ダイニング",
+            "rating": 4,
+            "quote": "木の質感が写真通りで高級感があります。家族も気に入っています。",
+            "author": "Y.A",
+            "age": "30代"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

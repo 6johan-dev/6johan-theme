@@ -1,0 +1,51 @@
+{
+  "sections": {
+    "main": {
+      "type": "6johan-scene-collection",
+      "settings": {
+        "label": "Living Room",
+        "title": "リビングルーム",
+        "description": "家族が集まる、くつろぎの空間に",
+        "show_nav": true,
+        "intro": "リビングは家族が集まり、くつろぎの時間を過ごす大切な空間。心地よいソファ、使いやすいテーブル、温かみのある照明など、厳選したアイテムでお気に入りの空間を作りましょう。",
+        "products_per_page": 12,
+        "show_tips": true,
+        "tips_title": "リビングのコーディネートポイント"
+      },
+      "blocks": {
+        "set_1": {
+          "type": "coordination_set",
+          "settings": {
+            "label": "Coordination Set",
+            "title": "リビング3点セット",
+            "description": "統一感のあるコーディネートをお得に",
+            "set_price": "¥128,000"
+          }
+        },
+        "tip_1": {
+          "type": "tip",
+          "settings": {
+            "title": "動線を意識する",
+            "text": "家具の配置は、歩きやすさを第一に考えましょう。最低でも60cmの通路幅を確保することで、快適に過ごせます。"
+          }
+        },
+        "tip_2": {
+          "type": "tip",
+          "settings": {
+            "title": "高さを揃える",
+            "text": "テーブルとソファ、棚の高さを揃えることで、空間に統一感が生まれます。視線の抜けも大切です。"
+          }
+        },
+        "tip_3": {
+          "type": "tip",
+          "settings": {
+            "title": "光を取り入れる",
+            "text": "自然光を最大限に活かしながら、夜は間接照明で温かみのある空間を演出しましょう。"
+          }
+        }
+      },
+      "block_order": ["set_1", "tip_1", "tip_2", "tip_3"]
+    }
+  },
+  "order": ["main"]
+}

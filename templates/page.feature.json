@@ -1,0 +1,58 @@
+{
+  "sections": {
+    "main": {
+      "type": "6johan-feature-page",
+      "settings": {
+        "label": "Special Feature",
+        "title": "北欧スタイルの作り方",
+        "subtitle": "シンプルで心地よい空間づくりのヒント",
+        "intro": "北欧インテリアの魅力は、シンプルでありながら温かみのあるデザイン。自然素材を活かした家具と、光を大切にした空間づくりが特徴です。このページでは、北欧スタイルを取り入れるためのポイントをご紹介します。",
+        "show_cta": true,
+        "cta_title": "特集アイテムを見る",
+        "cta_text": "この特集で紹介したアイテムをチェック",
+        "cta_button": "コレクションを見る"
+      },
+      "blocks": {
+        "block_1": {
+          "type": "text",
+          "settings": {
+            "title": "北欧インテリアの3つの要素",
+            "content": "<p>北欧インテリアを構成する重要な要素は、<strong>自然素材</strong>、<strong>シンプルなデザイン</strong>、<strong>光の取り入れ方</strong>の3つです。これらをバランスよく取り入れることで、心地よい空間が生まれます。</p>"
+          }
+        },
+        "block_2": {
+          "type": "image_text",
+          "settings": {
+            "title": "木の温もりを感じる",
+            "content": "<p>オーク、ウォールナット、アッシュなど、厳選した無垢材を使用した家具は、空間に温かみを与えます。経年変化を楽しめる素材選びにこだわることで、使うほどに愛着が増していきます。</p>",
+            "reverse": false
+          }
+        },
+        "block_3": {
+          "type": "image_text",
+          "settings": {
+            "title": "光を味方につける",
+            "content": "<p>北欧の冬は日照時間が短いため、自然光を最大限に活かす工夫が発達しました。白や明るいグレーを基調とした配色、光を反射するファブリック、キャンドルや間接照明の活用がポイントです。</p>",
+            "reverse": true
+          }
+        },
+        "block_4": {
+          "type": "quote",
+          "settings": {
+            "quote": "Less is more. シンプルさの中にこそ、本当の豊かさがある。",
+            "author": "北欧デザインの格言"
+          }
+        },
+        "block_5": {
+          "type": "products",
+          "settings": {
+            "title": "この特集のおすすめアイテム",
+            "limit": 3
+          }
+        }
+      },
+      "block_order": ["block_1", "block_2", "block_3", "block_4", "block_5"]
+    }
+  },
+  "order": ["main"]
+}

@@ -1,0 +1,73 @@
+{
+  "sections": {
+    "main": {
+      "type": "6johan-customer-voice-page",
+      "settings": {
+        "label": "Customer Voice",
+        "title": "お客様の声",
+        "description": "6JOHANの家具をお使いいただいているお客様からのレビューをご紹介します。",
+        "show_filters": true,
+        "show_load_more": true
+      },
+      "blocks": {
+        "voice_1": {
+          "type": "voice",
+          "settings": {
+            "room_type": "リビング",
+            "rating": 5,
+            "quote": "北欧らしいシンプルなデザインが気に入っています。部屋全体が明るくなりました。木の質感も写真通りで、家族全員が満足しています。",
+            "author": "T.K",
+            "age": "30代",
+            "featured": true
+          }
+        },
+        "voice_2": {
+          "type": "voice",
+          "settings": {
+            "room_type": "ワークスペース",
+            "rating": 5,
+            "quote": "在宅ワーク用に購入しました。長時間座っても疲れにくく、仕事の効率が上がった気がします。",
+            "author": "M.S",
+            "age": "40代",
+            "featured": false
+          }
+        },
+        "voice_3": {
+          "type": "voice",
+          "settings": {
+            "room_type": "ダイニング",
+            "rating": 4,
+            "quote": "木の質感が写真通りで高級感があります。家族も気に入っていて、食事の時間が楽しくなりました。",
+            "author": "Y.A",
+            "age": "30代",
+            "featured": false
+          }
+        },
+        "voice_4": {
+          "type": "voice",
+          "settings": {
+            "room_type": "寝室",
+            "rating": 5,
+            "quote": "シンプルで飽きのこないデザイン。組み立ても簡単で、説明書も分かりやすかったです。",
+            "author": "K.M",
+            "age": "20代",
+            "featured": false
+          }
+        },
+        "voice_5": {
+          "type": "voice",
+          "settings": {
+            "room_type": "リビング",
+            "rating": 5,
+            "quote": "配送も丁寧で、梱包もしっかりしていました。商品の品質も期待以上で大満足です。",
+            "author": "S.T",
+            "age": "40代",
+            "featured": false
+          }
+        }
+      },
+      "block_order": ["voice_1", "voice_2", "voice_3", "voice_4", "voice_5"]
+    }
+  },
+  "order": ["main"]
+}
