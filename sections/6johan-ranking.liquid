@@ -1,12 +1,13 @@
 {% comment %}
   6JOHAN Ranking Section
   タブ切り替えランキングセクション
+  修正: バッジ位置、スマホレイアウト改善
 {% endcomment %}
 
 {%- style -%}
 .ranking-section {
   padding: 60px 0;
-  background-color: var(--6j-linen, #FAFAF7);
+  background-color: var(--6j-bg, #FFFFFF);
 }
 
 .ranking-section__container {
@@ -26,7 +27,7 @@
   font-weight: 600;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: var(--6j-amber, #C4956A);
+  color: var(--6j-label, #8A7A6A);
   margin-bottom: 8px;
 }
 
@@ -34,7 +35,7 @@
   font-family: 'Playfair Display', 'Noto Serif JP', serif;
   font-size: 28px;
   font-weight: 500;
-  color: var(--6j-charcoal, #2C2C24);
+  color: var(--6j-text, #292724);
   margin: 0;
 }
 
@@ -49,23 +50,23 @@
 .ranking-section__tab {
   padding: 10px 20px;
   background: none;
-  border: 1px solid var(--6j-sand, #E8E5DC);
+  border: 1px solid var(--6j-border, #E8E5E0);
   border-radius: 24px;
   font-size: 13px;
   font-weight: 500;
-  color: var(--6j-earth, #6B6B5E);
+  color: var(--6j-text-sub, #807C76);
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .ranking-section__tab:hover {
-  border-color: var(--6j-charcoal, #2C2C24);
-  color: var(--6j-charcoal, #2C2C24);
+  border-color: var(--6j-text, #292724);
+  color: var(--6j-text, #292724);
 }
 
 .ranking-section__tab.is-active {
-  background-color: var(--6j-charcoal, #2C2C24);
-  border-color: var(--6j-charcoal, #2C2C24);
+  background-color: var(--6j-text, #292724);
+  border-color: var(--6j-text, #292724);
   color: #fff;
 }
 
@@ -85,6 +86,8 @@
 
 .ranking-section__item {
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 .ranking-section__rank {
@@ -93,7 +96,7 @@
   left: 8px;
   width: 28px;
   height: 28px;
-  background-color: var(--6j-charcoal, #2C2C24);
+  background-color: var(--6j-text, #292724);
   color: #fff;
   border-radius: 50%;
   display: flex;
@@ -101,7 +104,7 @@
   justify-content: center;
   font-size: 12px;
   font-weight: 700;
-  z-index: 2;
+  z-index: 3;
 }
 
 .ranking-section__rank--1 {
@@ -121,8 +124,8 @@
   aspect-ratio: 1;
   overflow: hidden;
   border-radius: 8px;
-  background-color: var(--6j-parchment, #F5F4F0);
-  margin-bottom: 12px;
+  background-color: var(--6j-bg-sub, #FAF9F7);
+  display: block;
 }
 
 .ranking-section__image {
@@ -136,26 +139,35 @@
   transform: scale(1.05);
 }
 
+/* バッジ: 画像の右上に固定 */
 .ranking-section__badges {
   position: absolute;
   top: 8px;
   right: 8px;
+  bottom: auto !important;
+  left: auto !important;
   display: flex;
   flex-direction: column;
+  align-items: flex-end;
   gap: 4px;
   z-index: 2;
 }
 
+/* 商品情報: 画像とは別エリア */
 .ranking-section__info {
-  padding: 0 4px;
+  padding: 12px 4px 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .ranking-section__name {
   font-size: 13px;
   font-weight: 500;
-  color: var(--6j-charcoal, #2C2C24);
-  margin: 0 0 6px;
-  line-height: 1.4;
+  color: var(--6j-text, #292724);
+  margin: 0 0 8px;
+  line-height: 1.5;
+  min-height: calc(13px * 1.5 * 2); /* 2行分の高さを確保 */
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -172,9 +184,11 @@
 }
 
 .ranking-section__price {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
-  color: var(--6j-charcoal, #2C2C24);
+  color: var(--6j-text, #292724);
+  margin: 0;
+  margin-top: auto;
 }
 
 .ranking-section__view-all {
@@ -187,33 +201,39 @@
   align-items: center;
   gap: 8px;
   padding: 14px 32px;
-  border: 1px solid var(--6j-charcoal, #2C2C24);
+  border: 1px solid var(--6j-text, #292724);
   border-radius: 4px;
   font-size: 14px;
   font-weight: 500;
-  color: var(--6j-charcoal, #2C2C24);
+  color: var(--6j-text, #292724);
   text-decoration: none;
   transition: all 0.2s;
 }
 
 .ranking-section__view-all-link:hover {
-  background-color: var(--6j-charcoal, #2C2C24);
+  background-color: var(--6j-text, #292724);
   color: #fff;
 }
 
+/* タブレット: 4列 */
 @media (max-width: 999px) {
   .ranking-section__grid {
     grid-template-columns: repeat(4, 1fr);
   }
   
-  .ranking-section__item:nth-child(5) {
+  .ranking-section__item:nth-child(n+5) {
     display: none;
   }
 }
 
+/* スマホ: 2列 */
 @media (max-width: 749px) {
   .ranking-section {
     padding: 40px 0;
+  }
+  
+  .ranking-section__container {
+    padding: 0 16px;
   }
   
   .ranking-section__title {
@@ -222,7 +242,8 @@
   
   .ranking-section__tabs {
     gap: 6px;
-    padding: 0 10px;
+    padding: 0;
+    margin-bottom: 24px;
   }
   
   .ranking-section__tab {
@@ -232,15 +253,70 @@
   
   .ranking-section__grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-  }
-  
-  .ranking-section__item:nth-child(5) {
-    display: block;
+    gap: 12px;
   }
   
   .ranking-section__item:nth-child(n+5) {
+    display: flex;
+  }
+  
+  .ranking-section__item:nth-child(n+7) {
     display: none;
+  }
+  
+  .ranking-section__rank {
+    width: 24px;
+    height: 24px;
+    font-size: 11px;
+    top: 6px;
+    left: 6px;
+  }
+  
+  .ranking-section__badges {
+    top: 6px;
+    right: 6px;
+  }
+  
+  /* バッジサイズ調整 */
+  .ranking-section__badges .product-badge {
+    font-size: 9px;
+    padding: 3px 6px;
+  }
+  
+  .ranking-section__badges .product-badge__icon {
+    width: 10px;
+    height: 10px;
+  }
+  
+  .ranking-section__info {
+    padding: 10px 2px 0;
+  }
+  
+  .ranking-section__name {
+    font-size: 12px;
+    margin-bottom: 6px;
+    min-height: calc(12px * 1.5 * 2);
+    line-height: 1.5;
+  }
+  
+  .ranking-section__price {
+    font-size: 14px;
+  }
+}
+
+/* 超小型スマホ */
+@media (max-width: 374px) {
+  .ranking-section__grid {
+    gap: 8px;
+  }
+  
+  .ranking-section__name {
+    font-size: 11px;
+    min-height: calc(11px * 1.5 * 2);
+  }
+  
+  .ranking-section__price {
+    font-size: 13px;
   }
 }
 {%- endstyle -%}
