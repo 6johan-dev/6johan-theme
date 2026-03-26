@@ -135,11 +135,38 @@
       },
       "6johan-global-trust-bar": {
         "type": "6johan-global-trust-bar",
-        "settings": {
-          "item1_text": "最短3日配送",
-          "item2_text": "30日返品OK",
-          "item3_text": "チャット相談"
-        }
+        "blocks": {
+          "trust_item_tPyXba": {
+            "type": "trust_item",
+            "settings": {
+              "icon_type": "shipping",
+              "text": "最短3日配送",
+              "subtext": ""
+            }
+          },
+          "trust_item_mxXCUX": {
+            "type": "trust_item",
+            "settings": {
+              "icon_type": "return",
+              "text": "30日返金保証",
+              "subtext": ""
+            }
+          },
+          "trust_item_ctmPmy": {
+            "type": "trust_item",
+            "settings": {
+              "icon_type": "chat",
+              "text": "チャット相談",
+              "subtext": ""
+            }
+          }
+        },
+        "block_order": [
+          "trust_item_tPyXba",
+          "trust_item_mxXCUX",
+          "trust_item_ctmPmy"
+        ],
+        "settings": {}
       }
     },
     "content_for_index": [],

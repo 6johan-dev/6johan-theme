@@ -9,6 +9,48 @@
  */
 {
   "sections": {
+    "6johan_announcement_ticker_QLCctr": {
+      "type": "6johan-announcement-ticker",
+      "blocks": {
+        "announcement_7ykbgi": {
+          "type": "announcement",
+          "settings": {
+            "date": "2026.03.20",
+            "text": "春の新作コレクションが入荷しました",
+            "url": ""
+          }
+        },
+        "announcement_6bQXtj": {
+          "type": "announcement",
+          "settings": {
+            "date": "2026.03.15",
+            "text": "【重要】配送料改定のお知らせ",
+            "url": ""
+          }
+        }
+      },
+      "block_order": [
+        "announcement_7ykbgi",
+        "announcement_6bQXtj"
+      ],
+      "name": "6JOHAN お知らせティッカー",
+      "settings": {
+        "label": "NEWS",
+        "scroll_speed": 6,
+        "show_close": true
+      }
+    },
+    "6johan_newsletter_bar_7T6WdJ": {
+      "type": "6johan-newsletter-bar",
+      "name": "6JOHAN メルマガ登録バー",
+      "settings": {
+        "badge_text": "初回10%OFF",
+        "text": "メルマガ登録で<strong>初回ご購入10%OFF</strong>クーポンをプレゼント",
+        "placeholder": "メールアドレス",
+        "button_text": "登録する",
+        "success_message": "ご登録ありがとうございます！クーポンをお送りしました。"
+      }
+    },
     "6johan_hero_qtHCRT": {
       "type": "6johan-hero",
       "name": "6JOHAN ヒーロー",
@@ -20,138 +62,338 @@
         "cta_url": "/collections/all"
       }
     },
-    "6johan_quick_nav_38RNf9": {
-      "type": "6johan-quick-nav",
+    "6johan_category_icons_RGywjp": {
+      "type": "6johan-category-icons",
       "blocks": {
-        "nav_item_LPEqBh": {
-          "type": "nav_item",
+        "category_q8HrgP": {
+          "type": "category",
           "settings": {
-            "icon": "👋",
-            "text": "はじめての方へ",
-            "url": "/pages/guide"
+            "label": "チェア・椅子",
+            "icon_type": "chair",
+            "url": ""
           }
         },
-        "nav_item_YKzhtV": {
-          "type": "nav_item",
+        "category_eapgpp": {
+          "type": "category",
           "settings": {
-            "icon": "🪑",
-            "text": "アイテムで探す",
-            "url": "/collections"
+            "label": "テーブル・デスク",
+            "icon_type": "table",
+            "url": ""
           }
         },
-        "nav_item_GByhGF": {
-          "type": "nav_item",
+        "category_GafKhV": {
+          "type": "category",
           "settings": {
-            "icon": "💰",
-            "text": "5万円以下",
-            "url": "/collections/5万円以下"
+            "label": "収納家具",
+            "icon_type": "storage",
+            "url": ""
           }
         },
-        "nav_item_Br6h7e": {
-          "type": "nav_item",
+        "category_QLM6TY": {
+          "type": "category",
           "settings": {
-            "icon": "⚡",
-            "text": "すぐ届く",
-            "url": "/collections/即納商品"
+            "label": "ソファ",
+            "icon_type": "sofa",
+            "url": ""
+          }
+        },
+        "category_Vk83dm": {
+          "type": "category",
+          "settings": {
+            "label": "ミラー・鏡",
+            "icon_type": "mirror",
+            "url": ""
+          }
+        },
+        "category_Qp4wRf": {
+          "type": "category",
+          "settings": {
+            "label": "ラグ",
+            "icon_type": "rug",
+            "url": ""
+          }
+        },
+        "category_JdpYHK": {
+          "type": "category",
+          "settings": {
+            "label": "すべて見る",
+            "icon_type": "all",
+            "url": ""
           }
         }
       },
       "block_order": [
-        "nav_item_LPEqBh",
-        "nav_item_YKzhtV",
-        "nav_item_GByhGF",
-        "nav_item_Br6h7e"
+        "category_q8HrgP",
+        "category_eapgpp",
+        "category_GafKhV",
+        "category_QLM6TY",
+        "category_Vk83dm",
+        "category_Qp4wRf",
+        "category_JdpYHK"
+      ],
+      "name": "6JOHAN カテゴリアイコン",
+      "settings": {}
+    },
+    "6johan_quick_nav_F43bz6": {
+      "type": "6johan-quick-nav",
+      "blocks": {
+        "nav_item_kDq6Km": {
+          "type": "nav_item",
+          "settings": {
+            "label": "部屋別で選ぶ",
+            "icon_type": "room",
+            "url": ""
+          }
+        },
+        "nav_item_i8CVzJ": {
+          "type": "nav_item",
+          "settings": {
+            "label": "スタイル別",
+            "icon_type": "style",
+            "url": ""
+          }
+        },
+        "nav_item_aGeBrN": {
+          "type": "nav_item",
+          "settings": {
+            "label": "初めての方",
+            "icon_type": "beginner",
+            "url": ""
+          }
+        },
+        "nav_item_DtrTFa": {
+          "type": "nav_item",
+          "settings": {
+            "label": "5万円以内",
+            "icon_type": "budget",
+            "url": ""
+          }
+        },
+        "nav_item_JN3qXj": {
+          "type": "nav_item",
+          "settings": {
+            "label": "部屋別で選ぶ",
+            "icon_type": "room",
+            "url": ""
+          }
+        }
+      },
+      "block_order": [
+        "nav_item_kDq6Km",
+        "nav_item_i8CVzJ",
+        "nav_item_aGeBrN",
+        "nav_item_DtrTFa",
+        "nav_item_JN3qXj"
       ],
       "name": "6JOHAN クイックナビ",
       "settings": {}
     },
-    "featured_collection_zd7XVY": {
-      "type": "featured-collection",
-      "name": "t:sections.featured-collection.presets.name",
+    "6johan_feature_banners_eHjW8f": {
+      "type": "6johan-feature-banners",
+      "blocks": {
+        "banner_Ttpwzy": {
+          "type": "banner",
+          "settings": {
+            "label": "SPRING COLLECTION",
+            "title": "春の新作コレクション",
+            "subtitle": "暮らしに彩りを添える新作家具",
+            "cta_text": "詳しく見る",
+            "url": "",
+            "is_large": true,
+            "overlay_light": false
+          }
+        },
+        "banner_dK7z7p": {
+          "type": "banner",
+          "settings": {
+            "label": "STYLE GUIDE",
+            "title": "北欧スタイルの作り方",
+            "subtitle": "",
+            "cta_text": "読む",
+            "url": "",
+            "is_large": false,
+            "overlay_light": false
+          }
+        },
+        "banner_b6VWdm": {
+          "type": "banner",
+          "settings": {
+            "label": "5万円以下",
+            "title": "お手頃価格の人気アイテム",
+            "subtitle": "",
+            "cta_text": "見る",
+            "url": "",
+            "is_large": false,
+            "overlay_light": false
+          }
+        }
+      },
+      "block_order": [
+        "banner_Ttpwzy",
+        "banner_dK7z7p",
+        "banner_b6VWdm"
+      ],
+      "name": "6JOHAN 特集バナー",
+      "settings": {}
+    },
+    "6johan_ranking_GfgLC3": {
+      "type": "6johan-ranking",
+      "blocks": {
+        "tab_BFcDpd": {
+          "type": "tab",
+          "settings": {
+            "tab_label": "すべて",
+            "collection": "",
+            "products_to_show": 5
+          }
+        },
+        "tab_qFBrTa": {
+          "type": "tab",
+          "settings": {
+            "tab_label": "チェア",
+            "collection": "",
+            "products_to_show": 5
+          }
+        },
+        "tab_beaKDX": {
+          "type": "tab",
+          "settings": {
+            "tab_label": "テーブル",
+            "collection": "",
+            "products_to_show": 5
+          }
+        },
+        "tab_bk8Aje": {
+          "type": "tab",
+          "settings": {
+            "tab_label": "収納",
+            "collection": "",
+            "products_to_show": 5
+          }
+        }
+      },
+      "block_order": [
+        "tab_BFcDpd",
+        "tab_qFBrTa",
+        "tab_beaKDX",
+        "tab_bk8Aje"
+      ],
+      "name": "6JOHAN ランキング",
       "settings": {
-        "collection": "pick-up",
-        "products_to_show": 4,
-        "title": "人気商品",
-        "heading_size": "h1",
-        "description": "",
-        "show_description": false,
-        "description_style": "body",
-        "columns_desktop": 4,
-        "enable_desktop_slider": false,
-        "full_width": false,
+        "label": "RANKING",
+        "heading": "人気ランキング",
         "show_view_all": true,
-        "view_all_style": "outline",
-        "color_scheme": "",
-        "image_ratio": "square",
-        "image_shape": "default",
-        "show_secondary_image": false,
-        "show_vendor": false,
-        "show_rating": false,
-        "quick_add": "none",
-        "columns_mobile": "2",
-        "swipe_on_mobile": false,
-        "padding_top": 36,
-        "padding_bottom": 36
+        "view_all_text": "ランキングをもっと見る",
+        "view_all_url": ""
       }
     },
-    "6johan_starter_set_QEF9Xj": {
-      "type": "6johan-starter-set",
-      "name": "6JOHAN セットバナー",
+    "6johan_customer_voice_Fq3Jif": {
+      "type": "6johan-customer-voice",
+      "blocks": {
+        "review_TfL3cj": {
+          "type": "review",
+          "settings": {
+            "room_type": "リビング",
+            "rating": 5,
+            "quote": "北欧らしいシンプルなデザインがとても気に入っています。部屋に置くだけで雰囲気が変わりました。組み立ても簡単で、すぐに使い始められました。",
+            "customer_name": "T.K様",
+            "customer_detail": "30代・東京都",
+            "products": "ダイニングチェア"
+          }
+        },
+        "review_ATxBJ7": {
+          "type": "review",
+          "settings": {
+            "room_type": "ワークスペース",
+            "rating": 5,
+            "quote": "在宅ワーク用に購入しましたが、座り心地が良く、長時間作業しても疲れません。デザインも部屋に馴染んで満足です。",
+            "customer_name": "M.S様",
+            "customer_detail": "40代・神奈川県",
+            "products": "ワークチェア, デスク"
+          }
+        },
+        "review_3UJ9cK": {
+          "type": "review",
+          "settings": {
+            "room_type": "ダイニング",
+            "rating": 4,
+            "quote": "木の質感が写真通りで、高級感があります。家族みんなで使っていますが、子どもも気に入っています。",
+            "customer_name": "Y.A様",
+            "customer_detail": "30代・大阪府",
+            "products": "ダイニングテーブル, チェア×4"
+          }
+        }
+      },
+      "block_order": [
+        "review_TfL3cj",
+        "review_ATxBJ7",
+        "review_3UJ9cK"
+      ],
+      "name": "6JOHAN お客様の声",
       "settings": {
-        "label": "Starter Set",
-        "heading": "コーディネートセット",
-        "description": "テーブル + チェア + ミラーの3点セット。統一感のあるお部屋づくりに。",
-        "price": "¥72,000",
-        "original_price": "",
-        "discount_badge": "10% OFF",
-        "cta_text": "セットを見る →",
-        "cta_url": ""
-      }
-    },
-    "featured_collection_Uc9AQz": {
-      "type": "featured-collection",
-      "name": "t:sections.featured-collection.presets.name",
-      "settings": {
-        "collection": "new-arrival",
-        "products_to_show": 4,
-        "title": "New Arrival",
-        "heading_size": "h1",
-        "description": "",
-        "show_description": false,
-        "description_style": "body",
-        "columns_desktop": 4,
-        "enable_desktop_slider": false,
-        "full_width": false,
+        "label": "CUSTOMER VOICE",
+        "heading": "お客様の声",
+        "subtitle": "実際にご購入いただいたお客様からのレビューをご紹介します",
         "show_view_all": true,
-        "view_all_style": "outline",
-        "color_scheme": "",
-        "image_ratio": "square",
-        "image_shape": "default",
-        "show_secondary_image": false,
-        "show_vendor": false,
-        "show_rating": false,
-        "quick_add": "none",
-        "columns_mobile": "2",
-        "swipe_on_mobile": false,
-        "padding_top": 36,
-        "padding_bottom": 36
+        "view_all_text": "すべてのレビューを見る",
+        "view_all_url": ""
       }
     },
-    "6johan_journal_fqbh9M": {
-      "type": "6johan-journal",
-      "name": "6JOHAN Journal",
+    "6johan_news_FQiVyx": {
+      "type": "6johan-news",
+      "blocks": {
+        "news_item_kPgDEW": {
+          "type": "news_item",
+          "settings": {
+            "date": "2026.03.20",
+            "category": "new",
+            "text": "春の新作コレクションが入荷しました",
+            "url": ""
+          }
+        },
+        "news_item_CX7Yaj": {
+          "type": "news_item",
+          "settings": {
+            "date": "2026.03.15",
+            "category": "important",
+            "text": "配送料改定のお知らせ（4月1日より適用）",
+            "url": ""
+          }
+        },
+        "news_item_ri3UpY": {
+          "type": "news_item",
+          "settings": {
+            "date": "2026.03.10",
+            "category": "campaign",
+            "text": "春のまとめ買いキャンペーン開催中",
+            "url": ""
+          }
+        }
+      },
+      "block_order": [
+        "news_item_kPgDEW",
+        "news_item_CX7Yaj",
+        "news_item_ri3UpY"
+      ],
+      "name": "6JOHAN ニュース",
       "settings": {
-        "label": "Journal",
-        "heading": "暮らしのヒント"
+        "label": "NEWS",
+        "heading": "お知らせ",
+        "show_view_all": true,
+        "view_all_text": "すべてのお知らせを見る",
+        "view_all_url": ""
       }
     }
   },
   "order": [
+    "6johan_announcement_ticker_QLCctr",
+    "6johan_newsletter_bar_7T6WdJ",
     "6johan_hero_qtHCRT",
-    "6johan_quick_nav_38RNf9",
-    "featured_collection_zd7XVY",
-    "6johan_starter_set_QEF9Xj",
-    "featured_collection_Uc9AQz",
-    "6johan_journal_fqbh9M"
+    "6johan_category_icons_RGywjp",
+    "6johan_quick_nav_F43bz6",
+    "6johan_feature_banners_eHjW8f",
+    "6johan_ranking_GfgLC3",
+    "6johan_customer_voice_Fq3Jif",
+    "6johan_news_FQiVyx"
   ]
 }
