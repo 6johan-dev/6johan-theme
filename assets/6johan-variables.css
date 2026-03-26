@@ -1,0 +1,250 @@
+/* ==========================================================================
+   6JOHAN Design System — CSS Variables
+   Palette: J. Deep Taupe
+   Version: 2.0
+   Updated: 2026-03-27
+   ========================================================================== */
+
+:root {
+  /* ========================================
+     Base Colors
+     ======================================== */
+  
+  /* Background */
+  --6j-bg: #FFFFFF;
+  --6j-bg-sub: #FAF9F7;
+  
+  /* Text */
+  --6j-text: #292724;
+  --6j-text-sub: #807C76;
+  
+  /* Accent / CTA */
+  --6j-accent: #6B5B4F;
+  --6j-accent-hover: #5A4A3F;
+  --6j-accent-light: #8A7A6A;
+  
+  /* UI Elements */
+  --6j-label: #8A7A6A;
+  --6j-border: #E8E5E0;
+  --6j-border-dark: #D5D0C8;
+  
+  /* ========================================
+     Badge Colors
+     ======================================== */
+  
+  --6j-badge-stock: #5E7A5E;        /* 即納・在庫あり — モスグリーン */
+  --6j-badge-popular: #6B5B4F;      /* 人気 — アクセント色 */
+  --6j-badge-new: #292724;          /* NEW — テキスト色 */
+  --6j-badge-lowstock: #C4956A;     /* 残りわずか — アンバー */
+  --6j-badge-soldout: #807C76;      /* SOLD OUT — サブテキスト色 */
+  --6j-badge-preorder: #5A7A9A;     /* 予約受付中 — ブルーグレー */
+  --6j-badge-madetoorder: #807C76;  /* 受注生産 — サブテキスト色 */
+  --6j-badge-webonly: #6B5B4F;      /* WEB限定 — アクセント色 */
+  
+  /* ========================================
+     Semantic Colors
+     ======================================== */
+  
+  --6j-success: #5E7A5E;
+  --6j-warning: #C4956A;
+  --6j-error: #B85450;
+  --6j-info: #5A7A9A;
+  
+  /* ========================================
+     Special Elements
+     ======================================== */
+  
+  --6j-star: #D4A843;               /* レビュー星 */
+  --6j-rank-gold: linear-gradient(135deg, #D4A843, #B8932E);
+  --6j-rank-silver: linear-gradient(135deg, #A8A8A8, #8A8A8A);
+  --6j-rank-bronze: linear-gradient(135deg, #CD7F32, #A66528);
+  
+  /* ========================================
+     Typography
+     ======================================== */
+  
+  --6j-font-primary: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --6j-font-heading: 'Noto Serif JP', 'Playfair Display', Georgia, serif;
+  
+  --6j-font-size-xs: 10px;
+  --6j-font-size-sm: 12px;
+  --6j-font-size-base: 14px;
+  --6j-font-size-md: 16px;
+  --6j-font-size-lg: 18px;
+  --6j-font-size-xl: 22px;
+  --6j-font-size-2xl: 28px;
+  
+  --6j-font-weight-normal: 400;
+  --6j-font-weight-medium: 500;
+  --6j-font-weight-bold: 600;
+  
+  --6j-line-height-tight: 1.3;
+  --6j-line-height-base: 1.5;
+  --6j-line-height-relaxed: 1.7;
+  
+  --6j-letter-spacing-label: 0.15em;
+  
+  /* ========================================
+     Spacing
+     ======================================== */
+  
+  --6j-space-1: 4px;
+  --6j-space-2: 8px;
+  --6j-space-3: 12px;
+  --6j-space-4: 16px;
+  --6j-space-5: 20px;
+  --6j-space-6: 24px;
+  --6j-space-8: 32px;
+  --6j-space-10: 40px;
+  --6j-space-12: 48px;
+  
+  /* ========================================
+     Border Radius
+     ======================================== */
+  
+  --6j-radius-sm: 3px;
+  --6j-radius-base: 4px;
+  --6j-radius-md: 6px;
+  --6j-radius-lg: 8px;
+  --6j-radius-xl: 12px;
+  --6j-radius-full: 9999px;
+  
+  /* ========================================
+     Shadows
+     ======================================== */
+  
+  --6j-shadow-sm: 0 1px 2px rgba(41, 39, 36, 0.04);
+  --6j-shadow-base: 0 2px 8px rgba(41, 39, 36, 0.06);
+  --6j-shadow-md: 0 4px 12px rgba(41, 39, 36, 0.08);
+  --6j-shadow-lg: 0 8px 24px rgba(41, 39, 36, 0.12);
+  
+  /* ========================================
+     Transitions
+     ======================================== */
+  
+  --6j-transition-fast: 150ms ease;
+  --6j-transition-base: 200ms ease;
+  --6j-transition-slow: 300ms ease;
+  
+  /* ========================================
+     Z-Index Scale
+     ======================================== */
+  
+  --6j-z-dropdown: 100;
+  --6j-z-sticky: 200;
+  --6j-z-modal-backdrop: 300;
+  --6j-z-modal: 400;
+  --6j-z-toast: 500;
+}
+
+
+/* ==========================================================================
+   Utility Classes
+   ========================================================================== */
+
+/* Background */
+.bg-6j { background-color: var(--6j-bg); }
+.bg-6j-sub { background-color: var(--6j-bg-sub); }
+.bg-6j-accent { background-color: var(--6j-accent); }
+
+/* Text Colors */
+.text-6j { color: var(--6j-text); }
+.text-6j-sub { color: var(--6j-text-sub); }
+.text-6j-accent { color: var(--6j-accent); }
+.text-6j-label { color: var(--6j-label); }
+
+/* Border */
+.border-6j { border-color: var(--6j-border); }
+
+
+/* ==========================================================================
+   Component Styles
+   ========================================================================== */
+
+/* Buttons */
+.btn-6j-primary {
+  background-color: var(--6j-accent);
+  color: #FFFFFF;
+  border: none;
+  padding: var(--6j-space-3) var(--6j-space-6);
+  border-radius: var(--6j-radius-base);
+  font-size: var(--6j-font-size-sm);
+  font-weight: var(--6j-font-weight-medium);
+  cursor: pointer;
+  transition: background-color var(--6j-transition-base);
+}
+
+.btn-6j-primary:hover {
+  background-color: var(--6j-accent-hover);
+}
+
+.btn-6j-outline {
+  background-color: var(--6j-bg);
+  color: var(--6j-accent);
+  border: 1px solid var(--6j-accent);
+  padding: var(--6j-space-3) var(--6j-space-6);
+  border-radius: var(--6j-radius-base);
+  font-size: var(--6j-font-size-sm);
+  font-weight: var(--6j-font-weight-medium);
+  cursor: pointer;
+  transition: background-color var(--6j-transition-base);
+}
+
+.btn-6j-outline:hover {
+  background-color: var(--6j-bg-sub);
+}
+
+/* Badges */
+.badge-6j {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--6j-space-1) var(--6j-space-2);
+  border-radius: var(--6j-radius-sm);
+  font-size: var(--6j-font-size-xs);
+  font-weight: var(--6j-font-weight-medium);
+  color: #FFFFFF;
+}
+
+.badge-6j-stock { background-color: var(--6j-badge-stock); }
+.badge-6j-popular { background-color: var(--6j-badge-popular); }
+.badge-6j-new { background-color: var(--6j-badge-new); }
+.badge-6j-lowstock { background-color: var(--6j-badge-lowstock); }
+.badge-6j-soldout { background-color: var(--6j-badge-soldout); }
+.badge-6j-preorder { background-color: var(--6j-badge-preorder); }
+
+/* Section Label */
+.label-6j {
+  font-size: var(--6j-font-size-xs);
+  letter-spacing: var(--6j-letter-spacing-label);
+  color: var(--6j-label);
+  text-transform: uppercase;
+}
+
+/* Cards */
+.card-6j {
+  background-color: var(--6j-bg);
+  border-radius: var(--6j-radius-lg);
+  box-shadow: var(--6j-shadow-sm);
+  overflow: hidden;
+}
+
+/* Input */
+.input-6j {
+  width: 100%;
+  padding: var(--6j-space-3) var(--6j-space-4);
+  border: 1px solid var(--6j-border);
+  border-radius: var(--6j-radius-base);
+  font-size: var(--6j-font-size-base);
+  color: var(--6j-text);
+  background-color: var(--6j-bg);
+  transition: border-color var(--6j-transition-base);
+}
+
+.input-6j:focus {
+  outline: none;
+  border-color: var(--6j-accent);
+}
+
+.input-6j::placeholder {
+  color: var(--6j-text-sub);
+}
