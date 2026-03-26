@@ -70,7 +70,7 @@
           "settings": {
             "label": "チェア・椅子",
             "icon_type": "chair",
-            "url": ""
+            "url": "shopify://collections/001"
           }
         },
         "category_eapgpp": {
@@ -243,7 +243,7 @@
           "type": "tab",
           "settings": {
             "tab_label": "すべて",
-            "collection": "",
+            "collection": "pick-up",
             "products_to_show": 5
           }
         },
@@ -251,7 +251,7 @@
           "type": "tab",
           "settings": {
             "tab_label": "チェア",
-            "collection": "",
+            "collection": "001",
             "products_to_show": 5
           }
         },
@@ -259,7 +259,7 @@
           "type": "tab",
           "settings": {
             "tab_label": "テーブル",
-            "collection": "",
+            "collection": "002",
             "products_to_show": 5
           }
         },
@@ -267,7 +267,7 @@
           "type": "tab",
           "settings": {
             "tab_label": "収納",
-            "collection": "",
+            "collection": "005",
             "products_to_show": 5
           }
         }
