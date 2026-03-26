@@ -1,0 +1,312 @@
+{% comment %}
+  6JOHAN Product Status
+  価格下に表示するステータスバッジセクション
+  カスタマイザーで「価格」ブロックの直後に配置
+{% endcomment %}
+
+{%- style -%}
+.product-status-section {
+  margin: 4px 0 16px;
+}
+
+.product-status-section__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.product-status-section__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.product-status-section__icon {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+}
+
+.product-status-section__icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* 即納 */
+.product-status-section__badge--in-stock {
+  background-color: rgba(94, 122, 94, 0.12);
+  color: var(--6j-stock, #5E7A5E);
+}
+
+/* 受注生産 */
+.product-status-section__badge--backorder {
+  background-color: rgba(90, 122, 154, 0.12);
+  color: var(--6j-backorder, #5A7A9A);
+}
+
+/* 人気 */
+.product-status-section__badge--popular {
+  background-color: rgba(196, 149, 106, 0.15);
+  color: var(--6j-amber, #C4956A);
+}
+
+/* NEW */
+.product-status-section__badge--new {
+  background-color: rgba(41, 39, 36, 0.1);
+  color: var(--6j-text, #292724);
+}
+
+/* 残りわずか */
+.product-status-section__badge--low-stock {
+  background-color: rgba(212, 128, 74, 0.12);
+  color: #D4804A;
+}
+
+/* SOLD OUT */
+.product-status-section__badge--sold-out {
+  background-color: rgba(107, 91, 79, 0.12);
+  color: var(--6j-text-sub, #807C76);
+}
+
+@media (max-width: 749px) {
+  .product-status-section__badge {
+    padding: 4px 8px;
+    font-size: 10px;
+  }
+  
+  .product-status-section__icon {
+    width: 11px;
+    height: 11px;
+  }
+}
+{%- endstyle -%}
+
+{%- liquid
+  assign is_in_stock = false
+  assign is_made_to_order = false
+  assign is_popular = false
+  assign is_new = false
+  assign is_low_stock = false
+  
+  # 新着判定
+  assign now = 'now' | date: '%s'
+  assign product_date = product.created_at | date: '%s'
+  assign diff_seconds = now | minus: product_date
+  assign thirty_days = 2592000
+  if diff_seconds < thirty_days
+    assign is_new = true
+  endif
+  
+  # タグから判定
+  for tag in product.tags
+    assign tag_lower = tag | downcase
+    if tag_lower == '即納' or tag_lower == 'in-stock' or tag_lower == 'in_stock'
+      assign is_in_stock = true
+    endif
+    if tag_lower == '受注生産' or tag_lower == 'made-to-order' or tag_lower == 'made_to_order'
+      assign is_made_to_order = true
+    endif
+    if tag_lower == '人気' or tag_lower == 'popular' or tag_lower == 'bestseller'
+      assign is_popular = true
+    endif
+    if tag_lower == '残りわずか' or tag_lower == 'low-stock' or tag_lower == 'limited'
+      assign is_low_stock = true
+    endif
+  endfor
+  
+  # コレクションから判定
+  for collection in product.collections
+    if collection.handle == '即納商品' or collection.handle == 'in-stock'
+      assign is_in_stock = true
+    endif
+    if collection.handle == 'pick-up' or collection.handle == 'bestsellers'
+      assign is_popular = true
+    endif
+  endfor
+  
+  # 在庫数から判定
+  if is_in_stock == false and is_made_to_order == false
+    if product.available
+      assign total_inventory = 0
+      for variant in product.variants
+        if variant.inventory_quantity > 0
+          assign total_inventory = total_inventory | plus: variant.inventory_quantity
+        endif
+      endfor
+      if total_inventory > 0
+        assign is_in_stock = true
+        if total_inventory <= 3
+          assign is_low_stock = true
+        endif
+      else
+        assign is_made_to_order = true
+      endif
+    endif
+  endif
+  
+  # バッジを表示するか判定
+  assign show_badges = false
+  if is_popular or is_new or is_low_stock or is_in_stock or is_made_to_order or product.available == false
+    assign show_badges = true
+  endif
+-%}
+
+{% if show_badges %}
+<div class="product-status-section">
+  <div class="product-status-section__badges">
+    
+    {% if product.available == false %}
+      <span class="product-status-section__badge product-status-section__badge--sold-out">
+        <span class="product-status-section__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
+          </svg>
+        </span>
+        SOLD OUT
+      </span>
+    {% else %}
+    
+      {% if is_popular and section.settings.show_popular %}
+        <span class="product-status-section__badge product-status-section__badge--popular">
+          <span class="product-status-section__icon">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+          </span>
+          {{ section.settings.popular_text }}
+        </span>
+      {% endif %}
+      
+      {% if is_new and is_popular == false and section.settings.show_new %}
+        <span class="product-status-section__badge product-status-section__badge--new">
+          <span class="product-status-section__icon">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+            </svg>
+          </span>
+          {{ section.settings.new_text }}
+        </span>
+      {% endif %}
+      
+      {% if section.settings.show_stock_status %}
+        {% if is_low_stock %}
+          <span class="product-status-section__badge product-status-section__badge--low-stock">
+            <span class="product-status-section__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                <line x1="12" y1="9" x2="12" y2="13"/>
+                <line x1="12" y1="17" x2="12.01" y2="17"/>
+              </svg>
+            </span>
+            {{ section.settings.low_stock_text }}
+          </span>
+        {% elsif is_in_stock %}
+          <span class="product-status-section__badge product-status-section__badge--in-stock">
+            <span class="product-status-section__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+            </span>
+            {{ section.settings.in_stock_text }}
+          </span>
+        {% elsif is_made_to_order %}
+          <span class="product-status-section__badge product-status-section__badge--backorder">
+            <span class="product-status-section__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                <line x1="16" y1="2" x2="16" y2="6"/>
+                <line x1="8" y1="2" x2="8" y2="6"/>
+                <line x1="3" y1="10" x2="21" y2="10"/>
+              </svg>
+            </span>
+            {{ section.settings.backorder_text }}
+          </span>
+        {% endif %}
+      {% endif %}
+      
+    {% endif %}
+  </div>
+</div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "6JOHAN 商品ステータス",
+  "tag": "section",
+  "class": "section-product-status",
+  "settings": [
+    {
+      "type": "header",
+      "content": "人気バッジ"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_popular",
+      "label": "人気バッジを表示",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "popular_text",
+      "label": "人気テキスト",
+      "default": "人気"
+    },
+    {
+      "type": "header",
+      "content": "新着バッジ"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_new",
+      "label": "NEWバッジを表示",
+      "default": true,
+      "info": "30日以内に追加された商品に表示"
+    },
+    {
+      "type": "text",
+      "id": "new_text",
+      "label": "NEWテキスト",
+      "default": "NEW"
+    },
+    {
+      "type": "header",
+      "content": "在庫ステータス"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_stock_status",
+      "label": "在庫ステータスを表示",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "in_stock_text",
+      "label": "即納テキスト",
+      "default": "即納"
+    },
+    {
+      "type": "text",
+      "id": "backorder_text",
+      "label": "受注生産テキスト",
+      "default": "受注生産"
+    },
+    {
+      "type": "text",
+      "id": "low_stock_text",
+      "label": "残りわずかテキスト",
+      "default": "残りわずか"
+    }
+  ],
+  "presets": [
+    {
+      "name": "6JOHAN 商品ステータス"
+    }
+  ]
+}
+{% endschema %}

@@ -1,141 +1,305 @@
-{{ '6johan-custom.css' | asset_url | stylesheet_tag }}
+{% comment %}
+  6JOHAN Product Trust Badges
+  商品ページ用信頼バッジ（SVGアイコン版）
+  カートボタン直下に配置推奨
+{% endcomment %}
 
-<style>
-  .sixj-product-trust {
-    padding: 0 !important;
-    margin: 0 !important;
-  }
-  .sixj-product-trust .sixj-trust-badges {
-    padding: 4px 0 8px;
-    margin: 0;
-  }
-  .shopify-section--6j-trust {
-    padding: 0 !important;
-    margin: 0 !important;
-  }
-  .sixj-trust-badge--instock {
-    background: #F2FDF5;
-    color: #6B9E6B;
-  }
-  .sixj-trust-badge--order {
-    background: #FDF8F2;
-    color: #B5935A;
-  }
-</style>
+{%- style -%}
+.product-trust-badges {
+  padding: 20px 0;
+  margin: 0;
+}
 
-<div class="sixj-trust-badges">
-  {%- if section.settings.show_delivery -%}
-    {%- assign current_variant = product.selected_or_first_available_variant -%}
-    <span class="sixj-trust-badge {% if current_variant.inventory_quantity > 0 %}sixj-trust-badge--instock{% else %}sixj-trust-badge--order{% endif %}">
-      {%- if current_variant.inventory_quantity > 0 -%}
-        🚚 在庫あり — 7日以内に発送
-      {%- elsif product.available -%}
-        📋 受注生産 — お届けまで約3ヶ月
-      {%- else -%}
-        現在取り扱いなし
-      {%- endif -%}
-    </span>
-  {%- endif -%}
+.product-trust-badges__grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
 
-  {%- if section.settings.show_return -%}
-    <span class="sixj-trust-badge">
-      ↩️ {{ section.settings.return_days }}日間返品OK
-    </span>
-  {%- endif -%}
+.product-trust-badges__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background-color: var(--6j-bg-sub, #FAF9F7);
+  border: 1px solid var(--6j-border, #E8E5E0);
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--6j-text, #292724);
+  white-space: nowrap;
+}
 
-  {%- if section.settings.show_assembly -%}
-    {%- assign needs_assembly = product.metafields.custom.needs_assembly -%}
-    <span class="sixj-trust-badge">
-      {%- if needs_assembly -%}
-        🔧 組立あり（{{ product.metafields.custom.assembly_time | default: '約15分' }}）
-      {%- else -%}
-        ✓ 完成品 — 組立不要
-      {%- endif -%}
-    </span>
-  {%- endif -%}
+.product-trust-badges__icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
 
-  {%- if section.settings.show_warranty -%}
-    <span class="sixj-trust-badge">
-      🛡️ {{ section.settings.warranty_period }}
-    </span>
-  {%- endif -%}
+.product-trust-badges__icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* 在庫ステータス別のカラー */
+.product-trust-badges__item--stock {
+  color: var(--6j-stock, #5E7A5E);
+}
+
+.product-trust-badges__item--stock .product-trust-badges__icon {
+  color: var(--6j-stock, #5E7A5E);
+}
+
+.product-trust-badges__item--backorder {
+  color: var(--6j-backorder, #5A7A9A);
+}
+
+.product-trust-badges__item--backorder .product-trust-badges__icon {
+  color: var(--6j-backorder, #5A7A9A);
+}
+
+.product-trust-badges__item--return {
+  color: var(--6j-accent, #6B5B4F);
+}
+
+.product-trust-badges__item--return .product-trust-badges__icon {
+  color: var(--6j-accent, #6B5B4F);
+}
+
+.product-trust-badges__item--assembly {
+  color: var(--6j-text, #292724);
+}
+
+.product-trust-badges__item--assembly .product-trust-badges__icon {
+  color: var(--6j-stock, #5E7A5E);
+}
+
+.product-trust-badges__item--warranty {
+  color: var(--6j-text, #292724);
+}
+
+.product-trust-badges__item--warranty .product-trust-badges__icon {
+  color: var(--6j-amber, #C4956A);
+}
+
+/* Mobile */
+@media (max-width: 749px) {
+  .product-trust-badges {
+    padding: 16px 0;
+  }
+  
+  .product-trust-badges__grid {
+    gap: 6px;
+  }
+  
+  .product-trust-badges__item {
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+  
+  .product-trust-badges__icon {
+    width: 14px;
+    height: 14px;
+  }
+}
+{%- endstyle -%}
+
+{%- liquid
+  # 在庫状況の判定
+  assign is_in_stock = false
+  assign is_made_to_order = false
+  assign needs_assembly = true
+  
+  # タグから判定
+  for tag in product.tags
+    assign tag_lower = tag | downcase
+    if tag_lower == '即納' or tag_lower == 'in-stock' or tag_lower == 'in_stock'
+      assign is_in_stock = true
+    endif
+    if tag_lower == '受注生産' or tag_lower == 'made-to-order' or tag_lower == 'made_to_order'
+      assign is_made_to_order = true
+    endif
+    if tag_lower == '完成品' or tag_lower == 'assembled' or tag_lower == 'no-assembly'
+      assign needs_assembly = false
+    endif
+  endfor
+  
+  # コレクションから判定
+  for collection in product.collections
+    if collection.handle == '即納商品' or collection.handle == 'in-stock'
+      assign is_in_stock = true
+    endif
+  endfor
+  
+  # メタフィールドから判定（あれば上書き）
+  if product.metafields.custom.is_assembly != blank
+    if product.metafields.custom.is_assembly == true
+      assign needs_assembly = true
+    else
+      assign needs_assembly = false
+    endif
+  endif
+  
+  # 在庫数から判定（タグがない場合のフォールバック）
+  if is_in_stock == false and is_made_to_order == false
+    if product.available
+      assign total_inventory = 0
+      for variant in product.variants
+        assign total_inventory = total_inventory | plus: variant.inventory_quantity
+      endfor
+      if total_inventory > 0
+        assign is_in_stock = true
+      else
+        assign is_made_to_order = true
+      endif
+    endif
+  endif
+-%}
+
+<div class="product-trust-badges">
+  <div class="product-trust-badges__grid">
+    
+    {%- comment -%} 在庫/配送ステータス {%- endcomment -%}
+    {% if is_in_stock %}
+      <div class="product-trust-badges__item product-trust-badges__item--stock">
+        <span class="product-trust-badges__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="1" y="3" width="15" height="13"/>
+            <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+            <circle cx="5.5" cy="18.5" r="2.5"/>
+            <circle cx="18.5" cy="18.5" r="2.5"/>
+          </svg>
+        </span>
+        <span>{{ section.settings.in_stock_text }}</span>
+      </div>
+    {% elsif is_made_to_order %}
+      <div class="product-trust-badges__item product-trust-badges__item--backorder">
+        <span class="product-trust-badges__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+            <line x1="16" y1="2" x2="16" y2="6"/>
+            <line x1="8" y1="2" x2="8" y2="6"/>
+            <line x1="3" y1="10" x2="21" y2="10"/>
+          </svg>
+        </span>
+        <span>{{ section.settings.made_to_order_text }}</span>
+      </div>
+    {% endif %}
+    
+    {%- comment -%} 返品保証 {%- endcomment -%}
+    {% if section.settings.show_return %}
+      <div class="product-trust-badges__item product-trust-badges__item--return">
+        <span class="product-trust-badges__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="1 4 1 10 7 10"/>
+            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+          </svg>
+        </span>
+        <span>{{ section.settings.return_text }}</span>
+      </div>
+    {% endif %}
+    
+    {%- comment -%} 組立不要/要組立 {%- endcomment -%}
+    {% if section.settings.show_assembly %}
+      {% if needs_assembly == false %}
+        <div class="product-trust-badges__item product-trust-badges__item--assembly">
+          <span class="product-trust-badges__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+          </span>
+          <span>{{ section.settings.assembled_text }}</span>
+        </div>
+      {% else %}
+        <div class="product-trust-badges__item product-trust-badges__item--assembly">
+          <span class="product-trust-badges__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+            </svg>
+          </span>
+          <span>{{ section.settings.assembly_required_text }}</span>
+        </div>
+      {% endif %}
+    {% endif %}
+    
+    {%- comment -%} 品質保証 {%- endcomment -%}
+    {% if section.settings.show_warranty %}
+      <div class="product-trust-badges__item product-trust-badges__item--warranty">
+        <span class="product-trust-badges__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+        </span>
+        <span>{{ section.settings.warranty_text }}</span>
+      </div>
+    {% endif %}
+    
+  </div>
 </div>
-
-<script>
-  // Update badges when variant changes
-  (function() {
-    var el = document.querySelector('.sixj-product-trust');
-    if (el) {
-      var parent = el.closest('.shopify-section');
-      if (parent) parent.classList.add('shopify-section--6j-trust');
-    }
-
-    // Listen for variant change
-    document.addEventListener('change', function(e) {
-      if (!e.target.closest('[name="id"]') && !e.target.closest('.product-form__input')) return;
-
-      // Small delay to let Shopify update
-      setTimeout(function() {
-        var variantId = document.querySelector('[name="id"]');
-        if (!variantId) return;
-
-        var selected = variantId.value;
-        var productJson = document.querySelector('[data-product-json]');
-        if (!productJson) return;
-
-        try {
-          var product = JSON.parse(productJson.textContent);
-          var variant = product.variants.find(function(v) { return v.id == selected; });
-          if (!variant) return;
-
-          var badge = document.querySelector('.sixj-trust-badges .sixj-trust-badge:first-child');
-          if (!badge) return;
-
-          if (variant.inventory_quantity > 0) {
-            badge.className = 'sixj-trust-badge sixj-trust-badge--instock';
-            badge.innerHTML = '🚚 在庫あり — 7日以内に発送';
-          } else if (variant.available) {
-            badge.className = 'sixj-trust-badge sixj-trust-badge--order';
-            badge.innerHTML = '📋 受注生産 — お届けまで約3ヶ月';
-          } else {
-            badge.className = 'sixj-trust-badge';
-            badge.innerHTML = '現在取り扱いなし';
-          }
-        } catch(err) {}
-      }, 100);
-    });
-  })();
-</script>
 
 {% schema %}
 {
   "name": "6JOHAN 信頼バッジ",
-  "tag": "div",
-  "class": "sixj-product-trust",
+  "tag": "section",
+  "class": "section-product-trust-badges",
   "settings": [
     {
-      "type": "checkbox",
-      "id": "show_delivery",
-      "label": "配送目安を表示",
-      "default": true
+      "type": "header",
+      "content": "在庫ステータス"
+    },
+    {
+      "type": "text",
+      "id": "in_stock_text",
+      "label": "在庫あり時のテキスト",
+      "default": "即納 — 7日以内に発送"
+    },
+    {
+      "type": "text",
+      "id": "made_to_order_text",
+      "label": "受注生産時のテキスト",
+      "default": "受注生産 — お届けまで約3ヶ月"
+    },
+    {
+      "type": "header",
+      "content": "返品保証"
     },
     {
       "type": "checkbox",
       "id": "show_return",
-      "label": "返品ポリシーを表示",
+      "label": "返品保証を表示",
       "default": true
     },
     {
-      "type": "number",
-      "id": "return_days",
-      "label": "返品可能日数",
-      "default": 30
+      "type": "text",
+      "id": "return_text",
+      "label": "返品テキスト",
+      "default": "30日間返品OK"
+    },
+    {
+      "type": "header",
+      "content": "組立情報"
     },
     {
       "type": "checkbox",
       "id": "show_assembly",
       "label": "組立情報を表示",
       "default": true
+    },
+    {
+      "type": "text",
+      "id": "assembled_text",
+      "label": "完成品テキスト",
+      "default": "完成品 — 組立不要"
+    },
+    {
+      "type": "text",
+      "id": "assembly_required_text",
+      "label": "組立必要テキスト",
+      "default": "簡単組立 — 約15分"
+    },
+    {
+      "type": "header",
+      "content": "品質保証"
     },
     {
       "type": "checkbox",
@@ -145,8 +309,8 @@
     },
     {
       "type": "text",
-      "id": "warranty_period",
-      "label": "保証期間",
+      "id": "warranty_text",
+      "label": "保証テキスト",
       "default": "1年間品質保証"
     }
   ],

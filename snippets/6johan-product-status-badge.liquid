@@ -1,0 +1,218 @@
+{% comment %}
+  6JOHAN Product Status Badge
+  価格下に表示する商品ステータスバッジ
+  
+  使用方法: {% render '6johan-product-status-badge', product: product %}
+  
+  配置場所の例（main-product.liquidまたはprice.liquidの価格表示直後）:
+  {% render '6johan-product-status-badge', product: product %}
+{% endcomment %}
+
+{%- style -%}
+.product-status-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.product-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.product-status-badge__icon {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+}
+
+.product-status-badge__icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* 即納（在庫あり） */
+.product-status-badge--in-stock {
+  background-color: rgba(94, 122, 94, 0.12);
+  color: var(--6j-stock, #5E7A5E);
+}
+
+/* 受注生産 */
+.product-status-badge--backorder {
+  background-color: rgba(90, 122, 154, 0.12);
+  color: var(--6j-backorder, #5A7A9A);
+}
+
+/* 人気 */
+.product-status-badge--popular {
+  background-color: rgba(196, 149, 106, 0.15);
+  color: var(--6j-amber, #C4956A);
+}
+
+/* NEW */
+.product-status-badge--new {
+  background-color: rgba(41, 39, 36, 0.1);
+  color: var(--6j-text, #292724);
+}
+
+/* 残りわずか */
+.product-status-badge--low-stock {
+  background-color: rgba(212, 128, 74, 0.12);
+  color: #D4804A;
+}
+
+/* SOLD OUT */
+.product-status-badge--sold-out {
+  background-color: rgba(107, 91, 79, 0.12);
+  color: var(--6j-text-sub, #807C76);
+}
+{%- endstyle -%}
+
+{%- liquid
+  # 在庫状況の判定
+  assign is_in_stock = false
+  assign is_made_to_order = false
+  assign is_popular = false
+  assign is_new = false
+  assign is_low_stock = false
+  
+  # 新着判定（30日以内）
+  assign now = 'now' | date: '%s'
+  assign product_date = product.created_at | date: '%s'
+  assign diff_seconds = now | minus: product_date
+  assign thirty_days = 2592000
+  if diff_seconds < thirty_days
+    assign is_new = true
+  endif
+  
+  # タグから判定
+  for tag in product.tags
+    assign tag_lower = tag | downcase
+    if tag_lower == '即納' or tag_lower == 'in-stock' or tag_lower == 'in_stock'
+      assign is_in_stock = true
+    endif
+    if tag_lower == '受注生産' or tag_lower == 'made-to-order' or tag_lower == 'made_to_order'
+      assign is_made_to_order = true
+    endif
+    if tag_lower == '人気' or tag_lower == 'popular' or tag_lower == 'bestseller'
+      assign is_popular = true
+    endif
+    if tag_lower == '残りわずか' or tag_lower == 'low-stock' or tag_lower == 'limited'
+      assign is_low_stock = true
+    endif
+  endfor
+  
+  # コレクションから判定
+  for collection in product.collections
+    if collection.handle == '即納商品' or collection.handle == 'in-stock'
+      assign is_in_stock = true
+    endif
+    if collection.handle == 'pick-up' or collection.handle == 'bestsellers'
+      assign is_popular = true
+    endif
+  endfor
+  
+  # 在庫数から判定（タグがない場合）
+  if is_in_stock == false and is_made_to_order == false
+    if product.available
+      assign total_inventory = 0
+      for variant in product.variants
+        if variant.inventory_quantity > 0
+          assign total_inventory = total_inventory | plus: variant.inventory_quantity
+        endif
+      endfor
+      if total_inventory > 0
+        assign is_in_stock = true
+        if total_inventory <= 3
+          assign is_low_stock = true
+        endif
+      else
+        assign is_made_to_order = true
+      endif
+    endif
+  endif
+-%}
+
+{% if product.available == false %}
+  <div class="product-status-badges">
+    <span class="product-status-badge product-status-badge--sold-out">
+      <span class="product-status-badge__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
+        </svg>
+      </span>
+      SOLD OUT
+    </span>
+  </div>
+{% else %}
+  <div class="product-status-badges">
+    
+    {%- comment -%} 人気バッジ（優先表示） {%- endcomment -%}
+    {% if is_popular %}
+      <span class="product-status-badge product-status-badge--popular">
+        <span class="product-status-badge__icon">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
+        </span>
+        人気
+      </span>
+    {% endif %}
+    
+    {%- comment -%} NEWバッジ {%- endcomment -%}
+    {% if is_new and is_popular == false %}
+      <span class="product-status-badge product-status-badge--new">
+        <span class="product-status-badge__icon">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+          </svg>
+        </span>
+        NEW
+      </span>
+    {% endif %}
+    
+    {%- comment -%} 在庫ステータス {%- endcomment -%}
+    {% if is_low_stock %}
+      <span class="product-status-badge product-status-badge--low-stock">
+        <span class="product-status-badge__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+        </span>
+        残りわずか
+      </span>
+    {% elsif is_in_stock %}
+      <span class="product-status-badge product-status-badge--in-stock">
+        <span class="product-status-badge__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+        </span>
+        即納
+      </span>
+    {% elsif is_made_to_order %}
+      <span class="product-status-badge product-status-badge--backorder">
+        <span class="product-status-badge__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+            <line x1="16" y1="2" x2="16" y2="6"/>
+            <line x1="8" y1="2" x2="8" y2="6"/>
+            <line x1="3" y1="10" x2="21" y2="10"/>
+          </svg>
+        </span>
+        受注生産
+      </span>
+    {% endif %}
+    
+  </div>
+{% endif %}

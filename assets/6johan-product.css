@@ -1,0 +1,253 @@
+/* 6JOHAN Product Page Additions
+   商品ページ用追加CSS
+   
+   assets/6johan-custom.css に追記、または 
+   assets/6johan-product.css として新規作成して theme.liquid で読み込み
+*/
+
+/* ===========================================
+   商品ページ全体
+   =========================================== */
+.product {
+  --6j-bg: #FFFFFF;
+  --6j-bg-sub: #FAF9F7;
+  --6j-text: #292724;
+  --6j-text-sub: #807C76;
+  --6j-border: #E8E5E0;
+  --6j-accent: #6B5B4F;
+  --6j-stock: #5E7A5E;
+  --6j-backorder: #5A7A9A;
+  --6j-amber: #C4956A;
+  --6j-star: #D4A843;
+}
+
+/* ===========================================
+   商品タイトル
+   =========================================== */
+.product__title {
+  font-family: 'Playfair Display', 'Noto Serif JP', serif;
+  font-weight: 500;
+  color: var(--6j-text);
+  letter-spacing: 0.02em;
+}
+
+/* ===========================================
+   価格表示
+   =========================================== */
+.price-item--regular {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--6j-text);
+}
+
+/* ===========================================
+   バリアントピッカー
+   =========================================== */
+.product-form__input label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--6j-text-sub);
+}
+
+/* ピルボタンスタイル */
+.product-form__input--pill input[type="radio"] + label {
+  border-color: var(--6j-border);
+  color: var(--6j-text);
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.product-form__input--pill input[type="radio"]:checked + label {
+  background-color: var(--6j-text);
+  border-color: var(--6j-text);
+  color: #fff;
+}
+
+.product-form__input--pill input[type="radio"]:hover + label {
+  border-color: var(--6j-text);
+}
+
+/* ===========================================
+   カートに追加ボタン
+   =========================================== */
+.product-form__submit {
+  background-color: var(--6j-text);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  padding: 16px 32px;
+  font-size: 1rem;
+  transition: all 0.2s;
+}
+
+.product-form__submit:hover {
+  background-color: var(--6j-accent);
+}
+
+.product-form__submit:disabled {
+  background-color: var(--6j-border);
+  color: var(--6j-text-sub);
+}
+
+/* ===========================================
+   折りたたみセクション（アコーディオン）
+   =========================================== */
+.accordion summary {
+  padding: 16px 0;
+  border-bottom: 1px solid var(--6j-border);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--6j-text);
+}
+
+.accordion summary:hover {
+  color: var(--6j-accent);
+}
+
+.accordion summary .icon-caret {
+  color: var(--6j-text-sub);
+  transition: transform 0.2s;
+}
+
+.accordion[open] summary .icon-caret {
+  transform: rotate(180deg);
+}
+
+.accordion__content {
+  padding: 16px 0 24px;
+  font-size: 0.875rem;
+  line-height: 1.8;
+  color: var(--6j-text-sub);
+}
+
+.accordion__content p {
+  margin-bottom: 12px;
+}
+
+.accordion__content ul {
+  margin: 12px 0;
+  padding-left: 20px;
+}
+
+.accordion__content li {
+  margin-bottom: 6px;
+}
+
+.accordion__content a {
+  color: var(--6j-accent);
+  text-decoration: underline;
+}
+
+.accordion__content a:hover {
+  color: var(--6j-text);
+}
+
+/* アイコン付き見出し */
+.accordion summary .icon-accordion {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+  color: var(--6j-text-sub);
+}
+
+/* ===========================================
+   商品説明
+   =========================================== */
+.product__description {
+  font-size: 0.9375rem;
+  line-height: 1.8;
+  color: var(--6j-text-sub);
+}
+
+.product__description p {
+  margin-bottom: 12px;
+}
+
+/* ===========================================
+   数量セレクター
+   =========================================== */
+.quantity__label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--6j-text-sub);
+}
+
+.quantity__input {
+  border-color: var(--6j-border);
+  color: var(--6j-text);
+}
+
+.quantity__button {
+  color: var(--6j-text-sub);
+  border-color: var(--6j-border);
+}
+
+.quantity__button:hover {
+  color: var(--6j-text);
+}
+
+/* ===========================================
+   セクション間のスペーシング調整
+   =========================================== */
+
+/* 信頼バッジセクションの余白調整 */
+.section-product-trust-badges {
+  margin-top: 8px;
+}
+
+/* 商品ステータスセクションの余白調整 */
+.section-product-status {
+  margin-top: -8px;
+  margin-bottom: 8px;
+}
+
+/* ===========================================
+   コーディネート提案セクション
+   =========================================== */
+.coordinate-section {
+  padding: 40px 0;
+  background-color: var(--6j-bg-sub);
+  margin-top: 40px;
+}
+
+.coordinate-section__label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--6j-text-sub);
+  margin-bottom: 8px;
+}
+
+.coordinate-section__title {
+  font-family: 'Playfair Display', 'Noto Serif JP', serif;
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: var(--6j-text);
+  margin-bottom: 24px;
+}
+
+/* ===========================================
+   モバイル調整
+   =========================================== */
+@media (max-width: 749px) {
+  .price-item--regular {
+    font-size: 1.375rem;
+  }
+  
+  .product-form__submit {
+    padding: 14px 24px;
+    font-size: 0.9375rem;
+  }
+  
+  .accordion summary {
+    padding: 14px 0;
+    font-size: 0.875rem;
+  }
+  
+  .accordion__content {
+    padding: 12px 0 20px;
+    font-size: 0.8125rem;
+  }
+}
