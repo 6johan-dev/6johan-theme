@@ -78,6 +78,7 @@
         assign total_inventory = total_inventory | plus: variant.inventory_quantity
       endfor
       if total_inventory > 0
+        assign delivery_text = "即納（残り" | append: total_inventory | append: "点）"
         assign is_in_stock = true
       else
         assign delivery_text = '約3ヶ月'
@@ -106,7 +107,7 @@
         <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
       </svg>
     </div>
-    <div class="trust-grid__text">30日返品OK</div>
+    <div class="trust-grid__text">7日返品OK</div>
   </div>
   
   <div class="trust-grid__item">
