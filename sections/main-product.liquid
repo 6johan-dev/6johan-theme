@@ -140,6 +140,9 @@
                     {{ form | payment_terms }}
                   {%- endform -%}
                 </div>
+
+              {%- comment -%} 6JOHAN Trust Grid - 価格直下 {%- endcomment -%}
+              {%- render '6johan-trust-grid', product: product -%}
               {%- when 'inventory' -%}
                 <p
                   class="product__inventory{% if block.settings.text_style == 'uppercase' %} caption-with-letter-spacing{% elsif block.settings.text_style == 'subtitle' %} subtitle{% endif %}{% if product.selected_or_first_available_variant.inventory_management != 'shopify' %} visibility-hidden{% endif %}"
@@ -492,7 +495,7 @@
 
               {%- comment -%} 6JOHAN Trust Badges - カートボタン直後 {%- endcomment -%}
               <div class="product-trust-badges" style="margin-top: 16px;">
-                {%- render '6johan-product-trust-inline', product: product -%}
+                {%- render '6johan-delivery-info', product: product -%}
               </div>
               {%- when 'rating' -%}
                 {%- if product.metafields.reviews.rating.value != blank -%}
