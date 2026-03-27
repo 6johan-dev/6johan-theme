@@ -304,6 +304,7 @@
     <!-- 6JOHAN: Custom Styles -->
     <link rel="stylesheet" href="{{ '6johan-custom.css' | asset_url }}?v=1">
   {{ '6johan-product.css' | asset_url | stylesheet_tag }}
+  {{ '6johan-collection.css' | asset_url | stylesheet_tag }}
   </head>
 
   <body class="gradient{% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %}">
