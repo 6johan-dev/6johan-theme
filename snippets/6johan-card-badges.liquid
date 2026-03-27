@@ -174,7 +174,7 @@
           </span>
           即納
         </span>
-      {% elsif is_made_to_order %}
+      {% comment %}受注生産は非表示{% endcomment %}{% elsif is_made_to_order and false %}
         <span class="card-badge card-badge--backorder">受注生産</span>
       {% endif %}
     {% endif %}
