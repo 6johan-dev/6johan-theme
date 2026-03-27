@@ -141,10 +141,9 @@
     endif
   endfor
   
+  # メタフィールドから判定（あれば上書き）
   if product.metafields.custom.is_assembly != blank
-    if product.metafields.custom.is_assembly == false
-      assign needs_assembly = false
-    endif
+    assign needs_assembly = product.metafields.custom.is_assembly
   endif
 -%}
 
@@ -194,7 +193,7 @@
           <polyline points="20 6 9 17 4 12"/>
         </svg>
       </span>
-      <span>返品・交換 到着後30日間OK</span>
+      <span>返品・交換 到着後7日間OK</span>
     </div>
   </div>
 </div>
