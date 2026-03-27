@@ -489,6 +489,11 @@
                   section_id: section.id,
                   show_pickup_availability: true
                 -%}
+
+              {%- comment -%} 6JOHAN Trust Badges - カートボタン直後 {%- endcomment -%}
+              <div class="product-trust-badges" style="margin-top: 16px;">
+                {%- render '6johan-product-trust-inline', product: product -%}
+              </div>
               {%- when 'rating' -%}
                 {%- if product.metafields.reviews.rating.value != blank -%}
                   <div class="rating-wrapper">

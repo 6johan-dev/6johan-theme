@@ -1,0 +1,188 @@
+{% comment %}
+  6JOHAN Product Trust Inline
+  商品ページ用インライン信頼バッジ（カートボタン直下用）
+{% endcomment %}
+
+{%- liquid
+  assign is_in_stock = false
+  assign is_made_to_order = false
+  assign needs_assembly = true
+  
+  for tag in product.tags
+    assign tag_lower = tag | downcase
+    if tag_lower == '即納' or tag_lower == 'in-stock' or tag_lower == 'in_stock'
+      assign is_in_stock = true
+    endif
+    if tag_lower == '受注生産' or tag_lower == 'made-to-order' or tag_lower == 'made_to_order'
+      assign is_made_to_order = true
+    endif
+    if tag_lower == '完成品' or tag_lower == 'assembled' or tag_lower == 'no-assembly'
+      assign needs_assembly = false
+    endif
+  endfor
+  
+  for collection in product.collections
+    if collection.handle == '即納商品' or collection.handle == 'in-stock'
+      assign is_in_stock = true
+    endif
+  endfor
+  
+  if product.metafields.custom.is_assembly != blank
+    if product.metafields.custom.is_assembly == true
+      assign needs_assembly = true
+    else
+      assign needs_assembly = false
+    endif
+  endif
+  
+  if is_in_stock == false and is_made_to_order == false
+    if product.available
+      assign total_inventory = 0
+      for variant in product.variants
+        assign total_inventory = total_inventory | plus: variant.inventory_quantity
+      endfor
+      if total_inventory > 0
+        assign is_in_stock = true
+      else
+        assign is_made_to_order = true
+      endif
+    endif
+  endif
+-%}
+
+<style>
+.trust-inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.trust-inline__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background-color: var(--6j-bg-sub, #FAF9F7);
+  border: 1px solid var(--6j-border, #E8E5E0);
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--6j-text, #292724);
+  white-space: nowrap;
+}
+
+.trust-inline__icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.trust-inline__icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.trust-inline__item--stock {
+  color: #5E7A5E;
+}
+.trust-inline__item--stock .trust-inline__icon {
+  color: #5E7A5E;
+}
+
+.trust-inline__item--backorder {
+  color: #5A7A9A;
+}
+.trust-inline__item--backorder .trust-inline__icon {
+  color: #5A7A9A;
+}
+
+.trust-inline__item--return .trust-inline__icon {
+  color: #6B5B4F;
+}
+
+.trust-inline__item--assembly .trust-inline__icon {
+  color: #5E7A5E;
+}
+
+.trust-inline__item--warranty .trust-inline__icon {
+  color: #C4956A;
+}
+
+@media (max-width: 749px) {
+  .trust-inline {
+    gap: 6px;
+  }
+  .trust-inline__item {
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+  .trust-inline__icon {
+    width: 14px;
+    height: 14px;
+  }
+}
+</style>
+
+<div class="trust-inline">
+  
+  {%- comment -%} 在庫/配送ステータス {%- endcomment -%}
+  {% if is_in_stock %}
+    <div class="trust-inline__item trust-inline__item--stock">
+      <span class="trust-inline__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="1" y="3" width="15" height="13"/>
+          <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+          <circle cx="5.5" cy="18.5" r="2.5"/>
+          <circle cx="18.5" cy="18.5" r="2.5"/>
+        </svg>
+      </span>
+      <span>即納 — 7日以内に発送</span>
+    </div>
+  {% elsif is_made_to_order %}
+    <div class="trust-inline__item trust-inline__item--backorder">
+      <span class="trust-inline__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+          <line x1="16" y1="2" x2="16" y2="6"/>
+          <line x1="8" y1="2" x2="8" y2="6"/>
+          <line x1="3" y1="10" x2="21" y2="10"/>
+        </svg>
+      </span>
+      <span>受注生産 — お届けまで約3ヶ月</span>
+    </div>
+  {% endif %}
+  
+  {%- comment -%} 返品保証 {%- endcomment -%}
+  <div class="trust-inline__item trust-inline__item--return">
+    <span class="trust-inline__icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="1 4 1 10 7 10"/>
+        <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+      </svg>
+    </span>
+    <span>30日間返品OK</span>
+  </div>
+  
+  {%- comment -%} 組立情報 {%- endcomment -%}
+  {% if needs_assembly == false %}
+    <div class="trust-inline__item trust-inline__item--assembly">
+      <span class="trust-inline__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+      </span>
+      <span>完成品 — 組立不要</span>
+    </div>
+  {% endif %}
+  
+  {%- comment -%} 品質保証 {%- endcomment -%}
+  <div class="trust-inline__item trust-inline__item--warranty">
+    <span class="trust-inline__icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+      </svg>
+    </span>
+    <span>1年間品質保証</span>
+  </div>
+  
+</div>
