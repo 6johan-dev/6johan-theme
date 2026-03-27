@@ -78,7 +78,7 @@
         assign total_inventory = total_inventory | plus: variant.inventory_quantity
       endfor
       if total_inventory > 0
-        assign delivery_text = "即納（残り" | append: total_inventory | append: "点）"
+        assign delivery_text = "即納"
         assign is_in_stock = true
       else
         assign delivery_text = '約3ヶ月'

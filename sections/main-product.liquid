@@ -235,6 +235,9 @@
                   </details>
                 </div>
               {%- when 'quantity_selector' -%}
+
+              {%- comment -%} 6JOHAN Inventory Alert - 在庫状況表示 {%- endcomment -%}
+              {%- render '6johan-inventory-alert', product: product -%}
                 <div
                   id="Quantity-Form-{{ section.id }}"
                   class="product-form__input product-form__quantity{% if settings.inputs_shadow_vertical_offset != 0 and settings.inputs_shadow_vertical_offset < 0 %} product-form__quantity-top{% endif %}"
