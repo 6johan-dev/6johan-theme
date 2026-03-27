@@ -107,21 +107,6 @@
         "padding_bottom": 12
       }
     },
-    "6johan_product_trust_badges_7CWJFc": {
-      "type": "6johan-product-trust-badges",
-      "name": "6JOHAN 信頼バッジ",
-      "settings": {
-        "in_stock_text": "即納 — 7日以内に発送",
-        "made_to_order_text": "受注生産 — お届けまで約3ヶ月",
-        "show_return": true,
-        "return_text": "30日間返品OK",
-        "show_assembly": true,
-        "assembled_text": "完成品 — 組立不要",
-        "assembly_required_text": "簡単組立 — 約15分",
-        "show_warranty": true,
-        "warranty_text": "1年間品質保証"
-      }
-    },
     "6johan_product_coordinate_UiNUH3": {
       "type": "6johan-product-coordinate",
       "name": "6JOHAN コーディネート提案",
@@ -152,26 +137,10 @@
         "padding_top": 36,
         "padding_bottom": 28
       }
-    },
-    "6johan_product_status_nDanEA": {
-      "type": "6johan-product-status",
-      "name": "6JOHAN 商品ステータス",
-      "settings": {
-        "show_popular": true,
-        "popular_text": "人気",
-        "show_new": true,
-        "new_text": "NEW",
-        "show_stock_status": true,
-        "in_stock_text": "即納",
-        "backorder_text": "受注生産",
-        "low_stock_text": "残りわずか"
-      }
     }
   },
   "order": [
     "main",
-    "6johan_product_status_nDanEA",
-    "6johan_product_trust_badges_7CWJFc",
     "6johan_product_coordinate_UiNUH3",
     "related-products"
   ]
