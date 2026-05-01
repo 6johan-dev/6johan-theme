@@ -219,6 +219,7 @@
   </div>
   
   {%- comment -%} オーバーレイ（共通） {%- endcomment -%}
+  {%- if section.settings.show_overlay -%}
   <div class="sixj-hero__overlay">
     <div class="sixj-hero__content">
       {%- if section.settings.label != blank -%}
@@ -235,6 +236,7 @@
       {%- endif -%}
     </div>
   </div>
+  {%- endif -%}
 </div>
 
 {% schema %}
@@ -265,6 +267,13 @@
     {
       "type": "header",
       "content": "テキスト設定"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_overlay",
+      "label": "テキストオーバーレイを表示",
+      "default": true,
+      "info": "オフにすると画像のみ表示されます"
     },
     {
       "type": "text",
