@@ -1364,6 +1364,7 @@ body,
 .collection-products,
 .collection-products--alt-bg,
 .customer-voice-section,
+.customer-voice,
 .sixj-quick-category,
 .scene-collection,
 [class*="6johan"],
@@ -1374,4 +1375,19 @@ body,
 /* Trust bar can keep a subtle different bg for emphasis */
 .global-trust-bar {
   background: #FAFAF8 !important;
+}
+
+
+/* No divider after announcement ticker */
+.sixj-quick-category-section,
+#MainContent > .shopify-section:first-child + .shopify-section {
+  border-top: none !important;
+}
+
+/* Quick category: ensure first item is fully visible on SP */
+@media (max-width: 749px) {
+  .sixj-quick-category__scroll {
+    justify-content: flex-start;
+    scroll-padding-left: 16px;
+  }
 }
