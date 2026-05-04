@@ -452,6 +452,53 @@
       "settings": {
         "include_margins": true
       }
+    },
+    "6johan_pickup_banners_qhfPDf": {
+      "type": "6johan-pickup-banners",
+      "blocks": {
+        "banner_DCynCe": {
+          "type": "banner",
+          "settings": {
+            "title": "北欧スタイルの作り方",
+            "url": ""
+          }
+        },
+        "banner_Y7Hctt": {
+          "type": "banner",
+          "settings": {
+            "title": "一人暮らし応援セット",
+            "url": ""
+          }
+        },
+        "banner_BxPKCp": {
+          "type": "banner",
+          "settings": {
+            "title": "新生活ガイド",
+            "url": ""
+          }
+        },
+        "banner_y7FyMJ": {
+          "type": "banner",
+          "settings": {
+            "title": "5万円以下の人気アイテム",
+            "url": ""
+          }
+        }
+      },
+      "block_order": [
+        "banner_DCynCe",
+        "banner_Y7Hctt",
+        "banner_BxPKCp",
+        "banner_y7FyMJ"
+      ],
+      "name": "6JOHAN ピックアップ特集",
+      "settings": {
+        "label": "FEATURE",
+        "heading": "ピックアップ特集",
+        "show_view_all": true,
+        "view_all_text": "特集をもっと見る",
+        "view_all_url": ""
+      }
     }
   },
   "order": [
@@ -464,6 +511,7 @@
     "6johan_collection_products_tNktNk",
     "6johan_customer_voice_Fq3Jif",
     "6johan_collection_products_V3GQVx",
+    "6johan_pickup_banners_qhfPDf",
     "6johan_news_FQiVyx",
     "17779036218a1b48bb"
   ]
