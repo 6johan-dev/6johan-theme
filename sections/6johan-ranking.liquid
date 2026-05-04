@@ -1,6 +1,6 @@
 {% comment %}
   6JOHAN Ranking Section
-  LOWYA風ランキング（1位大+2-9位が4列×2行）
+  LOWYA風ランキング（1位大+2-9位横スクロール）
 {% endcomment %}
 
 {%- style -%}
@@ -38,7 +38,7 @@
   margin: 0;
 }
 
-/* Tabs with scroll arrows */
+/* Tabs */
 .ranking-section__tabs-wrap {
   position: relative;
   margin-bottom: 32px;
@@ -105,13 +105,8 @@
   border-color: var(--6j-text, #292724);
 }
 
-.ranking-section__tabs-arrow--prev {
-  left: 0;
-}
-
-.ranking-section__tabs-arrow--next {
-  right: 0;
-}
+.ranking-section__tabs-arrow--prev { left: 0; }
+.ranking-section__tabs-arrow--next { right: 0; }
 
 .ranking-section__tabs-arrow svg {
   width: 16px;
@@ -132,12 +127,7 @@
   display: block;
 }
 
-/* Base grid */
-.ranking-section__grid {
-  display: grid;
-  gap: 16px;
-}
-
+/* Base item styles */
 .ranking-section__item {
   position: relative;
   display: flex;
@@ -270,7 +260,7 @@
   transform: translateX(4px);
 }
 
-/* ===== スマホ: 2列グリッド ===== */
+/* ===== スマホ: 1位左固定 + 2位以降横スクロール ===== */
 @media (max-width: 749px) {
   .ranking-section {
     padding: 40px 0;
@@ -304,34 +294,62 @@
     height: 14px;
   }
   
+  /* 横スクロールグリッド: 2行×自動列 */
   .ranking-section__grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+    display: grid;
+    grid-template-rows: repeat(2, 1fr);
+    grid-auto-flow: column;
+    grid-auto-columns: 140px;
+    gap: 10px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
+    margin: 0 -16px;
+    padding-left: 16px;
+    padding-right: 16px;
   }
   
-  /* 1位: 全幅 */
+  .ranking-section__grid::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* 1位: 2行分の高さ */
   .ranking-section__item--1 {
-    grid-column: 1 / -1;
+    grid-row: 1 / 3;
+    width: 52vw;
+    max-width: 220px;
+  }
+  
+  .ranking-section__item--1 .ranking-section__image-wrap {
+    aspect-ratio: auto;
+    flex: 1;
+    min-height: 0;
   }
   
   .ranking-section__item--1 .ranking-section__rank {
-    width: 40px;
-    height: 40px;
-    font-size: 18px;
-  }
-  
-  .ranking-section__item--1 .ranking-section__name {
-    font-size: 14px;
-  }
-  
-  .ranking-section__item--1 .ranking-section__price {
+    width: 36px;
+    height: 36px;
     font-size: 16px;
   }
   
+  .ranking-section__item--1 .ranking-section__name {
+    font-size: 13px;
+  }
+  
+  .ranking-section__item--1 .ranking-section__price {
+    font-size: 15px;
+  }
+  
+  .ranking-section__item:not(.ranking-section__item--1) {
+    scroll-snap-align: start;
+  }
+  
   .ranking-section__rank {
-    width: 26px;
-    height: 26px;
-    font-size: 12px;
+    width: 24px;
+    height: 24px;
+    font-size: 11px;
     top: 6px;
     left: 6px;
   }
@@ -342,16 +360,17 @@
   }
   
   .ranking-section__info {
-    padding: 10px 2px 0;
+    padding: 8px 2px 0;
   }
   
   .ranking-section__name {
-    font-size: 12px;
-    margin-bottom: 6px;
+    font-size: 11px;
+    margin-bottom: 4px;
+    -webkit-line-clamp: 1;
   }
   
   .ranking-section__price {
-    font-size: 14px;
+    font-size: 13px;
   }
   
   .ranking-section__view-all-link {
@@ -363,7 +382,9 @@
 /* ===== タブレット: 4列 ===== */
 @media (min-width: 750px) and (max-width: 1099px) {
   .ranking-section__grid {
+    display: grid;
     grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
   }
   
   .ranking-section__item--1 {
@@ -412,7 +433,9 @@
 /* ===== PC: 6列グリッド ===== */
 @media (min-width: 1100px) {
   .ranking-section__grid {
+    display: grid;
     grid-template-columns: repeat(6, 1fr);
+    gap: 16px;
   }
   
   .ranking-section__item--1 {
