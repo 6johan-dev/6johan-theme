@@ -1321,3 +1321,22 @@ h3.card__heading {
   width: 16px;
   height: 16px;
 }
+
+/* Fix: remove empty space from hidden Dawn nav */
+.menu-drawer__menu.has-submenu {
+  display: none !important;
+}
+
+.menu-drawer__navigation-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 0;
+}
+
+.menu-drawer__navigation {
+  height: 0;
+  overflow: hidden;
+  padding: 0 !important;
+  margin: 0 !important;
+}
