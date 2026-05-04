@@ -1094,10 +1094,10 @@ h3.card__heading {
 }
 
 /* ============================================
-   Menu Drawer Fixes
+   Menu Drawer — All Fixes
    ============================================ */
 
-/* Contain ranking/other sections so their z-index stays local */
+/* 1. Contain section z-index so badges stay below header */
 .ranking-section,
 .collection-products,
 .scene-collection,
@@ -1106,22 +1106,25 @@ h3.card__heading {
   z-index: 0;
 }
 
-/* Ensure header-drawer sits above all page content */
 .shopify-section-group-header-group {
   position: relative;
   z-index: 100;
 }
 
-/* Hide Dawn default nav (replaced by our custom drawer-nav) */
-.menu-drawer__navigation {
+/* 2. Collapse Dawn default nav (replaced by custom drawer-nav) */
+.menu-drawer .menu-drawer__navigation {
+  display: none !important;
+  height: 0 !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.menu-drawer .menu-drawer__utility-links {
   display: none !important;
 }
 
-.menu-drawer__utility-links {
-  display: none !important;
-}
-
-/* --- 6JOHAN Rich Menu Styles --- */
+/* 3. Fix layout: content starts right after search */
 .menu-drawer__inner-container {
   height: 100%;
   display: flex;
@@ -1129,13 +1132,19 @@ h3.card__heading {
 }
 
 .menu-drawer__navigation-container {
-  flex: 1;
+  flex: 1 1 auto;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  padding-top: 0 !important;
+  padding: 0 !important;
+  display: block !important;
 }
 
-/* Search inside drawer */
+.menu-drawer__inner-submenu,
+.menu-drawer__submenu {
+  display: none !important;
+}
+
+/* 4. Rich Menu Styles */
 .drawer-search {
   padding: 16px 20px;
   border-bottom: 1px solid var(--6j-sand, #E8E5DC);
@@ -1171,7 +1180,6 @@ h3.card__heading {
   flex-shrink: 0;
 }
 
-/* Section labels */
 .drawer-section {
   padding: 0 20px;
 }
@@ -1195,7 +1203,6 @@ h3.card__heading {
   background: var(--6j-sand, #E8E5DC);
 }
 
-/* Nav links */
 .drawer-nav {
   list-style: none;
   margin: 0;
@@ -1239,7 +1246,6 @@ h3.card__heading {
   padding: 12px 0 12px 12px;
 }
 
-/* Submenu (accordion) */
 .drawer-nav__submenu {
   list-style: none;
   margin: 0;
@@ -1273,7 +1279,6 @@ h3.card__heading {
   transform: rotate(180deg);
 }
 
-/* Account section at bottom */
 .drawer-account {
   padding: 16px 20px;
   border-top: 1px solid var(--6j-sand, #E8E5DC);
@@ -1320,23 +1325,4 @@ h3.card__heading {
 .drawer-account__icon {
   width: 16px;
   height: 16px;
-}
-
-/* Fix: remove empty space from hidden Dawn nav */
-.menu-drawer__menu.has-submenu {
-  display: none !important;
-}
-
-.menu-drawer__navigation-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  gap: 0;
-}
-
-.menu-drawer__navigation {
-  height: 0;
-  overflow: hidden;
-  padding: 0 !important;
-  margin: 0 !important;
 }
