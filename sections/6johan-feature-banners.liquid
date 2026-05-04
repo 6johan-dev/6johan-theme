@@ -1,6 +1,6 @@
 {% comment %}
   6JOHAN Feature Banners
-  特集バナーカルーセル（USAGI風フルワイドスライダー）
+  特集バナーカルーセル（USAGI風・見切れスタイル・無限ループ）
 {% endcomment %}
 
 {%- style -%}
@@ -11,32 +11,61 @@
   background: var(--6j-bg, #fff);
 }
 
+.feature-banners__viewport {
+  overflow: hidden;
+}
+
 .feature-banners__track {
   display: flex;
+}
+
+.feature-banners__track.is-animating {
   transition: transform 0.4s ease;
 }
 
 .feature-banners__slide {
-  flex: 0 0 100%;
-  min-width: 0;
+  flex-shrink: 0;
+  width: 84%;
+  padding: 0 6px;
+  opacity: 0.5;
+  transform: scale(0.95);
+  transition: opacity 0.4s, transform 0.4s;
+}
+
+.feature-banners__slide.is-active {
+  opacity: 1;
+  transform: scale(1);
 }
 
 .feature-banners__link {
   display: block;
   position: relative;
   text-decoration: none;
+  border-radius: 12px;
+  overflow: hidden;
 }
 
 .feature-banners__image-wrap {
   position: relative;
   width: 100%;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 1 / 1;
   overflow: hidden;
 }
 
 @media (min-width: 750px) {
+  .feature-banners__slide {
+    width: 100%;
+    padding: 0;
+    opacity: 1;
+    transform: scale(1);
+  }
+  
   .feature-banners__image-wrap {
-    aspect-ratio: 2.5 / 1;
+    aspect-ratio: 2 / 1;
+  }
+  
+  .feature-banners__link {
+    border-radius: 0;
   }
 }
 
@@ -64,15 +93,17 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 24px;
+  padding: 20px;
+}
+
+@media (min-width: 750px) {
+  .feature-banners__overlay {
+    padding: 24px 70px;
+  }
 }
 
 .feature-banners__overlay--light {
   background: linear-gradient(180deg, transparent 40%, rgba(255,255,255,0.9) 100%);
-}
-
-.feature-banners__overlay--none {
-  display: none;
 }
 
 .feature-banners__label {
@@ -87,7 +118,7 @@
 
 .feature-banners__title {
   font-family: 'Playfair Display', 'Noto Serif JP', serif;
-  font-size: clamp(20px, 4vw, 32px);
+  font-size: clamp(18px, 4vw, 32px);
   font-weight: 500;
   color: #fff;
   margin: 0 0 8px;
@@ -127,7 +158,7 @@
   gap: 10px;
 }
 
-/* Navigation Arrows */
+/* Navigation Arrows - PC only */
 .feature-banners__nav {
   position: absolute;
   top: 50%;
@@ -138,12 +169,18 @@
   border: none;
   border-radius: 50%;
   cursor: pointer;
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   transition: all 0.2s;
   z-index: 2;
+}
+
+@media (min-width: 750px) {
+  .feature-banners__nav {
+    display: flex;
+  }
 }
 
 .feature-banners__nav:hover {
@@ -163,26 +200,6 @@
   width: 20px;
   height: 20px;
   color: var(--6j-text, #292724);
-}
-
-@media (max-width: 749px) {
-  .feature-banners__nav {
-    width: 36px;
-    height: 36px;
-  }
-  
-  .feature-banners__nav--prev {
-    left: 8px;
-  }
-  
-  .feature-banners__nav--next {
-    right: 8px;
-  }
-  
-  .feature-banners__nav svg {
-    width: 16px;
-    height: 16px;
-  }
 }
 
 /* Dots */
@@ -211,70 +228,71 @@
   border-radius: 4px;
 }
 
-/* Touch swipe */
 .feature-banners__track {
   touch-action: pan-y pinch-zoom;
 }
 {%- endstyle -%}
 
-<section class="feature-banners" data-carousel>
-  <div class="feature-banners__track" data-carousel-track>
-    {%- for block in section.blocks -%}
-      <div class="feature-banners__slide" {{ block.shopify_attributes }}>
-        <a href="{{ block.settings.url | default: '#' }}" class="feature-banners__link">
-          <div class="feature-banners__image-wrap">
-            {%- if block.settings.image -%}
-              <img
-                src="{{ block.settings.image | image_url: width: 1200 }}"
-                srcset="{{ block.settings.image | image_url: width: 600 }} 600w,
-                        {{ block.settings.image | image_url: width: 900 }} 900w,
-                        {{ block.settings.image | image_url: width: 1200 }} 1200w,
-                        {{ block.settings.image | image_url: width: 1600 }} 1600w"
-                sizes="100vw"
-                alt="{{ block.settings.title | escape }}"
-                class="feature-banners__image"
-                loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
-              >
-            {%- else -%}
-              <div class="feature-banners__placeholder">📷 バナー画像を設定してください</div>
-            {%- endif -%}
-          </div>
-          
-          {%- unless block.settings.hide_overlay -%}
-            <div class="feature-banners__overlay{% if block.settings.overlay_light %} feature-banners__overlay--light{% endif %}">
-              {%- if block.settings.label != blank -%}
-                <span class="feature-banners__label">{{ block.settings.label }}</span>
-              {%- endif -%}
-              
-              {%- if block.settings.title != blank -%}
-                <h3 class="feature-banners__title">{{ block.settings.title }}</h3>
-              {%- endif -%}
-              
-              {%- if block.settings.subtitle != blank -%}
-                <p class="feature-banners__subtitle">{{ block.settings.subtitle }}</p>
-              {%- endif -%}
-              
-              {%- if block.settings.cta_text != blank -%}
-                <span class="feature-banners__cta">
-                  {{ block.settings.cta_text }}
-                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                    <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </span>
+<section class="feature-banners" data-carousel data-total="{{ section.blocks.size }}">
+  <div class="feature-banners__viewport">
+    <div class="feature-banners__track" data-carousel-track>
+      {%- for block in section.blocks -%}
+        <div class="feature-banners__slide{% if forloop.first %} is-active{% endif %}" data-index="{{ forloop.index0 }}" {{ block.shopify_attributes }}>
+          <a href="{{ block.settings.url | default: '#' }}" class="feature-banners__link">
+            <div class="feature-banners__image-wrap">
+              {%- if block.settings.image -%}
+                <img
+                  src="{{ block.settings.image | image_url: width: 1200 }}"
+                  srcset="{{ block.settings.image | image_url: width: 600 }} 600w,
+                          {{ block.settings.image | image_url: width: 900 }} 900w,
+                          {{ block.settings.image | image_url: width: 1200 }} 1200w,
+                          {{ block.settings.image | image_url: width: 1600 }} 1600w"
+                  sizes="100vw"
+                  alt="{{ block.settings.title | escape }}"
+                  class="feature-banners__image"
+                  loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+                >
+              {%- else -%}
+                <div class="feature-banners__placeholder">📷 バナー画像を設定してください</div>
               {%- endif -%}
             </div>
-          {%- endunless -%}
-        </a>
-      </div>
-    {%- else -%}
-      <div class="feature-banners__slide">
-        <div class="feature-banners__link">
-          <div class="feature-banners__image-wrap">
-            <div class="feature-banners__placeholder">📷 「スライドを追加」からバナーを追加してください</div>
+            
+            {%- unless block.settings.hide_overlay -%}
+              <div class="feature-banners__overlay{% if block.settings.overlay_light %} feature-banners__overlay--light{% endif %}">
+                {%- if block.settings.label != blank -%}
+                  <span class="feature-banners__label">{{ block.settings.label }}</span>
+                {%- endif -%}
+                
+                {%- if block.settings.title != blank -%}
+                  <h3 class="feature-banners__title">{{ block.settings.title }}</h3>
+                {%- endif -%}
+                
+                {%- if block.settings.subtitle != blank -%}
+                  <p class="feature-banners__subtitle">{{ block.settings.subtitle }}</p>
+                {%- endif -%}
+                
+                {%- if block.settings.cta_text != blank -%}
+                  <span class="feature-banners__cta">
+                    {{ block.settings.cta_text }}
+                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                      <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </span>
+                {%- endif -%}
+              </div>
+            {%- endunless -%}
+          </a>
+        </div>
+      {%- else -%}
+        <div class="feature-banners__slide is-active">
+          <div class="feature-banners__link">
+            <div class="feature-banners__image-wrap">
+              <div class="feature-banners__placeholder">📷 「スライドを追加」からバナーを追加してください</div>
+            </div>
           </div>
         </div>
-      </div>
-    {%- endfor -%}
+      {%- endfor -%}
+    </div>
   </div>
   
   {%- if section.blocks.size > 1 -%}
@@ -309,45 +327,114 @@ document.addEventListener('DOMContentLoaded', function() {
     const track = carousel.querySelector('[data-carousel-track]');
     if (!track) return;
     
-    const slides = track.children;
+    const originalSlides = Array.from(track.querySelectorAll('.feature-banners__slide'));
+    const totalSlides = originalSlides.length;
+    if (totalSlides < 2) return;
+    
     const prevBtn = carousel.querySelector('[data-carousel-prev]');
     const nextBtn = carousel.querySelector('[data-carousel-next]');
     const dots = carousel.querySelectorAll('[data-carousel-dot]');
     
-    let currentIndex = 0;
+    // Clone slides for infinite loop
+    const firstClone = originalSlides[0].cloneNode(true);
+    const lastClone = originalSlides[totalSlides - 1].cloneNode(true);
+    firstClone.classList.add('is-clone');
+    firstClone.removeAttribute('data-index');
+    lastClone.classList.add('is-clone');
+    lastClone.removeAttribute('data-index');
+    track.appendChild(firstClone);
+    track.insertBefore(lastClone, originalSlides[0]);
+    
+    const allSlides = Array.from(track.querySelectorAll('.feature-banners__slide'));
+    const slideCount = allSlides.length;
+    
+    let currentIndex = 1; // Start at first real slide
     let startX = 0;
     let isDragging = false;
+    let isTransitioning = false;
     let autoplayInterval;
     
-    const updateCarousel = () => {
-      track.style.transform = `translateX(-${currentIndex * 100}%)`;
+    const isMobile = () => window.innerWidth < 750;
+    
+    const updatePosition = (animate = true) => {
+      if (animate) {
+        track.classList.add('is-animating');
+      } else {
+        track.classList.remove('is-animating');
+      }
+      
+      if (isMobile()) {
+        // Mobile: Center the active slide with peek effect
+        // slideWidth = 84%, centerOffset = (100 - 84) / 2 = 8%
+        const slideWidthPercent = 84;
+        const centerOffset = (100 - slideWidthPercent) / 2;
+        const translateX = -(currentIndex * slideWidthPercent) + centerOffset;
+        track.style.transform = `translateX(${translateX}%)`;
+      } else {
+        // PC: Full width slides
+        track.style.transform = `translateX(-${currentIndex * 100}%)`;
+      }
+      
+      // Update active states
+      allSlides.forEach((slide, i) => {
+        slide.classList.toggle('is-active', i === currentIndex);
+      });
+      
+      // Update dots
+      const realIndex = getRealIndex();
       dots.forEach((dot, i) => {
-        dot.classList.toggle('is-active', i === currentIndex);
+        dot.classList.toggle('is-active', i === realIndex);
       });
     };
     
-    const goToSlide = (index) => {
-      currentIndex = Math.max(0, Math.min(index, slides.length - 1));
-      updateCarousel();
+    const getRealIndex = () => {
+      if (currentIndex === 0) return totalSlides - 1;
+      if (currentIndex === slideCount - 1) return 0;
+      return currentIndex - 1;
+    };
+    
+    const handleTransitionEnd = () => {
+      isTransitioning = false;
+      track.classList.remove('is-animating');
+      
+      // Jump to real slide if on clone
+      if (currentIndex === 0) {
+        currentIndex = totalSlides;
+        updatePosition(false);
+      } else if (currentIndex === slideCount - 1) {
+        currentIndex = 1;
+        updatePosition(false);
+      }
+    };
+    
+    track.addEventListener('transitionend', handleTransitionEnd);
+    
+    const goToSlide = (realIndex) => {
+      if (isTransitioning) return;
+      isTransitioning = true;
+      currentIndex = realIndex + 1;
+      updatePosition();
     };
     
     const nextSlide = () => {
-      currentIndex = (currentIndex + 1) % slides.length;
-      updateCarousel();
+      if (isTransitioning) return;
+      isTransitioning = true;
+      currentIndex++;
+      updatePosition();
     };
     
     const prevSlide = () => {
-      currentIndex = (currentIndex - 1 + slides.length) % slides.length;
-      updateCarousel();
+      if (isTransitioning) return;
+      isTransitioning = true;
+      currentIndex--;
+      updatePosition();
     };
     
     if (prevBtn) prevBtn.addEventListener('click', prevSlide);
     if (nextBtn) nextBtn.addEventListener('click', nextSlide);
     
-    dots.forEach(dot => {
-      dot.addEventListener('click', () => {
-        goToSlide(parseInt(dot.dataset.carouselDot));
-      });
+    dots.forEach((dot, index) => {
+      dot.addEventListener('click', () => goToSlide(index));
     });
     
     // Touch swipe
@@ -368,22 +455,33 @@ document.addEventListener('DOMContentLoaded', function() {
       isDragging = false;
     }, { passive: true });
     
+    // Resize handler
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => updatePosition(false), 100);
+    });
+    
     // Auto-play
     {% if section.settings.autoplay %}
     const startAutoplay = () => {
+      stopAutoplay();
       autoplayInterval = setInterval(nextSlide, {{ section.settings.autoplay_speed | default: 5000 }});
     };
     
     const stopAutoplay = () => {
-      clearInterval(autoplayInterval);
+      if (autoplayInterval) clearInterval(autoplayInterval);
     };
     
     startAutoplay();
     carousel.addEventListener('mouseenter', stopAutoplay);
     carousel.addEventListener('mouseleave', startAutoplay);
     carousel.addEventListener('touchstart', stopAutoplay, { passive: true });
-    carousel.addEventListener('touchend', startAutoplay, { passive: true });
+    carousel.addEventListener('touchend', () => setTimeout(startAutoplay, 3000), { passive: true });
     {% endif %}
+    
+    // Initial position (no animation)
+    updatePosition(false);
   });
 });
 </script>
@@ -406,7 +504,7 @@ document.addEventListener('DOMContentLoaded', function() {
       "id": "autoplay_speed",
       "label": "自動再生間隔（ミリ秒）",
       "min": 3000,
-      "max": 10000,
+      "max": 9500,
       "step": 500,
       "default": 5000
     }
@@ -420,7 +518,7 @@ document.addEventListener('DOMContentLoaded', function() {
           "type": "image_picker",
           "id": "image",
           "label": "バナー画像",
-          "info": "推奨: 1600×640px（PC）"
+          "info": "推奨: PC 1600×800px / SP 1000×1000px"
         },
         {
           "type": "checkbox",

@@ -40,6 +40,57 @@
         "show_close": true
       }
     },
+    "6johan_feature_banners_fWtxEw": {
+      "type": "6johan-feature-banners",
+      "blocks": {
+        "banner_eeFgaB": {
+          "type": "banner",
+          "settings": {
+            "hide_overlay": false,
+            "label": "SPRING COLLECTION",
+            "title": "春の新作コレクション",
+            "subtitle": "暮らしに彩りを添える新作家具",
+            "cta_text": "詳しく見る",
+            "url": "",
+            "overlay_light": false
+          }
+        },
+        "banner_mykBrA": {
+          "type": "banner",
+          "settings": {
+            "hide_overlay": false,
+            "label": "STYLE GUIDE",
+            "title": "北欧スタイルの作り方",
+            "subtitle": "",
+            "cta_text": "読む",
+            "url": "",
+            "overlay_light": false
+          }
+        },
+        "banner_9F7qEz": {
+          "type": "banner",
+          "settings": {
+            "hide_overlay": false,
+            "label": "5万円以下",
+            "title": "お手頃価格の人気アイテム",
+            "subtitle": "",
+            "cta_text": "見る",
+            "url": "",
+            "overlay_light": false
+          }
+        }
+      },
+      "block_order": [
+        "banner_eeFgaB",
+        "banner_mykBrA",
+        "banner_9F7qEz"
+      ],
+      "name": "6JOHAN 特集バナー",
+      "settings": {
+        "autoplay": true,
+        "autoplay_speed": 5000
+      }
+    },
     "6johan_search_bar_yrr97F": {
       "type": "6johan-search-bar",
       "name": "6JOHAN 検索バー",
@@ -379,65 +430,17 @@
         "view_all_text": "すべてのお知らせを見る",
         "view_all_url": ""
       }
-    },
-    "6johan_feature_banners_G8p7zY": {
-      "type": "6johan-feature-banners",
-      "blocks": {
-        "banner_PQWAmW": {
-          "type": "banner",
-          "settings": {
-            "label": "SPRING COLLECTION",
-            "title": "春の新作コレクション",
-            "subtitle": "暮らしに彩りを添える新作家具",
-            "cta_text": "詳しく見る",
-            "url": "",
-            "is_large": true,
-            "overlay_light": false
-          }
-        },
-        "banner_FDtBXi": {
-          "type": "banner",
-          "settings": {
-            "label": "STYLE GUIDE",
-            "title": "北欧スタイルの作り方",
-            "subtitle": "",
-            "cta_text": "読む",
-            "url": "",
-            "is_large": false,
-            "overlay_light": false
-          }
-        },
-        "banner_fA44XN": {
-          "type": "banner",
-          "settings": {
-            "label": "5万円以下",
-            "title": "お手頃価格の人気アイテム",
-            "subtitle": "",
-            "cta_text": "見る",
-            "url": "",
-            "is_large": false,
-            "overlay_light": false
-          }
-        }
-      },
-      "block_order": [
-        "banner_PQWAmW",
-        "banner_FDtBXi",
-        "banner_fA44XN"
-      ],
-      "name": "6JOHAN 特集バナー",
-      "settings": {}
     }
   },
   "order": [
     "6johan_announcement_ticker_QLCctr",
+    "6johan_feature_banners_fWtxEw",
     "6johan_search_bar_yrr97F",
     "6johan_quick_category_dF9MET",
     "6johan_category_icons_RGywjp",
     "6johan_quick_nav_F43bz6",
     "6johan_ranking_GfgLC3",
     "6johan_customer_voice_Fq3Jif",
-    "6johan_news_FQiVyx",
-    "6johan_feature_banners_G8p7zY"
+    "6johan_news_FQiVyx"
   ]
 }
