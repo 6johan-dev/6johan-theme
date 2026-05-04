@@ -500,6 +500,9 @@
               <div class="product-trust-badges" style="margin-top: 16px;">
                 {%- render '6johan-delivery-info', product: product -%}
               </div>
+
+              {%- comment -%} 6JOHAN お気に入りボタン {%- endcomment -%}
+              {% render '6johan-favorite-button', product: product %}
               {%- when 'rating' -%}
                 {%- if product.metafields.reviews.rating.value != blank -%}
                   <div class="rating-wrapper">
@@ -748,6 +751,9 @@
     -%}
 
     <script type="application/ld+json">
+
+{%- comment -%} 6JOHAN 閲覧履歴を保存 {%- endcomment -%}
+{% render '6johan-track-view', product: product %}
       {{ product | structured_data }}
     </script>
   </div>
