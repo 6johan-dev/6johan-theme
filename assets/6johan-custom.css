@@ -1391,3 +1391,15 @@ body,
     scroll-padding-left: 16px;
   }
 }
+
+/* Fix oversized cart icon in header */
+.header__icon--cart .svg-wrapper {
+  width: 44px;
+  height: 44px;
+}
+
+.header__icon--cart .icon,
+.header__icon--cart svg {
+  width: 24px;
+  height: 24px;
+}
