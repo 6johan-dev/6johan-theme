@@ -380,10 +380,10 @@
         "view_all_url": ""
       }
     },
-    "6johan_feature_banners_G8p7zY": {
+    "6johan_feature_banners_fWtxEw": {
       "type": "6johan-feature-banners",
       "blocks": {
-        "banner_PQWAmW": {
+        "banner_eeFgaB": {
           "type": "banner",
           "settings": {
             "label": "SPRING COLLECTION",
@@ -395,7 +395,7 @@
             "overlay_light": false
           }
         },
-        "banner_FDtBXi": {
+        "banner_mykBrA": {
           "type": "banner",
           "settings": {
             "label": "STYLE GUIDE",
@@ -407,7 +407,7 @@
             "overlay_light": false
           }
         },
-        "banner_fA44XN": {
+        "banner_9F7qEz": {
           "type": "banner",
           "settings": {
             "label": "5万円以下",
@@ -421,9 +421,9 @@
         }
       },
       "block_order": [
-        "banner_PQWAmW",
-        "banner_FDtBXi",
-        "banner_fA44XN"
+        "banner_eeFgaB",
+        "banner_mykBrA",
+        "banner_9F7qEz"
       ],
       "name": "6JOHAN 特集バナー",
       "settings": {}
@@ -438,6 +438,6 @@
     "6johan_ranking_GfgLC3",
     "6johan_customer_voice_Fq3Jif",
     "6johan_news_FQiVyx",
-    "6johan_feature_banners_G8p7zY"
+    "6johan_feature_banners_fWtxEw"
   ]
 }
