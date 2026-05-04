@@ -9,6 +9,13 @@
  */
 {
   "sections": {
+    "6johan_search_bar_yrr97F": {
+      "type": "6johan-search-bar",
+      "name": "6JOHAN 検索バー",
+      "settings": {
+        "placeholder": "何かお探しですか？"
+      }
+    },
     "6johan_announcement_ticker_QLCctr": {
       "type": "6johan-announcement-ticker",
       "blocks": {
@@ -102,13 +109,6 @@
       "settings": {
         "autoplay": true,
         "autoplay_speed": 4000
-      }
-    },
-    "6johan_search_bar_yrr97F": {
-      "type": "6johan-search-bar",
-      "name": "6JOHAN 検索バー",
-      "settings": {
-        "placeholder": "何かお探しですか？"
       }
     },
     "6johan_quick_category_dF9MET": {
@@ -503,9 +503,9 @@
     }
   },
   "order": [
+    "6johan_search_bar_yrr97F",
     "6johan_announcement_ticker_QLCctr",
     "6johan_feature_banners_fWtxEw",
-    "6johan_search_bar_yrr97F",
     "6johan_quick_category_dF9MET",
     "6johan_category_icons_RGywjp",
     "6johan_ranking_GfgLC3",
