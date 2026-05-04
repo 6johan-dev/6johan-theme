@@ -18,7 +18,8 @@
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
-  padding: 0 16px;
+  padding: 6px 16px 0;
+  justify-content: center;
 }
 
 .sixj-quick-category__scroll::-webkit-scrollbar {
@@ -43,8 +44,7 @@
 
 .sixj-quick-category__item:hover {
   border-color: var(--6j-text, #292724);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
 
 .sixj-quick-category__icon {
@@ -66,13 +66,15 @@
 
 .sixj-quick-category__badge {
   position: absolute;
-  top: -4px;
-  right: -4px;
+  top: -8px;
+  right: -12px;
   padding: 2px 5px;
   font-size: 8px;
   font-weight: 700;
   border-radius: 3px;
   text-transform: uppercase;
+  line-height: 1.2;
+  z-index: 1;
 }
 
 .sixj-quick-category__badge--new {
