@@ -47,6 +47,65 @@
         "placeholder": "何かお探しですか？"
       }
     },
+    "6johan_quick_category_dF9MET": {
+      "type": "6johan-quick-category",
+      "blocks": {
+        "category_KCghBj": {
+          "type": "category",
+          "settings": {
+            "icon": "new",
+            "label": "新商品",
+            "link": "",
+            "badge": "new"
+          }
+        },
+        "category_3Ggfj3": {
+          "type": "category",
+          "settings": {
+            "icon": "ranking",
+            "label": "ランキング",
+            "link": "",
+            "badge": "hot"
+          }
+        },
+        "category_Y8jjwH": {
+          "type": "category",
+          "settings": {
+            "icon": "sale",
+            "label": "セール",
+            "link": "",
+            "badge": "sale"
+          }
+        },
+        "category_RG4tre": {
+          "type": "category",
+          "settings": {
+            "icon": "recommend",
+            "label": "おすすめ",
+            "link": "",
+            "badge": "none"
+          }
+        },
+        "category_tWUwDh": {
+          "type": "category",
+          "settings": {
+            "icon": "blog",
+            "label": "マガジン",
+            "link": "",
+            "badge": "none"
+          }
+        }
+      },
+      "block_order": [
+        "category_KCghBj",
+        "category_3Ggfj3",
+        "category_Y8jjwH",
+        "category_RG4tre",
+        "category_tWUwDh"
+      ],
+      "name": "6JOHAN クイックカテゴリ",
+      "settings": {}
+    },
     "6johan_category_icons_RGywjp": {
       "type": "6johan-category-icons",
       "blocks": {
@@ -171,54 +230,6 @@
         "nav_item_JN3qXj"
       ],
       "name": "6JOHAN クイックナビ",
-      "settings": {}
-    },
-    "6johan_feature_banners_eHjW8f": {
-      "type": "6johan-feature-banners",
-      "blocks": {
-        "banner_Ttpwzy": {
-          "type": "banner",
-          "settings": {
-            "label": "SPRING COLLECTION",
-            "title": "春の新作コレクション",
-            "subtitle": "暮らしに彩りを添える新作家具",
-            "cta_text": "詳しく見る",
-            "url": "",
-            "is_large": true,
-            "overlay_light": false
-          }
-        },
-        "banner_dK7z7p": {
-          "type": "banner",
-          "settings": {
-            "label": "STYLE GUIDE",
-            "title": "北欧スタイルの作り方",
-            "subtitle": "",
-            "cta_text": "読む",
-            "url": "",
-            "is_large": false,
-            "overlay_light": false
-          }
-        },
-        "banner_b6VWdm": {
-          "type": "banner",
-          "settings": {
-            "label": "5万円以下",
-            "title": "お手頃価格の人気アイテム",
-            "subtitle": "",
-            "cta_text": "見る",
-            "url": "",
-            "is_large": false,
-            "overlay_light": false
-          }
-        }
-      },
-      "block_order": [
-        "banner_Ttpwzy",
-        "banner_dK7z7p",
-        "banner_b6VWdm"
-      ],
-      "name": "6JOHAN 特集バナー",
       "settings": {}
     },
     "6johan_ranking_GfgLC3": {
@@ -368,65 +379,6 @@
         "view_all_text": "すべてのお知らせを見る",
         "view_all_url": ""
       }
-    },
-    "6johan_quick_category_dF9MET": {
-      "type": "6johan-quick-category",
-      "blocks": {
-        "category_KCghBj": {
-          "type": "category",
-          "settings": {
-            "icon": "new",
-            "label": "新商品",
-            "link": "",
-            "badge": "new"
-          }
-        },
-        "category_3Ggfj3": {
-          "type": "category",
-          "settings": {
-            "icon": "ranking",
-            "label": "ランキング",
-            "link": "",
-            "badge": "hot"
-          }
-        },
-        "category_Y8jjwH": {
-          "type": "category",
-          "settings": {
-            "icon": "sale",
-            "label": "セール",
-            "link": "",
-            "badge": "sale"
-          }
-        },
-        "category_RG4tre": {
-          "type": "category",
-          "settings": {
-            "icon": "recommend",
-            "label": "おすすめ",
-            "link": "",
-            "badge": "none"
-          }
-        },
-        "category_tWUwDh": {
-          "type": "category",
-          "settings": {
-            "icon": "blog",
-            "label": "マガジン",
-            "link": "",
-            "badge": "none"
-          }
-        }
-      },
-      "block_order": [
-        "category_KCghBj",
-        "category_3Ggfj3",
-        "category_Y8jjwH",
-        "category_RG4tre",
-        "category_tWUwDh"
-      ],
-      "name": "6JOHAN クイックカテゴリ",
-      "settings": {}
     }
   },
   "order": [
@@ -435,7 +387,6 @@
     "6johan_quick_category_dF9MET",
     "6johan_category_icons_RGywjp",
     "6johan_quick_nav_F43bz6",
-    "6johan_feature_banners_eHjW8f",
     "6johan_ranking_GfgLC3",
     "6johan_customer_voice_Fq3Jif",
     "6johan_news_FQiVyx"
