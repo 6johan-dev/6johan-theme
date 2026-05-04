@@ -1326,3 +1326,28 @@ h3.card__heading {
   width: 16px;
   height: 16px;
 }
+
+/* Sticky Cart Bar - button color fix */
+.sticky-cart-bar__cart-btn {
+  background: var(--6j-charcoal, #2C2C24) !important;
+}
+
+.sticky-cart-bar__cart-btn:hover {
+  background: var(--6j-earth, #6B6B5E) !important;
+}
+
+/* Push chat widget above sticky cart bar */
+body.sticky-cart-active #ch-plugin,
+body.sticky-cart-active #ch-plugin-core,
+body.sticky-cart-active .ch-messenger-frame,
+body.sticky-cart-active #channel-io-plugin,
+body.sticky-cart-active [class*="ChannelIO"],
+body.sticky-cart-active #tidio-chat,
+body.sticky-cart-active .tidio-1k3p5hv,
+body.sticky-cart-active .crisp-client,
+body.sticky-cart-active .intercom-lightweight-app,
+body.sticky-cart-active [id*="chat"],
+body.sticky-cart-active .shopify-chat {
+  bottom: 72px !important;
+  transition: bottom 0.3s ease;
+}
