@@ -1335,3 +1335,43 @@ h3.card__heading {
 .sticky-cart-bar__cart-btn:hover {
   background: var(--6j-earth, #6B6B5E) !important;
 }
+/* ============================================
+   Global White Background + Section Dividers
+   ============================================ */
+
+/* Force all backgrounds white */
+body,
+.shopify-section,
+.menu-drawer,
+.color-background-1,
+.color-background-2,
+.gradient {
+  background: #fff !important;
+}
+
+/* LOWYA-style section divider: thin gray gap between sections */
+#MainContent > .shopify-section + .shopify-section {
+  border-top: 8px solid #F2F2F0;
+}
+
+/* Remove double dividers from sections that already have borders */
+#MainContent > .shopify-section + .shopify-section > section {
+  border-top: none;
+}
+
+/* Override individual section backgrounds */
+.ranking-section,
+.collection-products,
+.collection-products--alt-bg,
+.customer-voice-section,
+.sixj-quick-category,
+.scene-collection,
+[class*="6johan"],
+[class*="sixj-"] {
+  background: #fff !important;
+}
+
+/* Trust bar can keep a subtle different bg for emphasis */
+.global-trust-bar {
+  background: #FAFAF8 !important;
+}
