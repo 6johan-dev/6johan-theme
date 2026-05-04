@@ -258,7 +258,7 @@
   .ranking-section__item--9 { grid-column: 4; grid-row: 3; }
 }
 
-/* ========== スマホ: 横スクロール2行（画像のみ） ========== */
+/* ========== スマホ: 横スクロール2行 ========== */
 @media (max-width: 749px) {
   .ranking-section {
     padding: 40px 0;
@@ -290,7 +290,7 @@
   /* 横スクロールグリッド */
   .ranking-section__grid {
     display: flex;
-    align-items: stretch;
+    align-items: flex-start;
     gap: 8px;
     overflow-x: auto;
     scrollbar-width: none;
@@ -300,26 +300,35 @@
   
   .ranking-section__grid::-webkit-scrollbar { display: none; }
   
-  /* SP: 商品名・価格を非表示 */
-  .ranking-section__grid--mobile .ranking-section__info {
+  /* SP: 商品名を非表示、価格のみ表示 */
+  .ranking-section__grid--mobile .ranking-section__name {
     display: none;
+  }
+  
+  .ranking-section__grid--mobile .ranking-section__info {
+    padding: 4px 0 0;
   }
   
   /* 1位 */
   .ranking-section__item--1 {
     flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
   }
   
   .ranking-section__item--1 .ranking-section__image-wrap {
     width: calc(28vw * 2 + 8px);
     max-width: 240px;
-    height: calc(28vw * 2 + 8px);
-    max-height: 240px;
+    flex: 1;
   }
   
   .ranking-section__item--1 .ranking-section__rank {
     width: 28px;
     height: 28px;
+    font-size: 13px;
+  }
+  
+  .ranking-section__item--1 .ranking-section__price {
     font-size: 13px;
   }
   
@@ -330,6 +339,11 @@
     gap: 8px;
     flex: 0 0 28vw;
     max-width: 116px;
+  }
+  
+  .ranking-section__pair .ranking-section__item {
+    display: flex;
+    flex-direction: column;
   }
   
   .ranking-section__pair .ranking-section__image-wrap {
@@ -347,6 +361,10 @@
   .ranking-section__pair .ranking-section__badges {
     top: 5px;
     right: 5px;
+  }
+  
+  .ranking-section__pair .ranking-section__price {
+    font-size: 11px;
   }
   
   .ranking-section__view-all-link {
@@ -399,7 +417,7 @@
             {% endfor %}
           </div>
           
-          {%- comment -%} SP用横スクロール（画像のみ） {%- endcomment -%}
+          {%- comment -%} SP用横スクロール {%- endcomment -%}
           <div class="ranking-section__grid ranking-section__grid--mobile">
             {% for product in collection.products limit: 1 %}
               <article class="ranking-section__item ranking-section__item--1">
@@ -408,6 +426,10 @@
                   <img src="{{ product.featured_image | image_url: width: 500 }}" alt="{{ product.featured_image.alt | escape }}" class="ranking-section__image" loading="lazy">
                   <div class="ranking-section__badges">{% render '6johan-product-badge', product: product %}</div>
                 </a>
+                <div class="ranking-section__info">
+                  <h3 class="ranking-section__name"><a href="{{ product.url }}">{{ product.title }}</a></h3>
+                  <p class="ranking-section__price">{{ product.price | money }}</p>
+                </div>
               </article>
             {% endfor %}
             
@@ -426,6 +448,9 @@
                       <img src="{{ product.featured_image | image_url: width: 300 }}" alt="{{ product.featured_image.alt | escape }}" class="ranking-section__image" loading="lazy">
                       <div class="ranking-section__badges">{% render '6johan-product-badge', product: product %}</div>
                     </a>
+                    <div class="ranking-section__info">
+                      <p class="ranking-section__price">{{ product.price | money }}</p>
+                    </div>
                   </article>
                 {% endif %}
                 {% if products_array[idx2] %}
@@ -437,6 +462,9 @@
                       <img src="{{ product.featured_image | image_url: width: 300 }}" alt="{{ product.featured_image.alt | escape }}" class="ranking-section__image" loading="lazy">
                       <div class="ranking-section__badges">{% render '6johan-product-badge', product: product %}</div>
                     </a>
+                    <div class="ranking-section__info">
+                      <p class="ranking-section__price">{{ product.price | money }}</p>
+                    </div>
                   </article>
                 {% endif %}
               </div>
