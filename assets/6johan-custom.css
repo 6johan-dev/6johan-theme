@@ -1094,18 +1094,34 @@ h3.card__heading {
 }
 
 /* ============================================
-   Menu Drawer z-index Fix & Rich Menu Styles
+   Menu Drawer Fixes
    ============================================ */
 
-/* Fix: drawer must be above all page content */
-.menu-drawer-container summary::before {
-  z-index: 100 !important;
-}
-.menu-drawer {
-  z-index: 101 !important;
+/* Contain ranking/other sections so their z-index stays local */
+.ranking-section,
+.collection-products,
+.scene-collection,
+.customer-voice-section {
+  position: relative;
+  z-index: 0;
 }
 
-/* --- 6JOHAN Rich Menu --- */
+/* Ensure header-drawer sits above all page content */
+.shopify-section-group-header-group {
+  position: relative;
+  z-index: 100;
+}
+
+/* Hide Dawn default nav (replaced by our custom drawer-nav) */
+.menu-drawer__navigation {
+  display: none !important;
+}
+
+.menu-drawer__utility-links {
+  display: none !important;
+}
+
+/* --- 6JOHAN Rich Menu Styles --- */
 .menu-drawer__inner-container {
   height: 100%;
   display: flex;
@@ -1116,6 +1132,7 @@ h3.card__heading {
   flex: 1;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+  padding-top: 0 !important;
 }
 
 /* Search inside drawer */
@@ -1303,44 +1320,4 @@ h3.card__heading {
 .drawer-account__icon {
   width: 16px;
   height: 16px;
-}
-
-/* ============================================
-   Menu Drawer z-index Fix v2
-   ============================================ */
-
-/* Parent stacking context must be above everything */
-header-drawer {
-  position: relative;
-  z-index: 9999 !important;
-}
-
-.menu-drawer-container summary::before {
-  z-index: 9998 !important;
-}
-
-.menu-drawer {
-  z-index: 9999 !important;
-}
-
-/* Fix gap between search and nav */
-.menu-drawer__navigation-container {
-  padding-top: 0 !important;
-}
-
-.menu-drawer__navigation {
-  display: none;
-}
-
-.menu-drawer__utility-links {
-  display: none;
-}
-
-/* Remove extra spacing from Dawn defaults */
-.menu-drawer__inner-container {
-  padding-top: 0;
-}
-
-.drawer-search + .drawer-section {
-  margin-top: 0;
 }
