@@ -229,60 +229,6 @@
       "name": "6JOHAN カテゴリアイコン",
       "settings": {}
     },
-    "6johan_quick_nav_F43bz6": {
-      "type": "6johan-quick-nav",
-      "blocks": {
-        "nav_item_kDq6Km": {
-          "type": "nav_item",
-          "settings": {
-            "label": "部屋別で選ぶ",
-            "icon_type": "room",
-            "url": ""
-          }
-        },
-        "nav_item_i8CVzJ": {
-          "type": "nav_item",
-          "settings": {
-            "label": "スタイル別",
-            "icon_type": "style",
-            "url": ""
-          }
-        },
-        "nav_item_aGeBrN": {
-          "type": "nav_item",
-          "settings": {
-            "label": "初めての方",
-            "icon_type": "beginner",
-            "url": ""
-          }
-        },
-        "nav_item_DtrTFa": {
-          "type": "nav_item",
-          "settings": {
-            "label": "5万円以内",
-            "icon_type": "budget",
-            "url": ""
-          }
-        },
-        "nav_item_JN3qXj": {
-          "type": "nav_item",
-          "settings": {
-            "label": "部屋別で選ぶ",
-            "icon_type": "room",
-            "url": ""
-          }
-        }
-      },
-      "block_order": [
-        "nav_item_kDq6Km",
-        "nav_item_i8CVzJ",
-        "nav_item_aGeBrN",
-        "nav_item_DtrTFa",
-        "nav_item_JN3qXj"
-      ],
-      "name": "6JOHAN クイックナビ",
-      "settings": {}
-    },
     "6johan_ranking_GfgLC3": {
       "type": "6johan-ranking",
       "blocks": {
@@ -329,9 +275,20 @@
       "settings": {
         "label": "RANKING",
         "heading": "人気ランキング",
+        "view_all_text": "ランキングをもっと見る"
+      }
+    },
+    "6johan_collection_products_tNktNk": {
+      "type": "6johan-collection-products",
+      "name": "6JOHAN コレクション商品",
+      "settings": {
+        "label": "NEW ARRIVAL",
+        "heading": "新着商品",
+        "collection": "new-arrival",
+        "products_to_show": 8,
         "show_view_all": true,
-        "view_all_text": "ランキングをもっと見る",
-        "view_all_url": ""
+        "view_all_text": "すべて見る",
+        "alt_background": false
       }
     },
     "6johan_customer_voice_Fq3Jif": {
@@ -386,6 +343,19 @@
         "view_all_url": ""
       }
     },
+    "6johan_collection_products_V3GQVx": {
+      "type": "6johan-collection-products",
+      "name": "6JOHAN コレクション商品",
+      "settings": {
+        "label": "RECOMMEND",
+        "heading": "おすすめ商品",
+        "collection": "pick-up",
+        "products_to_show": 8,
+        "show_view_all": true,
+        "view_all_text": "すべて見る",
+        "alt_background": false
+      }
+    },
     "6johan_news_FQiVyx": {
       "type": "6johan-news",
       "blocks": {
@@ -438,9 +408,10 @@
     "6johan_search_bar_yrr97F",
     "6johan_quick_category_dF9MET",
     "6johan_category_icons_RGywjp",
-    "6johan_quick_nav_F43bz6",
     "6johan_ranking_GfgLC3",
+    "6johan_collection_products_tNktNk",
     "6johan_customer_voice_Fq3Jif",
+    "6johan_collection_products_V3GQVx",
     "6johan_news_FQiVyx"
   ]
 }
