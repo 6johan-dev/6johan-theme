@@ -290,7 +290,7 @@
   /* 横スクロールグリッド */
   .ranking-section__grid {
     display: flex;
-    align-items: flex-start;
+    align-items: stretch;
     gap: 8px;
     overflow-x: auto;
     scrollbar-width: none;
@@ -305,21 +305,38 @@
     display: none;
   }
   
+  /* SP用CSS変数 */
+  .ranking-section__grid--mobile {
+    --pair-width: 28vw;
+    --pair-max: 116px;
+    --gap: 8px;
+    --price-height: 19px; /* 4px padding + 15px line-height */
+  }
+  
   .ranking-section__grid--mobile .ranking-section__info {
     padding: 4px 0 0;
+    height: var(--price-height);
   }
   
-  /* 1位 */
+  .ranking-section__grid--mobile .ranking-section__price {
+    font-size: 11px;
+    line-height: 15px;
+  }
+  
+  /* 1位: ペア2つ分と同じ高さ */
   .ranking-section__item--1 {
     flex: 0 0 auto;
-    display: flex;
-    flex-direction: column;
+    width: calc(var(--pair-width) * 2 + var(--gap));
+    max-width: calc(var(--pair-max) * 2 + var(--gap));
   }
   
+  /* 1位の画像高さ = ペア全体 - 1位の価格部分 */
+  /* ペア全体 = (画像 + 価格) × 2 + gap = (28vw + 19px) × 2 + 8px */
   .ranking-section__item--1 .ranking-section__image-wrap {
-    width: calc(28vw * 2 + 8px);
-    max-width: 240px;
-    flex: 1;
+    aspect-ratio: auto;
+    width: 100%;
+    height: calc((var(--pair-width) + var(--price-height)) * 2 + var(--gap) - var(--price-height));
+    max-height: calc((var(--pair-max) + var(--price-height)) * 2 + var(--gap) - var(--price-height));
   }
   
   .ranking-section__item--1 .ranking-section__rank {
@@ -330,20 +347,16 @@
   
   .ranking-section__item--1 .ranking-section__price {
     font-size: 13px;
+    line-height: 15px;
   }
   
   /* 2位以降のペア */
   .ranking-section__pair {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    flex: 0 0 28vw;
-    max-width: 116px;
-  }
-  
-  .ranking-section__pair .ranking-section__item {
-    display: flex;
-    flex-direction: column;
+    gap: var(--gap);
+    flex: 0 0 var(--pair-width);
+    max-width: var(--pair-max);
   }
   
   .ranking-section__pair .ranking-section__image-wrap {
@@ -361,10 +374,6 @@
   .ranking-section__pair .ranking-section__badges {
     top: 5px;
     right: 5px;
-  }
-  
-  .ranking-section__pair .ranking-section__price {
-    font-size: 11px;
   }
   
   .ranking-section__view-all-link {
