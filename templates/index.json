@@ -55,6 +55,18 @@
             "overlay_light": false
           }
         },
+        "banner_R6XptY": {
+          "type": "banner",
+          "settings": {
+            "hide_overlay": false,
+            "label": "",
+            "title": "特集タイトル",
+            "subtitle": "",
+            "cta_text": "詳しく見る",
+            "url": "",
+            "overlay_light": false
+          }
+        },
         "banner_mykBrA": {
           "type": "banner",
           "settings": {
@@ -82,6 +94,7 @@
       },
       "block_order": [
         "banner_eeFgaB",
+        "banner_R6XptY",
         "banner_mykBrA",
         "banner_9F7qEz"
       ],
