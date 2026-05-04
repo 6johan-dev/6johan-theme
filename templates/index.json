@@ -263,13 +263,22 @@
             "collection": "005",
             "products_to_show": 9
           }
+        },
+        "tab_9VpWUi": {
+          "type": "tab",
+          "settings": {
+            "tab_label": "サイドテーブル",
+            "collection": "003",
+            "products_to_show": 9
+          }
         }
       },
       "block_order": [
         "tab_BFcDpd",
         "tab_qFBrTa",
         "tab_beaKDX",
-        "tab_bk8Aje"
+        "tab_bk8Aje",
+        "tab_9VpWUi"
       ],
       "name": "6JOHAN ランキング",
       "settings": {
