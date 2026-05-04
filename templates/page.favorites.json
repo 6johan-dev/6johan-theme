@@ -1,0 +1,12 @@
+{
+  "sections": {
+    "main": {
+      "type": "6johan-favorites",
+      "settings": {
+        "label": "MY FAVORITES",
+        "heading": "お気に入り"
+      }
+    }
+  },
+  "order": ["main"]
+}
