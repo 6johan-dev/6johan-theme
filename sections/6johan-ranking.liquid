@@ -132,37 +132,11 @@
   display: block;
 }
 
-/* PC: 6列グリッド - 1位大（2列×2行）+ 2-9位（4列×2行） */
+/* Base grid */
 .ranking-section__grid {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  grid-template-rows: auto auto;
   gap: 16px;
 }
-
-/* 1位: 左2列×2行 */
-.ranking-section__item--1 {
-  grid-column: 1 / 3;
-  grid-row: 1 / 3;
-  display: flex;
-  flex-direction: column;
-}
-
-.ranking-section__item--1 .ranking-section__image-wrap {
-  flex: 1;
-  min-height: 0;
-  aspect-ratio: auto;
-}
-
-/* 2-9位の配置: 上段が偶数(2,4,6,8)、下段が奇数(3,5,7,9) */
-.ranking-section__item--2 { grid-column: 3; grid-row: 1; }
-.ranking-section__item--3 { grid-column: 3; grid-row: 2; }
-.ranking-section__item--4 { grid-column: 4; grid-row: 1; }
-.ranking-section__item--5 { grid-column: 4; grid-row: 2; }
-.ranking-section__item--6 { grid-column: 5; grid-row: 1; }
-.ranking-section__item--7 { grid-column: 5; grid-row: 2; }
-.ranking-section__item--8 { grid-column: 6; grid-row: 1; }
-.ranking-section__item--9 { grid-column: 6; grid-row: 2; }
 
 .ranking-section__item {
   position: relative;
@@ -185,12 +159,6 @@
   font-size: 12px;
   font-weight: 700;
   z-index: 3;
-}
-
-.ranking-section__item--1 .ranking-section__rank {
-  width: 44px;
-  height: 44px;
-  font-size: 18px;
 }
 
 .ranking-section__rank--1 {
@@ -242,11 +210,6 @@
   flex-direction: column;
 }
 
-.ranking-section__item--1 .ranking-section__info {
-  padding: 14px 4px 0;
-  flex-shrink: 0;
-}
-
 .ranking-section__name {
   font-size: 12px;
   font-weight: 500;
@@ -257,11 +220,6 @@
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-}
-
-.ranking-section__item--1 .ranking-section__name {
-  font-size: 15px;
-  margin-bottom: 8px;
 }
 
 .ranking-section__name a {
@@ -278,10 +236,6 @@
   font-weight: 600;
   color: var(--6j-text, #292724);
   margin: 0;
-}
-
-.ranking-section__item--1 .ranking-section__price {
-  font-size: 17px;
 }
 
 .ranking-section__view-all {
@@ -316,29 +270,7 @@
   transform: translateX(4px);
 }
 
-/* タブレット: 4列 */
-@media (max-width: 1099px) {
-  .ranking-section__grid {
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: auto auto auto;
-  }
-  
-  .ranking-section__item--1 {
-    grid-column: 1 / 3;
-    grid-row: 1 / 3;
-  }
-  
-  .ranking-section__item--2 { grid-column: 3; grid-row: 1; }
-  .ranking-section__item--3 { grid-column: 4; grid-row: 1; }
-  .ranking-section__item--4 { grid-column: 3; grid-row: 2; }
-  .ranking-section__item--5 { grid-column: 4; grid-row: 2; }
-  .ranking-section__item--6 { grid-column: 1; grid-row: 3; }
-  .ranking-section__item--7 { grid-column: 2; grid-row: 3; }
-  .ranking-section__item--8 { grid-column: 3; grid-row: 3; }
-  .ranking-section__item--9 { grid-column: 4; grid-row: 3; }
-}
-
-/* スマホ: 1位全幅 + 2-9位が2列 */
+/* ===== スマホ: 2列グリッド ===== */
 @media (max-width: 749px) {
   .ranking-section {
     padding: 40px 0;
@@ -374,36 +306,26 @@
   
   .ranking-section__grid {
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: auto;
     gap: 12px;
   }
   
+  /* 1位: 全幅 */
   .ranking-section__item--1 {
     grid-column: 1 / -1;
-    grid-row: auto;
-  }
-  
-  .ranking-section__item--1 .ranking-section__image-wrap {
-    flex: none;
-    aspect-ratio: 1;
-  }
-  
-  .ranking-section__item--2,
-  .ranking-section__item--3,
-  .ranking-section__item--4,
-  .ranking-section__item--5,
-  .ranking-section__item--6,
-  .ranking-section__item--7,
-  .ranking-section__item--8,
-  .ranking-section__item--9 {
-    grid-column: auto;
-    grid-row: auto;
   }
   
   .ranking-section__item--1 .ranking-section__rank {
     width: 40px;
     height: 40px;
     font-size: 18px;
+  }
+  
+  .ranking-section__item--1 .ranking-section__name {
+    font-size: 14px;
+  }
+  
+  .ranking-section__item--1 .ranking-section__price {
+    font-size: 16px;
   }
   
   .ranking-section__rank {
@@ -428,22 +350,112 @@
     margin-bottom: 6px;
   }
   
-  .ranking-section__item--1 .ranking-section__name {
-    font-size: 14px;
-  }
-  
   .ranking-section__price {
     font-size: 14px;
-  }
-  
-  .ranking-section__item--1 .ranking-section__price {
-    font-size: 16px;
   }
   
   .ranking-section__view-all-link {
     padding: 12px 24px;
     font-size: 13px;
   }
+}
+
+/* ===== タブレット: 4列 ===== */
+@media (min-width: 750px) and (max-width: 1099px) {
+  .ranking-section__grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  
+  .ranking-section__item--1 {
+    grid-column: 1 / 3;
+    grid-row: 1 / 3;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .ranking-section__item--1 .ranking-section__image-wrap {
+    flex: 1;
+    min-height: 0;
+    aspect-ratio: auto;
+  }
+  
+  .ranking-section__item--1 .ranking-section__rank {
+    width: 44px;
+    height: 44px;
+    font-size: 18px;
+  }
+  
+  .ranking-section__item--1 .ranking-section__info {
+    padding: 14px 4px 0;
+    flex-shrink: 0;
+  }
+  
+  .ranking-section__item--1 .ranking-section__name {
+    font-size: 15px;
+    margin-bottom: 8px;
+  }
+  
+  .ranking-section__item--1 .ranking-section__price {
+    font-size: 17px;
+  }
+  
+  .ranking-section__item--2 { grid-column: 3; grid-row: 1; }
+  .ranking-section__item--3 { grid-column: 4; grid-row: 1; }
+  .ranking-section__item--4 { grid-column: 3; grid-row: 2; }
+  .ranking-section__item--5 { grid-column: 4; grid-row: 2; }
+  .ranking-section__item--6 { grid-column: 1; grid-row: 3; }
+  .ranking-section__item--7 { grid-column: 2; grid-row: 3; }
+  .ranking-section__item--8 { grid-column: 3; grid-row: 3; }
+  .ranking-section__item--9 { grid-column: 4; grid-row: 3; }
+}
+
+/* ===== PC: 6列グリッド ===== */
+@media (min-width: 1100px) {
+  .ranking-section__grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+  
+  .ranking-section__item--1 {
+    grid-column: 1 / 3;
+    grid-row: 1 / 3;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .ranking-section__item--1 .ranking-section__image-wrap {
+    flex: 1;
+    min-height: 0;
+    aspect-ratio: auto;
+  }
+  
+  .ranking-section__item--1 .ranking-section__rank {
+    width: 44px;
+    height: 44px;
+    font-size: 18px;
+  }
+  
+  .ranking-section__item--1 .ranking-section__info {
+    padding: 14px 4px 0;
+    flex-shrink: 0;
+  }
+  
+  .ranking-section__item--1 .ranking-section__name {
+    font-size: 15px;
+    margin-bottom: 8px;
+  }
+  
+  .ranking-section__item--1 .ranking-section__price {
+    font-size: 17px;
+  }
+  
+  .ranking-section__item--2 { grid-column: 3; grid-row: 1; }
+  .ranking-section__item--3 { grid-column: 3; grid-row: 2; }
+  .ranking-section__item--4 { grid-column: 4; grid-row: 1; }
+  .ranking-section__item--5 { grid-column: 4; grid-row: 2; }
+  .ranking-section__item--6 { grid-column: 5; grid-row: 1; }
+  .ranking-section__item--7 { grid-column: 5; grid-row: 2; }
+  .ranking-section__item--8 { grid-column: 6; grid-row: 1; }
+  .ranking-section__item--9 { grid-column: 6; grid-row: 2; }
 }
 {%- endstyle -%}
 
@@ -534,7 +546,6 @@
         </div>
       {% endfor %}
       
-      {% comment %} View All Button - 選択中のタブのコレクションへリンク {% endcomment %}
       {% assign first_collection = collections[section.blocks.first.settings.collection] %}
       <div class="ranking-section__view-all">
         <a href="{{ first_collection.url }}" class="ranking-section__view-all-link" id="ranking-view-all">
@@ -573,14 +584,12 @@ document.addEventListener('DOMContentLoaded', function() {
         }
       });
       
-      // Update View All link
       if (viewAllLink && collectionUrl) {
         viewAllLink.href = collectionUrl;
       }
     });
   });
   
-  // Tab scroll arrows
   const tabsWrap = document.querySelector('.ranking-section__tabs-wrap');
   if (tabsWrap) {
     const scrollContainer = tabsWrap.querySelector('.ranking-section__tabs-scroll');
