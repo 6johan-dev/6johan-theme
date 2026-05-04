@@ -1351,3 +1351,14 @@ body.sticky-cart-active .shopify-chat {
   bottom: 72px !important;
   transition: bottom 0.3s ease;
 }
+
+/* Channel Talk - push above sticky cart bar */
+body.sticky-cart-active #ch-plugin {
+  transform: translateY(-68px) !important;
+  transition: transform 0.3s ease !important;
+}
+
+body.sticky-cart-active #ch-plugin-entry {
+  transform: translateY(-68px) !important;
+  transition: transform 0.3s ease !important;
+}
