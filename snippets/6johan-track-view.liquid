@@ -1,0 +1,56 @@
+{% comment %}
+  6JOHAN Track Product View - Save to recently viewed
+  使用方法: 商品ページのテンプレートに {% render '6johan-track-view', product: product %} を追加
+{% endcomment %}
+
+<script>
+(function() {
+  const STORAGE_KEY = '6johan_recently_viewed';
+  const MAX_ITEMS = 20;
+  
+  // Product data from Liquid
+  const product = {
+    handle: '{{ product.handle }}',
+    title: '{{ product.title | escape }}',
+    url: '{{ product.url }}',
+    image: '{{ product.featured_image | image_url: width: 400 }}',
+    price: '{{ product.price | money }}',
+    viewedAt: Date.now()
+  };
+  
+  // Get existing items
+  function getRecentlyViewed() {
+    try {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    } catch (e) {
+      return [];
+    }
+  }
+  
+  // Save to localStorage
+  function saveRecentlyViewed(items) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+  }
+  
+  // Add current product to recently viewed
+  function trackView() {
+    let items = getRecentlyViewed();
+    
+    // Remove if already exists (to move to front)
+    items = items.filter(item => item.handle !== product.handle);
+    
+    // Add to beginning
+    items.unshift(product);
+    
+    // Limit to max items
+    if (items.length > MAX_ITEMS) {
+      items = items.slice(0, MAX_ITEMS);
+    }
+    
+    saveRecentlyViewed(items);
+  }
+  
+  // Track this view
+  trackView();
+})();
+</script>

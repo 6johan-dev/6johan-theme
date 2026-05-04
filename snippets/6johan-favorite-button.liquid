@@ -1,0 +1,165 @@
+{% comment %}
+  6JOHAN Favorite Button - Add to wishlist
+  使用方法: {% render '6johan-favorite-button', product: product %}
+{% endcomment %}
+
+<style>
+.favorite-btn {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  background: #fff;
+  border: 1px solid #E8E5E0;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.favorite-btn:hover {
+  border-color: #C4956A;
+}
+
+.favorite-btn.is-active {
+  background: #FEF3E8;
+  border-color: #C4956A;
+}
+
+.favorite-btn__icon {
+  width: 22px;
+  height: 22px;
+  stroke: #807C76;
+  fill: none;
+  transition: all 0.2s;
+}
+
+.favorite-btn.is-active .favorite-btn__icon {
+  stroke: #C4956A;
+  fill: #C4956A;
+}
+
+.favorite-btn:hover .favorite-btn__icon {
+  stroke: #C4956A;
+}
+
+/* Toast notification */
+.favorite-toast {
+  position: fixed;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: #292724;
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  z-index: 9999;
+  opacity: 0;
+  transition: all 0.3s;
+  pointer-events: none;
+}
+
+.favorite-toast.is-visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+</style>
+
+<button 
+  class="favorite-btn" 
+  id="favorite-btn-{{ product.id }}"
+  data-handle="{{ product.handle }}"
+  data-title="{{ product.title | escape }}"
+  data-url="{{ product.url }}"
+  data-image="{{ product.featured_image | image_url: width: 400 }}"
+  data-price="{{ product.price | money }}"
+  aria-label="お気に入りに追加"
+>
+  <svg class="favorite-btn__icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" stroke-width="1.5">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/>
+  </svg>
+</button>
+
+<div class="favorite-toast" id="favorite-toast">お気に入りに追加しました</div>
+
+<script>
+(function() {
+  const STORAGE_KEY = '6johan_favorites';
+  const btn = document.getElementById('favorite-btn-{{ product.id }}');
+  const toast = document.getElementById('favorite-toast');
+  
+  if (!btn) return;
+  
+  // Get favorites
+  function getFavorites() {
+    try {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    } catch (e) {
+      return [];
+    }
+  }
+  
+  // Save favorites
+  function saveFavorites(favorites) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(favorites));
+    updateHeaderCount();
+  }
+  
+  // Check if product is in favorites
+  function isInFavorites(handle) {
+    return getFavorites().some(f => f.handle === handle);
+  }
+  
+  // Update header count
+  function updateHeaderCount() {
+    const count = getFavorites().length;
+    const badge = document.querySelector('.header__favorites-count');
+    if (badge) {
+      badge.textContent = count;
+      badge.style.display = count > 0 ? 'flex' : 'none';
+    }
+  }
+  
+  // Show toast
+  function showToast(message) {
+    toast.textContent = message;
+    toast.classList.add('is-visible');
+    setTimeout(() => toast.classList.remove('is-visible'), 2000);
+  }
+  
+  // Toggle favorite
+  function toggleFavorite() {
+    const handle = btn.dataset.handle;
+    let favorites = getFavorites();
+    
+    if (isInFavorites(handle)) {
+      favorites = favorites.filter(f => f.handle !== handle);
+      btn.classList.remove('is-active');
+      showToast('お気に入りから削除しました');
+    } else {
+      favorites.push({
+        handle: handle,
+        title: btn.dataset.title,
+        url: btn.dataset.url,
+        image: btn.dataset.image,
+        price: btn.dataset.price,
+        addedAt: Date.now()
+      });
+      btn.classList.add('is-active');
+      showToast('お気に入りに追加しました');
+    }
+    
+    saveFavorites(favorites);
+  }
+  
+  // Initialize
+  if (isInFavorites(btn.dataset.handle)) {
+    btn.classList.add('is-active');
+  }
+  
+  btn.addEventListener('click', toggleFavorite);
+  updateHeaderCount();
+})();
+</script>

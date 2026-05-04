@@ -1,0 +1,274 @@
+{% comment %}
+  6JOHAN Recently Viewed - LocalStorage Based
+  商品ページで自動的に閲覧履歴を保存し、このセクションで表示
+{% endcomment %}
+
+{%- style -%}
+.recently-viewed {
+  padding: 60px 0;
+  background: var(--6j-bg, #FFFFFF);
+}
+
+.recently-viewed--alt-bg {
+  background: #FAF9F7;
+}
+
+.recently-viewed__container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.recently-viewed__header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.recently-viewed__label {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #8A7A6A;
+  margin-bottom: 8px;
+}
+
+.recently-viewed__title {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  font-weight: 500;
+  color: #292724;
+  margin: 0;
+}
+
+/* Grid */
+.recently-viewed__grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 16px;
+}
+
+/* Item */
+.recently-viewed__item {
+  position: relative;
+}
+
+.recently-viewed__image-wrap {
+  position: relative;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 6px;
+  background: #FAF9F7;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.recently-viewed__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+
+.recently-viewed__item:hover .recently-viewed__image {
+  transform: scale(1.03);
+}
+
+/* Info */
+.recently-viewed__info {
+  padding: 0;
+}
+
+.recently-viewed__name {
+  font-size: 12px;
+  font-weight: 500;
+  color: #292724;
+  margin: 0 0 4px;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.recently-viewed__name a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.recently-viewed__price {
+  font-size: 13px;
+  font-weight: 600;
+  color: #292724;
+  margin: 0;
+}
+
+/* Hidden state */
+.recently-viewed--hidden {
+  display: none;
+}
+
+/* ========== Responsive ========== */
+@media (max-width: 1099px) {
+  .recently-viewed__grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 749px) {
+  .recently-viewed {
+    padding: 40px 0;
+  }
+  
+  .recently-viewed__container {
+    padding: 0;
+  }
+  
+  .recently-viewed__header {
+    padding: 0 16px;
+    margin-bottom: 20px;
+  }
+  
+  .recently-viewed__title {
+    font-size: 20px;
+  }
+  
+  /* 横スクロール */
+  .recently-viewed__grid {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    padding: 0 16px 8px;
+  }
+  
+  .recently-viewed__grid::-webkit-scrollbar { display: none; }
+  
+  .recently-viewed__item {
+    flex: 0 0 28vw;
+    max-width: 120px;
+  }
+  
+  .recently-viewed__name {
+    font-size: 10px;
+  }
+  
+  .recently-viewed__price {
+    font-size: 11px;
+  }
+}
+{%- endstyle -%}
+
+<section class="recently-viewed recently-viewed--hidden{% if section.settings.alt_background %} recently-viewed--alt-bg{% endif %}" id="recently-viewed-section">
+  <div class="recently-viewed__container">
+    <header class="recently-viewed__header">
+      <span class="recently-viewed__label">{{ section.settings.label }}</span>
+      <h2 class="recently-viewed__title">{{ section.settings.heading }}</h2>
+    </header>
+    
+    <div class="recently-viewed__grid" id="recently-viewed-grid"></div>
+  </div>
+</section>
+
+<script>
+(function() {
+  const STORAGE_KEY = '6johan_recently_viewed';
+  const MAX_ITEMS = {{ section.settings.max_products }};
+  
+  const section = document.getElementById('recently-viewed-section');
+  const grid = document.getElementById('recently-viewed-grid');
+  
+  if (!section || !grid) return;
+  
+  // Get recently viewed from localStorage
+  function getRecentlyViewed() {
+    try {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    } catch (e) {
+      return [];
+    }
+  }
+  
+  // Render recently viewed
+  function renderRecentlyViewed() {
+    const items = getRecentlyViewed();
+    
+    // Don't show section if empty or only 1 item (current product)
+    if (items.length < 2) {
+      section.classList.add('recently-viewed--hidden');
+      return;
+    }
+    
+    // Show section
+    section.classList.remove('recently-viewed--hidden');
+    
+    // Filter out current product and limit
+    const currentHandle = window.location.pathname.split('/products/')[1];
+    const filteredItems = items
+      .filter(item => item.handle !== currentHandle)
+      .slice(0, MAX_ITEMS);
+    
+    if (filteredItems.length === 0) {
+      section.classList.add('recently-viewed--hidden');
+      return;
+    }
+    
+    grid.innerHTML = filteredItems.map(item => `
+      <article class="recently-viewed__item">
+        <a href="${item.url}" class="recently-viewed__image-wrap">
+          <img src="${item.image}" alt="${item.title}" class="recently-viewed__image" loading="lazy">
+        </a>
+        <div class="recently-viewed__info">
+          <h3 class="recently-viewed__name"><a href="${item.url}">${item.title}</a></h3>
+          <p class="recently-viewed__price">${item.price}</p>
+        </div>
+      </article>
+    `).join('');
+  }
+  
+  // Initialize
+  renderRecentlyViewed();
+})();
+</script>
+
+{% schema %}
+{
+  "name": "6JOHAN 最近見た商品",
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "ラベル",
+      "default": "RECENTLY VIEWED"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "見出し",
+      "default": "最近チェックした商品"
+    },
+    {
+      "type": "range",
+      "id": "max_products",
+      "label": "最大表示数",
+      "min": 4,
+      "max": 12,
+      "step": 1,
+      "default": 6
+    },
+    {
+      "type": "checkbox",
+      "id": "alt_background",
+      "label": "背景色を変える",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "6JOHAN 最近見た商品"
+    }
+  ]
+}
+{% endschema %}

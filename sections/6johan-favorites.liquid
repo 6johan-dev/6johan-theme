@@ -1,0 +1,353 @@
+{% comment %}
+  6JOHAN Favorites - LocalStorage Based Wishlist
+  使用方法:
+  1. このセクションをトップページや専用ページに配置
+  2. 商品ページに6johan-favorite-button.liquidスニペットを追加
+  3. theme.liquidにJS読み込みを追加
+{% endcomment %}
+
+{%- style -%}
+.favorites-section {
+  padding: 60px 0;
+  background: var(--6j-bg, #FFFFFF);
+}
+
+.favorites-section__container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.favorites-section__header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.favorites-section__label {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #8A7A6A;
+  margin-bottom: 8px;
+}
+
+.favorites-section__title {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  font-weight: 500;
+  color: #292724;
+  margin: 0;
+}
+
+/* Empty State */
+.favorites-section__empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: #807C76;
+}
+
+.favorites-section__empty-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 16px;
+  stroke: #E8E5E0;
+}
+
+.favorites-section__empty-text {
+  font-size: 15px;
+  margin: 0 0 24px;
+}
+
+.favorites-section__empty-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: #292724;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+.favorites-section__empty-link:hover {
+  background: #3d3a36;
+}
+
+/* Grid */
+.favorites-section__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+/* Item */
+.favorites-section__item {
+  position: relative;
+}
+
+.favorites-section__image-wrap {
+  position: relative;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 6px;
+  background: #FAF9F7;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.favorites-section__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+
+.favorites-section__item:hover .favorites-section__image {
+  transform: scale(1.03);
+}
+
+/* Remove Button */
+.favorites-section__remove {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  z-index: 2;
+}
+
+.favorites-section__remove:hover {
+  background: #fff;
+  transform: scale(1.1);
+}
+
+.favorites-section__remove svg {
+  width: 16px;
+  height: 16px;
+  stroke: #292724;
+}
+
+/* Info */
+.favorites-section__info {
+  padding: 0 4px;
+}
+
+.favorites-section__name {
+  font-size: 14px;
+  font-weight: 500;
+  color: #292724;
+  margin: 0 0 6px;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.favorites-section__name a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.favorites-section__price {
+  font-size: 15px;
+  font-weight: 600;
+  color: #292724;
+  margin: 0;
+}
+
+/* Loading */
+.favorites-section__loading {
+  text-align: center;
+  padding: 40px;
+  color: #807C76;
+}
+
+/* ========== Responsive ========== */
+@media (max-width: 1099px) {
+  .favorites-section__grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+}
+
+@media (max-width: 749px) {
+  .favorites-section {
+    padding: 40px 0;
+  }
+  
+  .favorites-section__container {
+    padding: 0 16px;
+  }
+  
+  .favorites-section__title {
+    font-size: 22px;
+  }
+  
+  .favorites-section__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  
+  .favorites-section__name {
+    font-size: 12px;
+  }
+  
+  .favorites-section__price {
+    font-size: 13px;
+  }
+}
+{%- endstyle -%}
+
+<section class="favorites-section" id="favorites-section">
+  <div class="favorites-section__container">
+    <header class="favorites-section__header">
+      <span class="favorites-section__label">{{ section.settings.label }}</span>
+      <h2 class="favorites-section__title">{{ section.settings.heading }}</h2>
+    </header>
+    
+    <div class="favorites-section__loading" id="favorites-loading">
+      読み込み中...
+    </div>
+    
+    <div class="favorites-section__empty" id="favorites-empty" style="display: none;">
+      <svg class="favorites-section__empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/>
+      </svg>
+      <p class="favorites-section__empty-text">{{ section.settings.empty_text }}</p>
+      <a href="/collections/all" class="favorites-section__empty-link">
+        商品を探す
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
+        </svg>
+      </a>
+    </div>
+    
+    <div class="favorites-section__grid" id="favorites-grid" style="display: none;"></div>
+  </div>
+</section>
+
+<script>
+(function() {
+  const STORAGE_KEY = '6johan_favorites';
+  
+  // DOM Elements
+  const grid = document.getElementById('favorites-grid');
+  const loading = document.getElementById('favorites-loading');
+  const empty = document.getElementById('favorites-empty');
+  
+  // Get favorites from localStorage
+  function getFavorites() {
+    try {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    } catch (e) {
+      return [];
+    }
+  }
+  
+  // Save favorites to localStorage
+  function saveFavorites(favorites) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(favorites));
+    updateHeaderCount();
+  }
+  
+  // Remove from favorites
+  function removeFromFavorites(handle) {
+    const favorites = getFavorites().filter(f => f.handle !== handle);
+    saveFavorites(favorites);
+    renderFavorites();
+  }
+  
+  // Update header heart icon count
+  function updateHeaderCount() {
+    const count = getFavorites().length;
+    const badge = document.querySelector('.header__favorites-count');
+    if (badge) {
+      badge.textContent = count;
+      badge.style.display = count > 0 ? 'flex' : 'none';
+    }
+  }
+  
+  // Render favorites grid
+  function renderFavorites() {
+    const favorites = getFavorites();
+    loading.style.display = 'none';
+    
+    if (favorites.length === 0) {
+      empty.style.display = 'block';
+      grid.style.display = 'none';
+      return;
+    }
+    
+    empty.style.display = 'none';
+    grid.style.display = 'grid';
+    
+    grid.innerHTML = favorites.map(item => `
+      <article class="favorites-section__item">
+        <a href="${item.url}" class="favorites-section__image-wrap">
+          <img src="${item.image}" alt="${item.title}" class="favorites-section__image" loading="lazy">
+        </a>
+        <button class="favorites-section__remove" onclick="window.removeFromFavorites('${item.handle}')" aria-label="お気に入りから削除">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+        <div class="favorites-section__info">
+          <h3 class="favorites-section__name"><a href="${item.url}">${item.title}</a></h3>
+          <p class="favorites-section__price">${item.price}</p>
+        </div>
+      </article>
+    `).join('');
+  }
+  
+  // Expose remove function globally
+  window.removeFromFavorites = removeFromFavorites;
+  
+  // Initialize
+  renderFavorites();
+})();
+</script>
+
+{% schema %}
+{
+  "name": "6JOHAN お気に入り一覧",
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "ラベル",
+      "default": "FAVORITES"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "見出し",
+      "default": "お気に入り"
+    },
+    {
+      "type": "text",
+      "id": "empty_text",
+      "label": "空の時のテキスト",
+      "default": "お気に入りに登録された商品はありません"
+    }
+  ],
+  "presets": [
+    {
+      "name": "6JOHAN お気に入り一覧"
+    }
+  ]
+}
+{% endschema %}
