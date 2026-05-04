@@ -1304,3 +1304,43 @@ h3.card__heading {
   width: 16px;
   height: 16px;
 }
+
+/* ============================================
+   Menu Drawer z-index Fix v2
+   ============================================ */
+
+/* Parent stacking context must be above everything */
+header-drawer {
+  position: relative;
+  z-index: 9999 !important;
+}
+
+.menu-drawer-container summary::before {
+  z-index: 9998 !important;
+}
+
+.menu-drawer {
+  z-index: 9999 !important;
+}
+
+/* Fix gap between search and nav */
+.menu-drawer__navigation-container {
+  padding-top: 0 !important;
+}
+
+.menu-drawer__navigation {
+  display: none;
+}
+
+.menu-drawer__utility-links {
+  display: none;
+}
+
+/* Remove extra spacing from Dawn defaults */
+.menu-drawer__inner-container {
+  padding-top: 0;
+}
+
+.drawer-search + .drawer-section {
+  margin-top: 0;
+}
