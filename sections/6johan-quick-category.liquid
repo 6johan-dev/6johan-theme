@@ -1,0 +1,256 @@
+{% comment %}
+  6JOHAN Quick Category Nav
+  大カテゴリナビ（LOWYA風）
+  新商品/ランキング/セール/レコメンド/ブログ など横スクロール
+{% endcomment %}
+
+<style>
+.sixj-quick-category {
+  background: var(--6j-bg, #fff);
+  padding: 20px 0;
+  border-bottom: 1px solid var(--6j-border, #E8E5E0);
+}
+
+.sixj-quick-category__scroll {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding: 0 16px;
+}
+
+.sixj-quick-category__scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.sixj-quick-category__item {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: var(--6j-bg-sub, #FAF9F7);
+  border: 1px solid var(--6j-border, #E8E5E0);
+  transition: all 0.2s;
+  min-width: 80px;
+}
+
+.sixj-quick-category__item:hover {
+  border-color: var(--6j-text, #292724);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.sixj-quick-category__icon {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--6j-bg, #fff);
+  position: relative;
+}
+
+.sixj-quick-category__icon svg {
+  width: 22px;
+  height: 22px;
+  color: var(--6j-text, #292724);
+}
+
+.sixj-quick-category__badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  padding: 2px 5px;
+  font-size: 8px;
+  font-weight: 700;
+  border-radius: 3px;
+  text-transform: uppercase;
+}
+
+.sixj-quick-category__badge--new {
+  background: #C4956A;
+  color: #fff;
+}
+
+.sixj-quick-category__badge--hot {
+  background: #D4504A;
+  color: #fff;
+}
+
+.sixj-quick-category__badge--sale {
+  background: #5E7A5E;
+  color: #fff;
+}
+
+.sixj-quick-category__label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--6j-text, #292724);
+  text-align: center;
+  white-space: nowrap;
+}
+
+@media (min-width: 750px) {
+  .sixj-quick-category {
+    padding: 24px 0;
+  }
+  
+  .sixj-quick-category__scroll {
+    justify-content: center;
+    gap: 12px;
+    padding: 0 24px;
+  }
+  
+  .sixj-quick-category__item {
+    padding: 16px 24px;
+    min-width: 100px;
+  }
+  
+  .sixj-quick-category__icon {
+    width: 44px;
+    height: 44px;
+  }
+  
+  .sixj-quick-category__icon svg {
+    width: 26px;
+    height: 26px;
+  }
+  
+  .sixj-quick-category__label {
+    font-size: 12px;
+  }
+}
+</style>
+
+<div class="sixj-quick-category">
+  <div class="sixj-quick-category__scroll">
+    {%- for block in section.blocks -%}
+      <a href="{{ block.settings.link }}" class="sixj-quick-category__item" {{ block.shopify_attributes }}>
+        <div class="sixj-quick-category__icon">
+          {%- case block.settings.icon -%}
+            {%- when 'new' -%}
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
+              </svg>
+            {%- when 'ranking' -%}
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 18.75h-9m9 0a3 3 0 013 3h-15a3 3 0 013-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 01-.982-3.172M9.497 14.25a7.454 7.454 0 00.981-3.172M5.25 4.236c-.982.143-1.954.317-2.916.52A6.003 6.003 0 007.73 9.728M5.25 4.236V4.5c0 2.108.966 3.99 2.48 5.228M5.25 4.236V2.721C7.456 2.41 9.71 2.25 12 2.25c2.291 0 4.545.16 6.75.47v1.516M7.73 9.728a6.726 6.726 0 002.748 1.35m8.272-6.842V4.5c0 2.108-.966 3.99-2.48 5.228m2.48-5.492a46.32 46.32 0 012.916.52 6.003 6.003 0 01-5.395 4.972m0 0a6.726 6.726 0 01-2.749 1.35m0 0a6.772 6.772 0 01-3.044 0" />
+              </svg>
+            {%- when 'sale' -%}
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6z" />
+              </svg>
+            {%- when 'recommend' -%}
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6.633 10.5c.806 0 1.533-.446 2.031-1.08a9.041 9.041 0 012.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 00.322-1.672V3a.75.75 0 01.75-.75A2.25 2.25 0 0116.5 4.5c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 01-2.649 7.521c-.388.482-.987.729-1.605.729H13.48c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 00-1.423-.23H5.904M14.25 9h2.25M5.904 18.75c.083.205.173.405.27.602.197.4-.078.898-.523.898h-.908c-.889 0-1.713-.518-1.972-1.368a12 12 0 01-.521-3.507c0-1.553.295-3.036.831-4.398C3.387 10.203 4.167 9.75 5 9.75h1.053c.472 0 .745.556.5.96a8.958 8.958 0 00-1.302 4.665c0 1.194.232 2.333.654 3.375z" />
+              </svg>
+            {%- when 'blog' -%}
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
+              </svg>
+            {%- when 'category' -%}
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
+              </svg>
+            {%- when 'gift' -%}
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 11.25v8.25a1.5 1.5 0 01-1.5 1.5H5.25a1.5 1.5 0 01-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 109.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1114.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
+              </svg>
+            {%- else -%}
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 21v-7.5a.75.75 0 01.75-.75h3a.75.75 0 01.75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349m-16.5 11.65V9.35m0 0a3.001 3.001 0 003.75-.615A2.993 2.993 0 009.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 002.25 1.016c.896 0 1.7-.393 2.25-1.016a3.001 3.001 0 003.75.614m-16.5 0a3.004 3.004 0 01-.621-4.72L4.318 3.44A1.5 1.5 0 015.378 3h13.243a1.5 1.5 0 011.06.44l1.19 1.189a3 3 0 01-.621 4.72m-13.5 8.65h3.75a.75.75 0 00.75-.75V13.5a.75.75 0 00-.75-.75H6.75a.75.75 0 00-.75.75v3.75c0 .415.336.75.75.75z" />
+              </svg>
+          {%- endcase -%}
+          
+          {%- if block.settings.badge != 'none' -%}
+            <span class="sixj-quick-category__badge sixj-quick-category__badge--{{ block.settings.badge }}">
+              {%- case block.settings.badge -%}
+                {%- when 'new' -%}NEW
+                {%- when 'hot' -%}HOT
+                {%- when 'sale' -%}SALE
+              {%- endcase -%}
+            </span>
+          {%- endif -%}
+        </div>
+        <span class="sixj-quick-category__label">{{ block.settings.label }}</span>
+      </a>
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "6JOHAN クイックカテゴリ",
+  "tag": "section",
+  "class": "sixj-quick-category-section",
+  "max_blocks": 8,
+  "settings": [],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "カテゴリ",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "アイコン",
+          "options": [
+            { "value": "category", "label": "カテゴリ" },
+            { "value": "new", "label": "新商品" },
+            { "value": "ranking", "label": "ランキング" },
+            { "value": "sale", "label": "セール" },
+            { "value": "recommend", "label": "おすすめ" },
+            { "value": "blog", "label": "ブログ/マガジン" },
+            { "value": "gift", "label": "ギフト" }
+          ],
+          "default": "category"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "ラベル",
+          "default": "カテゴリ"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "リンク先"
+        },
+        {
+          "type": "select",
+          "id": "badge",
+          "label": "バッジ",
+          "options": [
+            { "value": "none", "label": "なし" },
+            { "value": "new", "label": "NEW" },
+            { "value": "hot", "label": "HOT" },
+            { "value": "sale", "label": "SALE" }
+          ],
+          "default": "none"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "6JOHAN クイックカテゴリ",
+      "blocks": [
+        { "type": "category", "settings": { "icon": "new", "label": "新商品", "badge": "new" } },
+        { "type": "category", "settings": { "icon": "ranking", "label": "ランキング", "badge": "hot" } },
+        { "type": "category", "settings": { "icon": "sale", "label": "セール", "badge": "sale" } },
+        { "type": "category", "settings": { "icon": "recommend", "label": "おすすめ" } },
+        { "type": "category", "settings": { "icon": "blog", "label": "マガジン" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
