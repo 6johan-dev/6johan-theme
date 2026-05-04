@@ -127,9 +127,8 @@
   
   if is_in_stock
     assign today = 'now' | date: '%s'
-    assign delivery_start = today | plus: 259200 | date: '%m月%d日'
-    assign delivery_end = today | plus: 432000 | date: '%m月%d日'
-    assign shipping_text = '在庫あり — 7日以内に発送'
+    assign delivery_date = today | plus: 604800 | date: '%m月%d日'
+    assign shipping_text = '在庫あり — ' | append: delivery_date | append: 'までに発送'
   endif
   
   # 組み立て判定
