@@ -42,6 +42,7 @@
     },
     "6johan_newsletter_bar_7T6WdJ": {
       "type": "6johan-newsletter-bar",
+      "disabled": true,
       "name": "6JOHAN メルマガ登録バー",
       "settings": {
         "badge_text": "初回10%OFF",
@@ -55,10 +56,14 @@
       "type": "6johan-hero",
       "name": "6JOHAN ヒーロー",
       "settings": {
+        "image_pc": "shopify://shop_images/GW_hero_pc.jpg",
+        "image_sp": "shopify://shop_images/GW_hero_sp.jpg",
+        "show_overlay": false,
         "image_alt": "6JOHANの家具がある暮らし",
-        "label": "Nordic × Japanese",
-        "heading": "暮らしに馴染む、\n上質な家具を。",
-        "cta_text": "コレクションを見る →",
+        "label": "GW SALE",
+        "heading": "最大30%OFF",
+        "subheading": "5/10(日)まで",
+        "cta_text": "セール商品を見る →",
         "cta_url": "/collections/all"
       }
     },
