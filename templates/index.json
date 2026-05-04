@@ -291,7 +291,7 @@
           "settings": {
             "tab_label": "すべて",
             "collection": "pick-up",
-            "products_to_show": 5
+            "products_to_show": 9
           }
         },
         "tab_qFBrTa": {
@@ -299,7 +299,7 @@
           "settings": {
             "tab_label": "チェア",
             "collection": "001",
-            "products_to_show": 5
+            "products_to_show": 9
           }
         },
         "tab_beaKDX": {
@@ -307,7 +307,7 @@
           "settings": {
             "tab_label": "テーブル",
             "collection": "002",
-            "products_to_show": 5
+            "products_to_show": 9
           }
         },
         "tab_bk8Aje": {
@@ -315,7 +315,7 @@
           "settings": {
             "tab_label": "収納",
             "collection": "005",
-            "products_to_show": 5
+            "products_to_show": 9
           }
         }
       },
