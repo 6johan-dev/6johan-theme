@@ -331,6 +331,7 @@
         "review_ATxBJ7": {
           "type": "review",
           "settings": {
+            "image": "shopify://shop_images/6.png",
             "room_type": "ワークスペース",
             "rating": 5,
             "quote": "在宅ワーク用に購入しましたが、座り心地が良く、長時間作業しても疲れません。デザインも部屋に馴染んで満足です。",
@@ -377,6 +378,53 @@
         "show_view_all": true,
         "view_all_text": "すべて見る",
         "alt_background": false
+      }
+    },
+    "6johan_pickup_banners_qhfPDf": {
+      "type": "6johan-pickup-banners",
+      "blocks": {
+        "banner_DCynCe": {
+          "type": "banner",
+          "settings": {
+            "title": "北欧スタイルの作り方",
+            "url": ""
+          }
+        },
+        "banner_Y7Hctt": {
+          "type": "banner",
+          "settings": {
+            "title": "一人暮らし応援セット",
+            "url": ""
+          }
+        },
+        "banner_BxPKCp": {
+          "type": "banner",
+          "settings": {
+            "title": "新生活ガイド",
+            "url": ""
+          }
+        },
+        "banner_y7FyMJ": {
+          "type": "banner",
+          "settings": {
+            "title": "5万円以下の人気アイテム",
+            "url": ""
+          }
+        }
+      },
+      "block_order": [
+        "banner_DCynCe",
+        "banner_Y7Hctt",
+        "banner_BxPKCp",
+        "banner_y7FyMJ"
+      ],
+      "name": "6JOHAN ピックアップ特集",
+      "settings": {
+        "label": "FEATURE",
+        "heading": "ピックアップ特集",
+        "show_view_all": true,
+        "view_all_text": "特集をもっと見る",
+        "view_all_url": ""
       }
     },
     "6johan_news_FQiVyx": {
@@ -451,53 +499,6 @@
       ],
       "settings": {
         "include_margins": true
-      }
-    },
-    "6johan_pickup_banners_qhfPDf": {
-      "type": "6johan-pickup-banners",
-      "blocks": {
-        "banner_DCynCe": {
-          "type": "banner",
-          "settings": {
-            "title": "北欧スタイルの作り方",
-            "url": ""
-          }
-        },
-        "banner_Y7Hctt": {
-          "type": "banner",
-          "settings": {
-            "title": "一人暮らし応援セット",
-            "url": ""
-          }
-        },
-        "banner_BxPKCp": {
-          "type": "banner",
-          "settings": {
-            "title": "新生活ガイド",
-            "url": ""
-          }
-        },
-        "banner_y7FyMJ": {
-          "type": "banner",
-          "settings": {
-            "title": "5万円以下の人気アイテム",
-            "url": ""
-          }
-        }
-      },
-      "block_order": [
-        "banner_DCynCe",
-        "banner_Y7Hctt",
-        "banner_BxPKCp",
-        "banner_y7FyMJ"
-      ],
-      "name": "6JOHAN ピックアップ特集",
-      "settings": {
-        "label": "FEATURE",
-        "heading": "ピックアップ特集",
-        "show_view_all": true,
-        "view_all_text": "特集をもっと見る",
-        "view_all_url": ""
       }
     }
   },
