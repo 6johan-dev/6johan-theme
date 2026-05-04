@@ -46,7 +46,7 @@
         "banner_eeFgaB": {
           "type": "banner",
           "settings": {
-            "hide_overlay": false,
+            "hide_overlay": true,
             "label": "SPRING COLLECTION",
             "title": "春の新作コレクション",
             "subtitle": "暮らしに彩りを添える新作家具",
