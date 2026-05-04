@@ -1,70 +1,66 @@
 {% comment %}
   6JOHAN Feature Banners
-  特集バナースライダー
+  特集バナーカルーセル（USAGI風フルワイドスライダー）
 {% endcomment %}
 
 {%- style -%}
 .feature-banners {
-  padding: 0;
-  background-color: var(--6j-linen, #FAFAF7);
-}
-
-.feature-banners__container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 40px 20px;
-}
-
-.feature-banners__grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-}
-
-.feature-banners__grid--2 {
-  grid-template-columns: repeat(2, 1fr);
-}
-
-.feature-banners__grid--1 {
-  grid-template-columns: 1fr;
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.feature-banners__item {
   position: relative;
+  width: 100%;
   overflow: hidden;
-  border-radius: 8px;
-  aspect-ratio: 16/9;
-  background-color: var(--6j-parchment, #F5F4F0);
+  background: var(--6j-bg, #fff);
 }
 
-.feature-banners__item--large {
-  grid-column: span 2;
-  aspect-ratio: 2/1;
+.feature-banners__track {
+  display: flex;
+  transition: transform 0.4s ease;
+}
+
+.feature-banners__slide {
+  flex: 0 0 100%;
+  min-width: 0;
 }
 
 .feature-banners__link {
   display: block;
+  position: relative;
+  text-decoration: none;
+}
+
+.feature-banners__image-wrap {
+  position: relative;
   width: 100%;
-  height: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+}
+
+@media (min-width: 750px) {
+  .feature-banners__image-wrap {
+    aspect-ratio: 2.5 / 1;
+  }
 }
 
 .feature-banners__image {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.4s ease;
 }
 
-.feature-banners__item:hover .feature-banners__image {
-  transform: scale(1.03);
+.feature-banners__placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #E8E0D6 0%, #D4CFC6 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--6j-text-sub, #807C76);
+  font-size: 14px;
 }
 
 .feature-banners__overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.5) 100%);
+  background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.6) 100%);
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -75,19 +71,23 @@
   background: linear-gradient(180deg, transparent 40%, rgba(255,255,255,0.9) 100%);
 }
 
+.feature-banners__overlay--none {
+  display: none;
+}
+
 .feature-banners__label {
   display: inline-block;
   font-size: 10px;
   font-weight: 600;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: var(--6j-amber, #C4956A);
+  color: var(--6j-accent, #C4956A);
   margin-bottom: 8px;
 }
 
 .feature-banners__title {
   font-family: 'Playfair Display', 'Noto Serif JP', serif;
-  font-size: 22px;
+  font-size: clamp(20px, 4vw, 32px);
   font-weight: 500;
   color: #fff;
   margin: 0 0 8px;
@@ -95,7 +95,7 @@
 }
 
 .feature-banners__overlay--light .feature-banners__title {
-  color: var(--6j-charcoal, #2C2C24);
+  color: var(--6j-text, #292724);
 }
 
 .feature-banners__subtitle {
@@ -105,7 +105,7 @@
 }
 
 .feature-banners__overlay--light .feature-banners__subtitle {
-  color: var(--6j-earth, #6B6B5E);
+  color: var(--6j-text-sub, #807C76);
 }
 
 .feature-banners__cta {
@@ -120,119 +120,314 @@
 }
 
 .feature-banners__overlay--light .feature-banners__cta {
-  color: var(--6j-charcoal, #2C2C24);
+  color: var(--6j-text, #292724);
 }
 
-.feature-banners__item:hover .feature-banners__cta {
+.feature-banners__slide:hover .feature-banners__cta {
   gap: 10px;
 }
 
-@media (max-width: 899px) {
-  .feature-banners__grid {
-    grid-template-columns: repeat(2, 1fr);
+/* Navigation Arrows */
+.feature-banners__nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: all 0.2s;
+  z-index: 2;
+}
+
+.feature-banners__nav:hover {
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.feature-banners__nav--prev {
+  left: 16px;
+}
+
+.feature-banners__nav--next {
+  right: 16px;
+}
+
+.feature-banners__nav svg {
+  width: 20px;
+  height: 20px;
+  color: var(--6j-text, #292724);
+}
+
+@media (max-width: 749px) {
+  .feature-banners__nav {
+    width: 36px;
+    height: 36px;
   }
   
-  .feature-banners__item--large {
-    grid-column: span 2;
+  .feature-banners__nav--prev {
+    left: 8px;
+  }
+  
+  .feature-banners__nav--next {
+    right: 8px;
+  }
+  
+  .feature-banners__nav svg {
+    width: 16px;
+    height: 16px;
   }
 }
 
-@media (max-width: 599px) {
-  .feature-banners__container {
-    padding: 24px 16px;
-  }
-  
-  .feature-banners__grid {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-  
-  .feature-banners__item--large {
-    grid-column: span 1;
-  }
-  
-  .feature-banners__item {
-    aspect-ratio: 16/10;
-  }
-  
-  .feature-banners__title {
-    font-size: 18px;
-  }
-  
-  .feature-banners__overlay {
-    padding: 16px;
-  }
+/* Dots */
+.feature-banners__dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px 0;
+  background: var(--6j-bg, #fff);
+}
+
+.feature-banners__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--6j-border, #E8E5E0);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.2s;
+}
+
+.feature-banners__dot.is-active {
+  background: var(--6j-text, #292724);
+  width: 24px;
+  border-radius: 4px;
+}
+
+/* Touch swipe */
+.feature-banners__track {
+  touch-action: pan-y pinch-zoom;
 }
 {%- endstyle -%}
 
-<section class="feature-banners">
-  <div class="feature-banners__container">
-    {% assign block_count = section.blocks.size %}
-    <div class="feature-banners__grid{% if block_count == 2 %} feature-banners__grid--2{% elsif block_count == 1 %} feature-banners__grid--1{% endif %}">
-      {% for block in section.blocks %}
-        <article class="feature-banners__item{% if block.settings.is_large %} feature-banners__item--large{% endif %}" {{ block.shopify_attributes }}>
-          <a href="{{ block.settings.url | default: '#' }}" class="feature-banners__link">
-            {% if block.settings.image %}
+<section class="feature-banners" data-carousel>
+  <div class="feature-banners__track" data-carousel-track>
+    {%- for block in section.blocks -%}
+      <div class="feature-banners__slide" {{ block.shopify_attributes }}>
+        <a href="{{ block.settings.url | default: '#' }}" class="feature-banners__link">
+          <div class="feature-banners__image-wrap">
+            {%- if block.settings.image -%}
               <img
-                src="{{ block.settings.image | image_url: width: 800 }}"
-                srcset="{{ block.settings.image | image_url: width: 400 }} 400w,
-                        {{ block.settings.image | image_url: width: 600 }} 600w,
-                        {{ block.settings.image | image_url: width: 800 }} 800w,
-                        {{ block.settings.image | image_url: width: 1200 }} 1200w"
-                sizes="(max-width: 599px) 100vw, (max-width: 899px) 50vw, 33vw"
+                src="{{ block.settings.image | image_url: width: 1200 }}"
+                srcset="{{ block.settings.image | image_url: width: 600 }} 600w,
+                        {{ block.settings.image | image_url: width: 900 }} 900w,
+                        {{ block.settings.image | image_url: width: 1200 }} 1200w,
+                        {{ block.settings.image | image_url: width: 1600 }} 1600w"
+                sizes="100vw"
                 alt="{{ block.settings.title | escape }}"
                 class="feature-banners__image"
-                loading="lazy"
+                loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
               >
-            {% else %}
-              {{ 'lifestyle-1' | placeholder_svg_tag: 'feature-banners__image' }}
-            {% endif %}
-            
+            {%- else -%}
+              <div class="feature-banners__placeholder">📷 バナー画像を設定してください</div>
+            {%- endif -%}
+          </div>
+          
+          {%- unless block.settings.hide_overlay -%}
             <div class="feature-banners__overlay{% if block.settings.overlay_light %} feature-banners__overlay--light{% endif %}">
-              {% if block.settings.label != blank %}
+              {%- if block.settings.label != blank -%}
                 <span class="feature-banners__label">{{ block.settings.label }}</span>
-              {% endif %}
+              {%- endif -%}
               
-              {% if block.settings.title != blank %}
+              {%- if block.settings.title != blank -%}
                 <h3 class="feature-banners__title">{{ block.settings.title }}</h3>
-              {% endif %}
+              {%- endif -%}
               
-              {% if block.settings.subtitle != blank %}
+              {%- if block.settings.subtitle != blank -%}
                 <p class="feature-banners__subtitle">{{ block.settings.subtitle }}</p>
-              {% endif %}
+              {%- endif -%}
               
-              {% if block.settings.cta_text != blank %}
+              {%- if block.settings.cta_text != blank -%}
                 <span class="feature-banners__cta">
                   {{ block.settings.cta_text }}
                   <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
                     <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                   </svg>
                 </span>
-              {% endif %}
+              {%- endif -%}
             </div>
-          </a>
-        </article>
-      {% endfor %}
-    </div>
+          {%- endunless -%}
+        </a>
+      </div>
+    {%- else -%}
+      <div class="feature-banners__slide">
+        <div class="feature-banners__link">
+          <div class="feature-banners__image-wrap">
+            <div class="feature-banners__placeholder">📷 「スライドを追加」からバナーを追加してください</div>
+          </div>
+        </div>
+      </div>
+    {%- endfor -%}
   </div>
+  
+  {%- if section.blocks.size > 1 -%}
+    <button class="feature-banners__nav feature-banners__nav--prev" data-carousel-prev aria-label="前へ">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+      </svg>
+    </button>
+    <button class="feature-banners__nav feature-banners__nav--next" data-carousel-next aria-label="次へ">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+      </svg>
+    </button>
+    
+    <div class="feature-banners__dots" data-carousel-dots>
+      {%- for block in section.blocks -%}
+        <button 
+          class="feature-banners__dot{% if forloop.first %} is-active{% endif %}" 
+          data-carousel-dot="{{ forloop.index0 }}"
+          aria-label="スライド {{ forloop.index }}"
+        ></button>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
 </section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const carousels = document.querySelectorAll('[data-carousel]');
+  
+  carousels.forEach(carousel => {
+    const track = carousel.querySelector('[data-carousel-track]');
+    if (!track) return;
+    
+    const slides = track.children;
+    const prevBtn = carousel.querySelector('[data-carousel-prev]');
+    const nextBtn = carousel.querySelector('[data-carousel-next]');
+    const dots = carousel.querySelectorAll('[data-carousel-dot]');
+    
+    let currentIndex = 0;
+    let startX = 0;
+    let isDragging = false;
+    let autoplayInterval;
+    
+    const updateCarousel = () => {
+      track.style.transform = `translateX(-${currentIndex * 100}%)`;
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('is-active', i === currentIndex);
+      });
+    };
+    
+    const goToSlide = (index) => {
+      currentIndex = Math.max(0, Math.min(index, slides.length - 1));
+      updateCarousel();
+    };
+    
+    const nextSlide = () => {
+      currentIndex = (currentIndex + 1) % slides.length;
+      updateCarousel();
+    };
+    
+    const prevSlide = () => {
+      currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+      updateCarousel();
+    };
+    
+    if (prevBtn) prevBtn.addEventListener('click', prevSlide);
+    if (nextBtn) nextBtn.addEventListener('click', nextSlide);
+    
+    dots.forEach(dot => {
+      dot.addEventListener('click', () => {
+        goToSlide(parseInt(dot.dataset.carouselDot));
+      });
+    });
+    
+    // Touch swipe
+    track.addEventListener('touchstart', (e) => {
+      startX = e.touches[0].clientX;
+      isDragging = true;
+    }, { passive: true });
+    
+    track.addEventListener('touchend', (e) => {
+      if (!isDragging) return;
+      const endX = e.changedTouches[0].clientX;
+      const diff = startX - endX;
+      
+      if (Math.abs(diff) > 50) {
+        if (diff > 0) nextSlide();
+        else prevSlide();
+      }
+      isDragging = false;
+    }, { passive: true });
+    
+    // Auto-play
+    {% if section.settings.autoplay %}
+    const startAutoplay = () => {
+      autoplayInterval = setInterval(nextSlide, {{ section.settings.autoplay_speed | default: 5000 }});
+    };
+    
+    const stopAutoplay = () => {
+      clearInterval(autoplayInterval);
+    };
+    
+    startAutoplay();
+    carousel.addEventListener('mouseenter', stopAutoplay);
+    carousel.addEventListener('mouseleave', startAutoplay);
+    carousel.addEventListener('touchstart', stopAutoplay, { passive: true });
+    carousel.addEventListener('touchend', startAutoplay, { passive: true });
+    {% endif %}
+  });
+});
+</script>
 
 {% schema %}
 {
   "name": "6JOHAN 特集バナー",
   "tag": "section",
   "class": "section-feature-banners",
-  "max_blocks": 4,
-  "settings": [],
+  "max_blocks": 6,
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "自動再生",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "autoplay_speed",
+      "label": "自動再生間隔（ミリ秒）",
+      "min": 3000,
+      "max": 10000,
+      "step": 500,
+      "default": 5000
+    }
+  ],
   "blocks": [
     {
       "type": "banner",
-      "name": "バナー",
+      "name": "スライド",
       "settings": [
         {
           "type": "image_picker",
           "id": "image",
-          "label": "画像"
+          "label": "バナー画像",
+          "info": "推奨: 1600×640px（PC）"
+        },
+        {
+          "type": "checkbox",
+          "id": "hide_overlay",
+          "label": "テキストオーバーレイを非表示",
+          "default": false,
+          "info": "画像に文字が含まれている場合はオン"
         },
         {
           "type": "text",
@@ -264,12 +459,6 @@
         },
         {
           "type": "checkbox",
-          "id": "is_large",
-          "label": "大きく表示（2カラム分）",
-          "default": false
-        },
-        {
-          "type": "checkbox",
           "id": "overlay_light",
           "label": "明るいオーバーレイ",
           "default": false,
@@ -288,8 +477,7 @@
             "label": "SPRING COLLECTION",
             "title": "春の新作コレクション",
             "subtitle": "暮らしに彩りを添える新作家具",
-            "cta_text": "詳しく見る",
-            "is_large": true
+            "cta_text": "詳しく見る"
           }
         },
         {
@@ -298,14 +486,6 @@
             "label": "STYLE GUIDE",
             "title": "北欧スタイルの作り方",
             "cta_text": "読む"
-          }
-        },
-        {
-          "type": "banner",
-          "settings": {
-            "label": "5万円以下",
-            "title": "お手頃価格の人気アイテム",
-            "cta_text": "見る"
           }
         }
       ]
