@@ -137,11 +137,22 @@
         "padding_top": 36,
         "padding_bottom": 28
       }
+    },
+    "6johan_recently_viewed_b7fYV8": {
+      "type": "6johan-recently-viewed",
+      "name": "6JOHAN 最近見た商品",
+      "settings": {
+        "label": "RECENTLY VIEWED",
+        "heading": "最近チェックした商品",
+        "max_products": 6,
+        "alt_background": false
+      }
     }
   },
   "order": [
     "main",
     "6johan_product_coordinate_UiNUH3",
-    "related-products"
+    "related-products",
+    "6johan_recently_viewed_b7fYV8"
   ]
 }
