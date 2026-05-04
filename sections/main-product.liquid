@@ -750,14 +750,17 @@
       endif
     -%}
 
-    <script type="application/ld+json">
+    {%- comment -%} 6JOHAN 閲覧履歴を保存 {%- endcomment -%}
+    {% render '6johan-track-view', product: product %}
 
-{%- comment -%} 6JOHAN 閲覧履歴を保存 {%- endcomment -%}
-{% render '6johan-track-view', product: product %}
+    <script type="application/ld+json">
       {{ product | structured_data }}
     </script>
   </div>
 </product-info>
+
+{%- comment -%} 6JOHAN 固定カートバー {%- endcomment -%}
+{% render '6johan-sticky-cart', product: product %}
 
 {% schema %}
 {
