@@ -1,1306 +1,295 @@
-/* ============================================
-   6JOHAN Custom Design System
-   Applied on top of Shopify Dawn theme
-   ============================================ */
-
-/* ---- Design Tokens ---- */
-:root {
-  /* Colors */
-  --6j-linen: #FAFAF7;
-  --6j-parchment: #F5F4F0;
-  --6j-sand: #E8E5DC;
-  --6j-stone: #8A8A7A;
-  --6j-earth: #6B6B5E;
-  --6j-charcoal: #2C2C24;
-  --6j-amber: #C4956A;
-  --6j-terracotta: #B5735A;
-  --6j-sage: #8BA889;
-  --6j-gold: #D4A843;
-  --6j-white: #FFFFFF;
-
-  /* Typography */
-  --6j-font-heading: 'Playfair Display', 'Noto Serif JP', Georgia, serif;
-  --6j-font-body: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, sans-serif;
-  --6j-font-mono: 'SF Mono', 'Monaco', monospace;
-
-  /* Spacing */
-  --6j-space-xs: 4px;
-  --6j-space-sm: 8px;
-  --6j-space-md: 16px;
-  --6j-space-lg: 24px;
-  --6j-space-xl: 32px;
-  --6j-space-2xl: 48px;
-  --6j-space-3xl: 64px;
-
-  /* Border Radius */
-  --6j-radius-sm: 8px;
-  --6j-radius-md: 12px;
-  --6j-radius-lg: 16px;
-  --6j-radius-full: 999px;
-
-  /* Shadows */
-  --6j-shadow-sm: 0 1px 3px rgba(44, 44, 36, 0.04);
-  --6j-shadow-md: 0 4px 12px rgba(44, 44, 36, 0.06);
-  --6j-shadow-lg: 0 8px 30px rgba(44, 44, 36, 0.08);
-
-  /* Transitions */
-  --6j-transition: 0.2s ease;
-}
-
-
-/* ---- Dawn Theme Overrides ---- */
-
-/* Global background & text */
-body,
-.shopify-section,
-.section-template--*,
-.main-content {
-  background-color: var(--6j-linen) !important;
-  color: var(--6j-charcoal);
-  font-family: var(--6j-font-body);
-  line-height: 1.7;
-}
-
-/* Override Dawn's default heading styles */
-h1, h2, h3, h4, h5, h6,
-.h1, .h2, .h3, .h4, .h5, .h6 {
-  font-family: var(--6j-font-heading);
-  font-weight: 400;
-  color: var(--6j-charcoal);
-  line-height: 1.3;
-}
-
-h1, .h1 { font-size: clamp(28px, 5vw, 42px); }
-h2, .h2 { font-size: clamp(22px, 4vw, 32px); }
-h3, .h3 { font-size: clamp(18px, 3vw, 24px); }
-
-/* Body text */
-p, li, td, th, label, input, select, textarea {
-  font-family: var(--6j-font-body);
-  color: var(--6j-earth);
-}
-
-
-/* ---- Header Overrides ---- */
-.header-wrapper {
-  background-color: var(--6j-linen) !important;
-  border-bottom: 1px solid var(--6j-sand);
-}
-
-.header__heading-link {
-  font-family: var(--6j-font-body);
-  font-weight: 600;
-  letter-spacing: 0.15em;
-  color: var(--6j-charcoal) !important;
-}
-
-/* Navigation */
-.header__menu-item,
-.menu-drawer__menu-item {
-  font-family: var(--6j-font-body);
-  font-size: 13px;
-  letter-spacing: 0.05em;
-  color: var(--6j-earth);
-}
-
-.header__menu-item:hover,
-.menu-drawer__menu-item:hover {
-  color: var(--6j-charcoal);
-}
-
-
-/* ---- Announcement Bar ---- */
-.announcement-bar {
-  background-color: var(--6j-charcoal) !important;
-  color: var(--6j-linen) !important;
-}
-
-.announcement-bar__message {
-  font-family: var(--6j-font-body);
-  font-size: 12px;
-  letter-spacing: 0.05em;
-}
-
-
-/* ---- Product Cards (Collection Page) ---- */
-.card-wrapper {
-  position: relative;
-}
-
-.card {
-  background: var(--6j-white);
-  border: 1px solid var(--6j-sand);
-  border-radius: var(--6j-radius-md);
-  overflow: hidden;
-  transition: box-shadow var(--6j-transition), transform var(--6j-transition);
-}
-
-.card:hover {
-  box-shadow: var(--6j-shadow-md);
-  transform: translateY(-2px);
-}
-
-.card__heading {
-  font-family: var(--6j-font-body) !important;
-  font-weight: 500;
-  font-size: 14px;
-  color: var(--6j-charcoal);
-}
-
-.price {
-  font-family: var(--6j-font-body);
-  font-weight: 500;
-  color: var(--6j-charcoal);
-}
-
-.card__information {
-  padding: var(--6j-space-md);
-}
-
-
-/* ---- Product Page ---- */
-
-/* Product title */
-.product__title {
-  font-family: var(--6j-font-heading);
-  font-weight: 400;
-  font-size: clamp(22px, 4vw, 30px);
-}
-
-/* Product price */
-.product__info-container .price {
-  font-size: 22px;
-  font-weight: 500;
-}
-
-.price__sale .price-item--regular {
-  color: var(--6j-stone);
-}
-
-.price__sale .price-item--sale {
-  color: var(--6j-charcoal);
-}
-
-/* Add to cart button */
-.product-form__submit {
-  background-color: var(--6j-charcoal) !important;
-  color: var(--6j-linen) !important;
-  border: none !important;
-  border-radius: var(--6j-radius-full) !important;
-  font-family: var(--6j-font-body);
-  font-size: 14px;
-  font-weight: 500;
-  letter-spacing: 0.05em;
-  padding: 14px 32px !important;
-  transition: background-color var(--6j-transition);
-}
-
-.product-form__submit:hover {
-  background-color: #1a1a14 !important;
-}
-
-/* Buy it now button (if used) */
-.shopify-payment-button__button {
-  border-radius: var(--6j-radius-full) !important;
-}
-
-/* Variant picker */
-.product-form__input label {
-  font-family: var(--6j-font-body);
-  font-size: 13px;
-  color: var(--6j-earth);
-}
-
-/* Product description */
-.product__description {
-  font-family: var(--6j-font-body);
-  font-size: 14px;
-  line-height: 1.8;
-  color: var(--6j-earth);
-}
-
-
-/* ---- 6JOHAN Custom Components ---- */
-
-/* Section label (uppercase tracking) */
-.sixj-label {
-  font-family: var(--6j-font-body);
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  color: var(--6j-stone);
-  margin-bottom: var(--6j-space-sm);
-}
-
-/* Section heading */
-.sixj-heading {
-  font-family: var(--6j-font-heading);
-  font-weight: 400;
-  color: var(--6j-charcoal);
-  line-height: 1.3;
-}
-
-/* Trust badges */
-.sixj-trust-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 14px;
-  border-radius: var(--6j-radius-full);
-  background: var(--6j-parchment);
-  font-family: var(--6j-font-body);
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--6j-sage);
-  white-space: nowrap;
-}
-
-.sixj-trust-badge--dark {
-  background: var(--6j-charcoal);
-  color: var(--6j-linen);
-}
-
-.sixj-trust-badges {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--6j-space-sm);
-  margin: var(--6j-space-md) 0;
-}
-
-/* Star rating */
-.sixj-stars {
-  display: inline-flex;
-  align-items: center;
-  gap: 2px;
-}
-
-.sixj-star {
-  color: var(--6j-gold);
-  font-size: 14px;
-  line-height: 1;
-}
-
-.sixj-star--empty {
-  color: var(--6j-sand);
-}
-
-.sixj-rating {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--6j-space-sm);
-}
-
-.sixj-rating__count {
-  font-size: 12px;
-  color: var(--6j-stone);
-}
-
-.sixj-rating__score {
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--6j-charcoal);
-}
-
-/* Delivery estimate */
-.sixj-delivery {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  color: var(--6j-sage);
-  font-weight: 500;
-}
-
-.sixj-delivery__icon {
-  font-size: 14px;
-}
-
-/* Buttons */
-.sixj-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 12px 28px;
-  border-radius: var(--6j-radius-full);
-  font-family: var(--6j-font-body);
-  font-size: 13px;
-  font-weight: 500;
-  text-decoration: none;
-  cursor: pointer;
-  transition: all var(--6j-transition);
-  border: none;
-}
-
-.sixj-btn--primary {
-  background: var(--6j-charcoal);
-  color: var(--6j-linen);
-}
-.sixj-btn--primary:hover {
-  background: #1a1a14;
-}
-
-.sixj-btn--outline {
-  background: transparent;
-  color: var(--6j-charcoal);
-  border: 1px solid var(--6j-charcoal);
-}
-.sixj-btn--outline:hover {
-  background: var(--6j-charcoal);
-  color: var(--6j-linen);
-}
-
-.sixj-btn--accent {
-  background: var(--6j-amber);
-  color: var(--6j-white);
-}
-.sixj-btn--accent:hover {
-  background: var(--6j-terracotta);
-}
-
-.sixj-btn--full {
-  width: 100%;
-}
-
-/* Cards */
-.sixj-card {
-  background: var(--6j-white);
-  border: 1px solid var(--6j-sand);
-  border-radius: var(--6j-radius-lg);
-  padding: var(--6j-space-lg);
-}
-
-.sixj-card--muted {
-  background: var(--6j-parchment);
-  border: none;
-  border-radius: var(--6j-radius-lg);
-  padding: var(--6j-space-lg);
-}
-
-.sixj-card--dark {
-  background: var(--6j-charcoal);
-  color: var(--6j-linen);
-  border: none;
-  border-radius: var(--6j-radius-lg);
-  padding: var(--6j-space-xl);
-}
-
-/* Spec table */
-.sixj-specs {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.sixj-specs tr {
-  border-bottom: 1px solid var(--6j-sand);
-}
-
-.sixj-specs tr:last-child {
-  border-bottom: none;
-}
-
-.sixj-specs td {
-  padding: 10px 0;
-  font-size: 13px;
-  vertical-align: top;
-}
-
-.sixj-specs td:first-child {
-  color: var(--6j-stone);
-  width: 80px;
-  font-size: 12px;
-}
-
-.sixj-specs td:last-child {
-  text-align: right;
-  color: var(--6j-charcoal);
-}
-
-.sixj-specs__note {
-  display: block;
-  font-size: 11px;
-  color: var(--6j-sage);
-  margin-top: 2px;
-}
-
-/* FAQ Accordion */
-.sixj-faq-item {
-  border-bottom: 1px solid var(--6j-sand);
-}
-
-.sixj-faq-question {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px 0;
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--6j-charcoal);
-  cursor: pointer;
-  background: none;
-  border: none;
-  width: 100%;
-  text-align: left;
-  font-family: var(--6j-font-body);
-}
-
-.sixj-faq-question:hover {
-  color: var(--6j-amber);
-}
-
-.sixj-faq-icon {
-  font-size: 20px;
-  color: var(--6j-stone);
-  transition: transform var(--6j-transition);
-  flex-shrink: 0;
-  margin-left: 16px;
-}
-
-.sixj-faq-item.is-open .sixj-faq-icon {
-  transform: rotate(45deg);
-}
-
-.sixj-faq-answer {
-  display: none;
-  padding: 0 0 16px;
-  font-size: 13px;
-  line-height: 1.8;
-  color: var(--6j-earth);
-}
-
-.sixj-faq-item.is-open .sixj-faq-answer {
-  display: block;
-}
-
-/* Process steps */
-.sixj-process {
-  display: flex;
-  flex-direction: column;
-  gap: var(--6j-space-lg);
-}
-
-.sixj-process__step {
-  display: flex;
-  gap: var(--6j-space-md);
-}
-
-.sixj-process__number {
-  font-family: var(--6j-font-heading);
-  font-size: 20px;
-  color: var(--6j-stone);
-  flex-shrink: 0;
-  width: 32px;
-}
-
-.sixj-process__title {
-  font-size: 15px;
-  font-weight: 500;
-  color: var(--6j-charcoal);
-  margin-bottom: 4px;
-}
-
-.sixj-process__desc {
-  font-size: 13px;
-  color: var(--6j-earth);
-  line-height: 1.7;
-}
-
-/* Number stats row */
-.sixj-stats {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--6j-space-md);
-  text-align: center;
-  padding: var(--6j-space-xl) 0;
-}
-
-.sixj-stat__number {
-  font-family: var(--6j-font-heading);
-  font-size: 24px;
-  color: var(--6j-charcoal);
-  margin-bottom: 4px;
-}
-
-.sixj-stat__label {
-  font-size: 12px;
-  color: var(--6j-stone);
-}
-
-/* Quick nav pills */
-.sixj-quick-nav {
-  display: flex;
-  gap: var(--6j-space-sm);
-  overflow-x: auto;
-  padding: var(--6j-space-md) 0;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-}
-
-.sixj-quick-nav::-webkit-scrollbar {
-  display: none;
-}
-
-.sixj-quick-nav__item {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex-shrink: 0;
-  padding: 10px 16px;
-  border-radius: var(--6j-radius-full);
-  border: 1px solid var(--6j-sand);
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--6j-earth);
-  text-decoration: none;
-  white-space: nowrap;
-  transition: all var(--6j-transition);
-}
-
-.sixj-quick-nav__item:hover {
-  border-color: var(--6j-charcoal);
-  color: var(--6j-charcoal);
-}
-
-/* Global trust bar */
-.sixj-trust-bar {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--6j-space-sm);
-  padding: var(--6j-space-lg) var(--6j-space-md);
-  border-top: 1px solid var(--6j-sand);
-  text-align: center;
-}
-
-.sixj-trust-bar__item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-}
-
-.sixj-trust-bar__icon {
-  font-size: 20px;
-}
-
-.sixj-trust-bar__text {
-  font-size: 12px;
-  color: var(--6j-earth);
-  font-weight: 500;
-}
-
-/* Coordinate suggestion grid */
-.sixj-coordinate {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: var(--6j-space-md);
-}
-
-@media (max-width: 749px) {
-  .sixj-coordinate {
-    display: flex;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    padding-bottom: var(--6j-space-sm);
-    scrollbar-width: none;
-  }
-  .sixj-coordinate::-webkit-scrollbar { display: none; }
-}
-
-.sixj-coordinate__item {
-  flex-shrink: 0;
-  min-width: 140px;
-  text-decoration: none;
-  color: inherit;
-  transition: opacity var(--6j-transition);
-}
-
-.sixj-coordinate__item:hover {
-  opacity: 0.8;
-}
-
-.sixj-coordinate__image {
-  width: 100%;
-  aspect-ratio: 1;
-  object-fit: cover;
-  border-radius: var(--6j-radius-sm);
-  margin-bottom: var(--6j-space-sm);
-  background: var(--6j-white);
-}
-
-.sixj-coordinate__name {
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--6j-charcoal);
-  margin-bottom: 2px;
-  line-height: 1.4;
-}
-
-.sixj-coordinate__price {
-  font-size: 13px;
-  color: var(--6j-earth);
-}
-
-
-/* ---- Product Page Section Overrides ---- */
-/* Trust badges: kill Dawn's default section padding */
-.sixj-product-trust {
-  padding: 0 !important;
-  margin: 0 !important;
-}
-
-.sixj-product-trust .sixj-trust-badges {
-  margin: 0;
-  padding: 8px 0;
-}
-
-/* Also target Shopify section wrapper */
-.shopify-section:has(.sixj-product-trust) {
-  margin: 0 !important;
-  padding: 0 !important;
-}
-
-/* Coordinate section - tighter spacing */
-.shopify-section:has(.sixj-coordinate) {
-  margin-top: 0 !important;
-  padding: 0 !important;
-}
-
-section:has(.sixj-coordinate) {
-  padding-top: var(--6j-space-lg) !important;
-  padding-bottom: var(--6j-space-lg) !important;
-}
-
-/* Override Dawn's section spacing for 6JOHAN sections on product pages */
-.product section[class*="shopify-section"] .sixj-trust-badges,
-.sixj-product-trust + * {
-  margin-top: 0;
-}
-
-/* Review card */
-.sixj-review {
-  padding: var(--6j-space-md);
-  background: var(--6j-parchment);
-  border-radius: var(--6j-radius-md);
-}
-
-.sixj-review__text {
-  font-size: 13px;
-  font-style: italic;
-  line-height: 1.7;
-  color: var(--6j-earth);
-  margin: var(--6j-space-sm) 0;
-}
-
-.sixj-review__author {
-  font-size: 12px;
-  color: var(--6j-stone);
-}
-
-/* Coupon display */
-.sixj-coupon {
-  display: inline-block;
-  padding: 10px 24px;
-  border: 2px dashed var(--6j-amber);
-  border-radius: var(--6j-radius-sm);
-  font-family: var(--6j-font-body);
-  font-size: 18px;
-  font-weight: 600;
-  letter-spacing: 0.2em;
-  color: var(--6j-charcoal);
-  background: var(--6j-white);
-}
-
-/* Price display with sale */
-.sixj-price-group {
-  display: flex;
-  align-items: baseline;
-  gap: var(--6j-space-sm);
-}
-
-.sixj-price--current {
-  font-size: 20px;
-  font-weight: 500;
-  color: var(--6j-charcoal);
-}
-
-.sixj-price--original {
-  font-size: 13px;
-  color: var(--6j-stone);
-  text-decoration: line-through;
-}
-
-.sixj-price--badge {
-  display: inline-block;
-  padding: 2px 10px;
-  border-radius: var(--6j-radius-full);
-  background: var(--6j-amber);
-  color: var(--6j-white);
-  font-size: 11px;
-  font-weight: 500;
-}
-
-/* Payment security note */
-.sixj-security-note {
-  text-align: center;
-  font-size: 12px;
-  color: var(--6j-stone);
-  margin-top: var(--6j-space-sm);
-}
-
-/* Nav pills for style selection */
-.sixj-style-card {
-  display: flex;
-  align-items: center;
-  gap: var(--6j-space-md);
-  padding: var(--6j-space-md);
-  background: var(--6j-white);
-  border: 1px solid var(--6j-sand);
-  border-radius: var(--6j-radius-md);
-  text-decoration: none;
-  color: inherit;
-  transition: all var(--6j-transition);
-}
-
-.sixj-style-card:hover {
-  border-color: var(--6j-charcoal);
-  box-shadow: var(--6j-shadow-sm);
-}
-
-.sixj-style-card__icon {
-  font-size: 24px;
-  flex-shrink: 0;
-}
-
-.sixj-style-card__content {
-  flex: 1;
-}
-
-.sixj-style-card__title {
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--6j-charcoal);
-  margin-bottom: 2px;
-}
-
-.sixj-style-card__sub {
-  font-size: 12px;
-  color: var(--6j-stone);
-}
-
-.sixj-style-card__arrow {
-  color: var(--6j-stone);
-  font-size: 16px;
-  flex-shrink: 0;
-}
-
-
-/* ---- Responsive ---- */
-@media (max-width: 749px) {
-  .sixj-stats {
-    gap: var(--6j-space-sm);
-  }
-
-  .sixj-stat__number {
-    font-size: 20px;
-  }
-
-  .sixj-trust-bar {
-    padding: var(--6j-space-md);
-  }
-}
-
-
-/* ---- Utility Classes ---- */
-.sixj-section {
-  padding: var(--6j-space-2xl) 0;
-}
-
-.sixj-section--bordered {
-  border-bottom: 1px solid var(--6j-sand);
-}
-
-.sixj-section--muted {
-  background: var(--6j-parchment);
-}
-
-.sixj-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 var(--6j-space-lg);
-}
-
-.sixj-text-center { text-align: center; }
-.sixj-text-stone { color: var(--6j-stone); }
-.sixj-text-earth { color: var(--6j-earth); }
-.sixj-text-sage { color: var(--6j-sage); }
-.sixj-text-amber { color: var(--6j-amber); }
-.sixj-mb-sm { margin-bottom: var(--6j-space-sm); }
-.sixj-mb-md { margin-bottom: var(--6j-space-md); }
-.sixj-mb-lg { margin-bottom: var(--6j-space-lg); }
-.sixj-mb-xl { margin-bottom: var(--6j-space-xl); }
-
-
-
-
-/* ---- Dawn Button Overrides ---- */
-.button--secondary {
-  --color-button: 250, 250, 247;
-  --color-button-text: 44, 44, 36;
-  --alpha-button-background: 0;
-  border: 1px solid rgba(44, 44, 36, 0.3) !important;
-  border-radius: 999px !important;
-}
-.button--secondary:hover {
-  --alpha-button-background: 1;
-  --color-button: 44, 44, 36;
-  --color-button-text: 250, 250, 247;
-}
-
-/* ---- Product Card Refinements ---- */
-/* Product name - smaller, lighter weight */
-.card__heading,
-.card__heading a,
-.card-information__text,
-.card-information__text a,
-h3.card__heading {
-  font-family: var(--6j-font-body) !important;
-  font-size: 13px !important;
-  font-weight: 400 !important;
-  line-height: 1.5 !important;
-  color: var(--6j-charcoal) !important;
-  text-transform: none !important;
-  letter-spacing: 0 !important;
-}
-
-/* Price - refined */
-.price-item,
-.price-item--regular,
-.price-item--sale {
-  font-family: var(--6j-font-body) !important;
-  font-size: 13px !important;
-  font-weight: 500 !important;
-  color: var(--6j-charcoal) !important;
-}
-
-/* Card container - softer edges */
-.card--card,
-.card--standard {
-  border: 1px solid var(--6j-sand) !important;
-  border-radius: var(--6j-radius-md) !important;
-  background: var(--6j-white) !important;
-  box-shadow: none !important;
-}
-
-.card--card:hover,
-.card--standard:hover {
-  box-shadow: var(--6j-shadow-md) !important;
-}
-
-/* Card content padding */
-.card__content,
-.card-information {
-  padding: 12px !important;
-}
-
-/* "View all" button - thinner border */
-.button--secondary {
-  border-width: 1px !important;
-  font-size: 13px !important;
-  font-weight: 400 !important;
-  letter-spacing: 0.03em !important;
-}
-
-/* Section headings on home page */
-.featured-collection h2,
-.collection-list h2,
-.shopify-section .title {
-  font-family: var(--6j-font-heading) !important;
-  font-size: 20px !important;
-  font-weight: 400 !important;
-}
-
-/* ---- Premium Card Design (Borderless) ---- */
-/* Remove card borders and background - let images breathe */
-.card--card,
-.card--standard,
-.card-wrapper .card {
-  border: none !important;
-  border-radius: 0 !important;
-  background: transparent !important;
-  box-shadow: none !important;
-}
-
-.card--card:hover,
-.card--standard:hover {
-  box-shadow: none !important;
-}
-
-/* Image - subtle rounded corners only */
-.card .media,
-.card__media,
-.card__inner {
-  border-radius: 8px !important;
-  overflow: hidden;
-  background: transparent !important;
-  border: none !important;
-}
-
-/* Tighten text area */
-.card__content,
-.card-information {
-  padding: 8px 0 0 0 !important;
-}
-
-/* Product name - clean and tight */
-.card__heading,
-.card__heading a,
-.card-information__text,
-.card-information__text a,
-h3.card__heading {
-  font-family: var(--6j-font-body) !important;
-  font-size: 12.5px !important;
-  font-weight: 400 !important;
-  line-height: 1.45 !important;
-  color: var(--6j-charcoal) !important;
-  text-transform: none !important;
-  letter-spacing: 0 !important;
-  margin-bottom: 2px !important;
-}
-
-/* Price - smaller than name, muted */
-.price-item,
-.price-item--regular,
-.price-item--sale {
-  font-family: var(--6j-font-body) !important;
-  font-size: 12px !important;
-  font-weight: 400 !important;
-  color: var(--6j-earth) !important;
-}
-
-/* Remove extra price wrapper spacing */
-.price,
-.price__container {
-  margin-top: 0 !important;
-  padding: 0 !important;
-}
-
-.card-information > * + * {
-  margin-top: 0 !important;
-}
-
-/* Card inner - remove Dawn's default padding */
-.card__inner {
-  padding: 0 !important;
-}
-
-/* Grid gap - tighter on mobile */
-@media (max-width: 749px) {
-  .grid--2-col-tablet-down .grid__item {
-    padding-bottom: 8px !important;
-  }
-}
-
-/* Hide "税込。" text on product page */
-.tax-note,
-.product__tax,
-.price .tax-note,
-.rte--product .tax-note,
-[data-tax-line] {
-  display: none !important;
-}
-
-/* ---- Breadcrumb ---- */
-.sixj-breadcrumb {
-  padding: 12px 24px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-.sixj-breadcrumb__list {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  gap: 4px;
-  font-size: 11px;
-  color: var(--6j-stone);
-}
-.sixj-breadcrumb__item a {
-  color: var(--6j-stone);
-  text-decoration: none;
-}
-.sixj-breadcrumb__item a:hover {
-  color: var(--6j-charcoal);
-}
-.sixj-breadcrumb__item + .sixj-breadcrumb__item::before {
-  content: "›";
-  margin-right: 4px;
-  color: var(--6j-sand);
-}
-.sixj-breadcrumb__current {
-  color: var(--6j-earth);
-}
-
-/* ---- Product Page Typography ---- */
-/* Product title - serif, larger */
-.product__title {
-  font-family: var(--6j-font-heading) !important;
-  font-size: clamp(22px, 5vw, 28px) !important;
-  font-weight: 400 !important;
-  line-height: 1.3 !important;
-}
-
-/* Price - prominent */
-.product__info-wrapper .price-item,
-.product__info-wrapper .price {
-  font-size: 20px !important;
-  font-weight: 500 !important;
-  color: var(--6j-charcoal) !important;
-}
-
-/* Variant buttons - rounded pill style */
-.product-form__input input[type="radio"] + label {
-  border-radius: var(--6j-radius-full) !important;
-  font-size: 13px !important;
-  padding: 8px 20px !important;
-}
-
-/* お気に入りアイコン */
-.header__icon--favorite {
-  position: relative;
-}
-
-.header__icon--favorite .svg-wrapper {
-  width: 22px;
-  height: 22px;
-}
-
-.favorite-count-bubble {
-  position: absolute;
-  top: -4px;
-  right: -4px;
-  min-width: 16px;
-  height: 16px;
-  padding: 0 4px;
-  background-color: var(--6j-accent, #C4956A);
-  border-radius: 50%;
-  font-size: 10px;
-  font-weight: 600;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* ============================================
-   Menu Drawer z-index Fix & Rich Menu Styles
-   ============================================ */
-
-/* Fix: drawer must be above all page content */
-.menu-drawer-container summary::before {
-  z-index: 100 !important;
-}
-.menu-drawer {
-  z-index: 101 !important;
-}
-
-/* --- 6JOHAN Rich Menu --- */
-.menu-drawer__inner-container {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-.menu-drawer__navigation-container {
-  flex: 1;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-}
-
-/* Search inside drawer */
-.drawer-search {
-  padding: 16px 20px;
-  border-bottom: 1px solid var(--6j-sand, #E8E5DC);
-}
-
-.drawer-search__form {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: var(--6j-parchment, #F5F4F0);
-  border-radius: 6px;
-  padding: 10px 14px;
-}
-
-.drawer-search__input {
-  flex: 1;
-  border: none;
-  background: transparent;
-  font-size: 14px;
-  font-family: var(--6j-font-body);
-  color: var(--6j-charcoal, #2C2C24);
-  outline: none;
-}
-
-.drawer-search__input::placeholder {
-  color: var(--6j-stone, #8A8A7A);
-}
-
-.drawer-search__icon {
-  width: 18px;
-  height: 18px;
-  color: var(--6j-stone, #8A8A7A);
-  flex-shrink: 0;
-}
-
-/* Section labels */
-.drawer-section {
-  padding: 0 20px;
-}
-
-.drawer-section__label {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 14px 0 8px;
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--6j-stone, #8A8A7A);
-}
-
-.drawer-section__label::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: var(--6j-sand, #E8E5DC);
-}
-
-/* Nav links */
-.drawer-nav {
-  list-style: none;
-  margin: 0;
-  padding: 0 20px;
-}
-
-.drawer-nav__item {
-  border-bottom: 1px solid var(--6j-sand, #E8E5DC);
-}
-
-.drawer-nav__item:last-child {
-  border-bottom: none;
-}
-
-.drawer-nav__link {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 14px 0;
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--6j-charcoal, #2C2C24);
-  text-decoration: none;
-  transition: color 0.2s;
-}
-
-.drawer-nav__link:hover {
-  color: var(--6j-accent, #6B5B4F);
-}
-
-.drawer-nav__link-icon {
-  width: 16px;
-  height: 16px;
-  color: var(--6j-stone, #8A8A7A);
-  flex-shrink: 0;
-}
-
-.drawer-nav__link--sub {
-  font-weight: 400;
-  font-size: 13px;
-  padding: 12px 0 12px 12px;
-}
-
-/* Submenu (accordion) */
-.drawer-nav__submenu {
-  list-style: none;
-  margin: 0;
-  padding: 0 0 4px 0;
-}
-
-.drawer-nav__submenu-toggle {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  padding: 14px 0;
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--6j-charcoal, #2C2C24);
-  background: none;
-  border: none;
-  cursor: pointer;
-  text-align: left;
-  font-family: var(--6j-font-body);
-}
-
-.drawer-nav__submenu-toggle .chevron {
-  width: 16px;
-  height: 16px;
-  color: var(--6j-stone, #8A8A7A);
-  transition: transform 0.2s;
-}
-
-.drawer-nav__details[open] .chevron {
-  transform: rotate(180deg);
-}
-
-/* Account section at bottom */
-.drawer-account {
-  padding: 16px 20px;
-  border-top: 1px solid var(--6j-sand, #E8E5DC);
-  display: flex;
-  gap: 10px;
-  margin-top: auto;
-}
-
-.drawer-account__btn {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 12px;
-  font-size: 13px;
-  font-weight: 500;
-  text-decoration: none;
-  border-radius: 4px;
-  transition: all 0.2s;
-  font-family: var(--6j-font-body);
-}
-
-.drawer-account__btn--primary {
-  background: var(--6j-charcoal, #2C2C24);
-  color: #fff;
-}
-
-.drawer-account__btn--primary:hover {
-  background: var(--6j-earth, #6B6B5E);
-  color: #fff;
-}
-
-.drawer-account__btn--secondary {
-  background: transparent;
-  color: var(--6j-charcoal, #2C2C24);
-  border: 1px solid var(--6j-sand, #E8E5DC);
-}
-
-.drawer-account__btn--secondary:hover {
-  border-color: var(--6j-charcoal, #2C2C24);
-}
-
-.drawer-account__icon {
-  width: 16px;
-  height: 16px;
-}
+{% comment %}
+  Renders a header drawer menu for mobile and desktop.
+
+  Usage:
+  {% render 'header-drawer' %}
+{% endcomment %}
+
+<header-drawer data-breakpoint="{% if section.settings.menu_type_desktop == 'drawer' %}desktop{% else %}tablet{% endif %}">
+  <details id="Details-menu-drawer-container" class="menu-drawer-container">
+    <summary
+      class="header__icon header__icon--menu header__icon--summary link focus-inset"
+      aria-label="{{ 'sections.header.menu' | t }}"
+    >
+      <span>
+        {{- 'icon-hamburger.svg' | inline_asset_content -}}
+        {{- 'icon-close.svg' | inline_asset_content -}}
+      </span>
+    </summary>
+    <div id="menu-drawer" class="gradient menu-drawer motion-reduce color-{{ section.settings.menu_color_scheme }}">
+      <div class="menu-drawer__inner-container">
+        <div class="menu-drawer__navigation-container">
+          <nav class="menu-drawer__navigation">
+            <ul class="menu-drawer__menu has-submenu list-menu" role="list">
+              {%- for link in section.settings.menu.links -%}
+                <li>
+                  {%- if link.links != blank -%}
+                    <details id="Details-menu-drawer-menu-item-{{ forloop.index }}">
+                      <summary
+                        id="HeaderDrawer-{{ link.handle }}"
+                        class="menu-drawer__menu-item list-menu__item link link--text focus-inset{% if link.child_active %} menu-drawer__menu-item--active{% endif %}"
+                      >
+                        {{ link.title | escape }}
+                        <span class="svg-wrapper">
+                          {{- 'icon-arrow.svg' | inline_asset_content -}}
+                        </span>
+                        <span class="svg-wrapper">
+                          {{- 'icon-caret.svg' | inline_asset_content -}}
+                        </span>
+                      </summary>
+                      <div
+                        id="link-{{ link.handle | escape }}"
+                        class="menu-drawer__submenu has-submenu gradient motion-reduce"
+                        tabindex="-1"
+                      >
+                        <div class="menu-drawer__inner-submenu">
+                          <button class="menu-drawer__close-button link link--text focus-inset" aria-expanded="true">
+                            <span class="svg-wrapper">
+                              {{- 'icon-arrow.svg' | inline_asset_content -}}
+                            </span>
+                            {{ link.title | escape }}
+                          </button>
+                          <ul class="menu-drawer__menu list-menu" role="list" tabindex="-1">
+                            {%- for childlink in link.links -%}
+                              <li>
+                                {%- if childlink.links == blank -%}
+                                  <a
+                                    id="HeaderDrawer-{{ link.handle }}-{{ childlink.handle }}"
+                                    href="{{ childlink.url }}"
+                                    class="menu-drawer__menu-item link link--text list-menu__item focus-inset{% if childlink.current %} menu-drawer__menu-item--active{% endif %}"
+                                    {% if childlink.current %}
+                                      aria-current="page"
+                                    {% endif %}
+                                  >
+                                    {{ childlink.title | escape }}
+                                  </a>
+                                {%- else -%}
+                                  <details id="Details-menu-drawer-{{ link.handle }}-{{ childlink.handle }}">
+                                    <summary
+                                      id="HeaderDrawer-{{ link.handle }}-{{ childlink.handle }}"
+                                      class="menu-drawer__menu-item link link--text list-menu__item focus-inset"
+                                    >
+                                      {{ childlink.title | escape }}
+                                      <span class="svg-wrapper">
+                                        {{- 'icon-arrow.svg' | inline_asset_content -}}
+                                      </span>
+                                      <span class="svg-wrapper">
+                                        {{- 'icon-caret.svg' | inline_asset_content -}}
+                                      </span>
+                                    </summary>
+                                    <div
+                                      id="childlink-{{ childlink.handle | escape }}"
+                                      class="menu-drawer__submenu has-submenu gradient motion-reduce"
+                                    >
+                                      <button
+                                        class="menu-drawer__close-button link link--text focus-inset"
+                                        aria-expanded="true"
+                                      >
+                                        <span class="svg-wrapper">
+                                          {{- 'icon-arrow.svg' | inline_asset_content -}}
+                                        </span>
+                                        {{ childlink.title | escape }}
+                                      </button>
+                                      <ul
+                                        class="menu-drawer__menu list-menu"
+                                        role="list"
+                                        tabindex="-1"
+                                      >
+                                        {%- for grandchildlink in childlink.links -%}
+                                          <li>
+                                            <a
+                                              id="HeaderDrawer-{{ link.handle }}-{{ childlink.handle }}-{{ grandchildlink.handle }}"
+                                              href="{{ grandchildlink.url }}"
+                                              class="menu-drawer__menu-item link link--text list-menu__item focus-inset{% if grandchildlink.current %} menu-drawer__menu-item--active{% endif %}"
+                                              {% if grandchildlink.current %}
+                                                aria-current="page"
+                                              {% endif %}
+                                            >
+                                              {{ grandchildlink.title | escape }}
+                                            </a>
+                                          </li>
+                                        {%- endfor -%}
+                                      </ul>
+                                    </div>
+                                  </details>
+                                {%- endif -%}
+                              </li>
+                            {%- endfor -%}
+                          </ul>
+                        </div>
+                      </div>
+                    </details>
+                  {%- else -%}
+                    <a
+                      id="HeaderDrawer-{{ link.handle }}"
+                      href="{{ link.url }}"
+                      class="menu-drawer__menu-item list-menu__item link link--text focus-inset{% if link.current %} menu-drawer__menu-item--active{% endif %}"
+                      {% if link.current %}
+                        aria-current="page"
+                      {% endif %}
+                    >
+                      {{ link.title | escape }}
+                    </a>
+                  {%- endif -%}
+                </li>
+              {%- endfor -%}
+            </ul>
+          </nav>
+          <div class="menu-drawer__utility-links">
+            {%- if shop.customer_accounts_enabled -%}
+              <a
+                href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}"
+                class="menu-drawer__account link focus-inset h5 medium-hide large-up-hide"
+                rel="nofollow"
+              >
+                {%- if section.settings.enable_customer_avatar -%}
+                  <account-icon>
+                    {%- if customer and customer.has_avatar? -%}
+                      {{ customer | avatar }}
+                    {%- else -%}
+                      <span class="svg-wrapper">
+                        {{- 'icon-account.svg' | inline_asset_content -}}
+                      </span>
+                    {%- endif -%}
+                  </account-icon>
+                {%- else -%}
+                  <span class="svg-wrapper">
+                    {{- 'icon-account.svg' | inline_asset_content -}}
+                  </span>
+                {%- endif -%}
+                {%- liquid
+                  if customer
+                    echo 'customer.account_fallback' | t
+                  else
+                    echo 'customer.log_in' | t
+                  endif
+                -%}
+              </a>
+            {%- endif -%}
+            {%- if localization.available_countries or localization.available_languages -%}
+              <div class="menu-drawer__localization header-localization">
+                {%- if localization.available_countries and localization.available_countries.size > 1 -%}
+                  <localization-form>
+                    {%- form 'localization', id: 'HeaderCountryMobileForm', class: 'localization-form' -%}
+                      <div>
+                        <h2 class="visually-hidden" id="HeaderCountryMobileLabel">
+                          {{ 'localization.country_label' | t }}
+                        </h2>
+                        {%- render 'country-localization', localPosition: 'HeaderCountryMobile' -%}
+                      </div>
+                    {%- endform -%}
+                  </localization-form>
+                {% endif %}
+
+                {%- if localization.available_languages and localization.available_languages.size > 1 -%}
+                  <localization-form>
+                    {%- form 'localization', id: 'HeaderLanguageMobileForm', class: 'localization-form' -%}
+                      <div>
+                        <h2 class="visually-hidden" id="HeaderLanguageMobileLabel">
+                          {{ 'localization.language_label' | t }}
+                        </h2>
+                        {%- render 'language-localization', localPosition: 'HeaderLanguageMobile' -%}
+                      </div>
+                    {%- endform -%}
+                  </localization-form>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+            <ul class="list list-social list-unstyled" role="list">
+              {%- if settings.social_twitter_link != blank -%}
+                <li class="list-social__item">
+                  <a href="{{ settings.social_twitter_link }}" class="list-social__link link">
+                    <span class="svg-wrapper">
+                      {{- 'icon-twitter.svg' | inline_asset_content -}}
+                    </span>
+                    <span class="visually-hidden">{{ 'general.social.links.twitter' | t }}</span>
+                  </a>
+                </li>
+              {%- endif -%}
+              {%- if settings.social_facebook_link != blank -%}
+                <li class="list-social__item">
+                  <a href="{{ settings.social_facebook_link }}" class="list-social__link link">
+                    <span class="svg-wrapper">
+                      {{- 'icon-facebook.svg' | inline_asset_content -}}
+                    </span>
+                    <span class="visually-hidden">{{ 'general.social.links.facebook' | t }}</span>
+                  </a>
+                </li>
+              {%- endif -%}
+              {%- if settings.social_pinterest_link != blank -%}
+                <li class="list-social__item">
+                  <a href="{{ settings.social_pinterest_link }}" class="list-social__link link">
+                    <span class="svg-wrapper">
+                      {{- 'icon-pinterest.svg' | inline_asset_content -}}
+                    </span>
+                    <span class="visually-hidden">{{ 'general.social.links.pinterest' | t }}</span>
+                  </a>
+                </li>
+              {%- endif -%}
+              {%- if settings.social_instagram_link != blank -%}
+                <li class="list-social__item">
+                  <a href="{{ settings.social_instagram_link }}" class="list-social__link link">
+                    <span class="svg-wrapper">
+                      {{- 'icon-instagram.svg' | inline_asset_content -}}
+                    </span>
+                    <span class="visually-hidden">{{ 'general.social.links.instagram' | t }}</span>
+                  </a>
+                </li>
+              {%- endif -%}
+              {%- if settings.social_tiktok_link != blank -%}
+                <li class="list-social__item">
+                  <a href="{{ settings.social_tiktok_link }}" class="list-social__link link">
+                    <span class="svg-wrapper">
+                      {{- 'icon-tiktok.svg' | inline_asset_content -}}
+                    </span>
+                    <span class="visually-hidden">{{ 'general.social.links.tiktok' | t }}</span>
+                  </a>
+                </li>
+              {%- endif -%}
+              {%- if settings.social_tumblr_link != blank -%}
+                <li class="list-social__item">
+                  <a href="{{ settings.social_tumblr_link }}" class="list-social__link link">
+                    <span class="svg-wrapper">
+                      {{- 'icon-tumblr.svg' | inline_asset_content -}}
+                    </span>
+                    <span class="visually-hidden">{{ 'general.social.links.tumblr' | t }}</span>
+                  </a>
+                </li>
+              {%- endif -%}
+              {%- if settings.social_snapchat_link != blank -%}
+                <li class="list-social__item">
+                  <a href="{{ settings.social_snapchat_link }}" class="list-social__link link">
+                    <span class="svg-wrapper">
+                      {{- 'icon-snapchat.svg' | inline_asset_content -}}
+                    </span>
+                    <span class="visually-hidden">{{ 'general.social.links.snapchat' | t }}</span>
+                  </a>
+                </li>
+              {%- endif -%}
+              {%- if settings.social_youtube_link != blank -%}
+                <li class="list-social__item">
+                  <a href="{{ settings.social_youtube_link }}" class="list-social__link link">
+                    <span class="svg-wrapper">
+                      {{- 'icon-youtube.svg' | inline_asset_content -}}
+                    </span>
+                    <span class="visually-hidden">{{ 'general.social.links.youtube' | t }}</span>
+                  </a>
+                </li>
+              {%- endif -%}
+              {%- if settings.social_vimeo_link != blank -%}
+                <li class="list-social__item">
+                  <a href="{{ settings.social_vimeo_link }}" class="list-social__link link">
+                    <span class="svg-wrapper">
+                      {{- 'icon-vimeo.svg' | inline_asset_content -}}
+                    </span>
+                    <span class="visually-hidden">{{ 'general.social.links.vimeo' | t }}</span>
+                  </a>
+                </li>
+              {%- endif -%}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </details>
+</header-drawer>
