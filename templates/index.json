@@ -423,6 +423,35 @@
         "view_all_text": "すべてのお知らせを見る",
         "view_all_url": ""
       }
+    },
+    "17779036218a1b48bb": {
+      "type": "apps",
+      "blocks": {
+        "instafeed_app_block_czhRCt": {
+          "type": "shopify://apps/instafeed/blocks/app-block/c447db20-095d-4a10-9725-b5977662c9d5",
+          "settings": {
+            "title": "",
+            "title_color": "",
+            "title_size_v2": 0,
+            "alignment": "center",
+            "instafeed_margin_top": 0,
+            "instafeed_margin_bottom": 0,
+            "instafeed_margin_sides": 0,
+            "show_instagram_link": false,
+            "link_alignment": "left",
+            "link_color": "#000000",
+            "background_color": "",
+            "feed_id": "",
+            "html_area": ""
+          }
+        }
+      },
+      "block_order": [
+        "instafeed_app_block_czhRCt"
+      ],
+      "settings": {
+        "include_margins": true
+      }
     }
   },
   "order": [
@@ -435,6 +464,7 @@
     "6johan_collection_products_tNktNk",
     "6johan_customer_voice_Fq3Jif",
     "6johan_collection_products_V3GQVx",
-    "6johan_news_FQiVyx"
+    "6johan_news_FQiVyx",
+    "17779036218a1b48bb"
   ]
 }
