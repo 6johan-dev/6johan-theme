@@ -1,3 +1,4 @@
+cat > sections/6johan-ranking.liquid << 'EOF'
 {% comment %}
   6JOHAN Ranking Section
   LOWYA風ランキング（1位大+2-9位横スクロール）
@@ -260,7 +261,12 @@
   transform: translateX(4px);
 }
 
-/* ===== スマホ: 1位左固定 + 2位以降横スクロール（Flexbox版） ===== */
+/* SP横スクロールエリアは非表示（PC/タブレットでは使わない） */
+.ranking-section__scroll-area {
+  display: contents;
+}
+
+/* ===== スマホ: 1位左固定 + 2位以降横スクロール ===== */
 @media (max-width: 749px) {
   .ranking-section {
     padding: 40px 0;
@@ -302,16 +308,16 @@
     height: 14px;
   }
   
-  /* Flexbox横スクロール */
+  /* 外側コンテナ: 横並び */
   .ranking-section__grid {
     display: flex;
-    flex-wrap: wrap;
+    align-items: stretch;
+    gap: 10px;
+    padding: 0 16px;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
-    padding: 0 16px;
-    gap: 8px;
   }
   
   .ranking-section__grid::-webkit-scrollbar {
@@ -320,15 +326,27 @@
   
   /* 1位: 左側に大きく */
   .ranking-section__item--1 {
-    flex: 0 0 48%;
-    min-width: 48%;
-    order: 0;
+    flex: 0 0 45%;
+    min-width: 45%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .ranking-section__item--1 .ranking-section__image-wrap {
+    flex: 1;
+    aspect-ratio: auto;
+    min-height: 0;
   }
   
   .ranking-section__item--1 .ranking-section__rank {
     width: 36px;
     height: 36px;
     font-size: 16px;
+  }
+  
+  .ranking-section__item--1 .ranking-section__info {
+    flex-shrink: 0;
+    padding: 10px 4px 0;
   }
   
   .ranking-section__item--1 .ranking-section__name {
@@ -340,43 +358,50 @@
     font-size: 15px;
   }
   
-  /* 2位以降: 小さいカード、右側に横スクロール */
-  .ranking-section__item:not(.ranking-section__item--1) {
-    flex: 0 0 calc(26% - 4px);
-    min-width: calc(26% - 4px);
+  /* 2位以降: 2行グリッドで横スクロール */
+  .ranking-section__scroll-area {
+    display: grid;
+    grid-template-rows: repeat(2, 1fr);
+    grid-auto-flow: column;
+    grid-auto-columns: 120px;
+    gap: 10px;
+    flex: 0 0 auto;
+  }
+  
+  .ranking-section__scroll-area .ranking-section__item {
     scroll-snap-align: start;
   }
   
-  .ranking-section__rank {
-    width: 22px;
-    height: 22px;
-    font-size: 10px;
-    top: 4px;
-    left: 4px;
+  .ranking-section__scroll-area .ranking-section__rank {
+    width: 24px;
+    height: 24px;
+    font-size: 11px;
+    top: 6px;
+    left: 6px;
   }
   
-  .ranking-section__badges {
-    top: 4px;
-    right: 4px;
+  .ranking-section__scroll-area .ranking-section__badges {
+    top: 6px;
+    right: 6px;
   }
   
-  .ranking-section__badges .product-badge {
+  .ranking-section__scroll-area .ranking-section__badges .product-badge {
     font-size: 8px;
     padding: 2px 4px;
   }
   
-  .ranking-section__info {
+  .ranking-section__scroll-area .ranking-section__info {
     padding: 6px 2px 0;
   }
   
-  .ranking-section__name {
+  .ranking-section__scroll-area .ranking-section__name {
     font-size: 10px;
     margin-bottom: 2px;
     -webkit-line-clamp: 1;
   }
   
-  .ranking-section__price {
-    font-size: 11px;
+  .ranking-section__scroll-area .ranking-section__price {
+    font-size: 12px;
   }
   
   .ranking-section__view-all {
@@ -532,6 +557,7 @@
       
       {% for block in section.blocks %}
         {% assign collection = collections[block.settings.collection] %}
+        {% assign products_to_show = block.settings.products_to_show | default: 9 %}
         <div
           class="ranking-section__content{% if forloop.first %} is-active{% endif %}"
           role="tabpanel"
@@ -539,13 +565,10 @@
           data-collection-url="{{ collection.url }}"
         >
           <div class="ranking-section__grid">
-            {% assign products_to_show = block.settings.products_to_show | default: 9 %}
-            {% for product in collection.products limit: products_to_show %}
-              <article class="ranking-section__item ranking-section__item--{{ forloop.index }}">
-                <span class="ranking-section__rank ranking-section__rank--{{ forloop.index }}">
-                  {{ forloop.index }}
-                </span>
-                
+            {% comment %} 1位を単独で出力 {% endcomment %}
+            {% for product in collection.products limit: 1 %}
+              <article class="ranking-section__item ranking-section__item--1">
+                <span class="ranking-section__rank ranking-section__rank--1">1</span>
                 <a href="{{ product.url }}" class="ranking-section__image-wrap">
                   {% if product.featured_image %}
                     <img
@@ -559,22 +582,52 @@
                   {% else %}
                     {{ 'product-1' | placeholder_svg_tag: 'ranking-section__image' }}
                   {% endif %}
-                  
                   <div class="ranking-section__badges">
                     {% render '6johan-product-badge', product: product %}
                   </div>
                 </a>
-                
                 <div class="ranking-section__info">
                   <h3 class="ranking-section__name">
                     <a href="{{ product.url }}">{{ product.title }}</a>
                   </h3>
-                  <p class="ranking-section__price">
-                    {{ product.price | money }}
-                  </p>
+                  <p class="ranking-section__price">{{ product.price | money }}</p>
                 </div>
               </article>
             {% endfor %}
+            
+            {% comment %} 2位以降を横スクロールエリアで出力 {% endcomment %}
+            <div class="ranking-section__scroll-area">
+              {% assign remaining = products_to_show | minus: 1 %}
+              {% for product in collection.products offset: 1 limit: remaining %}
+                {% assign rank = forloop.index | plus: 1 %}
+                <article class="ranking-section__item ranking-section__item--{{ rank }}">
+                  <span class="ranking-section__rank ranking-section__rank--{{ rank }}">{{ rank }}</span>
+                  <a href="{{ product.url }}" class="ranking-section__image-wrap">
+                    {% if product.featured_image %}
+                      <img
+                        src="{{ product.featured_image | image_url: width: 400 }}"
+                        alt="{{ product.featured_image.alt | escape }}"
+                        class="ranking-section__image"
+                        loading="lazy"
+                        width="400"
+                        height="400"
+                      >
+                    {% else %}
+                      {{ 'product-1' | placeholder_svg_tag: 'ranking-section__image' }}
+                    {% endif %}
+                    <div class="ranking-section__badges">
+                      {% render '6johan-product-badge', product: product %}
+                    </div>
+                  </a>
+                  <div class="ranking-section__info">
+                    <h3 class="ranking-section__name">
+                      <a href="{{ product.url }}">{{ product.title }}</a>
+                    </h3>
+                    <p class="ranking-section__price">{{ product.price | money }}</p>
+                  </div>
+                </article>
+              {% endfor %}
+            </div>
           </div>
         </div>
       {% endfor %}
@@ -632,27 +685,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const updateArrows = () => {
       if (!scrollContainer) return;
       const { scrollLeft, scrollWidth, clientWidth } = scrollContainer;
-      
-      if (prevBtn) {
-        prevBtn.classList.toggle('is-hidden', scrollLeft <= 0);
-      }
-      if (nextBtn) {
-        nextBtn.classList.toggle('is-hidden', scrollLeft + clientWidth >= scrollWidth - 1);
-      }
+      if (prevBtn) prevBtn.classList.toggle('is-hidden', scrollLeft <= 0);
+      if (nextBtn) nextBtn.classList.toggle('is-hidden', scrollLeft + clientWidth >= scrollWidth - 1);
     };
     
-    if (prevBtn) {
-      prevBtn.addEventListener('click', () => {
-        scrollContainer.scrollBy({ left: -150, behavior: 'smooth' });
-      });
-    }
-    
-    if (nextBtn) {
-      nextBtn.addEventListener('click', () => {
-        scrollContainer.scrollBy({ left: 150, behavior: 'smooth' });
-      });
-    }
-    
+    if (prevBtn) prevBtn.addEventListener('click', () => scrollContainer.scrollBy({ left: -150, behavior: 'smooth' }));
+    if (nextBtn) nextBtn.addEventListener('click', () => scrollContainer.scrollBy({ left: 150, behavior: 'smooth' }));
     if (scrollContainer) {
       scrollContainer.addEventListener('scroll', updateArrows);
       window.addEventListener('resize', updateArrows);
@@ -719,32 +757,16 @@ document.addEventListener('DOMContentLoaded', function() {
     {
       "name": "6JOHAN ランキング",
       "blocks": [
-        {
-          "type": "tab",
-          "settings": {
-            "tab_label": "すべて"
-          }
-        },
-        {
-          "type": "tab",
-          "settings": {
-            "tab_label": "チェア"
-          }
-        },
-        {
-          "type": "tab",
-          "settings": {
-            "tab_label": "テーブル"
-          }
-        },
-        {
-          "type": "tab",
-          "settings": {
-            "tab_label": "収納"
-          }
-        }
+        { "type": "tab", "settings": { "tab_label": "すべて" } },
+        { "type": "tab", "settings": { "tab_label": "チェア" } },
+        { "type": "tab", "settings": { "tab_label": "テーブル" } },
+        { "type": "tab", "settings": { "tab_label": "収納" } }
       ]
     }
   ]
 }
 {% endschema %}
+EOF
+
+cat sections/6johan-ranking.liquid | pbcopy
+echo "完了！Shopifyエディタで Cmd+A → Cmd+V → Save"
