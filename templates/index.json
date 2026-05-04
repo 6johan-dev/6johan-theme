@@ -42,6 +42,7 @@
     },
     "6johan_newsletter_bar_7T6WdJ": {
       "type": "6johan-newsletter-bar",
+      "disabled": true,
       "name": "6JOHAN メルマガ登録バー",
       "settings": {
         "badge_text": "初回10%OFF",
@@ -57,6 +58,7 @@
       "settings": {
         "image_pc": "shopify://shop_images/GW_hero_pc.jpg",
         "image_sp": "shopify://shop_images/GW_hero_sp.jpg",
+        "show_overlay": false,
         "image_alt": "6JOHANの家具がある暮らし",
         "label": "GW SALE",
         "heading": "最大30%OFF",
