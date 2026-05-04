@@ -379,6 +379,54 @@
         "view_all_text": "すべてのお知らせを見る",
         "view_all_url": ""
       }
+    },
+    "6johan_feature_banners_G8p7zY": {
+      "type": "6johan-feature-banners",
+      "blocks": {
+        "banner_PQWAmW": {
+          "type": "banner",
+          "settings": {
+            "label": "SPRING COLLECTION",
+            "title": "春の新作コレクション",
+            "subtitle": "暮らしに彩りを添える新作家具",
+            "cta_text": "詳しく見る",
+            "url": "",
+            "is_large": true,
+            "overlay_light": false
+          }
+        },
+        "banner_FDtBXi": {
+          "type": "banner",
+          "settings": {
+            "label": "STYLE GUIDE",
+            "title": "北欧スタイルの作り方",
+            "subtitle": "",
+            "cta_text": "読む",
+            "url": "",
+            "is_large": false,
+            "overlay_light": false
+          }
+        },
+        "banner_fA44XN": {
+          "type": "banner",
+          "settings": {
+            "label": "5万円以下",
+            "title": "お手頃価格の人気アイテム",
+            "subtitle": "",
+            "cta_text": "見る",
+            "url": "",
+            "is_large": false,
+            "overlay_light": false
+          }
+        }
+      },
+      "block_order": [
+        "banner_PQWAmW",
+        "banner_FDtBXi",
+        "banner_fA44XN"
+      ],
+      "name": "6JOHAN 特集バナー",
+      "settings": {}
     }
   },
   "order": [
@@ -389,6 +437,7 @@
     "6johan_quick_nav_F43bz6",
     "6johan_ranking_GfgLC3",
     "6johan_customer_voice_Fq3Jif",
-    "6johan_news_FQiVyx"
+    "6johan_news_FQiVyx",
+    "6johan_feature_banners_G8p7zY"
   ]
 }
