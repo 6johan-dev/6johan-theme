@@ -1,6 +1,6 @@
 {% comment %}
   6JOHAN Ranking Section
-  LOWYA風ランキング（1位大+2-9位小）- 高さ調整版
+  LOWYA風ランキング（1位大+2-9位が4列×2行）
 {% endcomment %}
 
 {%- style -%}
@@ -10,7 +10,7 @@
 }
 
 .ranking-section__container {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 0 20px;
 }
@@ -132,11 +132,12 @@
   display: block;
 }
 
-/* PC: 1位大（左2列×2行）+ 2-5位（右2列）+ 6-9位（下4列） */
+/* PC: 6列グリッド - 1位大（2列×2行）+ 2-9位（4列×2行） */
 .ranking-section__grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: auto auto;
+  gap: 16px;
 }
 
 /* 1位: 左2列×2行 */
@@ -147,44 +148,21 @@
   flex-direction: column;
 }
 
-/* 1位の画像を残りスペースに拡張 */
 .ranking-section__item--1 .ranking-section__image-wrap {
   flex: 1;
   min-height: 0;
   aspect-ratio: auto;
 }
 
-/* 2位: 右上 */
-.ranking-section__item--2 {
-  grid-column: 3;
-  grid-row: 1;
-}
-
-/* 3位: 右上 */
-.ranking-section__item--3 {
-  grid-column: 4;
-  grid-row: 1;
-}
-
-/* 4位: 右下 */
-.ranking-section__item--4 {
-  grid-column: 3;
-  grid-row: 2;
-}
-
-/* 5位: 右下 */
-.ranking-section__item--5 {
-  grid-column: 4;
-  grid-row: 2;
-}
-
-/* 6-9位: 3行目 */
-.ranking-section__item--6,
-.ranking-section__item--7,
-.ranking-section__item--8,
-.ranking-section__item--9 {
-  grid-row: 3;
-}
+/* 2-9位の配置: 上段が偶数(2,4,6,8)、下段が奇数(3,5,7,9) */
+.ranking-section__item--2 { grid-column: 3; grid-row: 1; }
+.ranking-section__item--3 { grid-column: 3; grid-row: 2; }
+.ranking-section__item--4 { grid-column: 4; grid-row: 1; }
+.ranking-section__item--5 { grid-column: 4; grid-row: 2; }
+.ranking-section__item--6 { grid-column: 5; grid-row: 1; }
+.ranking-section__item--7 { grid-column: 5; grid-row: 2; }
+.ranking-section__item--8 { grid-column: 6; grid-row: 1; }
+.ranking-section__item--9 { grid-column: 6; grid-row: 2; }
 
 .ranking-section__item {
   position: relative;
@@ -196,23 +174,23 @@
   position: absolute;
   top: 8px;
   left: 8px;
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   background-color: var(--6j-text, #292724);
   color: #fff;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 700;
   z-index: 3;
 }
 
 .ranking-section__item--1 .ranking-section__rank {
-  width: 48px;
-  height: 48px;
-  font-size: 20px;
+  width: 44px;
+  height: 44px;
+  font-size: 18px;
 }
 
 .ranking-section__rank--1 {
@@ -259,22 +237,22 @@
 }
 
 .ranking-section__info {
-  padding: 12px 4px 0;
+  padding: 10px 4px 0;
   display: flex;
   flex-direction: column;
 }
 
 .ranking-section__item--1 .ranking-section__info {
-  padding: 16px 4px 0;
+  padding: 14px 4px 0;
   flex-shrink: 0;
 }
 
 .ranking-section__name {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
   color: var(--6j-text, #292724);
-  margin: 0 0 8px;
-  line-height: 1.5;
+  margin: 0 0 6px;
+  line-height: 1.4;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -282,7 +260,8 @@
 }
 
 .ranking-section__item--1 .ranking-section__name {
-  font-size: 16px;
+  font-size: 15px;
+  margin-bottom: 8px;
 }
 
 .ranking-section__name a {
@@ -295,14 +274,14 @@
 }
 
 .ranking-section__price {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--6j-text, #292724);
   margin: 0;
 }
 
 .ranking-section__item--1 .ranking-section__price {
-  font-size: 18px;
+  font-size: 17px;
 }
 
 .ranking-section__view-all {
@@ -314,7 +293,7 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 14px 32px;
+  padding: 14px 40px;
   border: 1px solid var(--6j-text, #292724);
   border-radius: 4px;
   font-size: 14px;
@@ -327,6 +306,36 @@
 .ranking-section__view-all-link:hover {
   background-color: var(--6j-text, #292724);
   color: #fff;
+}
+
+.ranking-section__view-all-link svg {
+  transition: transform 0.2s;
+}
+
+.ranking-section__view-all-link:hover svg {
+  transform: translateX(4px);
+}
+
+/* タブレット: 4列 */
+@media (max-width: 1099px) {
+  .ranking-section__grid {
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: auto auto auto;
+  }
+  
+  .ranking-section__item--1 {
+    grid-column: 1 / 3;
+    grid-row: 1 / 3;
+  }
+  
+  .ranking-section__item--2 { grid-column: 3; grid-row: 1; }
+  .ranking-section__item--3 { grid-column: 4; grid-row: 1; }
+  .ranking-section__item--4 { grid-column: 3; grid-row: 2; }
+  .ranking-section__item--5 { grid-column: 4; grid-row: 2; }
+  .ranking-section__item--6 { grid-column: 1; grid-row: 3; }
+  .ranking-section__item--7 { grid-column: 2; grid-row: 3; }
+  .ranking-section__item--8 { grid-column: 3; grid-row: 3; }
+  .ranking-section__item--9 { grid-column: 4; grid-row: 3; }
 }
 
 /* スマホ: 1位全幅 + 2-9位が2列 */
@@ -369,7 +378,6 @@
     gap: 12px;
   }
   
-  /* 1位: 全幅、通常のaspect-ratio */
   .ranking-section__item--1 {
     grid-column: 1 / -1;
     grid-row: auto;
@@ -380,7 +388,6 @@
     aspect-ratio: 1;
   }
   
-  /* 2-9位: 通常の2列配置 */
   .ranking-section__item--2,
   .ranking-section__item--3,
   .ranking-section__item--4,
@@ -432,6 +439,11 @@
   .ranking-section__item--1 .ranking-section__price {
     font-size: 16px;
   }
+  
+  .ranking-section__view-all-link {
+    padding: 12px 24px;
+    font-size: 13px;
+  }
 }
 {%- endstyle -%}
 
@@ -458,6 +470,7 @@
               aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
               aria-controls="ranking-panel-{{ block.id }}"
               data-tab="{{ block.id }}"
+              data-collection-url="{{ collections[block.settings.collection].url }}"
               {{ block.shopify_attributes }}
             >
               {{ block.settings.tab_label }}
@@ -478,7 +491,7 @@
           class="ranking-section__content{% if forloop.first %} is-active{% endif %}"
           role="tabpanel"
           id="ranking-panel-{{ block.id }}"
-          aria-labelledby="ranking-tab-{{ block.id }}"
+          data-collection-url="{{ collection.url }}"
         >
           <div class="ranking-section__grid">
             {% assign products_to_show = block.settings.products_to_show | default: 9 %}
@@ -520,14 +533,14 @@
           </div>
         </div>
       {% endfor %}
-    {% endif %}
-    
-    {% if section.settings.show_view_all and section.settings.view_all_url != blank %}
+      
+      {% comment %} View All Button - 選択中のタブのコレクションへリンク {% endcomment %}
+      {% assign first_collection = collections[section.blocks.first.settings.collection] %}
       <div class="ranking-section__view-all">
-        <a href="{{ section.settings.view_all_url }}" class="ranking-section__view-all-link">
+        <a href="{{ first_collection.url }}" class="ranking-section__view-all-link" id="ranking-view-all">
           {{ section.settings.view_all_text }}
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-            <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
           </svg>
         </a>
       </div>
@@ -537,13 +550,14 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  // Tab switching
   const tabs = document.querySelectorAll('.ranking-section__tab');
   const panels = document.querySelectorAll('.ranking-section__content');
+  const viewAllLink = document.getElementById('ranking-view-all');
   
   tabs.forEach(function(tab) {
     tab.addEventListener('click', function() {
       const targetId = this.getAttribute('data-tab');
+      const collectionUrl = this.getAttribute('data-collection-url');
       
       tabs.forEach(function(t) {
         t.classList.remove('is-active');
@@ -558,6 +572,11 @@ document.addEventListener('DOMContentLoaded', function() {
           panel.classList.add('is-active');
         }
       });
+      
+      // Update View All link
+      if (viewAllLink && collectionUrl) {
+        viewAllLink.href = collectionUrl;
+      }
     });
   });
   
@@ -620,21 +639,10 @@ document.addEventListener('DOMContentLoaded', function() {
       "default": "人気ランキング"
     },
     {
-      "type": "checkbox",
-      "id": "show_view_all",
-      "label": "「すべて見る」リンクを表示",
-      "default": true
-    },
-    {
       "type": "text",
       "id": "view_all_text",
       "label": "「すべて見る」テキスト",
       "default": "ランキングをもっと見る"
-    },
-    {
-      "type": "url",
-      "id": "view_all_url",
-      "label": "「すべて見る」リンク先"
     }
   ],
   "blocks": [
