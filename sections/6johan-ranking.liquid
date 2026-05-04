@@ -290,6 +290,7 @@
   /* 横スクロールグリッド */
   .ranking-section__grid {
     display: flex;
+    align-items: flex-start;
     gap: 10px;
     overflow-x: auto;
     scrollbar-width: none;
@@ -299,10 +300,11 @@
   
   .ranking-section__grid::-webkit-scrollbar { display: none; }
   
-  /* 1位 */
+  /* 1位: 2行分と同じ高さ */
   .ranking-section__item--1 {
-    flex: 0 0 55vw;
-    max-width: 220px;
+    flex: 0 0 auto;
+    width: calc(32vw * 2 + 10px);
+    max-width: 290px;
   }
   
   .ranking-section__item--1 .ranking-section__rank {
@@ -481,7 +483,6 @@
 </section>
 
 <style>
-  /* PC/タブレットではdesktop表示、SPではmobile表示 */
   .ranking-section__grid--mobile { display: none; }
   
   @media (max-width: 749px) {
