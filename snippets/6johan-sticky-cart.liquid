@@ -224,6 +224,36 @@ body.sticky-cart-active {
     }
   });
 
+  /* Channel Talk position sync */
+  function moveChannelTalk(up) {
+    var offset = up ? '80px' : '16px';
+    /* Try multiple selectors for Channel Talk */
+    var selectors = ['#ch-plugin', '#ch-plugin-entry', '[id^="ch-"]'];
+    selectors.forEach(function(sel) {
+      var els = document.querySelectorAll(sel);
+      els.forEach(function(el) {
+        el.style.setProperty('bottom', offset, 'important');
+        el.style.setProperty('transition', 'bottom 0.3s ease', 'important');
+      });
+    });
+    /* Also try iframe approach */
+    var iframes = document.querySelectorAll('iframe[title*="Channel"], iframe[id*="ch-"]');
+    iframes.forEach(function(iframe) {
+      var parent = iframe.parentElement;
+      if (parent) {
+        parent.style.setProperty('bottom', offset, 'important');
+        parent.style.setProperty('transition', 'bottom 0.3s ease', 'important');
+      }
+    });
+  }
+
+  /* Observe sticky bar visibility and sync Channel Talk */
+  var barObserver = new MutationObserver(function() {
+    var isVisible = stickyBar.classList.contains('sticky-cart-bar--visible');
+    moveChannelTalk(isVisible);
+  });
+  barObserver.observe(stickyBar, { attributes: true, attributeFilter: ['class'] });
+
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initObserver);
   } else {
