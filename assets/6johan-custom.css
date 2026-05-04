@@ -1372,9 +1372,9 @@ body,
   background: #fff !important;
 }
 
-/* Trust bar can keep a subtle different bg for emphasis */
+/* Trust bar - white bg */
 .global-trust-bar {
-  background: #FAFAF8 !important;
+  background: #fff !important;
 }
 
 
