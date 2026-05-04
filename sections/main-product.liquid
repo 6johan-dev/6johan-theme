@@ -497,12 +497,14 @@
                 -%}
 
               {%- comment -%} 6JOHAN Trust Badges - カートボタン直後 {%- endcomment -%}
+              {%- comment -%} 6JOHAN お気に入りボタン - カートボタン直下 {%- endcomment -%}
+              {% render '6johan-favorite-button', product: product %}
+
               <div class="product-trust-badges" style="margin-top: 16px;">
                 {%- render '6johan-delivery-info', product: product -%}
               </div>
 
-              {%- comment -%} 6JOHAN お気に入りボタン {%- endcomment -%}
-              {% render '6johan-favorite-button', product: product %}
+
               {%- when 'rating' -%}
                 {%- if product.metafields.reviews.rating.value != blank -%}
                   <div class="rating-wrapper">
