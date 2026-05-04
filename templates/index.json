@@ -297,6 +297,7 @@
         "review_TfL3cj": {
           "type": "review",
           "settings": {
+            "image": "shopify://shop_images/woodcircletabledetail7.png",
             "room_type": "リビング",
             "rating": 5,
             "quote": "北欧らしいシンプルなデザインがとても気に入っています。部屋に置くだけで雰囲気が変わりました。組み立ても簡単で、すぐに使い始められました。",
