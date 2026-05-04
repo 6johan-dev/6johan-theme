@@ -258,7 +258,7 @@
   .ranking-section__item--9 { grid-column: 4; grid-row: 3; }
 }
 
-/* ========== スマホ: 横スクロール2行 ========== */
+/* ========== スマホ: 横スクロール2行（画像のみ） ========== */
 @media (max-width: 749px) {
   .ranking-section {
     padding: 40px 0;
@@ -290,8 +290,8 @@
   /* 横スクロールグリッド */
   .ranking-section__grid {
     display: flex;
-    align-items: flex-start;
-    gap: 10px;
+    align-items: stretch;
+    gap: 8px;
     overflow-x: auto;
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
@@ -300,65 +300,53 @@
   
   .ranking-section__grid::-webkit-scrollbar { display: none; }
   
-  /* 1位: 2行分と同じ高さ */
+  /* SP: 商品名・価格を非表示 */
+  .ranking-section__grid--mobile .ranking-section__info {
+    display: none;
+  }
+  
+  /* 1位 */
   .ranking-section__item--1 {
     flex: 0 0 auto;
-    width: calc(32vw * 2 + 10px);
-    max-width: 290px;
+  }
+  
+  .ranking-section__item--1 .ranking-section__image-wrap {
+    width: calc(28vw * 2 + 8px);
+    max-width: 240px;
+    height: calc(28vw * 2 + 8px);
+    max-height: 240px;
   }
   
   .ranking-section__item--1 .ranking-section__rank {
-    width: 32px;
-    height: 32px;
-    font-size: 14px;
+    width: 28px;
+    height: 28px;
+    font-size: 13px;
   }
   
-  .ranking-section__item--1 .ranking-section__name {
-    font-size: 12px;
-  }
-  
-  .ranking-section__item--1 .ranking-section__price {
-    font-size: 14px;
-  }
-  
-  /* 2位以降のペアをラップ */
+  /* 2位以降のペア */
   .ranking-section__pair {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    flex: 0 0 32vw;
-    max-width: 140px;
+    gap: 8px;
+    flex: 0 0 28vw;
+    max-width: 116px;
   }
   
-  .ranking-section__pair .ranking-section__item {
-    flex: 1;
+  .ranking-section__pair .ranking-section__image-wrap {
+    aspect-ratio: 1;
   }
   
   .ranking-section__pair .ranking-section__rank {
-    width: 22px;
-    height: 22px;
+    width: 20px;
+    height: 20px;
     font-size: 10px;
-    top: 6px;
-    left: 6px;
+    top: 5px;
+    left: 5px;
   }
   
   .ranking-section__pair .ranking-section__badges {
-    top: 6px;
-    right: 6px;
-  }
-  
-  .ranking-section__pair .ranking-section__info {
-    padding: 6px 0 0;
-  }
-  
-  .ranking-section__pair .ranking-section__name {
-    font-size: 10px;
-    margin-bottom: 2px;
-    -webkit-line-clamp: 1;
-  }
-  
-  .ranking-section__pair .ranking-section__price {
-    font-size: 11px;
+    top: 5px;
+    right: 5px;
   }
   
   .ranking-section__view-all-link {
@@ -411,7 +399,7 @@
             {% endfor %}
           </div>
           
-          {%- comment -%} SP用横スクロール {%- endcomment -%}
+          {%- comment -%} SP用横スクロール（画像のみ） {%- endcomment -%}
           <div class="ranking-section__grid ranking-section__grid--mobile">
             {% for product in collection.products limit: 1 %}
               <article class="ranking-section__item ranking-section__item--1">
@@ -420,10 +408,6 @@
                   <img src="{{ product.featured_image | image_url: width: 500 }}" alt="{{ product.featured_image.alt | escape }}" class="ranking-section__image" loading="lazy">
                   <div class="ranking-section__badges">{% render '6johan-product-badge', product: product %}</div>
                 </a>
-                <div class="ranking-section__info">
-                  <h3 class="ranking-section__name"><a href="{{ product.url }}">{{ product.title }}</a></h3>
-                  <p class="ranking-section__price">{{ product.price | money }}</p>
-                </div>
               </article>
             {% endfor %}
             
@@ -442,10 +426,6 @@
                       <img src="{{ product.featured_image | image_url: width: 300 }}" alt="{{ product.featured_image.alt | escape }}" class="ranking-section__image" loading="lazy">
                       <div class="ranking-section__badges">{% render '6johan-product-badge', product: product %}</div>
                     </a>
-                    <div class="ranking-section__info">
-                      <h3 class="ranking-section__name"><a href="{{ product.url }}">{{ product.title }}</a></h3>
-                      <p class="ranking-section__price">{{ product.price | money }}</p>
-                    </div>
                   </article>
                 {% endif %}
                 {% if products_array[idx2] %}
@@ -457,10 +437,6 @@
                       <img src="{{ product.featured_image | image_url: width: 300 }}" alt="{{ product.featured_image.alt | escape }}" class="ranking-section__image" loading="lazy">
                       <div class="ranking-section__badges">{% render '6johan-product-badge', product: product %}</div>
                     </a>
-                    <div class="ranking-section__info">
-                      <h3 class="ranking-section__name"><a href="{{ product.url }}">{{ product.title }}</a></h3>
-                      <p class="ranking-section__price">{{ product.price | money }}</p>
-                    </div>
                   </article>
                 {% endif %}
               </div>
