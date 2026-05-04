@@ -40,31 +40,11 @@
         "show_close": true
       }
     },
-    "6johan_newsletter_bar_7T6WdJ": {
-      "type": "6johan-newsletter-bar",
-      "disabled": true,
-      "name": "6JOHAN メルマガ登録バー",
+    "6johan_search_bar_yrr97F": {
+      "type": "6johan-search-bar",
+      "name": "6JOHAN 検索バー",
       "settings": {
-        "badge_text": "初回10%OFF",
-        "text": "メルマガ登録で<strong>初回ご購入10%OFF</strong>クーポンをプレゼント",
-        "placeholder": "メールアドレス",
-        "button_text": "登録する",
-        "success_message": "ご登録ありがとうございます！クーポンをお送りしました。"
-      }
-    },
-    "6johan_hero_qtHCRT": {
-      "type": "6johan-hero",
-      "name": "6JOHAN ヒーロー",
-      "settings": {
-        "image_pc": "shopify://shop_images/GW_hero_pc.jpg",
-        "image_sp": "shopify://shop_images/GW_hero_sp.jpg",
-        "show_overlay": false,
-        "image_alt": "6JOHANの家具がある暮らし",
-        "label": "GW SALE",
-        "heading": "最大30%OFF",
-        "subheading": "5/10(日)まで",
-        "cta_text": "セール商品を見る →",
-        "cta_url": "/collections/all"
+        "placeholder": "何かお探しですか？"
       }
     },
     "6johan_category_icons_RGywjp": {
@@ -388,12 +368,71 @@
         "view_all_text": "すべてのお知らせを見る",
         "view_all_url": ""
       }
+    },
+    "6johan_quick_category_dF9MET": {
+      "type": "6johan-quick-category",
+      "blocks": {
+        "category_KCghBj": {
+          "type": "category",
+          "settings": {
+            "icon": "new",
+            "label": "新商品",
+            "link": "",
+            "badge": "new"
+          }
+        },
+        "category_3Ggfj3": {
+          "type": "category",
+          "settings": {
+            "icon": "ranking",
+            "label": "ランキング",
+            "link": "",
+            "badge": "hot"
+          }
+        },
+        "category_Y8jjwH": {
+          "type": "category",
+          "settings": {
+            "icon": "sale",
+            "label": "セール",
+            "link": "",
+            "badge": "sale"
+          }
+        },
+        "category_RG4tre": {
+          "type": "category",
+          "settings": {
+            "icon": "recommend",
+            "label": "おすすめ",
+            "link": "",
+            "badge": "none"
+          }
+        },
+        "category_tWUwDh": {
+          "type": "category",
+          "settings": {
+            "icon": "blog",
+            "label": "マガジン",
+            "link": "",
+            "badge": "none"
+          }
+        }
+      },
+      "block_order": [
+        "category_KCghBj",
+        "category_3Ggfj3",
+        "category_Y8jjwH",
+        "category_RG4tre",
+        "category_tWUwDh"
+      ],
+      "name": "6JOHAN クイックカテゴリ",
+      "settings": {}
     }
   },
   "order": [
     "6johan_announcement_ticker_QLCctr",
-    "6johan_newsletter_bar_7T6WdJ",
-    "6johan_hero_qtHCRT",
+    "6johan_search_bar_yrr97F",
+    "6johan_quick_category_dF9MET",
     "6johan_category_icons_RGywjp",
     "6johan_quick_nav_F43bz6",
     "6johan_feature_banners_eHjW8f",
