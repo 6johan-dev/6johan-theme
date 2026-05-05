@@ -176,6 +176,14 @@
     "6johan_category_icons_RGywjp": {
       "type": "6johan-category-icons",
       "blocks": {
+        "category_eHz46m": {
+          "type": "category",
+          "settings": {
+            "label": "テレビボード",
+            "icon_type": "tv_board",
+            "url": "shopify://collections/004"
+          }
+        },
         "category_q8HrgP": {
           "type": "category",
           "settings": {
@@ -208,20 +216,12 @@
             "url": "shopify://collections/003"
           }
         },
-        "category_GafKhV": {
-          "type": "category",
-          "settings": {
-            "label": "収納家具",
-            "icon_type": "storage",
-            "url": ""
-          }
-        },
         "category_QLM6TY": {
           "type": "category",
           "settings": {
             "label": "ソファ",
             "icon_type": "sofa",
-            "url": ""
+            "url": "shopify://collections/ソファ"
           }
         },
         "category_Vk83dm": {
@@ -229,7 +229,7 @@
           "settings": {
             "label": "ミラー・鏡",
             "icon_type": "mirror",
-            "url": ""
+            "url": "shopify://collections/008"
           }
         },
         "category_Qp4wRf": {
@@ -274,11 +274,11 @@
         }
       },
       "block_order": [
+        "category_eHz46m",
         "category_q8HrgP",
         "category_eapgpp",
         "category_UXiUUN",
         "category_Ri7PpX",
-        "category_GafKhV",
         "category_QLM6TY",
         "category_Vk83dm",
         "category_Qp4wRf",
