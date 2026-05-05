@@ -176,14 +176,6 @@
     "6johan_category_icons_RGywjp": {
       "type": "6johan-category-icons",
       "blocks": {
-        "category_eHz46m": {
-          "type": "category",
-          "settings": {
-            "label": "テレビボード",
-            "icon_type": "tv_board",
-            "url": "shopify://collections/004"
-          }
-        },
         "category_q8HrgP": {
           "type": "category",
           "settings": {
@@ -237,7 +229,7 @@
           "settings": {
             "label": "ラグ",
             "icon_type": "rug",
-            "url": ""
+            "url": "shopify://collections/009"
           }
         },
         "category_qjqnyk": {
@@ -246,6 +238,14 @@
             "label": "シェルフ・本棚",
             "icon_type": "shelf",
             "url": "shopify://collections/006"
+          }
+        },
+        "category_eHz46m": {
+          "type": "category",
+          "settings": {
+            "label": "テレビボード",
+            "icon_type": "tv_board",
+            "url": "shopify://collections/004"
           }
         },
         "category_giHhDq": {
@@ -269,12 +269,11 @@
           "settings": {
             "label": "すべて見る",
             "icon_type": "all",
-            "url": ""
+            "url": "shopify://collections"
           }
         }
       },
       "block_order": [
-        "category_eHz46m",
         "category_q8HrgP",
         "category_eapgpp",
         "category_UXiUUN",
@@ -283,6 +282,7 @@
         "category_Vk83dm",
         "category_Qp4wRf",
         "category_qjqnyk",
+        "category_eHz46m",
         "category_giHhDq",
         "category_XfTwTL",
         "category_JdpYHK"
