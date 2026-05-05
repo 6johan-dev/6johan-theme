@@ -1510,3 +1510,10 @@ body,
 .collection .grid__item {
   position: relative;
 }
+
+/* B4: コレクションページのcard-badgesを右上に移動（ランキングバッジと共存） */
+.product-grid .card-badges {
+  left: auto !important;
+  right: 8px !important;
+  align-items: flex-end !important;
+}
