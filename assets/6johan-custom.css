@@ -1598,3 +1598,23 @@ body,
   border: none !important;
   border-radius: 8px !important;
 }
+
+/* 検索窓: TOPページ含む全ページ対応 */
+.search-modal__form input[type="search"],
+.search__input,
+.field__input[name="q"],
+input[type="search"],
+.predictive-search__input {
+  background-color: #F2F2F0 !important;
+  border: none !important;
+  border-radius: 8px !important;
+}
+
+/* 検索窓の外枠もボーダー削除 */
+.search-modal__form,
+.search form,
+.search-form,
+.field--with-button {
+  border: none !important;
+  background: transparent !important;
+}
