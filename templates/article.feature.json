@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "feature_hero": {
@@ -18,57 +27,98 @@
     },
     "feature_chapter_1": {
       "type": "6johan-feature-chapter",
-      "settings": {
-        "chapter_number": "01.",
-        "chapter_title": "チャプター1のタイトル"
-      },
       "blocks": {
         "product_1": {
           "type": "product_item",
           "settings": {
-            "heading": "商品の見出し"
+            "heading": "商品の見出し",
+            "description": "",
+            "product": ""
           }
         }
       },
-      "block_order": ["product_1"]
+      "block_order": [
+        "product_1"
+      ],
+      "settings": {
+        "chapter_number": "01.",
+        "chapter_title": "チャプター1のタイトル",
+        "chapter_body": ""
+      }
     },
     "feature_chapter_2": {
       "type": "6johan-feature-chapter",
-      "settings": {
-        "chapter_number": "02.",
-        "chapter_title": "チャプター2のタイトル"
-      },
       "blocks": {
         "product_2": {
           "type": "product_item",
           "settings": {
-            "heading": "商品の見出し"
+            "heading": "商品の見出し",
+            "description": "",
+            "product": ""
           }
         }
       },
-      "block_order": ["product_2"]
+      "block_order": [
+        "product_2"
+      ],
+      "settings": {
+        "chapter_number": "02.",
+        "chapter_title": "チャプター2のタイトル",
+        "chapter_body": ""
+      }
     },
     "feature_chapter_3": {
       "type": "6johan-feature-chapter",
-      "settings": {
-        "chapter_number": "03.",
-        "chapter_title": "チャプター3のタイトル"
-      },
       "blocks": {
         "product_3": {
           "type": "product_item",
           "settings": {
-            "heading": "商品の見出し"
+            "heading": "商品の見出し",
+            "description": "",
+            "product": ""
           }
         }
       },
-      "block_order": ["product_3"]
+      "block_order": [
+        "product_3"
+      ],
+      "settings": {
+        "chapter_number": "03.",
+        "chapter_title": "チャプター3のタイトル",
+        "chapter_body": ""
+      }
+    },
+    "6johan_feature_chapter_J9aczw": {
+      "type": "6johan-feature-chapter",
+      "blocks": {
+        "product_item_JQBWCq": {
+          "type": "product_item",
+          "settings": {
+            "heading": "商品の見出し",
+            "description": "",
+            "product": ""
+          }
+        }
+      },
+      "block_order": [
+        "product_item_JQBWCq"
+      ],
+      "name": "特集チャプター",
+      "settings": {
+        "chapter_number": "04.",
+        "chapter_title": "チャプター4のタイトル",
+        "chapter_body": ""
+      }
     },
     "feature_grid": {
       "type": "6johan-feature-grid",
       "settings": {
         "title": "関連アイテムをもっと見る",
-        "cta_text": "もっとアイテムを見る"
+        "description": "",
+        "collection": "",
+        "product_count": 6,
+        "cta_text": "もっとアイテムを見る",
+        "cta_link": ""
       }
     },
     "feature_share": {
@@ -87,8 +137,8 @@
     "feature_chapter_1",
     "feature_chapter_2",
     "feature_chapter_3",
+    "6johan_feature_chapter_J9aczw",
     "feature_grid",
     "feature_share"
   ]
 }
-
