@@ -192,6 +192,22 @@
             "url": ""
           }
         },
+        "category_UXiUUN": {
+          "type": "category",
+          "settings": {
+            "label": "キャビネット",
+            "icon_type": "cabinet",
+            "url": "shopify://collections/005"
+          }
+        },
+        "category_Ri7PpX": {
+          "type": "category",
+          "settings": {
+            "label": "サイドテーブル",
+            "icon_type": "side_table",
+            "url": "shopify://collections/003"
+          }
+        },
         "category_GafKhV": {
           "type": "category",
           "settings": {
@@ -224,6 +240,30 @@
             "url": ""
           }
         },
+        "category_qjqnyk": {
+          "type": "category",
+          "settings": {
+            "label": "シェルフ・本棚",
+            "icon_type": "shelf",
+            "url": "shopify://collections/006"
+          }
+        },
+        "category_giHhDq": {
+          "type": "category",
+          "settings": {
+            "label": "チェスト",
+            "icon_type": "chest",
+            "url": "shopify://collections/007"
+          }
+        },
+        "category_XfTwTL": {
+          "type": "category",
+          "settings": {
+            "label": "雑貨・その他",
+            "icon_type": "misc",
+            "url": "shopify://collections/012"
+          }
+        },
         "category_JdpYHK": {
           "type": "category",
           "settings": {
@@ -236,10 +276,15 @@
       "block_order": [
         "category_q8HrgP",
         "category_eapgpp",
+        "category_UXiUUN",
+        "category_Ri7PpX",
         "category_GafKhV",
         "category_QLM6TY",
         "category_Vk83dm",
         "category_Qp4wRf",
+        "category_qjqnyk",
+        "category_giHhDq",
+        "category_XfTwTL",
         "category_JdpYHK"
       ],
       "name": "6JOHAN カテゴリアイコン",
