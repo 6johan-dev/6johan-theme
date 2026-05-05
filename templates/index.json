@@ -434,6 +434,7 @@
         "banner_DCynCe": {
           "type": "banner",
           "settings": {
+            "image": "shopify://shop_images/SP.png",
             "title": "北欧スタイルの作り方",
             "url": ""
           }
