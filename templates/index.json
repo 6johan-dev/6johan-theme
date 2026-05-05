@@ -192,12 +192,20 @@
             "url": ""
           }
         },
-        "category_GafKhV": {
+        "category_UXiUUN": {
           "type": "category",
           "settings": {
-            "label": "収納家具",
-            "icon_type": "storage",
-            "url": ""
+            "label": "キャビネット",
+            "icon_type": "cabinet",
+            "url": "shopify://collections/005"
+          }
+        },
+        "category_Ri7PpX": {
+          "type": "category",
+          "settings": {
+            "label": "サイドテーブル",
+            "icon_type": "side_table",
+            "url": "shopify://collections/003"
           }
         },
         "category_QLM6TY": {
@@ -205,7 +213,7 @@
           "settings": {
             "label": "ソファ",
             "icon_type": "sofa",
-            "url": ""
+            "url": "shopify://collections/ソファ"
           }
         },
         "category_Vk83dm": {
@@ -213,7 +221,7 @@
           "settings": {
             "label": "ミラー・鏡",
             "icon_type": "mirror",
-            "url": ""
+            "url": "shopify://collections/008"
           }
         },
         "category_Qp4wRf": {
@@ -221,7 +229,39 @@
           "settings": {
             "label": "ラグ",
             "icon_type": "rug",
-            "url": ""
+            "url": "shopify://collections/009"
+          }
+        },
+        "category_qjqnyk": {
+          "type": "category",
+          "settings": {
+            "label": "シェルフ・本棚",
+            "icon_type": "shelf",
+            "url": "shopify://collections/006"
+          }
+        },
+        "category_eHz46m": {
+          "type": "category",
+          "settings": {
+            "label": "テレビボード",
+            "icon_type": "tv_board",
+            "url": "shopify://collections/004"
+          }
+        },
+        "category_giHhDq": {
+          "type": "category",
+          "settings": {
+            "label": "チェスト",
+            "icon_type": "chest",
+            "url": "shopify://collections/007"
+          }
+        },
+        "category_XfTwTL": {
+          "type": "category",
+          "settings": {
+            "label": "雑貨・その他",
+            "icon_type": "misc",
+            "url": "shopify://collections/012"
           }
         },
         "category_JdpYHK": {
@@ -229,17 +269,22 @@
           "settings": {
             "label": "すべて見る",
             "icon_type": "all",
-            "url": ""
+            "url": "shopify://collections"
           }
         }
       },
       "block_order": [
         "category_q8HrgP",
         "category_eapgpp",
-        "category_GafKhV",
+        "category_UXiUUN",
+        "category_Ri7PpX",
         "category_QLM6TY",
         "category_Vk83dm",
         "category_Qp4wRf",
+        "category_qjqnyk",
+        "category_eHz46m",
+        "category_giHhDq",
+        "category_XfTwTL",
         "category_JdpYHK"
       ],
       "name": "6JOHAN カテゴリアイコン",
