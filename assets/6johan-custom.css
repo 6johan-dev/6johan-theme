@@ -1613,3 +1613,7 @@ body,
   border: none !important;
   box-shadow: none !important;
 }
+
+.sixj-search-bar__icon {
+  background: transparent !important;
+}
