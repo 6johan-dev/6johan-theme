@@ -1584,3 +1584,17 @@ body,
     max-width: 180px !important;
   }
 }
+/* 検索窓: USAGI風グレー背景 */
+.drawer-search__input,
+.search__input,
+.search-modal__input {
+  background-color: #F2F2F0 !important;
+  border: none !important;
+  border-radius: 8px !important;
+}
+
+.drawer-search__form {
+  background-color: #F2F2F0 !important;
+  border: none !important;
+  border-radius: 8px !important;
+}
