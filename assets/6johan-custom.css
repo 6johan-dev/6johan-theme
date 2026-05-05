@@ -1624,3 +1624,9 @@ body,
   background: transparent !important;
   border: none !important;
 }
+
+/* 検索窓: TOPページ直接指定 */
+.sixj-search-bar__form {
+  background: #EAEAE8 !important;
+  border: none !important;
+}
