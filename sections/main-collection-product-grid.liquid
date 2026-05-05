@@ -165,6 +165,9 @@
                     style="--animation-order: {{ forloop.index }};"
                   {% endif %}
                 >
+                  {% if collection.handle == 'pick-up' and forloop.index <= 12 %}
+                    <span class="collection-rank-badge collection-rank-badge--{{ forloop.index }}">{{ forloop.index }}</span>
+                  {% endif %}
                   {% render 'card-product',
                     card_product: product,
                     media_aspect_ratio: section.settings.image_ratio,

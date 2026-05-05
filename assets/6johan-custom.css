@@ -1482,3 +1482,31 @@ body,
     margin-left: -0.8rem !important;
   }
 }
+
+/* B4: コレクションページのランキングバッジ */
+.collection-rank-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 28px;
+  height: 28px;
+  background: #292724;
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.collection-rank-badge--1 { background: linear-gradient(135deg, #D4A843, #B8932E); width: 32px; height: 32px; font-size: 14px; }
+.collection-rank-badge--2 { background: linear-gradient(135deg, #A8A8A8, #8A8A8A); }
+.collection-rank-badge--3 { background: linear-gradient(135deg, #CD7F32, #A66528); }
+
+/* grid__itemにposition:relativeを追加（バッジの位置決め用） */
+.collection .grid__item {
+  position: relative;
+}
