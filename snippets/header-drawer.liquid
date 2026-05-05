@@ -27,6 +27,14 @@
             </form>
           </div>
 
+          <!-- 閲覧履歴 -->
+          <div class="drawer-recently-viewed" id="drawer-recently-viewed" style="display:none;">
+            <div class="drawer-section">
+              <div class="drawer-section__label">閲覧履歴アイテム</div>
+            </div>
+            <div class="drawer-recently-viewed__scroll" id="drawer-recently-viewed-grid"></div>
+          </div>
+
           <div class="drawer-section">
             <div class="drawer-section__label">FIND ITEMS</div>
           </div>
@@ -146,4 +154,49 @@
       </div>
     </div>
   </details>
+
+<script>
+(function() {
+  const STORAGE_KEY = '6johan_recently_viewed';
+  const MAX_DRAWER_ITEMS = 10;
+
+  function renderDrawerRecentlyViewed() {
+    const section = document.getElementById('drawer-recently-viewed');
+    const grid = document.getElementById('drawer-recently-viewed-grid');
+    if (!section || !grid) return;
+
+    let items = [];
+    try {
+      items = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    } catch (e) {
+      return;
+    }
+
+    if (items.length === 0) return;
+
+    const display = items.slice(0, MAX_DRAWER_ITEMS);
+    section.style.display = '';
+
+    grid.innerHTML = display.map(item =>
+      '<a href="' + item.url + '" class="drawer-recently-viewed__item">' +
+        '<img src="' + item.image + '" alt="' + item.title + '" class="drawer-recently-viewed__image" loading="lazy">' +
+        '<div class="drawer-recently-viewed__price">' + item.price + '</div>' +
+      '</a>'
+    ).join('');
+  }
+
+  // ドロワーが開かれた時に描画
+  const drawerDetails = document.getElementById('Details-menu-drawer-container');
+  if (drawerDetails) {
+    drawerDetails.addEventListener('toggle', function() {
+      if (this.open) renderDrawerRecentlyViewed();
+    });
+    // 初回描画もトリガー（既に開いている場合）
+    if (drawerDetails.open) renderDrawerRecentlyViewed();
+  }
+
+  // フォールバック: DOMContentLoaded
+  document.addEventListener('DOMContentLoaded', renderDrawerRecentlyViewed);
+})();
+</script>
 </header-drawer>
