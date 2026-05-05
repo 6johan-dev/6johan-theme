@@ -1403,3 +1403,62 @@ body,
   width: 24px;
   height: 24px;
 }
+
+/* ===========================================
+   2026-05-05 フィードバック対応
+   =========================================== */
+
+/* B2: クイックカテゴリの上にセクション区切り追加 */
+.sixj-quick-category {
+  border-top: 8px solid #F2F2F0;
+}
+
+/* C1: 折りたたみセクション（アコーディオン）の文字サイズ拡大 */
+.product .accordion .accordion__content,
+.product .accordion .accordion__content p,
+.product .accordion .accordion__content div,
+.product .accordion .accordion__content li,
+.product .accordion .accordion__content span,
+.product .accordion .accordion__content td,
+.product .accordion .accordion__content th {
+  font-size: 14px !important;
+  line-height: 1.85 !important;
+}
+
+/* C2: コーディネート提案 — カードを小さく（recently viewed風） */
+.sixj-coordinate {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 12px !important;
+}
+
+.sixj-coordinate__image {
+  aspect-ratio: 1 / 1 !important;
+  width: 100% !important;
+  height: auto !important;
+  object-fit: cover !important;
+  border-radius: 4px !important;
+}
+
+.sixj-coordinate__name {
+  font-size: 12px !important;
+  line-height: 1.4 !important;
+  margin-top: 6px !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+}
+
+.sixj-coordinate__price {
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  margin-top: 2px !important;
+}
+
+@media (min-width: 750px) {
+  .sixj-coordinate {
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 16px !important;
+  }
+}
