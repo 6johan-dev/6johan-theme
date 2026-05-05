@@ -36,7 +36,7 @@
     .then(function(r) { return r.json(); })
     .then(function(data) {
       var products = data.products || [];
-      if (products.length === 0) return;
+      if (products.length === 0) { renderFallback(); return; }
 
       section.style.display = '';
 
@@ -62,11 +62,51 @@
       else section.style.display = 'none';
     })
     .catch(function() {
-      // API失敗時は非表示
-      section.style.display = 'none';
+      renderFallback();
     });
+
+  // フォールバック: Liquid側で用意した別コレクション商品を表示
+  function renderFallback() {
+    var fallbackGrid = document.getElementById('6johan-cross-sell-fallback');
+    if (fallbackGrid && fallbackGrid.children.length > 0) {
+      section.style.display = '';
+      grid.innerHTML = fallbackGrid.innerHTML;
+    }
+  }
 })();
 </script>
+
+<div id="6johan-cross-sell-fallback" style="display:none;">
+  {%- assign current_collections = product.collections -%}
+  {%- assign current_type = product.type -%}
+  {%- assign shown = 0 -%}
+  {%- for c in collections -%}
+    {%- if c.handle != 'pick-up' and c.handle != 'new-arrival' and c.handle != '即納商品' and c.handle != '5万円以下' and c.all_products_count > 0 -%}
+      {%- assign in_current = false -%}
+      {%- for pc in current_collections -%}
+        {%- if pc.handle == c.handle -%}
+          {%- assign in_current = true -%}
+          {%- break -%}
+        {%- endif -%}
+      {%- endfor -%}
+      {%- unless in_current -%}
+        {%- for p in c.products limit: 2 -%}
+          {%- if p.id != product.id and shown < section.settings.max_products -%}
+            <a href="{{ p.url }}" style="text-decoration: none;">
+              <div style="aspect-ratio: 1; overflow: hidden; border-radius: 4px; background: #FAF9F7; margin-bottom: 6px;">
+                <img src="{{ p.featured_image | image_url: width: 400 }}" alt="{{ p.title | escape }}" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy">
+              </div>
+              <div style="font-size: 12px; font-weight: 500; color: #292724; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">{{ p.title }}</div>
+              <div style="font-size: 12px; font-weight: 500; color: #292724; margin-top: 2px;">{{ p.price | money }}</div>
+            </a>
+            {%- assign shown = shown | plus: 1 -%}
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endunless -%}
+    {%- endif -%}
+    {%- if shown >= section.settings.max_products -%}{%- break -%}{%- endif -%}
+  {%- endfor -%}
+</div>
 
 {% schema %}
 {
