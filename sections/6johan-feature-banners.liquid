@@ -242,17 +242,28 @@
           <a href="{{ block.settings.url | default: '#' }}" class="feature-banners__link">
             <div class="feature-banners__image-wrap">
               {%- if block.settings.image -%}
-                <img
-                  src="{{ block.settings.image | image_url: width: 1200 }}"
-                  srcset="{{ block.settings.image | image_url: width: 600 }} 600w,
-                          {{ block.settings.image | image_url: width: 900 }} 900w,
-                          {{ block.settings.image | image_url: width: 1200 }} 1200w,
-                          {{ block.settings.image | image_url: width: 1600 }} 1600w"
-                  sizes="100vw"
-                  alt="{{ block.settings.title | escape }}"
-                  class="feature-banners__image"
-                  loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
-                >
+                <picture>
+                  {%- if block.settings.image_mobile -%}
+                    <source
+                      media="(max-width: 749px)"
+                      srcset="{{ block.settings.image_mobile | image_url: width: 600 }} 600w,
+                              {{ block.settings.image_mobile | image_url: width: 800 }} 800w,
+                              {{ block.settings.image_mobile | image_url: width: 1000 }} 1000w"
+                      sizes="100vw"
+                    >
+                  {%- endif -%}
+                  <img
+                    src="{{ block.settings.image | image_url: width: 1200 }}"
+                    srcset="{{ block.settings.image | image_url: width: 600 }} 600w,
+                            {{ block.settings.image | image_url: width: 900 }} 900w,
+                            {{ block.settings.image | image_url: width: 1200 }} 1200w,
+                            {{ block.settings.image | image_url: width: 1600 }} 1600w"
+                    sizes="100vw"
+                    alt="{{ block.settings.title | escape }}"
+                    class="feature-banners__image"
+                    loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+                  >
+                </picture>
               {%- else -%}
                 <div class="feature-banners__placeholder">📷 バナー画像を設定してください</div>
               {%- endif -%}
