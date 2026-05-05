@@ -1517,3 +1517,50 @@ body,
   right: 8px !important;
   align-items: flex-end !important;
 }
+
+/* 全セクション統一: RECENTLY VIEWEDをCOORDINATEに合わせる */
+.recently-viewed {
+  padding: 32px 0 !important;
+}
+
+.recently-viewed__header {
+  text-align: left !important;
+  padding: 0 20px !important;
+  margin-bottom: 16px !important;
+}
+
+.recently-viewed__grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 12px !important;
+  padding: 0 20px !important;
+  overflow: visible !important;
+}
+
+.recently-viewed__item {
+  flex: none !important;
+  max-width: none !important;
+}
+
+.recently-viewed__image-wrap {
+  aspect-ratio: 1 !important;
+  border-radius: 4px !important;
+  margin-bottom: 6px !important;
+}
+
+.recently-viewed__name {
+  font-size: 12px !important;
+  line-height: 1.4 !important;
+  -webkit-line-clamp: 2 !important;
+}
+
+.recently-viewed__price {
+  font-size: 12px !important;
+}
+
+@media (min-width: 750px) {
+  .recently-viewed__grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 16px !important;
+  }
+}

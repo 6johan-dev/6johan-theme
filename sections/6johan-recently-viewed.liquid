@@ -161,11 +161,11 @@
 }
 {%- endstyle -%}
 
-<section class="recently-viewed recently-viewed--hidden{% if section.settings.alt_background %} recently-viewed--alt-bg{% endif %}" id="recently-viewed-section">
+<section class="recently-viewed recently-viewed--hidden" style="padding: 0;{% if section.settings.alt_background %} recently-viewed--alt-bg{% endif %}" id="recently-viewed-section">
   <div class="recently-viewed__container">
-    <header class="recently-viewed__header">
-      <span class="recently-viewed__label">{{ section.settings.label }}</span>
-      <h2 class="recently-viewed__title">{{ section.settings.heading }}</h2>
+    <header class="recently-viewed__header" style="text-align: left; padding: 0; margin-bottom: 16px;">
+      <p class="sixj-label">{{ section.settings.label }}</p>
+      <h2 class="sixj-heading" style="font-size: 18px; margin-bottom: 0;">{{ section.settings.heading }}</h2>
     </header>
     
     <div class="recently-viewed__grid" id="recently-viewed-grid"></div>
