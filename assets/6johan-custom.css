@@ -1599,22 +1599,28 @@ body,
   border-radius: 8px !important;
 }
 
-/* 検索窓: TOPページ含む全ページ対応 */
-.search-modal__form input[type="search"],
-.search__input,
-.field__input[name="q"],
-input[type="search"],
-.predictive-search__input {
+
+
+/* 検索窓: グレー背景（USAGI風）統一 */
+.search .field,
+.search .search__input,
+.search-modal .field,
+.search-modal .search__input {
   background-color: #F2F2F0 !important;
   border: none !important;
+  border-color: transparent !important;
   border-radius: 8px !important;
+  box-shadow: none !important;
 }
 
-/* 検索窓の外枠もボーダー削除 */
-.search-modal__form,
-.search form,
-.search-form,
-.field--with-button {
+.search .field__input,
+.search-modal .field__input {
+  background-color: transparent !important;
   border: none !important;
+}
+
+.search .field__button,
+.search-modal .field__button {
   background: transparent !important;
+  border: none !important;
 }
