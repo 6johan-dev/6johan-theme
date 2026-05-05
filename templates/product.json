@@ -111,8 +111,8 @@
       "type": "6johan-product-coordinate",
       "name": "6JOHAN コーディネート提案",
       "settings": {
-        "label": "Coordinate",
-        "heading": "この商品に合わせて",
+        "label": "RECOMMEND",
+        "heading": "この商品を見た人はコチラの商品もチェックしています",
         "max_products": 4,
         "show_set_cta": false,
         "set_url": "",
