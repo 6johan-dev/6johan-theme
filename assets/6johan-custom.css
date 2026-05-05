@@ -1584,49 +1584,32 @@ body,
     max-width: 180px !important;
   }
 }
-/* 検索窓: USAGI風グレー背景 */
-.drawer-search__input,
-.search__input,
-.search-modal__input {
-  background-color: #F2F2F0 !important;
-  border: none !important;
-  border-radius: 8px !important;
-}
 
+
+
+
+
+
+
+
+/* 検索窓: 全ページ統一（USAGI風グレー背景） */
+.sixj-search-bar__form,
 .drawer-search__form {
-  background-color: #F2F2F0 !important;
+  background-color: #EAEAE8 !important;
   border: none !important;
-  border-radius: 8px !important;
-}
-
-
-
-/* 検索窓: グレー背景（USAGI風）統一 */
-.search .field,
-.search .search__input,
-.search-modal .field,
-.search-modal .search__input {
-  background-color: #F2F2F0 !important;
-  border: none !important;
-  border-color: transparent !important;
   border-radius: 8px !important;
   box-shadow: none !important;
 }
 
-.search .field__input,
-.search-modal .field__input {
+.sixj-search-bar__input,
+.drawer-search__input {
   background-color: transparent !important;
   border: none !important;
+  box-shadow: none !important;
 }
 
-.search .field__button,
-.search-modal .field__button {
-  background: transparent !important;
+.sixj-search-bar__form:focus-within,
+.drawer-search__form:focus-within {
   border: none !important;
-}
-
-/* 検索窓: TOPページ直接指定 */
-.sixj-search-bar__form {
-  background: #EAEAE8 !important;
-  border: none !important;
+  box-shadow: none !important;
 }
