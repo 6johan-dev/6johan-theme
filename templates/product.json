@@ -147,12 +147,20 @@
         "max_products": 6,
         "alt_background": false
       }
+    },
+    "6johan_cross_sell_new": {
+      "type": "6johan-cross-sell",
+      "settings": {
+        "label": "CROSS SELL",
+        "heading": "このアイテムを購入した人は、一緒にこんな商品も購入しています",
+        "max_products": 3
+      }
     }
   },
   "order": [
     "main",
     "6johan_product_coordinate_UiNUH3",
-    "related-products",
+    "6johan_cross_sell_new",
     "6johan_recently_viewed_b7fYV8"
   ]
 }
