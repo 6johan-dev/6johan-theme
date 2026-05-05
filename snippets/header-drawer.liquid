@@ -157,15 +157,17 @@
 
 <script>
 (function() {
-  const STORAGE_KEY = '6johan_recently_viewed';
-  const MAX_DRAWER_ITEMS = 10;
+  var STORAGE_KEY = '6johan_recently_viewed';
+  var MAX_DRAWER_ITEMS = 10;
+  var rendered = false;
 
   function renderDrawerRecentlyViewed() {
-    const section = document.getElementById('drawer-recently-viewed');
-    const grid = document.getElementById('drawer-recently-viewed-grid');
+    if (rendered) return;
+    var section = document.getElementById('drawer-recently-viewed');
+    var grid = document.getElementById('drawer-recently-viewed-grid');
     if (!section || !grid) return;
 
-    let items = [];
+    var items = [];
     try {
       items = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
     } catch (e) {
@@ -174,29 +176,35 @@
 
     if (items.length === 0) return;
 
-    const display = items.slice(0, MAX_DRAWER_ITEMS);
+    var display = items.slice(0, MAX_DRAWER_ITEMS);
     section.style.display = '';
+    rendered = true;
 
-    grid.innerHTML = display.map(item =>
-      '<a href="' + item.url + '" class="drawer-recently-viewed__item">' +
+    var html = '';
+    for (var i = 0; i < display.length; i++) {
+      var item = display[i];
+      html += '<a href="' + item.url + '" class="drawer-recently-viewed__item">' +
         '<img src="' + item.image + '" alt="' + item.title + '" class="drawer-recently-viewed__image" loading="lazy">' +
         '<div class="drawer-recently-viewed__price">' + item.price + '</div>' +
-      '</a>'
-    ).join('');
+      '</a>';
+    }
+    grid.innerHTML = html;
   }
 
-  // ドロワーが開かれた時に描画
-  const drawerDetails = document.getElementById('Details-menu-drawer-container');
-  if (drawerDetails) {
-    drawerDetails.addEventListener('toggle', function() {
-      if (this.open) renderDrawerRecentlyViewed();
-    });
-    // 初回描画もトリガー（既に開いている場合）
-    if (drawerDetails.open) renderDrawerRecentlyViewed();
-  }
+  // ハンバーガーメニューのクリックで描画
+  document.addEventListener('click', function(e) {
+    var menuBtn = e.target.closest('.header__icon--menu');
+    if (menuBtn) {
+      setTimeout(renderDrawerRecentlyViewed, 50);
+    }
+  });
 
-  // フォールバック: DOMContentLoaded
-  document.addEventListener('DOMContentLoaded', renderDrawerRecentlyViewed);
+  // フォールバック
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', renderDrawerRecentlyViewed);
+  } else {
+    renderDrawerRecentlyViewed();
+  }
 })();
 </script>
 </header-drawer>
