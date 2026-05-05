@@ -444,7 +444,7 @@
             
             {% assign pairs = limit | minus: 1 | divided_by: 2 %}
             {% for i in (1..pairs) %}
-              {% assign idx1 = i | times: 2 %}
+              {% assign idx1 = i | times: 2 | minus: 1 %}
               {% assign idx2 = idx1 | plus: 1 %}
               <div class="ranking-section__pair">
                 {% assign products_array = collection.products %}
