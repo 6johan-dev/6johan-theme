@@ -80,6 +80,9 @@
 }
 {%- endstyle -%}
 
+{% comment %} コレクションページではバッジを非表示 {% endcomment %}
+{% unless template.name == 'collection' %}
+
 {% comment %} Determine badge conditions {% endcomment %}
 {% assign show_sale = show_sale | default: false %}
 {% assign show_new = true %}
@@ -185,3 +188,4 @@
   {% endif %}
   
 {% endif %}
+{% endunless %}
