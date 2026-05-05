@@ -54,6 +54,8 @@
         "banner_eeFgaB": {
           "type": "banner",
           "settings": {
+            "image": "shopify://shop_images/PC.png",
+            "image_mobile": "shopify://shop_images/SP.png",
             "hide_overlay": true,
             "label": "SPRING COLLECTION",
             "title": "春の新作コレクション",
