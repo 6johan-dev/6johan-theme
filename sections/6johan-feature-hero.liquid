@@ -1,0 +1,139 @@
+{% comment %}
+  6JOHAN Feature Hero
+  Full-width hero image with title overlay.
+  Supports separate PC/SP images.
+{% endcomment %}
+
+{{ '6johan-feature.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign hero_image = section.settings.hero_image
+  assign hero_image_mobile = section.settings.hero_image_mobile
+  assign title = section.settings.title
+  assign subtitle = section.settings.subtitle
+  assign overlay_opacity = section.settings.overlay_opacity | default: 25
+-%}
+
+{% if hero_image != blank or title != blank %}
+<section class="feature-hero" id="feature-hero">
+  {% if hero_image != blank %}
+    <div class="feature-hero__image-wrap">
+      <picture>
+        {% if hero_image_mobile != blank %}
+          <source media="(max-width: 749px)" srcset="{{ hero_image_mobile | image_url: width: 800 }}">
+        {% endif %}
+        <img
+          src="{{ hero_image | image_url: width: 1600 }}"
+          srcset="{{ hero_image | image_url: width: 800 }} 800w,
+                  {{ hero_image | image_url: width: 1200 }} 1200w,
+                  {{ hero_image | image_url: width: 1600 }} 1600w"
+          sizes="100vw"
+          alt="{{ hero_image.alt | default: title | escape }}"
+          loading="eager"
+          width="{{ hero_image.width }}"
+          height="{{ hero_image.height }}"
+        >
+      </picture>
+      {% if title != blank or subtitle != blank %}
+        <div class="feature-hero__overlay" style="background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,{{ overlay_opacity | divided_by: 100.0 }}) 100%);">
+          {% if subtitle != blank %}
+            <p class="feature-hero__subtitle">{{ subtitle }}</p>
+          {% endif %}
+          {% if title != blank %}
+            <h1 class="feature-hero__title">{{ title }}</h1>
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
+  {% else %}
+    <div class="feature-hero__image-wrap" style="background: #F2F2F0; display: flex; align-items: center; justify-content: center;">
+      <div class="feature-hero__overlay" style="background: none;">
+        {% if subtitle != blank %}
+          <p class="feature-hero__subtitle" style="color: #8A8A7A;">{{ subtitle }}</p>
+        {% endif %}
+        {% if title != blank %}
+          <h1 class="feature-hero__title" style="color: #292724;">{{ title }}</h1>
+        {% endif %}
+      </div>
+    </div>
+  {% endif %}
+
+  {%- comment -%} JSON-LD Article structured data {%- endcomment -%}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": {{ article.title | json }},
+      "description": {{ article.excerpt_or_content | strip_html | truncate: 160 | json }},
+      {% if hero_image != blank %}
+      "image": {{ hero_image | image_url: width: 1200 | json }},
+      {% endif %}
+      "datePublished": {{ article.published_at | date: "%Y-%m-%dT%H:%M:%S%z" | json }},
+      "dateModified": {{ article.updated_at | date: "%Y-%m-%dT%H:%M:%S%z" | json }},
+      "author": {
+        "@type": "Organization",
+        "name": "6JOHAN"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "6JOHAN",
+        "url": "{{ shop.url }}"
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "{{ shop.url }}{{ article.url }}"
+      }
+    }
+  </script>
+</section>
+{% endif %}
+
+{% schema %}
+{
+  "name": "特集ヒーロー",
+  "tag": "div",
+  "class": "feature-hero-section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "ヒーロー画像（PC）",
+      "info": "推奨: 1600×680px以上"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image_mobile",
+      "label": "ヒーロー画像（SP）",
+      "info": "推奨: 800×600px。未設定時はPC画像を使用"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "タイトル",
+      "default": "特集タイトル"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "サブタイトル",
+      "info": "タイトルの上に小さく表示"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "オーバーレイの濃さ",
+      "min": 0,
+      "max": 60,
+      "step": 5,
+      "default": 25,
+      "unit": "%"
+    }
+  ],
+  "presets": [
+    {
+      "name": "特集ヒーロー"
+    }
+  ]
+}
+{% endschema %}
+

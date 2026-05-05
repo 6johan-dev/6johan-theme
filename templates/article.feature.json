@@ -1,0 +1,94 @@
+{
+  "sections": {
+    "feature_hero": {
+      "type": "6johan-feature-hero",
+      "settings": {
+        "title": "特集タイトル",
+        "subtitle": "",
+        "overlay_opacity": 25
+      }
+    },
+    "feature_lead": {
+      "type": "6johan-feature-lead",
+      "settings": {
+        "show_breadcrumb": true,
+        "lead_text": "<p>ここに特集のリード文を入力してください。特集のテーマや世界観を伝える導入文です。</p>",
+        "show_toc": true
+      }
+    },
+    "feature_chapter_1": {
+      "type": "6johan-feature-chapter",
+      "settings": {
+        "chapter_number": "01.",
+        "chapter_title": "チャプター1のタイトル"
+      },
+      "blocks": {
+        "product_1": {
+          "type": "product_item",
+          "settings": {
+            "heading": "商品の見出し"
+          }
+        }
+      },
+      "block_order": ["product_1"]
+    },
+    "feature_chapter_2": {
+      "type": "6johan-feature-chapter",
+      "settings": {
+        "chapter_number": "02.",
+        "chapter_title": "チャプター2のタイトル"
+      },
+      "blocks": {
+        "product_2": {
+          "type": "product_item",
+          "settings": {
+            "heading": "商品の見出し"
+          }
+        }
+      },
+      "block_order": ["product_2"]
+    },
+    "feature_chapter_3": {
+      "type": "6johan-feature-chapter",
+      "settings": {
+        "chapter_number": "03.",
+        "chapter_title": "チャプター3のタイトル"
+      },
+      "blocks": {
+        "product_3": {
+          "type": "product_item",
+          "settings": {
+            "heading": "商品の見出し"
+          }
+        }
+      },
+      "block_order": ["product_3"]
+    },
+    "feature_grid": {
+      "type": "6johan-feature-grid",
+      "settings": {
+        "title": "関連アイテムをもっと見る",
+        "cta_text": "もっとアイテムを見る"
+      }
+    },
+    "feature_share": {
+      "type": "6johan-feature-share",
+      "settings": {
+        "heading": "このページをシェア",
+        "show_line": true,
+        "show_x": true,
+        "show_facebook": true
+      }
+    }
+  },
+  "order": [
+    "feature_hero",
+    "feature_lead",
+    "feature_chapter_1",
+    "feature_chapter_2",
+    "feature_chapter_3",
+    "feature_grid",
+    "feature_share"
+  ]
+}
+

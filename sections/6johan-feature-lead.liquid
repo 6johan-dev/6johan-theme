@@ -1,0 +1,124 @@
+{% comment %}
+  6JOHAN Feature Lead
+  Introduction text + auto-generated table of contents.
+  TOC is built dynamically via JS from chapter h2 elements.
+{% endcomment %}
+
+{%- liquid
+  assign show_breadcrumb = section.settings.show_breadcrumb | default: true
+  assign lead_text = section.settings.lead_text
+  assign show_toc = section.settings.show_toc | default: true
+-%}
+
+<section class="feature-lead-section">
+  {%- if show_breadcrumb -%}
+    <nav class="feature-breadcrumb" aria-label="パンくずリスト">
+      <a href="{{ shop.url }}">TOP</a>
+      <span>›</span>
+      <a href="{{ blog.url }}">{{ blog.title }}</a>
+      <span>›</span>
+      <span>{{ article.title }}</span>
+    </nav>
+  {%- endif -%}
+
+  <div class="feature-lead">
+    {% if lead_text != blank %}
+      <div class="feature-lead__text">
+        {{ lead_text }}
+      </div>
+    {% endif %}
+
+    {% if show_toc %}
+      <details class="feature-toc" open>
+        <summary class="feature-toc__header">
+          <span class="feature-toc__header-label">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/>
+            </svg>
+            目次
+          </span>
+          <span class="feature-toc__toggle">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </span>
+        </summary>
+        <ul class="feature-toc__list" id="feature-toc-list">
+          {%- comment -%} Populated by JavaScript {%- endcomment -%}
+        </ul>
+      </details>
+    {% endif %}
+  </div>
+</section>
+
+{% if show_toc %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var tocList = document.getElementById('feature-toc-list');
+    if (!tocList) return;
+
+    var chapters = document.querySelectorAll('.feature-chapter__title');
+    if (chapters.length === 0) return;
+
+    chapters.forEach(function(chapter, index) {
+      var id = 'chapter-' + (index + 1);
+      chapter.id = id;
+
+      var li = document.createElement('li');
+      li.className = 'feature-toc__item';
+
+      var a = document.createElement('a');
+      a.className = 'feature-toc__link';
+      a.href = '#' + id;
+      a.textContent = chapter.textContent;
+      a.addEventListener('click', function(e) {
+        e.preventDefault();
+        var target = document.getElementById(id);
+        if (target) {
+          var headerHeight = 60;
+          var y = target.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+          window.scrollTo({ top: y, behavior: 'smooth' });
+        }
+      });
+
+      li.appendChild(a);
+      tocList.appendChild(li);
+    });
+  });
+</script>
+{% endif %}
+
+{% schema %}
+{
+  "name": "特集リード文",
+  "tag": "div",
+  "class": "feature-lead-wrapper",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_breadcrumb",
+      "label": "パンくずリストを表示",
+      "default": true
+    },
+    {
+      "type": "richtext",
+      "id": "lead_text",
+      "label": "リード文",
+      "info": "特集の導入文。世界観やテーマを伝える文章を入力"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_toc",
+      "label": "目次を表示",
+      "default": true,
+      "info": "チャプターの見出しから自動生成されます"
+    }
+  ],
+  "presets": [
+    {
+      "name": "特集リード文"
+    }
+  ]
+}
+{% endschema %}
+

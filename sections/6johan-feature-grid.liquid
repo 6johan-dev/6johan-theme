@@ -1,0 +1,178 @@
+{% comment %}
+  6JOHAN Feature Grid
+  Product grid section for the bottom of feature pages.
+  Can use a collection or manual product selection.
+{% endcomment %}
+
+{%- liquid
+  assign grid_title = section.settings.title
+  assign grid_description = section.settings.description
+  assign collection = section.settings.collection
+  assign product_count = section.settings.product_count | default: 6
+  assign cta_text = section.settings.cta_text
+  assign cta_link = section.settings.cta_link
+-%}
+
+{%- comment -%} Determine products to show {%- endcomment -%}
+{%- assign manual_products = section.blocks | where: "type", "product" -%}
+{%- assign has_manual = false -%}
+{%- if manual_products.size > 0 -%}
+  {%- assign has_manual = true -%}
+{%- endif -%}
+
+{% if collection != blank or has_manual %}
+<section class="feature-grid">
+  {% if grid_title != blank or grid_description != blank %}
+    <div class="feature-grid__header">
+      {% if grid_title != blank %}
+        <h2 class="feature-grid__title">{{ grid_title }}</h2>
+      {% endif %}
+      {% if grid_description != blank %}
+        <p class="feature-grid__description">{{ grid_description }}</p>
+      {% endif %}
+    </div>
+  {% endif %}
+
+  <div class="feature-grid__products">
+    {% if has_manual %}
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'product' -%}
+          {%- assign grid_product = block.settings.product -%}
+          {% if grid_product != blank %}
+            <a href="{{ grid_product.url }}" class="feature-grid__card" {{ block.shopify_attributes }}>
+              <div class="feature-grid__card-image">
+                {% if grid_product.featured_image != blank %}
+                  <img
+                    src="{{ grid_product.featured_image | image_url: width: 400 }}"
+                    srcset="{{ grid_product.featured_image | image_url: width: 300 }} 300w,
+                            {{ grid_product.featured_image | image_url: width: 400 }} 400w"
+                    sizes="(min-width: 750px) 220px, calc(50vw - 28px)"
+                    alt="{{ grid_product.title | escape }}"
+                    loading="lazy"
+                    width="{{ grid_product.featured_image.width }}"
+                    height="{{ grid_product.featured_image.height }}"
+                  >
+                {% endif %}
+              </div>
+              <div class="feature-grid__card-name">{{ grid_product.title }}</div>
+              <div class="feature-grid__card-price">
+                {% if grid_product.compare_at_price > grid_product.price %}
+                  <span class="feature-grid__card-price-compare">
+                    {{ grid_product.compare_at_price | money_without_trailing_zeros }}
+                  </span>
+                {% endif %}
+                {{ grid_product.price | money_without_trailing_zeros }}〜
+              </div>
+            </a>
+          {% endif %}
+        {%- endif -%}
+      {%- endfor -%}
+    {% elsif collection != blank %}
+      {%- for product in collection.products limit: product_count -%}
+        <a href="{{ product.url }}" class="feature-grid__card">
+          <div class="feature-grid__card-image">
+            {% if product.featured_image != blank %}
+              <img
+                src="{{ product.featured_image | image_url: width: 400 }}"
+                srcset="{{ product.featured_image | image_url: width: 300 }} 300w,
+                        {{ product.featured_image | image_url: width: 400 }} 400w"
+                sizes="(min-width: 750px) 220px, calc(50vw - 28px)"
+                alt="{{ product.title | escape }}"
+                loading="lazy"
+                width="{{ product.featured_image.width }}"
+                height="{{ product.featured_image.height }}"
+              >
+            {% endif %}
+          </div>
+          <div class="feature-grid__card-name">{{ product.title }}</div>
+          <div class="feature-grid__card-price">
+            {% if product.compare_at_price > product.price %}
+              <span class="feature-grid__card-price-compare">
+                {{ product.compare_at_price | money_without_trailing_zeros }}
+              </span>
+            {% endif %}
+            {{ product.price | money_without_trailing_zeros }}〜
+          </div>
+        </a>
+      {%- endfor -%}
+    {% endif %}
+  </div>
+
+  {% if cta_text != blank and cta_link != blank %}
+    <a href="{{ cta_link }}" class="feature-grid__cta">
+      {{ cta_text }}
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="5" y1="12" x2="19" y2="12"/>
+        <polyline points="12 5 19 12 12 19"/>
+      </svg>
+    </a>
+  {% endif %}
+</section>
+{% endif %}
+
+{% schema %}
+{
+  "name": "特集 商品グリッド",
+  "tag": "div",
+  "class": "feature-grid-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "見出し",
+      "default": "関連アイテムをもっと見る"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "説明文"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "コレクション",
+      "info": "手動で商品を追加する場合は空のままにしてください"
+    },
+    {
+      "type": "range",
+      "id": "product_count",
+      "label": "表示件数（コレクション使用時）",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "default": 6
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "ボタンテキスト",
+      "default": "もっとアイテムを見る"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "ボタンリンク先"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product",
+      "name": "商品",
+      "limit": 12,
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "商品"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "特集 商品グリッド"
+    }
+  ]
+}
+{% endschema %}
+
