@@ -28,11 +28,11 @@
           </div>
 
           <!-- 閲覧履歴 -->
-          <div class="drawer-recently-viewed" id="drawer-recently-viewed" style="display:none;">
+          <div id="drawer-recently-viewed" style="display:none; padding: 0 0 8px; border-bottom: 1px solid #E8E5E0;">
             <div class="drawer-section">
               <div class="drawer-section__label">閲覧履歴アイテム</div>
             </div>
-            <div class="drawer-recently-viewed__scroll" id="drawer-recently-viewed-grid"></div>
+            <div id="drawer-recently-viewed-grid" style="display: flex; gap: 10px; overflow-x: auto; padding: 0 20px 12px; scrollbar-width: none; -webkit-overflow-scrolling: touch;"></div>
           </div>
 
           <div class="drawer-section">
@@ -183,9 +183,9 @@
     var html = '';
     for (var i = 0; i < display.length; i++) {
       var item = display[i];
-      html += '<a href="' + item.url + '" class="drawer-recently-viewed__item">' +
-        '<img src="' + item.image + '" alt="' + item.title + '" class="drawer-recently-viewed__image" loading="lazy">' +
-        '<div class="drawer-recently-viewed__price">' + item.price + '</div>' +
+      html += '<a href="' + item.url + '" style="flex: 0 0 70px; text-decoration: none;">' +
+        '<img src="' + item.image + '" alt="' + item.title + '" style="width: 70px; height: 70px; object-fit: cover; border-radius: 4px; background: #FAF9F7; display: block;" loading="lazy">' +
+        '<div style="font-size: 10px; font-weight: 500; color: #292724; margin-top: 4px; text-align: center;">' + item.price + '</div>' +
       '</a>';
     }
     grid.innerHTML = html;
