@@ -5,11 +5,11 @@
   フォールバック: 異なるコレクションの商品を表示
 {% endcomment %}
 
-<div id="6johan-cross-sell" style="border-top: 1px solid var(--6j-sand, #E8E5E0); padding: 32px 0; display: none;">
-  <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
-    <p style="font-size: 11px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: #8A7A6A; margin: 0 0 4px;">{{ section.settings.label }}</p>
-    <h3 style="font-family: 'Noto Sans JP', sans-serif; font-size: 15px; font-weight: 500; color: #292724; margin: 0 0 16px; line-height: 1.5;">{{ section.settings.heading }}</h3>
-    <div id="6johan-cross-sell-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;"></div>
+<div id="6johan-cross-sell" style="border-top: 1px solid var(--6j-sand, #E8E5E0); padding: var(--6j-space-lg, 32px) 0; display: none;">
+  <div class="sixj-container">
+    <p class="sixj-label">{{ section.settings.label }}</p>
+    <h3 class="sixj-heading" style="font-size: 18px; margin-bottom: var(--6j-space-md, 16px);">{{ section.settings.heading }}</h3>
+    <div id="6johan-cross-sell-grid" class="sixj-coordinate"></div>
   </div>
 </div>
 
