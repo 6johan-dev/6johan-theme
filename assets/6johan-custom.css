@@ -1462,3 +1462,23 @@ body,
     gap: 16px !important;
   }
 }
+
+/* A1: ヘッダーアイコンの間隔を詰めて右寄せ */
+.header__icons {
+  gap: 0 !important;
+}
+
+.header__icons .header__icon {
+  padding: 0 8px !important;
+}
+
+/* モバイル: アイコンさらにコンパクトに */
+@media (max-width: 749px) {
+  .header__icons .header__icon {
+    padding: 0 6px !important;
+  }
+  
+  header-drawer {
+    margin-left: -0.8rem !important;
+  }
+}
