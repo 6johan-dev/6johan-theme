@@ -1425,43 +1425,7 @@ body,
   line-height: 1.85 !important;
 }
 
-/* C2: コーディネート提案 — カードを小さく（recently viewed風） */
-.sixj-coordinate {
-  display: grid !important;
-  grid-template-columns: repeat(3, 1fr) !important;
-  gap: 12px !important;
-}
 
-.sixj-coordinate__image {
-  aspect-ratio: 1 / 1 !important;
-  width: 100% !important;
-  height: auto !important;
-  object-fit: cover !important;
-  border-radius: 4px !important;
-}
-
-.sixj-coordinate__name {
-  font-size: 12px !important;
-  line-height: 1.4 !important;
-  margin-top: 6px !important;
-  display: -webkit-box !important;
-  -webkit-line-clamp: 2 !important;
-  -webkit-box-orient: vertical !important;
-  overflow: hidden !important;
-}
-
-.sixj-coordinate__price {
-  font-size: 12px !important;
-  font-weight: 500 !important;
-  margin-top: 2px !important;
-}
-
-@media (min-width: 750px) {
-  .sixj-coordinate {
-    grid-template-columns: repeat(4, 1fr) !important;
-    gap: 16px !important;
-  }
-}
 
 /* A1: ヘッダーアイコンの間隔を詰めて右寄せ */
 .header__icons {
@@ -1518,7 +1482,82 @@ body,
   align-items: flex-end !important;
 }
 
-/* 全セクション統一: RECENTLY VIEWEDをCOORDINATEに合わせる */
+
+
+/* =============================================
+   商品ページ下部3セクション統一スタイル
+   COORDINATE / RECENTLY VIEWED / CROSS SELL
+   横スクロール型・カードサイズ統一
+   ============================================= */
+
+/* 共通: 横スクロールコンテナ */
+.sixj-coordinate,
+.recently-viewed__grid,
+#6johan-cross-sell-grid {
+  display: flex !important;
+  gap: 12px !important;
+  overflow-x: auto !important;
+  scrollbar-width: none !important;
+  -webkit-overflow-scrolling: touch !important;
+  padding-bottom: 4px !important;
+}
+
+.sixj-coordinate::-webkit-scrollbar,
+.recently-viewed__grid::-webkit-scrollbar,
+#6johan-cross-sell-grid::-webkit-scrollbar {
+  display: none !important;
+}
+
+/* 共通: カードサイズ */
+.sixj-coordinate__item,
+.recently-viewed__item {
+  flex: 0 0 30% !important;
+  max-width: 140px !important;
+  text-decoration: none !important;
+}
+
+/* 共通: 画像 */
+.sixj-coordinate__image,
+.recently-viewed__image-wrap {
+  aspect-ratio: 1 / 1 !important;
+  width: 100% !important;
+  height: auto !important;
+  object-fit: cover !important;
+  border-radius: 4px !important;
+  display: block !important;
+}
+
+.recently-viewed__image-wrap {
+  margin-bottom: 6px !important;
+}
+
+.recently-viewed__image {
+  border-radius: 4px !important;
+}
+
+/* 共通: テキスト */
+.sixj-coordinate__name,
+.recently-viewed__name {
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  line-height: 1.4 !important;
+  margin-top: 6px !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+  color: #292724 !important;
+}
+
+.sixj-coordinate__price,
+.recently-viewed__price {
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  margin-top: 2px !important;
+  color: #292724 !important;
+}
+
+/* 共通: ヘッダー */
 .recently-viewed {
   padding: 32px 0 !important;
 }
@@ -1530,37 +1569,18 @@ body,
 }
 
 .recently-viewed__grid {
-  display: grid !important;
-  grid-template-columns: repeat(3, 1fr) !important;
-  gap: 12px !important;
   padding: 0 20px !important;
-  overflow: visible !important;
 }
 
 .recently-viewed__item {
-  flex: none !important;
-  max-width: none !important;
+  max-width: 140px !important;
 }
 
-.recently-viewed__image-wrap {
-  aspect-ratio: 1 !important;
-  border-radius: 4px !important;
-  margin-bottom: 6px !important;
-}
-
-.recently-viewed__name {
-  font-size: 12px !important;
-  line-height: 1.4 !important;
-  -webkit-line-clamp: 2 !important;
-}
-
-.recently-viewed__price {
-  font-size: 12px !important;
-}
-
+/* PC: カードをやや大きく */
 @media (min-width: 750px) {
-  .recently-viewed__grid {
-    grid-template-columns: repeat(4, 1fr) !important;
-    gap: 16px !important;
+  .sixj-coordinate__item,
+  .recently-viewed__item {
+    flex: 0 0 22% !important;
+    max-width: 180px !important;
   }
 }
