@@ -220,7 +220,7 @@
    コレクションヘッダー
    =========================================== */
 .collection-hero__title {
-  font-family: 'Playfair Display', 'Noto Serif JP', serif;
+  font-family: var(--6j-font-heading);
   font-size: 1.75rem;
   font-weight: 500;
   color: var(--6j-text, #292724);

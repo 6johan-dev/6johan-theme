@@ -25,7 +25,7 @@
    商品タイトル
    =========================================== */
 .product__title {
-  font-family: 'Playfair Display', 'Noto Serif JP', serif;
+  font-family: var(--6j-font-heading);
   font-weight: 500;
   color: var(--6j-text);
   letter-spacing: 0.02em;
@@ -221,7 +221,7 @@
 }
 
 .coordinate-section__title {
-  font-family: 'Playfair Display', 'Noto Serif JP', serif;
+  font-family: var(--6j-font-heading);
   font-size: 1.25rem;
   font-weight: 500;
   color: var(--6j-text);
