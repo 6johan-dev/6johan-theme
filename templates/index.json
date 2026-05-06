@@ -113,7 +113,7 @@
           "settings": {
             "icon": "new",
             "label": "新商品",
-            "link": "",
+            "link": "shopify://collections/new-arrival",
             "badge": "new"
           }
         },
@@ -122,7 +122,7 @@
           "settings": {
             "icon": "ranking",
             "label": "ランキング",
-            "link": "",
+            "link": "shopify://collections/all",
             "badge": "hot"
           }
         },
