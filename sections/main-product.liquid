@@ -141,6 +141,9 @@
                   {%- endform -%}
                 </div>
 
+              {%- comment -%} 6JOHAN PDP Badges - 価格直下 {%- endcomment -%}
+              {%- render '6johan-pdp-badges', product: product -%}
+
               {%- comment -%} 6JOHAN Trust Grid - 価格直下 {%- endcomment -%}
               {%- render '6johan-trust-grid', product: product -%}
               {%- when 'inventory' -%}
