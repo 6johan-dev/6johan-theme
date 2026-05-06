@@ -52,3 +52,18 @@
 ## 重要ルール
 - git push は自動で行わない。変更内容を説明して承認を待つこと
 - main-product.liquid や theme.liquid の構造変更は必ず差分を提示してレビューを受けること
+
+## 商品ストーリーセクション
+- ファイル: sections/6johan-product-story.liquid
+- メタフィールド: descriptiontitle1-4, description1-4, descriptionimage1-4
+- 注意: 説明画像3のキーは custom.desctiptionimage3（typo、rではなくt）
+
+## ブログ記事メタフィールド（API作成済み）
+- custom.chapter_title1-4 (単一行テキスト)
+- custom.chapter_body1-4 (複数行テキスト)
+- custom.chapter_image1-4 (ファイル参照)
+- custom.chapter_product1-4 (商品参照)
+
+## Shopify Admin API
+- アプリ名: 6johan api（レガシーカスタムアプリ）
+- スコープ: read/write_products, read/write_content
