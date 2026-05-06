@@ -70,7 +70,7 @@
           "settings": {
             "image": "shopify://shop_images/PC_b3c02e59-0e7a-4270-869d-314dcc90518f.png",
             "image_mobile": "shopify://shop_images/SP_627404fb-6df9-4f4d-9fd1-dec03c8d230e.png",
-            "hide_overlay": true,
+            "hide_overlay": false,
             "label": "",
             "title": "",
             "subtitle": "",
