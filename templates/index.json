@@ -68,12 +68,14 @@
         "banner_R6XptY": {
           "type": "banner",
           "settings": {
-            "hide_overlay": false,
+            "image": "shopify://shop_images/PC_b3c02e59-0e7a-4270-869d-314dcc90518f.png",
+            "image_mobile": "shopify://shop_images/SP_627404fb-6df9-4f4d-9fd1-dec03c8d230e.png",
+            "hide_overlay": true,
             "label": "",
             "title": "特集タイトル",
             "subtitle": "",
             "cta_text": "詳しく見る",
-            "url": "",
+            "url": "shopify://collections/001",
             "overlay_light": false
           }
         },
@@ -88,25 +90,12 @@
             "url": "",
             "overlay_light": false
           }
-        },
-        "banner_9F7qEz": {
-          "type": "banner",
-          "settings": {
-            "hide_overlay": false,
-            "label": "5万円以下",
-            "title": "お手頃価格の人気アイテム",
-            "subtitle": "",
-            "cta_text": "見る",
-            "url": "",
-            "overlay_light": false
-          }
         }
       },
       "block_order": [
         "banner_eeFgaB",
         "banner_R6XptY",
-        "banner_mykBrA",
-        "banner_9F7qEz"
+        "banner_mykBrA"
       ],
       "name": "6JOHAN 特集バナー",
       "settings": {
