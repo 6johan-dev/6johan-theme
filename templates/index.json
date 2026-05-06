@@ -413,19 +413,20 @@
     "6johan_pickup_banners_qhfPDf": {
       "type": "6johan-pickup-banners",
       "blocks": {
+        "banner_Y7Hctt": {
+          "type": "banner",
+          "settings": {
+            "image": "shopify://shop_images/SP_888ef798-823e-47e2-bd7e-cec9346c2ac0.png",
+            "title": "リニューアルセール",
+            "url": ""
+          }
+        },
         "banner_DCynCe": {
           "type": "banner",
           "settings": {
             "image": "shopify://shop_images/SP.png",
             "title": "Round & Lib",
             "url": "shopify://products/wood-circle-table"
-          }
-        },
-        "banner_Y7Hctt": {
-          "type": "banner",
-          "settings": {
-            "title": "一人暮らし応援セット",
-            "url": ""
           }
         },
         "banner_BxPKCp": {
@@ -437,8 +438,8 @@
         }
       },
       "block_order": [
-        "banner_DCynCe",
         "banner_Y7Hctt",
+        "banner_DCynCe",
         "banner_BxPKCp"
       ],
       "name": "6JOHAN ピックアップ特集",
