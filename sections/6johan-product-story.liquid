@@ -1,0 +1,232 @@
+{% comment %}
+  6JOHAN Product Story Section
+  メタフィールドから商品ストーリー（タイトル+説明文+画像 × 4ブロック）を読み込んで表示。
+  
+  使用メタフィールド:
+  - custom.descriptiontitle1〜4 (単一行テキスト)
+  - custom.description1〜4 (複数行テキスト)
+  - custom.descriptionimage1〜4 (ファイル) ← キー要確認
+{% endcomment %}
+
+{%- liquid
+  assign t1 = product.metafields.custom.descriptiontitle1
+  assign t2 = product.metafields.custom.descriptiontitle2
+  assign t3 = product.metafields.custom.descriptiontitle3
+  assign t4 = product.metafields.custom.descriptiontitle4
+  assign d1 = product.metafields.custom.description1
+  assign d2 = product.metafields.custom.description2
+  assign d3 = product.metafields.custom.description3
+  assign d4 = product.metafields.custom.description4
+  assign i1 = product.metafields.custom.descriptionimage1
+  assign i2 = product.metafields.custom.descriptionimage2
+  assign i3 = product.metafields.custom.descriptionimage3
+  assign i4 = product.metafields.custom.descriptionimage4
+
+  assign has_story = false
+  if d1 != blank or d2 != blank or d3 != blank or d4 != blank
+    assign has_story = true
+  endif
+-%}
+
+{%- if has_story -%}
+<div class="product-story" id="ProductStory-{{ section.id }}">
+  <div class="product-story__container">
+
+    <div class="product-story__header">
+      <span class="product-story__label">{{ section.settings.label | default: 'ABOUT THIS PRODUCT' }}</span>
+      <h2 class="product-story__title">{{ section.settings.title | default: product.title }}</h2>
+    </div>
+
+    {%- if d1 != blank -%}
+      <div class="product-story__block">
+        <div class="product-story__text">
+          {%- if t1 != blank -%}<h3 class="product-story__heading">{{ t1 }}</h3>{%- endif -%}
+          <div class="product-story__body">{{ d1 | newline_to_br }}</div>
+        </div>
+        {%- if i1 != blank -%}
+          <div class="product-story__image">
+            <img src="{{ i1 | image_url: width: 1200 }}" alt="{{ t1 | default: product.title | escape }}" loading="lazy" width="1200" height="800">
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if d2 != blank -%}
+      <div class="product-story__block">
+        <div class="product-story__text">
+          {%- if t2 != blank -%}<h3 class="product-story__heading">{{ t2 }}</h3>{%- endif -%}
+          <div class="product-story__body">{{ d2 | newline_to_br }}</div>
+        </div>
+        {%- if i2 != blank -%}
+          <div class="product-story__image">
+            <img src="{{ i2 | image_url: width: 1200 }}" alt="{{ t2 | default: product.title | escape }}" loading="lazy" width="1200" height="800">
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if d3 != blank -%}
+      <div class="product-story__block">
+        <div class="product-story__text">
+          {%- if t3 != blank -%}<h3 class="product-story__heading">{{ t3 }}</h3>{%- endif -%}
+          <div class="product-story__body">{{ d3 | newline_to_br }}</div>
+        </div>
+        {%- if i3 != blank -%}
+          <div class="product-story__image">
+            <img src="{{ i3 | image_url: width: 1200 }}" alt="{{ t3 | default: product.title | escape }}" loading="lazy" width="1200" height="800">
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if d4 != blank -%}
+      <div class="product-story__block">
+        <div class="product-story__text">
+          {%- if t4 != blank -%}<h3 class="product-story__heading">{{ t4 }}</h3>{%- endif -%}
+          <div class="product-story__body">{{ d4 | newline_to_br }}</div>
+        </div>
+        {%- if i4 != blank -%}
+          <div class="product-story__image">
+            <img src="{{ i4 | image_url: width: 1200 }}" alt="{{ t4 | default: product.title | escape }}" loading="lazy" width="1200" height="800">
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+  </div>
+</div>
+
+<style>
+.product-story {
+  padding: 48px 0;
+  border-top: 1px solid #F2F2F0;
+}
+
+.product-story__container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.product-story__header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.product-story__label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  color: #999;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.product-story__title {
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1.5;
+  margin: 0;
+  color: #292724;
+}
+
+.product-story__block {
+  margin-bottom: 56px;
+}
+
+.product-story__block:last-child {
+  margin-bottom: 0;
+}
+
+.product-story__heading {
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.6;
+  margin: 0 0 16px;
+  color: #292724;
+}
+
+.product-story__body {
+  font-size: 14px;
+  line-height: 2.0;
+  color: #555;
+  letter-spacing: 0.03em;
+}
+
+.product-story__image {
+  margin-top: 24px;
+}
+
+.product-story__image img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+@media screen and (min-width: 750px) {
+  .product-story {
+    padding: 80px 0;
+  }
+
+  .product-story__container {
+    max-width: 900px;
+  }
+
+  .product-story__header {
+    margin-bottom: 64px;
+  }
+
+  .product-story__title {
+    font-size: 28px;
+  }
+
+  .product-story__block {
+    margin-bottom: 80px;
+  }
+
+  .product-story__text {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .product-story__heading {
+    font-size: 19px;
+    margin-bottom: 20px;
+  }
+
+  .product-story__body {
+    font-size: 15px;
+  }
+
+  .product-story__image {
+    margin-top: 32px;
+  }
+}
+</style>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "商品ストーリー",
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "ラベル",
+      "default": "ABOUT THIS PRODUCT"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "タイトル（空欄で商品名を表示）"
+    }
+  ],
+  "presets": [
+    {
+      "name": "商品ストーリー"
+    }
+  ],
+  "templates": ["product"]
+}
+{% endschema %}
