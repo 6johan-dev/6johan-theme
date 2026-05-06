@@ -107,13 +107,6 @@
         "padding_bottom": 12
       }
     },
-    "6johan_product_specs_kPq3Mz": {
-      "type": "6johan-product-specs",
-      "settings": {
-        "show_heading": true,
-        "heading": "商品仕様"
-      }
-    },
     "6johan_product_coordinate_UiNUH3": {
       "type": "6johan-product-coordinate",
       "name": "6JOHAN コーディネート提案",
@@ -167,7 +160,6 @@
   },
   "order": [
     "main",
-    "6johan_product_specs_kPq3Mz",
     "6johan_product_coordinate_UiNUH3",
     "related-products",
     "6johan_recently_viewed_b7fYV8",

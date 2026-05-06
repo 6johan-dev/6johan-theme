@@ -5,9 +5,6 @@
   メタフィールドキー:
   - custom.measurements (寸法詳細)
   - custom.material (素材)
-  - custom.weight (重量)
-  - custom.weight_capacity (耐荷重)
-  - custom.origin (原産国)
   - custom._new (梱包サイズ)
   - custom.is_assembly (組み立て有無)
   - custom._shipping_cost (最低送料)
@@ -17,16 +14,13 @@
 {%- liquid
   assign measurements = product.metafields.custom.measurements
   assign material = product.metafields.custom.material
-  assign weight = product.metafields.custom.weight
-  assign weight_capacity = product.metafields.custom.weight_capacity
-  assign origin = product.metafields.custom.origin
   assign package_size = product.metafields.custom._new
   assign is_assembly = product.metafields.custom.is_assembly
   assign shipping_cost = product.metafields.custom._shipping_cost
   assign memo = product.metafields.custom.memo
-
+  
   assign has_specs = false
-  if measurements != blank or material != blank or weight != blank or weight_capacity != blank or origin != blank or package_size != blank or is_assembly != blank or shipping_cost != blank
+  if measurements != blank or material != blank or package_size != blank or is_assembly != blank or shipping_cost != blank
     assign has_specs = true
   endif
 -%}
@@ -53,28 +47,7 @@
             <td>{{ material }}</td>
           </tr>
         {% endif %}
-
-        {% if weight != blank %}
-          <tr>
-            <th>重量</th>
-            <td>{{ weight }}</td>
-          </tr>
-        {% endif %}
-
-        {% if weight_capacity != blank %}
-          <tr>
-            <th>耐荷重</th>
-            <td>{{ weight_capacity }}</td>
-          </tr>
-        {% endif %}
-
-        {% if origin != blank %}
-          <tr>
-            <th>原産国</th>
-            <td>{{ origin }}</td>
-          </tr>
-        {% endif %}
-
+        
         {% if package_size != blank %}
           <tr>
             <th>梱包サイズ</th>
