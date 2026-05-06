@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main": {
@@ -28,10 +37,6 @@
             "show_dynamic_checkout": false,
             "show_gift_card_recipient": true
           }
-        },
-        "description": {
-          "type": "description",
-          "settings": {}
         },
         "collapsible-row-0": {
           "type": "collapsible_tab",
@@ -76,7 +81,6 @@
         "variant_picker",
         "quantity_selector",
         "buy_buttons",
-        "description",
         "collapsible-row-0",
         "collapsible-row-1",
         "collapsible-row-2",
@@ -96,6 +100,13 @@
         "enable_video_looping": false,
         "padding_top": 36,
         "padding_bottom": 12
+      }
+    },
+    "6johan_product_story": {
+      "type": "6johan-product-story",
+      "settings": {
+        "label": "ABOUT THIS PRODUCT",
+        "title": ""
       }
     },
     "6johan_product_coordinate_UiNUH3": {
@@ -146,13 +157,6 @@
         "label": "CROSS SELL",
         "heading": "このアイテムを購入した人は、一緒にこんな商品も購入しています",
         "max_products": 3
-      }
-    },
-    "6johan_product_story": {
-      "type": "6johan-product-story",
-      "settings": {
-        "label": "ABOUT THIS PRODUCT",
-        "title": ""
       }
     }
   },
