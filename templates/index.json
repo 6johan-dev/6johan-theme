@@ -56,12 +56,12 @@
           "settings": {
             "image": "shopify://shop_images/PC.png",
             "image_mobile": "shopify://shop_images/SP.png",
-            "hide_overlay": true,
-            "label": "SPRING COLLECTION",
-            "title": "春の新作コレクション",
-            "subtitle": "暮らしに彩りを添える新作家具",
+            "hide_overlay": false,
+            "label": "",
+            "title": "",
+            "subtitle": "",
             "cta_text": "詳しく見る",
-            "url": "",
+            "url": "shopify://products/wood-circle-table",
             "overlay_light": false
           }
         },
