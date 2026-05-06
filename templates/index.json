@@ -140,16 +140,7 @@
           "settings": {
             "icon": "recommend",
             "label": "おすすめ",
-            "link": "",
-            "badge": "none"
-          }
-        },
-        "category_tWUwDh": {
-          "type": "category",
-          "settings": {
-            "icon": "blog",
-            "label": "マガジン",
-            "link": "",
+            "link": "shopify://collections/pick-up",
             "badge": "none"
           }
         }
@@ -158,8 +149,7 @@
         "category_KCghBj",
         "category_3Ggfj3",
         "category_Y8jjwH",
-        "category_RG4tre",
-        "category_tWUwDh"
+        "category_RG4tre"
       ],
       "name": "6JOHAN クイックカテゴリ",
       "settings": {}
@@ -396,6 +386,7 @@
         "review_ATxBJ7",
         "review_3UJ9cK"
       ],
+      "disabled": true,
       "name": "6JOHAN お客様の声",
       "settings": {
         "label": "CUSTOMER VOICE",
@@ -426,8 +417,8 @@
           "type": "banner",
           "settings": {
             "image": "shopify://shop_images/SP.png",
-            "title": "北欧スタイルの作り方",
-            "url": ""
+            "title": "Round & Lib",
+            "url": "shopify://products/wood-circle-table"
           }
         },
         "banner_Y7Hctt": {
@@ -443,20 +434,12 @@
             "title": "新生活ガイド",
             "url": ""
           }
-        },
-        "banner_y7FyMJ": {
-          "type": "banner",
-          "settings": {
-            "title": "5万円以下の人気アイテム",
-            "url": ""
-          }
         }
       },
       "block_order": [
         "banner_DCynCe",
         "banner_Y7Hctt",
-        "banner_BxPKCp",
-        "banner_y7FyMJ"
+        "banner_BxPKCp"
       ],
       "name": "6JOHAN ピックアップ特集",
       "settings": {
