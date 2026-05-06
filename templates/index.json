@@ -51,6 +51,20 @@
     "6johan_feature_banners_fWtxEw": {
       "type": "6johan-feature-banners",
       "blocks": {
+        "banner_mykBrA": {
+          "type": "banner",
+          "settings": {
+            "image": "shopify://shop_images/PC_c82c506b-ee0b-4eb9-b8fd-a0b9b8e2b516.png",
+            "image_mobile": "shopify://shop_images/SP_888ef798-823e-47e2-bd7e-cec9346c2ac0.png",
+            "hide_overlay": false,
+            "label": "",
+            "title": "",
+            "subtitle": "",
+            "cta_text": "詳しく見る",
+            "url": "",
+            "overlay_light": false
+          }
+        },
         "banner_eeFgaB": {
           "type": "banner",
           "settings": {
@@ -78,26 +92,12 @@
             "url": "shopify://collections/001",
             "overlay_light": false
           }
-        },
-        "banner_mykBrA": {
-          "type": "banner",
-          "settings": {
-            "image": "shopify://shop_images/PC_c82c506b-ee0b-4eb9-b8fd-a0b9b8e2b516.png",
-            "image_mobile": "shopify://shop_images/SP_888ef798-823e-47e2-bd7e-cec9346c2ac0.png",
-            "hide_overlay": true,
-            "label": "",
-            "title": "",
-            "subtitle": "",
-            "cta_text": "詳しく見る",
-            "url": "",
-            "overlay_light": false
-          }
         }
       },
       "block_order": [
+        "banner_mykBrA",
         "banner_eeFgaB",
-        "banner_R6XptY",
-        "banner_mykBrA"
+        "banner_R6XptY"
       ],
       "name": "6JOHAN 特集バナー",
       "settings": {
