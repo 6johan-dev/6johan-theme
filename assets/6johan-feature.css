@@ -520,3 +520,39 @@
   .feature-product-gallery__nav--prev { left: 8px; }
   .feature-product-gallery__nav--next { right: 8px; }
 }
+
+/* --- Feature Grid: メタフィールド商品グリッド --- */
+.feature-grid__products {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  padding: 0 20px;
+}
+.feature-grid__item { }
+.feature-grid__product-link {
+  text-decoration: none;
+  display: block;
+}
+.feature-grid__image {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 4px;
+  display: block;
+}
+.feature-grid__product-info {
+  padding: 8px 0;
+}
+.feature-grid__product-name {
+  font-size: 13px;
+  color: #292724;
+  font-weight: 500;
+  line-height: 1.5;
+}
+.feature-grid__product-price {
+  font-size: 14px;
+  color: #292724;
+  font-weight: 600;
+  margin-top: 4px;
+}
