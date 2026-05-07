@@ -294,7 +294,7 @@
         "tab_bk8Aje": {
           "type": "tab",
           "settings": {
-            "tab_label": "収納",
+            "tab_label": "キャビネット",
             "collection": "005",
             "products_to_show": 9
           }
@@ -318,7 +318,7 @@
       "name": "6JOHAN ランキング",
       "settings": {
         "label": "RANKING",
-        "heading": "人気ランキング",
+        "heading": "人気カテゴリランキング",
         "view_all_text": "ランキングをもっと見る"
       }
     },
