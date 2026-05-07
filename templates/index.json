@@ -421,20 +421,20 @@
     "6johan_pickup_banners_qhfPDf": {
       "type": "6johan-pickup-banners",
       "blocks": {
+        "banner_Y7Hctt": {
+          "type": "banner",
+          "settings": {
+            "image": "shopify://shop_images/RENEWAL_SALE_SP.jpg",
+            "title": "リニューアルセール",
+            "url": "shopify://collections/リニューアルセール"
+          }
+        },
         "banner_Q3R3Lb": {
           "type": "banner",
           "settings": {
             "image": "shopify://shop_images/SP_81bc3c8e-68b3-4982-b502-d45736e91745.png",
             "title": "SUMMER SWITCH — さらりと過ごす、夏の家具",
             "url": "shopify://blogs/ニュース/summer-switch-さらりと過ごす-夏の家具"
-          }
-        },
-        "banner_Y7Hctt": {
-          "type": "banner",
-          "settings": {
-            "image": "shopify://shop_images/SP_888ef798-823e-47e2-bd7e-cec9346c2ac0.png",
-            "title": "リニューアルセール",
-            "url": "shopify://collections/リニューアルセール"
           }
         },
         "banner_DCynCe": {
@@ -455,8 +455,8 @@
         }
       },
       "block_order": [
-        "banner_Q3R3Lb",
         "banner_Y7Hctt",
+        "banner_Q3R3Lb",
         "banner_DCynCe",
         "banner_BxPKCp"
       ],
