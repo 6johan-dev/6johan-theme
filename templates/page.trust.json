@@ -12,19 +12,80 @@
         "cta_url": "/pages/contact"
       },
       "blocks": {
-        "g1": { "type": "guarantee", "settings": { "icon": "🚚", "title": "最短3日", "subtitle": "お届け" } },
-        "g2": { "type": "guarantee", "settings": { "icon": "↩️", "title": "30日間", "subtitle": "返品OK" } },
-        "g3": { "type": "guarantee", "settings": { "icon": "🛡️", "title": "1年間", "subtitle": "品質保証" } },
-        "p1": { "type": "policy", "settings": { "icon": "📦", "title": "配送について", "content": "<p><strong>在庫品:</strong> ご注文から3〜5営業日でお届け<br><strong>受注生産品:</strong> 2〜4週間（商品ページに明記）<br>佐川急便にて全国配送<br>追跡番号は出荷時にメールでお知らせします</p>" } },
-        "p2": { "type": "policy", "settings": { "icon": "↩️", "title": "返品・交換", "content": "<p>商品到着から<strong>30日以内</strong>は理由を問わず返品OK<br>不良品の場合: 送料当社負担で交換<br>イメージ違いの場合: 返送料のみお客様負担<br>お手続きはメールまたはチャットで承ります</p>" } },
-        "p3": { "type": "policy", "settings": { "icon": "🔧", "title": "品質保証", "content": "<p>全商品<strong>1年間の品質保証</strong>付き<br>通常使用での破損は無償修理・交換<br>初期不良は到着後7日以内にご連絡ください</p>" } },
-        "f1": { "type": "faq", "settings": { "question": "送料はいくらですか？", "answer": "<p>全国一律送料をいただいております。一部大型商品は別途送料がかかる場合がございます。商品ページに記載しておりますのでご確認ください。</p>" } },
-        "f2": { "type": "faq", "settings": { "question": "届くまでどのくらいかかりますか？", "answer": "<p>在庫品はご注文から3〜5営業日でお届けします。受注生産品は2〜4週間いただいております。商品ページにてご確認ください。</p>" } },
-        "f3": { "type": "faq", "settings": { "question": "組み立ては必要ですか？", "answer": "<p>多くの商品は完成品でお届けしますので組立不要です。組立が必要な商品は商品ページに記載しています。</p>" } },
-        "f4": { "type": "faq", "settings": { "question": "支払い方法は何がありますか？", "answer": "<p>クレジットカード（Visa/Mastercard/Amex/JCB）、Apple Pay、Google Pay、コンビニ後払い、銀行振込をご利用いただけます。</p>" } }
+        "g1": {
+          "type": "guarantee",
+          "settings": {
+            "icon": "🚚",
+            "title": "最短7日",
+            "subtitle": "発送"
+          }
+        },
+        "g2": {
+          "type": "guarantee",
+          "settings": {
+            "icon": "↩️",
+            "title": "30日間",
+            "subtitle": "返品OK"
+          }
+        },
+        "p1": {
+          "type": "policy",
+          "settings": {
+            "icon": "📦",
+            "title": "配送について",
+            "content": "<p><strong>在庫品:</strong> ご注文から7日以内に発送<br><strong>受注生産品:</strong> 約3ヶ月（商品ページに明記）<br>佐川急便にて全国配送<br>追跡番号は出荷時にメールでお知らせします</p>"
+          }
+        },
+        "p2": {
+          "type": "policy",
+          "settings": {
+            "icon": "↩️",
+            "title": "返品・交換",
+            "content": "<p>商品到着から<strong>30日以内</strong>は理由を問わず返品OK<br>不良品の場合: 送料当社負担で交換<br>イメージ違いの場合: 返送料のみお客様負担<br>お手続きはメールまたはチャットで承ります</p>"
+          }
+        },
+        "f1": {
+          "type": "faq",
+          "settings": {
+            "question": "送料はいくらですか？",
+            "answer": "<p>全国一律送料をいただいております。一部大型商品は別途送料がかかる場合がございます。商品ページに記載しておりますのでご確認ください。</p>"
+          }
+        },
+        "f2": {
+          "type": "faq",
+          "settings": {
+            "question": "届くまでどのくらいかかりますか？",
+            "answer": "<p>在庫品はご注文から7日以内に発送いたします。受注生産品は約3ヶ月いただいております。商品ページにてご確認ください。</p>"
+          }
+        },
+        "f3": {
+          "type": "faq",
+          "settings": {
+            "question": "組み立ては必要ですか？",
+            "answer": "<p>多くの商品は完成品でお届けしますので組立不要です。組立が必要な商品は商品ページに記載しています。</p>"
+          }
+        },
+        "f4": {
+          "type": "faq",
+          "settings": {
+            "question": "支払い方法は何がありますか？",
+            "answer": "<p>クレジットカード（Visa/Mastercard/Amex/JCB）、Apple Pay、Google Pay、コンビニ後払い、銀行振込をご利用いただけます。</p>"
+          }
+        }
       },
-      "block_order": ["g1", "g2", "g3", "p1", "p2", "p3", "f1", "f2", "f3", "f4"]
+      "block_order": [
+        "g1",
+        "g2",
+        "p1",
+        "p2",
+        "f1",
+        "f2",
+        "f3",
+        "f4"
+      ]
     }
   },
-  "order": ["main"]
+  "order": [
+    "main"
+  ]
 }
