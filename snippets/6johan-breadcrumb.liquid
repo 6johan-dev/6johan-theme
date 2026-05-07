@@ -8,7 +8,20 @@
 
     {%- if template contains 'product' -%}
       {%- if product.collections.size > 0 -%}
-        {%- assign col = product.collections | first -%}
+        {%- assign col = nil -%}
+        {%- for c in product.collections -%}
+          {%- assign h = c.handle -%}
+          {%- if h == 'all' or h == 'frontpage' -%}{%- continue -%}{%- endif -%}
+          {%- if c.title contains '全ての商品' -%}{%- continue -%}{%- endif -%}
+          {%- if c.title contains '5万円以下' -%}{%- continue -%}{%- endif -%}
+          {%- if c.title contains '即納商品' -%}{%- continue -%}{%- endif -%}
+          {%- if c.title contains 'Pick Up' or c.title contains 'pick up' -%}{%- continue -%}{%- endif -%}
+          {%- if c.title contains 'NEW ARRIVAL' or c.title contains 'new arrival' -%}{%- continue -%}{%- endif -%}
+          {%- if c.title contains 'セール' -%}{%- continue -%}{%- endif -%}
+          {%- assign col = c -%}
+          {%- break -%}
+        {%- endfor -%}
+        {%- if col == nil -%}{%- assign col = product.collections | first -%}{%- endif -%}
         <li class="sixj-breadcrumb__item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
           <a href="{{ col.url }}" itemprop="item"><span itemprop="name">{{ col.title }}</span></a>
           <meta itemprop="position" content="2" />

@@ -1720,3 +1720,17 @@ body,
    - .sixj-product-status 関連のスタイル
    - .sixj-delivery-info 関連のスタイル
    ============================================ */
+
+/* Cart icon: match weight with other header icons */
+.header__icon--cart svg path,
+.header__icon--cart svg circle,
+.header__icon--cart svg line {
+  stroke-width: 1.5;
+}
+
+/* Cart icon: match stroke weight with other header icons */
+.header__icon--cart svg path,
+.header__icon--cart svg circle,
+.header__icon--cart svg line {
+  stroke-width: 1.5;
+}
