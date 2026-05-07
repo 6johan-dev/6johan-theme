@@ -16,38 +16,6 @@
         "placeholder": "何かお探しですか？"
       }
     },
-    "6johan_announcement_ticker_QLCctr": {
-      "type": "6johan-announcement-ticker",
-      "blocks": {
-        "announcement_7ykbgi": {
-          "type": "announcement",
-          "settings": {
-            "date": "2026.03.20",
-            "text": "春の新作コレクションが入荷しました",
-            "url": ""
-          }
-        },
-        "announcement_6bQXtj": {
-          "type": "announcement",
-          "settings": {
-            "date": "2026.03.15",
-            "text": "【重要】配送料改定のお知らせ",
-            "url": ""
-          }
-        }
-      },
-      "block_order": [
-        "announcement_7ykbgi",
-        "announcement_6bQXtj"
-      ],
-      "disabled": true,
-      "name": "6JOHAN お知らせティッカー",
-      "settings": {
-        "label": "NEWS",
-        "scroll_speed": 6,
-        "show_close": true
-      }
-    },
     "6johan_feature_banners_fWtxEw": {
       "type": "6johan-feature-banners",
       "blocks": {
@@ -525,14 +493,24 @@
       "settings": {
         "include_margins": true
       }
+    },
+    "6johan_recently_viewed_UFANbd": {
+      "type": "6johan-recently-viewed",
+      "name": "6JOHAN 最近見た商品",
+      "settings": {
+        "label": "RECENTLY VIEWED",
+        "heading": "最近チェックした商品",
+        "max_products": 6,
+        "alt_background": false
+      }
     }
   },
   "order": [
     "6johan_search_bar_yrr97F",
-    "6johan_announcement_ticker_QLCctr",
     "6johan_feature_banners_fWtxEw",
     "6johan_quick_category_dF9MET",
     "6johan_category_icons_RGywjp",
+    "6johan_recently_viewed_UFANbd",
     "6johan_ranking_GfgLC3",
     "6johan_collection_products_tNktNk",
     "6johan_customer_voice_Fq3Jif",
