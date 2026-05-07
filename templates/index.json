@@ -63,10 +63,10 @@
         },
         "banner_66waWc": {
           "type": "banner",
-          "disabled": true,
           "settings": {
+            "image": "shopify://shop_images/The_Best_of_May_PC.jpg",
             "image_mobile": "shopify://shop_images/The_Best_of_May_SP.jpg",
-            "hide_overlay": false,
+            "hide_overlay": true,
             "label": "",
             "title": "特集タイトル",
             "subtitle": "",
