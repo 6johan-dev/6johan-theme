@@ -63,6 +63,7 @@
         },
         "banner_66waWc": {
           "type": "banner",
+          "disabled": true,
           "settings": {
             "image_mobile": "shopify://shop_images/The_Best_of_May_SP.jpg",
             "hide_overlay": false,
