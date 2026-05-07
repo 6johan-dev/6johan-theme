@@ -70,26 +70,43 @@
   {% endif %}
 
   {%- if mf_product != blank -%}
-    <div class="feature-product-item feature-product-item--metafield">
-      <a href="{{ mf_product.url }}" class="feature-product-card">
-        <div class="feature-product-card__thumb">
-          {%- if mf_product.featured_image != blank -%}
-            <img
-              src="{{ mf_product.featured_image | image_url: width: 200 }}"
-              alt="{{ mf_product.title | escape }}"
-              loading="lazy"
-              width="80"
-              height="80"
-            >
+    {%- assign product_images = mf_product.images | slice: 0, 5 -%}
+    {%- if product_images.size > 0 -%}
+      <div class="feature-product-item feature-product-item--metafield">
+        <div class="feature-product-gallery">
+          <div class="feature-product-gallery__track">
+            {%- for img in product_images -%}
+              <div class="feature-product-gallery__slide">
+                <img
+                  src="{{ img | image_url: width: 600 }}"
+                  srcset="{{ img | image_url: width: 400 }} 400w, {{ img | image_url: width: 600 }} 600w"
+                  sizes="(min-width: 750px) 380px, 80vw"
+                  alt="{{ mf_product.title | escape }}"
+                  loading="lazy"
+                >
+              </div>
+            {%- endfor -%}
+          </div>
+          <div class="feature-product-gallery__dots">
+            <span class="feature-product-gallery__counter">1 / {{ product_images.size }}</span>
+          </div>
+          {%- if product_images.size > 1 -%}
+            <button class="feature-product-gallery__nav feature-product-gallery__nav--prev" aria-label="前へ">‹</button>
+            <button class="feature-product-gallery__nav feature-product-gallery__nav--next" aria-label="次へ">›</button>
           {%- endif -%}
         </div>
-        <div class="feature-product-card__info">
-          <div class="feature-product-card__name">{{ mf_product.title }}</div>
-          <div class="feature-product-card__price">{{ mf_product.price | money }}</div>
-          <div class="feature-product-card__link-text">詳しくはこちら ›</div>
-        </div>
-      </a>
-    </div>
+        <a href="{{ mf_product.url }}" class="feature-product-card">
+          <div class="feature-product-card__thumb">
+            <img src="{{ mf_product.featured_image | image_url: width: 200 }}" alt="{{ mf_product.title | escape }}" loading="lazy" width="80" height="80">
+          </div>
+          <div class="feature-product-card__info">
+            <div class="feature-product-card__name">{{ mf_product.title }}</div>
+            <div class="feature-product-card__price">{{ mf_product.price | money }}</div>
+            <div class="feature-product-card__link-text">詳しくはこちら ›</div>
+          </div>
+        </a>
+      </div>
+    {%- endif -%}
   {%- endif -%}
 
   {%- unless mf_product != blank -%}
@@ -308,3 +325,31 @@
 }
 {% endschema %}
 
+
+<script>
+(function() {
+  document.querySelectorAll('.feature-product-gallery').forEach(function(gallery) {
+    var track = gallery.querySelector('.feature-product-gallery__track');
+    var slides = gallery.querySelectorAll('.feature-product-gallery__slide');
+    var counter = gallery.querySelector('.feature-product-gallery__counter');
+    var prevBtn = gallery.querySelector('.feature-product-gallery__nav--prev');
+    var nextBtn = gallery.querySelector('.feature-product-gallery__nav--next');
+    if (!track || slides.length < 2) return;
+    var current = 0;
+    var total = slides.length;
+    function goTo(i) {
+      current = Math.max(0, Math.min(i, total - 1));
+      track.style.transform = 'translateX(-' + (current * 100) + '%)';
+      if (counter) counter.textContent = (current + 1) + ' / ' + total;
+    }
+    if (prevBtn) prevBtn.addEventListener('click', function() { goTo(current - 1); });
+    if (nextBtn) nextBtn.addEventListener('click', function() { goTo(current + 1); });
+    var startX = 0;
+    track.addEventListener('touchstart', function(e) { startX = e.touches[0].clientX; }, {passive: true});
+    track.addEventListener('touchend', function(e) {
+      var diff = startX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 40) goTo(current + (diff > 0 ? 1 : -1));
+    }, {passive: true});
+  });
+})();
+</script>
