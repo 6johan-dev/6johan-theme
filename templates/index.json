@@ -22,8 +22,8 @@
         "banner_mykBrA": {
           "type": "banner",
           "settings": {
-            "image": "shopify://shop_images/PC_c82c506b-ee0b-4eb9-b8fd-a0b9b8e2b516.png",
-            "image_mobile": "shopify://shop_images/SP_888ef798-823e-47e2-bd7e-cec9346c2ac0.png",
+            "image": "shopify://shop_images/RENEWAL_SALE_PC.jpg",
+            "image_mobile": "shopify://shop_images/RENEWAL_SALE_SP.jpg",
             "hide_overlay": true,
             "label": "",
             "title": "",
@@ -421,6 +421,14 @@
     "6johan_pickup_banners_qhfPDf": {
       "type": "6johan-pickup-banners",
       "blocks": {
+        "banner_Q3R3Lb": {
+          "type": "banner",
+          "settings": {
+            "image": "shopify://shop_images/SP_81bc3c8e-68b3-4982-b502-d45736e91745.png",
+            "title": "SUMMER SWITCH — さらりと過ごす、夏の家具",
+            "url": "shopify://blogs/ニュース/summer-switch-さらりと過ごす-夏の家具"
+          }
+        },
         "banner_Y7Hctt": {
           "type": "banner",
           "settings": {
@@ -447,6 +455,7 @@
         }
       },
       "block_order": [
+        "banner_Q3R3Lb",
         "banner_Y7Hctt",
         "banner_DCynCe",
         "banner_BxPKCp"
