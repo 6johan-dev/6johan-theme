@@ -96,6 +96,7 @@
     </div>
   {%- endif -%}
 
+  {%- unless mf_product != blank -%}
   {%- for block in section.blocks -%}
     {%- case block.type -%}
 
@@ -207,7 +208,7 @@
 
     {%- endcase -%}
   {%- endfor -%}
-</section>
+  {%- endunless -%}</section>
 {% endif %}
 
 {% schema %}
