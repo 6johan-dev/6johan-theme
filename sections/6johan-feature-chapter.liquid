@@ -7,9 +7,35 @@
 
 {%- liquid
   assign chapter_number = section.settings.chapter_number
-  assign chapter_title = section.settings.chapter_title
-  assign chapter_image = section.settings.chapter_image
-  assign chapter_body = section.settings.chapter_body
+  assign chapter_idx = chapter_number | remove: '.' | remove: ' ' | strip | plus: 0
+
+  assign title_key = 'chapter_title' | append: chapter_idx
+  assign body_key = 'chapter_body' | append: chapter_idx
+  assign image_key = 'chapter_image' | append: chapter_idx
+  assign product_key = 'chapter_product' | append: chapter_idx
+
+  assign mf_title = article.metafields.custom[title_key].value
+  assign mf_body = article.metafields.custom[body_key].value
+  assign mf_image = article.metafields.custom[image_key].value
+  assign mf_product = article.metafields.custom[product_key].value
+
+  if mf_title != blank
+    assign chapter_title = mf_title
+  else
+    assign chapter_title = section.settings.chapter_title
+  endif
+
+  if mf_body != blank
+    assign chapter_body = mf_body
+  else
+    assign chapter_body = section.settings.chapter_body
+  endif
+
+  if mf_image != blank
+    assign chapter_image = mf_image
+  else
+    assign chapter_image = section.settings.chapter_image
+  endif
 -%}
 
 {% if chapter_title != blank %}
@@ -42,6 +68,33 @@
       {{ chapter_body }}
     </div>
   {% endif %}
+
+  {%- if mf_product != blank -%}
+    <div class="feature-product-item feature-product-item--metafield">
+      <div class="feature-product-item__card">
+        <a href="{{ mf_product.url }}" class="feature-product-item__link">
+          {%- if mf_product.featured_image != blank -%}
+            <img
+              src="{{ mf_product.featured_image | image_url: width: 800 }}"
+              srcset="{{ mf_product.featured_image | image_url: width: 400 }} 400w,
+                      {{ mf_product.featured_image | image_url: width: 600 }} 600w,
+                      {{ mf_product.featured_image | image_url: width: 800 }} 800w"
+              sizes="(min-width: 750px) 50vw, 100vw"
+              alt="{{ mf_product.title | escape }}"
+              loading="lazy"
+              width="{{ mf_product.featured_image.width }}"
+              height="{{ mf_product.featured_image.height }}"
+            >
+          {%- endif -%}
+        </a>
+        <div class="feature-product-item__info">
+          <h3 class="feature-product-item__sub-heading">{{ mf_product.title }}</h3>
+          <p class="feature-product-item__price">{{ mf_product.price | money }}</p>
+          <a href="{{ mf_product.url }}" class="feature-product-item__cta">詳しく見る →</a>
+        </div>
+      </div>
+    </div>
+  {%- endif -%}
 
   {%- for block in section.blocks -%}
     {%- case block.type -%}

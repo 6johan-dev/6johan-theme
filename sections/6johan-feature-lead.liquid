@@ -6,7 +6,12 @@
 
 {%- liquid
   assign show_breadcrumb = section.settings.show_breadcrumb | default: true
-  assign lead_text = section.settings.lead_text
+  assign mf_lead = article.metafields.custom.lead_text.value
+  if mf_lead != blank
+    assign lead_text = mf_lead
+  else
+    assign lead_text = section.settings.lead_text
+  endif
   assign show_toc = section.settings.show_toc | default: true
 -%}
 
