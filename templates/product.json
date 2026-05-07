@@ -154,7 +154,7 @@
       "type": "6johan-cross-sell",
       "name": "6JOHAN クロスセル",
       "settings": {
-        "label": "CROSS SELL",
+        "label": "Related Items",
         "heading": "このアイテムを購入した人は、一緒にこんな商品も購入しています",
         "max_products": 3
       }
