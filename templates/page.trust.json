@@ -6,7 +6,7 @@
         "hero_label": "Shopping Guide",
         "hero_heading": "安心してお買い物\nいただくために",
         "show_payment": true,
-        "payment_text": "クレジットカード（Visa / Mastercard / American Express / JCB）、Apple Pay、Google Pay、コンビニ後払い、銀行振込をご利用いただけます。",
+        "payment_text": "クレジットカード（Visa / Mastercard / American Express / JCB）、Apple Pay、Google Payをご利用いただけます。",
         "faq_label": "よくある質問",
         "cta_text": "お問い合わせ →",
         "cta_url": "/pages/contact"
@@ -69,7 +69,7 @@
           "type": "faq",
           "settings": {
             "question": "支払い方法は何がありますか？",
-            "answer": "<p>クレジットカード（Visa/Mastercard/Amex/JCB）、Apple Pay、Google Pay、コンビニ後払い、銀行振込をご利用いただけます。</p>"
+            "answer": "<p>クレジットカード（Visa/Mastercard/Amex/JCB）、Apple Pay、Google Payをご利用いただけます。</p>"
           }
         }
       },
