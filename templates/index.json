@@ -74,13 +74,28 @@
             "url": "shopify://collections/all",
             "overlay_light": false
           }
+        },
+        "banner_yRxEYQ": {
+          "type": "banner",
+          "settings": {
+            "image": "shopify://shop_images/PC_c3159421-8759-476c-8808-113673aa31db.png",
+            "image_mobile": "shopify://shop_images/SP_81bc3c8e-68b3-4982-b502-d45736e91745.png",
+            "hide_overlay": true,
+            "label": "",
+            "title": "特集タイトル",
+            "subtitle": "",
+            "cta_text": "詳しく見る",
+            "url": "shopify://blogs/ニュース/summer-switch-さらりと過ごす-夏の家具",
+            "overlay_light": false
+          }
         }
       },
       "block_order": [
         "banner_mykBrA",
         "banner_eeFgaB",
         "banner_R6XptY",
-        "banner_66waWc"
+        "banner_66waWc",
+        "banner_yRxEYQ"
       ],
       "name": "6JOHAN 特集バナー",
       "settings": {
