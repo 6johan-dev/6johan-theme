@@ -10,7 +10,7 @@
 {
   {%- for v in product.variants -%}
     "{{ v.id }}": {
-      "state": "{%- if v.available -%}{%- if v.inventory_management == 'shopify' -%}{%- if v.inventory_quantity > 0 -%}in_stock{%- else -%}backorder{%- endif -%}{%- else -%}in_stock{%- endif -%}{%- else -%}unavailable{%- endif -%}",
+      "state": "{%- if v.available -%}{%- if v.inventory_management == 'shopify' -%}{%- if v.inventory_quantity > 0 -%}instock{%- else -%}backorder{%- endif -%}{%- else -%}instock{%- endif -%}{%- else -%}unavailable{%- endif -%}",
       "qty": {{ v.inventory_quantity | default: 0 }},
       "options": {{ v.options | json }}
     }{%- unless forloop.last -%},{%- endunless -%}
@@ -23,18 +23,18 @@
 {%- if cv.available -%}
   {%- if cv.inventory_management == 'shopify' -%}
     {%- if cv.inventory_quantity > 0 -%}
-      {%- assign stock_state = 'in_stock' -%}
+      {%- assign stock_state = 'instock' -%}
     {%- else -%}
       {%- assign stock_state = 'backorder' -%}
     {%- endif -%}
   {%- else -%}
-    {%- assign stock_state = 'in_stock' -%}
+    {%- assign stock_state = 'instock' -%}
   {%- endif -%}
 {%- endif -%}
 
 <div id="sixj-delivery-box" class="sixj-dbox" data-product-id="{{ product.id }}">
   {%- comment -%} 在庫あり {%- endcomment -%}
-  <div class="sixj-dbox__inner sixj-dbox--instock" {% if stock_state != 'in_stock' %}style="display:none"{% endif %}>
+  <div class="sixj-dbox__inner sixj-dbox--instock" {% if stock_state != 'instock' %}style="display:none"{% endif %}>
     <div class="sixj-dbox__icon">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3A6A3A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <rect x="1" y="3" width="15" height="13" rx="1"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>
@@ -143,7 +143,7 @@
         var optionValue = input.value;
 
         var hasStock = allStates.some(function(v) {
-          return v.options[optionIndex] === optionValue && v.state === 'in_stock';
+          return v.options[optionIndex] === optionValue && v.state === 'instock';
         });
 
         var dot = document.createElement('span');
