@@ -29,7 +29,7 @@
             "title": "",
             "subtitle": "",
             "cta_text": "詳しく見る",
-            "url": "shopify://collections",
+            "url": "shopify://collections/リニューアルセール",
             "overlay_light": false
           }
         },
@@ -396,7 +396,7 @@
           "settings": {
             "image": "shopify://shop_images/SP_888ef798-823e-47e2-bd7e-cec9346c2ac0.png",
             "title": "リニューアルセール",
-            "url": ""
+            "url": "shopify://collections/リニューアルセール"
           }
         },
         "banner_DCynCe": {
