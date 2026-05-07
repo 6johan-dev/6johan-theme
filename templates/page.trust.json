@@ -71,11 +71,20 @@
             "question": "支払い方法は何がありますか？",
             "answer": "<p>クレジットカード（Visa/Mastercard/Amex/JCB）、Apple Pay、Google Payをご利用いただけます。</p>"
           }
+        },
+        "g3": {
+          "type": "guarantee",
+          "settings": {
+            "icon": "💬",
+            "title": "チャット相談",
+            "subtitle": "OK"
+          }
         }
       },
       "block_order": [
         "g1",
         "g2",
+        "g3",
         "p1",
         "p2",
         "f1",
