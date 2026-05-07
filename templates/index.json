@@ -36,8 +36,8 @@
         "banner_eeFgaB": {
           "type": "banner",
           "settings": {
-            "image": "shopify://shop_images/PC.png",
-            "image_mobile": "shopify://shop_images/SP.png",
+            "image": "shopify://shop_images/PC.jpg",
+            "image_mobile": "shopify://shop_images/SP.jpg",
             "hide_overlay": true,
             "label": "",
             "title": "",
