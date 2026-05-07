@@ -37,6 +37,18 @@
 
 {% if collection != blank or has_manual or has_mf_products %}
 <section class="feature-grid">
+  {%- assign summary_title = article.metafields.custom.summary_title.value -%}
+  {%- assign summary_body = article.metafields.custom.summary_body.value -%}
+  {%- if summary_title != blank or summary_body != blank -%}
+    <div class="feature-summary">
+      {%- if summary_title != blank -%}
+        <h2 class="feature-summary__title">{{ summary_title }}</h2>
+      {%- endif -%}
+      {%- if summary_body != blank -%}
+        <div class="feature-summary__body">{{ summary_body | newline_to_br }}</div>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
   {% if grid_title != blank or grid_description != blank %}
     <div class="feature-grid__header">
       {% if grid_title != blank %}
