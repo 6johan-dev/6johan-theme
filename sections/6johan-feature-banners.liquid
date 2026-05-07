@@ -392,8 +392,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const translateX = -(currentIndex * slideWidthPercent) + centerOffset;
         track.style.transform = `translateX(${translateX}%)`;
       } else {
-        // PC: Full width slides
-        track.style.transform = `translateX(-${currentIndex * 100}%)`;
+        // PC: Center with peek effect
+        const pcSlideWidth = 80; const pcOffset = (100 - pcSlideWidth) / 2; track.style.transform = `translateX(${-(currentIndex * pcSlideWidth) + pcOffset}%)`;
       }
       
       // Update active states
