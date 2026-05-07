@@ -1714,11 +1714,6 @@ body,
 }
 
 /* バリアントラベルにドットを入れるためのflex化 */
-variant-radios label.sixj-dotted,
-variant-selects label.sixj-dotted {
-  display: inline-flex;
-  align-items: center;
-}
 
 /* ============================================
    以下を削除（既存CSSから）:
