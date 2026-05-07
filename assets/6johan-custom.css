@@ -1617,3 +1617,111 @@ body,
 .sixj-search-bar__icon {
   background: transparent !important;
 }
+/* ============================================
+   6JOHAN Delivery Box — 統合配送・在庫表示
+   6johan-custom.css に追記
+   ============================================ */
+
+/* --- 配送ボックス本体 --- */
+.sixj-dbox {
+  margin-bottom: 16px;
+}
+
+.sixj-dbox__inner {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 8px;
+  transition: opacity 0.2s ease;
+}
+
+/* 在庫あり */
+.sixj-dbox--instock {
+  background: #EDF5ED;
+  border: 1px solid #C4DCC4;
+}
+
+.sixj-dbox__main--instock {
+  font-size: 14px;
+  font-weight: 500;
+  color: #2C4A2C;
+  line-height: 1.5;
+}
+
+.sixj-dbox__sub--instock {
+  font-size: 12px;
+  color: #5E7A5E;
+  margin-top: 2px;
+}
+
+/* 受注生産 */
+.sixj-dbox--backorder {
+  background: #F5F0EB;
+  border: 1px solid #DDD5CC;
+}
+
+.sixj-dbox__main--backorder {
+  font-size: 14px;
+  font-weight: 500;
+  color: #6B5B4F;
+  line-height: 1.5;
+}
+
+.sixj-dbox__sub--backorder {
+  font-size: 12px;
+  color: #8A7A6E;
+  margin-top: 2px;
+}
+
+/* 在庫切れ */
+.sixj-dbox--unavailable {
+  background: #F5F3F0;
+  border: 1px solid #E0DCDA;
+}
+
+.sixj-dbox__main--unavailable {
+  font-size: 14px;
+  font-weight: 500;
+  color: #8A7A6E;
+  line-height: 1.5;
+}
+
+/* アイコン */
+.sixj-dbox__icon {
+  flex-shrink: 0;
+  margin-top: 1px;
+  line-height: 0;
+}
+
+/* --- バリアント在庫ドット --- */
+.sixj-stock-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  margin-left: 6px;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+.sixj-stock-dot--in {
+  background-color: #5E7A5E;
+}
+
+.sixj-stock-dot--out {
+  background-color: #C4956A;
+}
+
+/* バリアントラベルにドットを入れるためのflex化 */
+variant-radios label.sixj-dotted,
+variant-selects label.sixj-dotted {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* ============================================
+   以下を削除（既存CSSから）:
+   - .sixj-product-status 関連のスタイル
+   - .sixj-delivery-info 関連のスタイル
+   ============================================ */
