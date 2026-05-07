@@ -239,6 +239,16 @@
       "name": "6JOHAN カテゴリアイコン",
       "settings": {}
     },
+    "6johan_recently_viewed_UFANbd": {
+      "type": "6johan-recently-viewed",
+      "name": "6JOHAN 最近見た商品",
+      "settings": {
+        "label": "RECENTLY VIEWED",
+        "heading": "最近チェックした商品",
+        "max_products": 6,
+        "alt_background": false
+      }
+    },
     "6johan_ranking_GfgLC3": {
       "type": "6johan-ranking",
       "blocks": {
@@ -426,28 +436,28 @@
         "news_item_kPgDEW": {
           "type": "news_item",
           "settings": {
-            "date": "2026.03.20",
-            "category": "new",
-            "text": "春の新作コレクションが入荷しました",
-            "url": ""
+            "date": "2026.04.28",
+            "category": "info",
+            "text": "ゴールデンウィーク期間中の営業につきまして",
+            "url": "shopify://blogs/information/033"
           }
         },
         "news_item_CX7Yaj": {
           "type": "news_item",
           "settings": {
-            "date": "2026.03.15",
-            "category": "important",
-            "text": "配送料改定のお知らせ（4月1日より適用）",
-            "url": ""
+            "date": "2025.12.24",
+            "category": "info",
+            "text": "【重要】春節（旧正月）に伴う受注生産品の配送遅延および生産停止に関するお知らせ",
+            "url": "shopify://blogs/information/032"
           }
         },
         "news_item_ri3UpY": {
           "type": "news_item",
           "settings": {
-            "date": "2026.03.10",
-            "category": "campaign",
-            "text": "春のまとめ買いキャンペーン開催中",
-            "url": ""
+            "date": "2025.12.24",
+            "category": "info",
+            "text": "年末年始休業のお知らせ",
+            "url": "shopify://blogs/information/031"
           }
         }
       },
@@ -462,7 +472,7 @@
         "heading": "お知らせ",
         "show_view_all": true,
         "view_all_text": "すべてのお知らせを見る",
-        "view_all_url": ""
+        "view_all_url": "shopify://blogs/information"
       }
     },
     "17779036218a1b48bb": {
@@ -492,16 +502,6 @@
       ],
       "settings": {
         "include_margins": true
-      }
-    },
-    "6johan_recently_viewed_UFANbd": {
-      "type": "6johan-recently-viewed",
-      "name": "6JOHAN 最近見た商品",
-      "settings": {
-        "label": "RECENTLY VIEWED",
-        "heading": "最近チェックした商品",
-        "max_products": 6,
-        "alt_background": false
       }
     }
   },
