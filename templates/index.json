@@ -60,12 +60,26 @@
             "url": "shopify://collections/001",
             "overlay_light": false
           }
+        },
+        "banner_66waWc": {
+          "type": "banner",
+          "settings": {
+            "image_mobile": "shopify://shop_images/The_Best_of_May_SP.jpg",
+            "hide_overlay": false,
+            "label": "",
+            "title": "特集タイトル",
+            "subtitle": "",
+            "cta_text": "詳しく見る",
+            "url": "shopify://collections/all",
+            "overlay_light": false
+          }
         }
       },
       "block_order": [
         "banner_mykBrA",
         "banner_eeFgaB",
-        "banner_R6XptY"
+        "banner_R6XptY",
+        "banner_66waWc"
       ],
       "name": "6JOHAN 特集バナー",
       "settings": {
