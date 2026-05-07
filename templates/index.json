@@ -60,12 +60,27 @@
             "url": "shopify://collections/001",
             "overlay_light": false
           }
+        },
+        "banner_66waWc": {
+          "type": "banner",
+          "settings": {
+            "image": "shopify://shop_images/The_Best_of_May_PC.jpg",
+            "image_mobile": "shopify://shop_images/The_Best_of_May_SP.jpg",
+            "hide_overlay": true,
+            "label": "",
+            "title": "特集タイトル",
+            "subtitle": "",
+            "cta_text": "詳しく見る",
+            "url": "shopify://collections/all",
+            "overlay_light": false
+          }
         }
       },
       "block_order": [
         "banner_mykBrA",
         "banner_eeFgaB",
-        "banner_R6XptY"
+        "banner_R6XptY",
+        "banner_66waWc"
       ],
       "name": "6JOHAN 特集バナー",
       "settings": {
@@ -138,7 +153,7 @@
           "settings": {
             "label": "テーブル・デスク",
             "icon_type": "table",
-            "url": ""
+            "url": "shopify://collections/002"
           }
         },
         "category_UXiUUN": {
@@ -256,7 +271,7 @@
           "type": "tab",
           "settings": {
             "tab_label": "すべて",
-            "collection": "pick-up",
+            "collection": "全ての商品",
             "products_to_show": 9
           }
         },
@@ -279,7 +294,7 @@
         "tab_bk8Aje": {
           "type": "tab",
           "settings": {
-            "tab_label": "収納",
+            "tab_label": "キャビネット",
             "collection": "005",
             "products_to_show": 9
           }
@@ -303,7 +318,7 @@
       "name": "6JOHAN ランキング",
       "settings": {
         "label": "RANKING",
-        "heading": "人気ランキング",
+        "heading": "人気カテゴリランキング",
         "view_all_text": "ランキングをもっと見る"
       }
     },
