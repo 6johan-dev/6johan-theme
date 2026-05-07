@@ -90,7 +90,7 @@
           "settings": {
             "icon": "ranking",
             "label": "ランキング",
-            "link": "shopify://collections/all",
+            "link": "shopify://collections/全ての商品",
             "badge": "hot"
           }
         },
