@@ -271,7 +271,7 @@
           "type": "tab",
           "settings": {
             "tab_label": "すべて",
-            "collection": "pick-up",
+            "collection": "全ての商品",
             "products_to_show": 9
           }
         },
