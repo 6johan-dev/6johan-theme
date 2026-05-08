@@ -1735,14 +1735,25 @@ body,
   stroke-width: 1.5;
 }
 
+
 /* SP: ロゴ絶対中央配置 */
 @media (max-width: 989px) {
   .header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     position: relative;
   }
   .header__heading-link {
     position: absolute;
     left: 50%;
-    transform: translateX(-50%);
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+  header-drawer {
+    z-index: 2;
+  }
+  .header__icons {
+    z-index: 2;
   }
 }
