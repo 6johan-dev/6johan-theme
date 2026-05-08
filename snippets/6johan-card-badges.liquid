@@ -147,7 +147,14 @@
   <div class="card-badges">
     
     {%- comment -%} セールバッジ {%- endcomment -%}
-    {% if product.compare_at_price_max > product.price_min and badge_count < 2 %}
+    {%- assign is_on_sale = false -%}
+    {%- for variant in product.variants -%}
+      {%- if variant.compare_at_price > variant.price -%}
+        {%- assign is_on_sale = true -%}
+        {%- break -%}
+      {%- endif -%}
+    {%- endfor -%}
+    {% if is_on_sale and badge_count < 2 %}
       <span class="card-badge card-badge--sale">セール</span>
       {% assign badge_count = badge_count | plus: 1 %}
     {% endif %}
