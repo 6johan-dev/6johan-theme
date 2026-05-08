@@ -22,8 +22,8 @@
         "banner_mykBrA": {
           "type": "banner",
           "settings": {
-            "image": "shopify://shop_images/PC_c82c506b-ee0b-4eb9-b8fd-a0b9b8e2b516.png",
-            "image_mobile": "shopify://shop_images/SP_888ef798-823e-47e2-bd7e-cec9346c2ac0.png",
+            "image": "shopify://shop_images/RENEWAL_SALE_PC.jpg",
+            "image_mobile": "shopify://shop_images/RENEWAL_SALE_SP.jpg",
             "hide_overlay": true,
             "label": "",
             "title": "",
@@ -36,8 +36,8 @@
         "banner_eeFgaB": {
           "type": "banner",
           "settings": {
-            "image": "shopify://shop_images/PC.png",
-            "image_mobile": "shopify://shop_images/SP.png",
+            "image": "shopify://shop_images/PC.jpg",
+            "image_mobile": "shopify://shop_images/SP.jpg",
             "hide_overlay": true,
             "label": "",
             "title": "",
@@ -50,8 +50,8 @@
         "banner_R6XptY": {
           "type": "banner",
           "settings": {
-            "image": "shopify://shop_images/PC_b3c02e59-0e7a-4270-869d-314dcc90518f.png",
-            "image_mobile": "shopify://shop_images/SP_627404fb-6df9-4f4d-9fd1-dec03c8d230e.png",
+            "image": "shopify://shop_images/chair_stool_collection_PC.jpg",
+            "image_mobile": "shopify://shop_images/chair_stool_collection_SP.jpg",
             "hide_overlay": true,
             "label": "",
             "title": "",
@@ -74,13 +74,28 @@
             "url": "shopify://collections/all",
             "overlay_light": false
           }
+        },
+        "banner_yRxEYQ": {
+          "type": "banner",
+          "settings": {
+            "image": "shopify://shop_images/summer_switch_collection_PC.jpg",
+            "image_mobile": "shopify://shop_images/summer_switch_SP.jpg",
+            "hide_overlay": true,
+            "label": "",
+            "title": "特集タイトル",
+            "subtitle": "",
+            "cta_text": "詳しく見る",
+            "url": "shopify://blogs/ニュース/summer-switch-さらりと過ごす-夏の家具",
+            "overlay_light": false
+          }
         }
       },
       "block_order": [
         "banner_mykBrA",
         "banner_eeFgaB",
         "banner_R6XptY",
-        "banner_66waWc"
+        "banner_66waWc",
+        "banner_yRxEYQ"
       ],
       "name": "6JOHAN 特集バナー",
       "settings": {
@@ -114,7 +129,7 @@
           "settings": {
             "icon": "sale",
             "label": "セール",
-            "link": "",
+            "link": "shopify://collections/リニューアルセール",
             "badge": "sale"
           }
         },
@@ -318,7 +333,7 @@
       "name": "6JOHAN ランキング",
       "settings": {
         "label": "RANKING",
-        "heading": "人気カテゴリランキング",
+        "heading": "人気アイテムランキング",
         "view_all_text": "ランキングをもっと見る"
       }
     },
@@ -409,9 +424,17 @@
         "banner_Y7Hctt": {
           "type": "banner",
           "settings": {
-            "image": "shopify://shop_images/SP_888ef798-823e-47e2-bd7e-cec9346c2ac0.png",
+            "image": "shopify://shop_images/RENEWAL_SALE_SP.jpg",
             "title": "リニューアルセール",
             "url": "shopify://collections/リニューアルセール"
+          }
+        },
+        "banner_Q3R3Lb": {
+          "type": "banner",
+          "settings": {
+            "image": "shopify://shop_images/SP_81bc3c8e-68b3-4982-b502-d45736e91745.png",
+            "title": "SUMMER SWITCH — さらりと過ごす、夏の家具",
+            "url": "shopify://blogs/ニュース/summer-switch-さらりと過ごす-夏の家具"
           }
         },
         "banner_DCynCe": {
@@ -433,6 +456,7 @@
       },
       "block_order": [
         "banner_Y7Hctt",
+        "banner_Q3R3Lb",
         "banner_DCynCe",
         "banner_BxPKCp"
       ],
