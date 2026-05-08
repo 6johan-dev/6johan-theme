@@ -129,7 +129,7 @@
           "settings": {
             "icon": "sale",
             "label": "セール",
-            "link": "",
+            "link": "shopify://collections/リニューアルセール",
             "badge": "sale"
           }
         },
