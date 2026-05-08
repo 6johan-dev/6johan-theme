@@ -141,9 +141,6 @@
 {%- endif -%}
 {% if product.available == false %}
   <div class="card-badges">
-    {% if product.compare_at_price > product.price %}
-      <span class="card-badge card-badge--sale">セール</span>
-    {% endif %}
     <span class="card-badge card-badge--sold-out">SOLD OUT</span>
   </div>
 {% else %}
