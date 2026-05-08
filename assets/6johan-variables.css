@@ -102,11 +102,11 @@
      Border Radius
      ======================================== */
   
-  --6j-radius-sm: 3px;
-  --6j-radius-base: 4px;
-  --6j-radius-md: 6px;
-  --6j-radius-lg: 8px;
-  --6j-radius-xl: 12px;
+  --6j-radius-sm: 0;
+  --6j-radius-base: 0;
+  --6j-radius-md: 0;
+  --6j-radius-lg: 0;
+  --6j-radius-xl: 0;
   --6j-radius-full: 9999px;
   
   /* ========================================
