@@ -165,7 +165,7 @@
                     style="--animation-order: {{ forloop.index }};"
                   {% endif %}
                 >
-                  {% if forloop.index <= 12 %}
+                  {% if forloop.index <= 12 and collection.handle == "pick-up" %}
                     <span class="collection-rank-badge collection-rank-badge--{{ forloop.index }}">{{ forloop.index }}</span>
                   {% endif %}
                   {% render 'card-product',

@@ -1747,3 +1747,21 @@ body,
     padding: 0 4px !important;
   }
 }
+
+/* Dawn本体の売り切れバッジを非表示（カスタムSOLD OUTに統一） */
+.card__badge .badge--bottom-left {
+  display: none !important;
+}
+
+/* セール価格を赤文字に */
+.price__sale .price-item--sale,
+.price--on-sale .price-item--sale {
+  color: #C41E1E !important;
+  font-weight: 600;
+}
+
+/* セールバッジ */
+.card-badge--sale {
+  background: #C41E1E;
+  color: #fff;
+}

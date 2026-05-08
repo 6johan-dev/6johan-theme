@@ -141,11 +141,20 @@
 {%- endif -%}
 {% if product.available == false %}
   <div class="card-badges">
+    {% if product.compare_at_price > product.price %}
+      <span class="card-badge card-badge--sale">セール</span>
+    {% endif %}
     <span class="card-badge card-badge--sold-out">SOLD OUT</span>
   </div>
 {% else %}
   <div class="card-badges">
     
+    {%- comment -%} セールバッジ {%- endcomment -%}
+    {% if product.compare_at_price > product.price and badge_count < 2 %}
+      <span class="card-badge card-badge--sale">セール</span>
+      {% assign badge_count = badge_count | plus: 1 %}
+    {% endif %}
+
     {%- comment -%} 人気バッジ（優先） {%- endcomment -%}
     {% if is_popular and badge_count < 2 %}
       <span class="card-badge card-badge--popular">
