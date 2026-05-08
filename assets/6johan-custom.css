@@ -1734,3 +1734,15 @@ body,
 .header__icon--cart svg line {
   stroke-width: 1.5;
 }
+
+/* SP: ロゴ絶対中央配置 */
+@media (max-width: 989px) {
+  .header {
+    position: relative;
+  }
+  .header__heading-link {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
