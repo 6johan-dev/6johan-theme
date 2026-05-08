@@ -1735,25 +1735,12 @@ body,
   stroke-width: 1.5;
 }
 
-
-/* SP: ロゴ絶対中央配置 */
+/* SP: ロゴ中央寄せ（アイコン側のpaddingで調整） */
 @media (max-width: 989px) {
-  .header {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-  }
-  .header__heading-link {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
+  .header__icons .header__icon {
+    padding: 0 2px !important;
   }
   header-drawer {
-    z-index: 2;
-  }
-  .header__icons {
-    z-index: 2;
+    margin-left: -0.6rem;
   }
 }
