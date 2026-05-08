@@ -3595,3 +3595,9 @@ details-disclosure > details {
     transform: translateX(100%) scaleX(0);
   }
 }
+
+/* 検索アイコン非表示 */
+.header__icon--search,
+details-modal.header__search {
+  display: none !important;
+}
