@@ -1439,7 +1439,7 @@ body,
 /* モバイル: アイコンさらにコンパクトに */
 @media (max-width: 749px) {
   .header__icons .header__icon {
-    padding: 0 6px !important;
+    padding: 0 3px !important;
   }
   
   header-drawer {
