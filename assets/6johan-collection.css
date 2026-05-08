@@ -43,7 +43,7 @@
   gap: 6px;
   padding: 8px 12px;
   border: 1px solid var(--6j-border, #E8E5E0);
-  border-radius: 4px;
+  border-radius: 0;
   background: #fff;
   font-size: 12px;
   color: var(--6j-text, #292724);
@@ -92,7 +92,7 @@
   padding: 6px 10px;
   background: var(--6j-bg-sub, #FAF9F7);
   border: none;
-  border-radius: 4px;
+  border-radius: 0;
   font-size: 11px;
   color: var(--6j-text, #292724);
   cursor: pointer;
@@ -135,7 +135,7 @@
   gap: 8px;
   padding: 10px 16px;
   border: 1px solid var(--6j-border, #E8E5E0);
-  border-radius: 4px;
+  border-radius: 0;
   background: #fff;
   font-size: 13px;
   color: var(--6j-text, #292724);
@@ -164,7 +164,7 @@
 .facet-filters__sort.select__select {
   padding: 8px 32px 8px 12px;
   border: 1px solid var(--6j-border, #E8E5E0);
-  border-radius: 4px;
+  border-radius: 0;
   background: #fff;
   font-size: 12px;
   color: var(--6j-text, #292724);
@@ -180,11 +180,11 @@
    =========================================== */
 .card__media,
 .card__media img {
-  border-radius: 8px;
+  border-radius: 0;
 }
 
 .card--standard .card__media {
-  border-radius: 8px;
+  border-radius: 0;
   overflow: hidden;
 }
 
@@ -255,7 +255,7 @@
   height: 32px;
   padding: 0 8px;
   border: 1px solid var(--6j-border, #E8E5E0);
-  border-radius: 4px;
+  border-radius: 0;
   font-size: 12px;
   color: var(--6j-text, #292724);
   text-decoration: none;
