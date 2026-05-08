@@ -68,9 +68,7 @@
 }
 </style>
 
-{%- if template.name == 'collection' -%}
-  {%- comment -%}コレクションページではランキングバッジのみ表示{%- endcomment -%}
-{%- else -%}
+
 {%- liquid
   assign is_in_stock = false
   assign is_made_to_order = false
@@ -138,7 +136,6 @@
   assign badge_count = 0
 -%}
 
-{%- endif -%}
 {% if product.available == false %}
   <div class="card-badges">
     <span class="card-badge card-badge--sold-out">SOLD OUT</span>
