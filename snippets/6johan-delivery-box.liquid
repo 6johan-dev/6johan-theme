@@ -101,6 +101,25 @@
     deliveryBox.querySelector('.sixj-dbox--unavailable').style.display = 'none';
     var target = deliveryBox.querySelector('.sixj-dbox--' + state);
     if (target) target.style.display = 'flex';
+    updateBackorderNote(state);
+  }
+
+  /* --- 受注生産メモ自動付与 --- */
+  function updateBackorderNote(state) {
+    var form = document.querySelector('form[action="/cart/add"]');
+    if (!form) return;
+    var noteInput = form.querySelector('input[name="properties[_受注生産]"]');
+    if (state === 'backorder') {
+      if (!noteInput) {
+        noteInput = document.createElement('input');
+        noteInput.type = 'hidden';
+        noteInput.name = 'properties[_受注生産]';
+        form.appendChild(noteInput);
+      }
+      noteInput.value = '受注生産商品';
+    } else {
+      if (noteInput) noteInput.remove();
+    }
   }
 
   /* --- バリアント変更検知 --- */
@@ -155,5 +174,6 @@
   }
 
   addStockDots();
+  updateBackorderNote('{{ stock_state }}');
 })();
 </script>
