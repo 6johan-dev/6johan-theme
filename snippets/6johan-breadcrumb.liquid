@@ -37,6 +37,12 @@
         </li>
       {%- endif -%}
 
+    {%- elsif template == 'list-collections' -%}
+      <li class="sixj-breadcrumb__item sixj-breadcrumb__current" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <span itemprop="name">コレクション</span>
+        <meta itemprop="position" content="2" />
+      </li>
+
     {%- elsif template contains 'collection' -%}
       <li class="sixj-breadcrumb__item sixj-breadcrumb__current" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
         <span itemprop="name">{{ collection.title }}</span>
