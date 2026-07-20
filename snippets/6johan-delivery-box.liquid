@@ -117,6 +117,11 @@
         form.appendChild(prop);
       }
       prop.value = '受注生産品（お届けまで約3ヶ月）';
+      fetch('/cart/update.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ attributes: { '_受注生産含む': 'true' } })
+      });
     } else if (state === 'instock') {
       if (prop == null) {
         prop = document.createElement('input');
