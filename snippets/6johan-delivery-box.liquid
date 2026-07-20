@@ -104,21 +104,29 @@
     updateBackorderNote(state);
   }
 
-  /* --- 受注生産メモ自動付与 --- */
+  /* --- 配送区分の自動付与 --- */
   function updateBackorderNote(state) {
     var form = document.querySelector('form[action="/cart/add"]');
-    if (!form) return;
-    var noteInput = form.querySelector('input[name="properties[_受注生産]"]');
+    if (form == null) return;
+    var prop = form.querySelector('input[name="properties[配送区分]"]');
     if (state === 'backorder') {
-      if (!noteInput) {
-        noteInput = document.createElement('input');
-        noteInput.type = 'hidden';
-        noteInput.name = 'properties[_受注生産]';
-        form.appendChild(noteInput);
+      if (prop == null) {
+        prop = document.createElement('input');
+        prop.type = 'hidden';
+        prop.name = 'properties[配送区分]';
+        form.appendChild(prop);
       }
-      noteInput.value = '受注生産商品';
+      prop.value = '受注生産品（お届けまで約3ヶ月）';
+    } else if (state === 'instock') {
+      if (prop == null) {
+        prop = document.createElement('input');
+        prop.type = 'hidden';
+        prop.name = 'properties[配送区分]';
+        form.appendChild(prop);
+      }
+      prop.value = '在庫品（最短7日発送）';
     } else {
-      if (noteInput) noteInput.remove();
+      if (prop) prop.remove();
     }
   }
 
