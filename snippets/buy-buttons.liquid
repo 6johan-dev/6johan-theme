@@ -56,23 +56,6 @@
           class="product-variant-id"
         >
 
-        {%- liquid
-          assign _dbox_state = 'instock'
-          assign _v = product.selected_or_first_available_variant
-          if _v.available
-            if _v.inventory_management == 'shopify'
-              if _v.inventory_quantity <= 0
-                assign _dbox_state = 'backorder'
-              endif
-            endif
-          endif
-        -%}
-        {%- if _dbox_state == 'backorder' -%}
-          <input type="hidden" name="properties[配送区分]" value="受注生産品（お届けまで約3ヶ月）">
-        {%- else -%}
-          <input type="hidden" name="properties[配送区分]" value="在庫品（最短7日発送）">
-        {%- endif -%}
-
         {%- if gift_card_recipient_feature_active -%}
           {%- render 'gift-card-recipient-form', product: product, form: form, section: section -%}
         {%- endif -%}
