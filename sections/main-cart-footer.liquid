@@ -128,7 +128,7 @@
               </div>
 
               <script>
-              (function() {
+              (function() { document.addEventListener("DOMContentLoaded", function() {
                 var guideBox = document.getElementById('sixj-agree-guide');
                 var backorderBox = document.getElementById('sixj-agree-backorder');
                 var checkoutBtn = document.getElementById('checkout');
@@ -150,7 +150,7 @@
 
                 if (guideBox) guideBox.addEventListener('change', updateCheckout);
                 if (backorderBox) backorderBox.addEventListener('change', updateCheckout);
-                updateCheckout();
+                updateCheckout(); });
               })();
               </script>
 
