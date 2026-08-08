@@ -104,15 +104,63 @@
                 </small>
               </div>
             {%- else -%}
+              {%- comment -%} 6JOHAN 注文同意チェックボックス {%- endcomment -%}
+              {%- assign has_backorder_item = false -%}
+              {%- for item in cart.items -%}
+                {%- for property in item.properties -%}
+                  {%- if property.first == '配送区分' and property.last contains '受注生産' -%}
+                    {%- assign has_backorder_item = true -%}
+                  {%- endif -%}
+                {%- endfor -%}
+              {%- endfor -%}
+
+              <div class="sixj-cart-agree" style="margin-bottom: 16px; font-size: 13px; color: #2C2C24; line-height: 1.6;">
+                <label style="display: flex; align-items: flex-start; gap: 8px; cursor: pointer; margin-bottom: 10px;">
+                  <input type="checkbox" id="sixj-agree-guide" style="margin-top: 3px; width: 16px; height: 16px; accent-color: #6B5B4F; flex-shrink: 0;">
+                  <span><a href="/pages/035" target="_blank" style="color: #6B5B4F; text-decoration: underline;">ショッピングガイド</a>に同意して注文する</span>
+                </label>
+                {%- if has_backorder_item -%}
+                <label style="display: flex; align-items: flex-start; gap: 8px; cursor: pointer; margin-bottom: 10px;">
+                  <input type="checkbox" id="sixj-agree-backorder" style="margin-top: 3px; width: 16px; height: 16px; accent-color: #6B5B4F; flex-shrink: 0;">
+                  <span>受注生産品はお届けまで約3ヶ月かかることに同意する</span>
+                </label>
+                {%- endif -%}
+              </div>
+
+              <script>
+              (function() {
+                var guideBox = document.getElementById('sixj-agree-guide');
+                var backorderBox = document.getElementById('sixj-agree-backorder');
+                var checkoutBtn = document.getElementById('checkout');
+                var dynamicBtns = document.querySelector('.cart__dynamic-checkout-buttons');
+
+                function updateCheckout() {
+                  var ok = guideBox && guideBox.checked;
+                  if (backorderBox) ok = ok && backorderBox.checked;
+                  if (checkoutBtn) {
+                    checkoutBtn.disabled = !ok;
+                    checkoutBtn.style.opacity = ok ? '1' : '0.4';
+                    checkoutBtn.style.pointerEvents = ok ? 'auto' : 'none';
+                  }
+                  if (dynamicBtns) {
+                    dynamicBtns.style.opacity = ok ? '1' : '0.4';
+                    dynamicBtns.style.pointerEvents = ok ? 'auto' : 'none';
+                  }
+                }
+
+                if (guideBox) guideBox.addEventListener('change', updateCheckout);
+                if (backorderBox) backorderBox.addEventListener('change', updateCheckout);
+                updateCheckout();
+              })();
+              </script>
+
               <div class="cart__ctas" {{ block.shopify_attributes }}>
                 <button
                   type="submit"
                   id="checkout"
                   class="cart__checkout-button button"
                   name="checkout"
-                  {% if cart == empty %}
-                    disabled
-                  {% endif %}
+                  disabled
                   form="cart"
                 >
                   {{ 'sections.cart.checkout' | t }}
@@ -120,7 +168,7 @@
               </div>
 
               {%- if additional_checkout_buttons -%}
-                <div class="cart__dynamic-checkout-buttons additional-checkout-buttons">
+                <div class="cart__dynamic-checkout-buttons additional-checkout-buttons" style="opacity: 0.4; pointer-events: none;">
                   {{ content_for_additional_checkout_buttons }}
                 </div>
               {%- endif -%}
