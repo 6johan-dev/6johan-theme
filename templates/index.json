@@ -176,7 +176,7 @@
           "settings": {
             "label": "キャビネット",
             "icon_type": "cabinet",
-            "url": "shopify://collections/005"
+            "url": "shopify://collections/collections-cabinets-sideboards"
           }
         },
         "category_Ri7PpX": {
@@ -310,7 +310,7 @@
           "type": "tab",
           "settings": {
             "tab_label": "キャビネット",
-            "collection": "005",
+            "collection": "collections-cabinets-sideboards",
             "products_to_show": 9
           }
         },
