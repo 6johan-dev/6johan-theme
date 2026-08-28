@@ -168,7 +168,7 @@
           "settings": {
             "label": "テーブル・デスク",
             "icon_type": "table",
-            "url": "shopify://collections/002"
+            "url": "shopify://collections/collections-desks-tables"
           }
         },
         "category_UXiUUN": {
@@ -302,7 +302,7 @@
           "type": "tab",
           "settings": {
             "tab_label": "テーブル",
-            "collection": "002",
+            "collection": "collections-desks-tables",
             "products_to_show": 9
           }
         },
