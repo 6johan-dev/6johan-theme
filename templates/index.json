@@ -184,7 +184,7 @@
           "settings": {
             "label": "サイドテーブル",
             "icon_type": "side_table",
-            "url": "shopify://collections/003"
+            "url": "shopify://collections/collections-side-tables-low-tables"
           }
         },
         "category_QLM6TY": {
@@ -318,7 +318,7 @@
           "type": "tab",
           "settings": {
             "tab_label": "サイドテーブル",
-            "collection": "003",
+            "collection": "collections-side-tables-low-tables",
             "products_to_show": 9
           }
         }
