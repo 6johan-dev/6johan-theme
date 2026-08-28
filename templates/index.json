@@ -216,7 +216,7 @@
           "settings": {
             "label": "シェルフ・本棚",
             "icon_type": "shelf",
-            "url": "shopify://collections/006"
+            "url": "shopify://collections/collections-shelves-bookshelves"
           }
         },
         "category_eHz46m": {
