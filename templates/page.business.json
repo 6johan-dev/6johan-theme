@@ -1,0 +1,98 @@
+{
+  "sections": {
+    "main": {
+      "type": "6johan-business-page",
+      "settings": {
+        "hero_label": "FOR BUSINESS",
+        "hero_title": "法人・業務用のお客様へ",
+        "hero_lead": "設計事務所・ホテル・カフェ・オフィス向けに、6JOHANの家具を一括見積・カスタム対応・大量発注割引でご提供します。",
+        "targets_label": "OUR CLIENTS",
+        "targets_title": "こんなお客様にご利用いただいています",
+        "values_label": "WHAT WE OFFER",
+        "values_title": "6JOHANが法人のお客様にお約束すること",
+        "flow_label": "HOW IT WORKS",
+        "flow_title": "ご利用の流れ",
+        "form_label": "CONTACT",
+        "form_title": "お問い合わせ・お見積依頼",
+        "form_note": "以下フォームよりお問い合わせください。担当営業より2営業日以内にご連絡いたします。カタログ閲覧用アカウントも合わせてご案内します。",
+        "form_success": "お問い合わせを受け付けました。担当より2営業日以内にご連絡いたします。",
+        "faq_label": "FAQ",
+        "faq_title": "よくあるご質問"
+      },
+      "blocks": {
+        "target_1": { "type": "target", "settings": { "icon": "◇", "label": "設計事務所・デザイナー" } },
+        "target_2": { "type": "target", "settings": { "icon": "◇", "label": "ホテル・宿泊施設" } },
+        "target_3": { "type": "target", "settings": { "icon": "◇", "label": "カフェ・レストラン" } },
+        "target_4": { "type": "target", "settings": { "icon": "◇", "label": "オフィス・法人" } },
+        "target_5": { "type": "target", "settings": { "icon": "◇", "label": "店舗・小売" } },
+        "value_1": {
+          "type": "value",
+          "settings": {
+            "title": "一括見積・大量発注割引",
+            "text": "10点以上のご発注で、通常価格からのお見積を承ります。数量に応じた価格調整が可能です。"
+          }
+        },
+        "value_2": {
+          "type": "value",
+          "settings": {
+            "title": "カスタム対応",
+            "text": "サイズ・素材・仕上げなどのカスタマイズをご相談ください。受注生産は約4ヶ月でお届けします。"
+          }
+        },
+        "value_3": {
+          "type": "value",
+          "settings": {
+            "title": "納品・組立サポート",
+            "text": "現場搬入から組立まで、専門スタッフが対応可能です(別途費用)。"
+          }
+        },
+        "value_4": {
+          "type": "value",
+          "settings": {
+            "title": "請求書払い・後払い対応",
+            "text": "法人様向けに、請求書払い・掛売でのお取引を承ります(与信審査あり)。"
+          }
+        },
+        "flow_1": { "type": "flow_step", "settings": { "title": "お問い合わせ", "text": "フォームより案件内容をお知らせください。" } },
+        "flow_2": { "type": "flow_step", "settings": { "title": "ヒアリング", "text": "担当より2営業日以内にご連絡し、詳細をヒアリング。" } },
+        "flow_3": { "type": "flow_step", "settings": { "title": "お見積・カタログ閲覧", "text": "お見積書と、法人向けカタログの閲覧アカウントを発行。" } },
+        "flow_4": { "type": "flow_step", "settings": { "title": "ご発注・納品", "text": "内容確定後、製造・納品。組立サポートも可能です。" } },
+        "faq_1": {
+          "type": "faq",
+          "settings": {
+            "question": "最小発注数量はありますか？",
+            "answer": "<p>特に定めておりません。1点からでもご相談ください。ただし、大量発注割引は10点以上が目安となります。</p>"
+          }
+        },
+        "faq_2": {
+          "type": "faq",
+          "settings": {
+            "question": "支払い方法は？",
+            "answer": "<p>クレジットカード決済に加え、法人様には請求書払い(掛売)も承ります。ご希望の場合は与信審査をお願いしております。</p>"
+          }
+        },
+        "faq_3": {
+          "type": "faq",
+          "settings": {
+            "question": "納期はどのくらいですか？",
+            "answer": "<p>在庫商品は7日以内発送、受注生産品は約4ヶ月です。大量発注時は別途スケジュールをご相談させてください。</p>"
+          }
+        },
+        "faq_4": {
+          "type": "faq",
+          "settings": {
+            "question": "カタログはもらえますか？",
+            "answer": "<p>お問い合わせいただいた後、法人向けオンラインカタログの閲覧アカウントを発行いたします。全商品の詳細スペック・価格をご確認いただけます。</p>"
+          }
+        }
+      },
+      "block_order": [
+        "target_1", "target_2", "target_3", "target_4", "target_5",
+        "value_1", "value_2", "value_3", "value_4",
+        "flow_1", "flow_2", "flow_3", "flow_4",
+        "faq_1", "faq_2", "faq_3", "faq_4"
+      ]
+    }
+  },
+  "order": ["main"]
+}

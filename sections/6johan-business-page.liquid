@@ -1,0 +1,573 @@
+{% comment %}
+  6JOHAN Business (B2B) Landing Page Section
+  法人・業務用のお客様向けランディング + 申込フォーム
+{% endcomment %}
+
+{%- style -%}
+  .biz-page {
+    background: var(--6j-bg);
+    color: var(--6j-text, #292724);
+  }
+
+  /* Hero */
+  .biz-hero {
+    position: relative;
+    padding: 80px 20px 60px;
+    text-align: center;
+    background: var(--6j-bg-sub);
+    border-bottom: 1px solid var(--6j-border);
+  }
+  .biz-hero__label {
+    font-size: var(--6j-font-size-xs);
+    letter-spacing: var(--6j-letter-spacing-label);
+    color: var(--6j-label);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .biz-hero__title {
+    font-size: 28px;
+    font-weight: var(--6j-font-weight-medium);
+    line-height: 1.4;
+    margin: 0 0 16px;
+  }
+  .biz-hero__lead {
+    max-width: 640px;
+    margin: 0 auto;
+    font-size: var(--6j-font-size-md);
+    line-height: var(--6j-line-height-relaxed);
+    color: var(--6j-earth);
+  }
+  @media (min-width: 750px) {
+    .biz-hero { padding: 120px 20px 90px; }
+    .biz-hero__title { font-size: 40px; }
+  }
+
+  /* Container */
+  .biz-container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 60px 20px;
+  }
+  .biz-section { margin-bottom: 80px; }
+  .biz-section:last-child { margin-bottom: 0; }
+  .biz-section__label {
+    font-size: var(--6j-font-size-xs);
+    letter-spacing: var(--6j-letter-spacing-label);
+    color: var(--6j-label);
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 12px;
+  }
+  .biz-section__title {
+    font-size: 24px;
+    font-weight: var(--6j-font-weight-medium);
+    text-align: center;
+    margin: 0 0 40px;
+  }
+
+  /* Targets grid */
+  .biz-targets {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  @media (min-width: 750px) {
+    .biz-targets { grid-template-columns: repeat(5, 1fr); }
+  }
+  .biz-target {
+    text-align: center;
+    padding: 24px 12px;
+    background: var(--6j-bg-sub);
+    border: 1px solid var(--6j-border);
+    border-radius: 4px;
+  }
+  .biz-target__icon {
+    font-size: 24px;
+    margin-bottom: 8px;
+  }
+  .biz-target__label {
+    font-size: var(--6j-font-size-sm);
+    color: var(--6j-text, #292724);
+    line-height: 1.4;
+  }
+
+  /* Values */
+  .biz-values {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  @media (min-width: 750px) {
+    .biz-values { grid-template-columns: repeat(2, 1fr); gap: 32px; }
+  }
+  .biz-value {
+    padding: 28px;
+    background: var(--6j-bg-sub);
+    border: 1px solid var(--6j-border);
+    border-radius: 4px;
+  }
+  .biz-value__title {
+    font-size: var(--6j-font-size-lg);
+    font-weight: var(--6j-font-weight-medium);
+    margin: 0 0 12px;
+  }
+  .biz-value__text {
+    font-size: var(--6j-font-size-base);
+    line-height: var(--6j-line-height-relaxed);
+    color: var(--6j-earth);
+    margin: 0;
+  }
+
+  /* Flow */
+  .biz-flow {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    counter-reset: biz-flow;
+  }
+  @media (min-width: 750px) {
+    .biz-flow { grid-template-columns: repeat(4, 1fr); }
+  }
+  .biz-flow__step {
+    position: relative;
+    padding: 24px 20px 20px;
+    background: #fff;
+    border: 1px solid var(--6j-border);
+    border-radius: 4px;
+  }
+  .biz-flow__step::before {
+    counter-increment: biz-flow;
+    content: counter(biz-flow, decimal-leading-zero);
+    display: block;
+    font-family: var(--6j-font-mono);
+    font-size: var(--6j-font-size-sm);
+    color: var(--6j-accent);
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+  }
+  .biz-flow__title {
+    font-size: var(--6j-font-size-md);
+    font-weight: var(--6j-font-weight-medium);
+    margin: 0 0 6px;
+  }
+  .biz-flow__text {
+    font-size: var(--6j-font-size-sm);
+    line-height: var(--6j-line-height-relaxed);
+    color: var(--6j-earth);
+    margin: 0;
+  }
+
+  /* Form */
+  .biz-form-wrap {
+    background: var(--6j-bg-sub);
+    padding: 60px 20px;
+    border-top: 1px solid var(--6j-border);
+    border-bottom: 1px solid var(--6j-border);
+  }
+  .biz-form-inner {
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  .biz-form__note {
+    text-align: center;
+    font-size: var(--6j-font-size-sm);
+    color: var(--6j-earth);
+    margin: 0 0 32px;
+  }
+  .biz-form {
+    display: grid;
+    gap: 16px;
+  }
+  .biz-form__row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  @media (min-width: 640px) {
+    .biz-form__row--2 { grid-template-columns: 1fr 1fr; }
+  }
+  .biz-form__field label {
+    display: block;
+    font-size: var(--6j-font-size-sm);
+    font-weight: var(--6j-font-weight-medium);
+    margin-bottom: 6px;
+    color: var(--6j-text, #292724);
+  }
+  .biz-form__field .biz-required {
+    color: var(--6j-error);
+    margin-left: 4px;
+    font-size: var(--6j-font-size-xs);
+  }
+  .biz-form__field input,
+  .biz-form__field select,
+  .biz-form__field textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--6j-border-dark);
+    border-radius: 4px;
+    background: #fff;
+    font-family: var(--6j-font-body);
+    font-size: var(--6j-font-size-base);
+    color: var(--6j-text, #292724);
+    box-sizing: border-box;
+  }
+  .biz-form__field textarea {
+    min-height: 120px;
+    resize: vertical;
+  }
+  .biz-form__field input:focus,
+  .biz-form__field select:focus,
+  .biz-form__field textarea:focus {
+    outline: none;
+    border-color: var(--6j-accent);
+  }
+  .biz-form__submit {
+    display: inline-block;
+    width: 100%;
+    padding: 16px 24px;
+    background: var(--6j-accent);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-family: var(--6j-font-body);
+    font-size: var(--6j-font-size-md);
+    font-weight: var(--6j-font-weight-medium);
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .biz-form__submit:hover { background: var(--6j-accent-hover); }
+  .biz-form__consent {
+    font-size: var(--6j-font-size-xs);
+    color: var(--6j-earth);
+    line-height: 1.6;
+    margin: 0;
+  }
+  .biz-form__consent a { color: var(--6j-accent); text-decoration: underline; }
+
+  .biz-form__success,
+  .biz-form__error {
+    padding: 16px 20px;
+    border-radius: 4px;
+    margin-bottom: 24px;
+    font-size: var(--6j-font-size-base);
+  }
+  .biz-form__success {
+    background: #EAF2EA;
+    color: #3D5A3D;
+    border: 1px solid #B8CDB8;
+  }
+  .biz-form__error {
+    background: #F7E8E7;
+    color: var(--6j-error);
+    border: 1px solid #E3B9B7;
+  }
+
+  /* FAQ */
+  .biz-faq details {
+    border-top: 1px solid var(--6j-border);
+    padding: 20px 0;
+  }
+  .biz-faq details:last-child { border-bottom: 1px solid var(--6j-border); }
+  .biz-faq summary {
+    cursor: pointer;
+    font-size: var(--6j-font-size-md);
+    font-weight: var(--6j-font-weight-medium);
+    list-style: none;
+    padding-right: 32px;
+    position: relative;
+  }
+  .biz-faq summary::-webkit-details-marker { display: none; }
+  .biz-faq summary::after {
+    content: "＋";
+    position: absolute;
+    right: 4px;
+    top: 0;
+    color: var(--6j-accent);
+    transition: transform 0.2s;
+  }
+  .biz-faq details[open] summary::after { content: "−"; }
+  .biz-faq__body {
+    margin-top: 12px;
+    font-size: var(--6j-font-size-base);
+    line-height: var(--6j-line-height-relaxed);
+    color: var(--6j-earth);
+  }
+{%- endstyle -%}
+
+<div class="biz-page">
+  {%- comment -%} Hero {%- endcomment -%}
+  <section class="biz-hero">
+    {%- if section.settings.hero_label != blank -%}
+      <div class="biz-hero__label">{{ section.settings.hero_label }}</div>
+    {%- endif -%}
+    <h1 class="biz-hero__title">{{ section.settings.hero_title }}</h1>
+    {%- if section.settings.hero_lead != blank -%}
+      <p class="biz-hero__lead">{{ section.settings.hero_lead }}</p>
+    {%- endif -%}
+  </section>
+
+  <div class="biz-container">
+    {%- comment -%} Targets {%- endcomment -%}
+    <section class="biz-section">
+      <div class="biz-section__label">{{ section.settings.targets_label }}</div>
+      <h2 class="biz-section__title">{{ section.settings.targets_title }}</h2>
+      <div class="biz-targets">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'target' -%}
+            <div class="biz-target" {{ block.shopify_attributes }}>
+              <div class="biz-target__icon">{{ block.settings.icon }}</div>
+              <div class="biz-target__label">{{ block.settings.label }}</div>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </section>
+
+    {%- comment -%} Values {%- endcomment -%}
+    <section class="biz-section">
+      <div class="biz-section__label">{{ section.settings.values_label }}</div>
+      <h2 class="biz-section__title">{{ section.settings.values_title }}</h2>
+      <div class="biz-values">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'value' -%}
+            <div class="biz-value" {{ block.shopify_attributes }}>
+              <h3 class="biz-value__title">{{ block.settings.title }}</h3>
+              <p class="biz-value__text">{{ block.settings.text }}</p>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </section>
+
+    {%- comment -%} Flow {%- endcomment -%}
+    <section class="biz-section">
+      <div class="biz-section__label">{{ section.settings.flow_label }}</div>
+      <h2 class="biz-section__title">{{ section.settings.flow_title }}</h2>
+      <div class="biz-flow">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'flow_step' -%}
+            <div class="biz-flow__step" {{ block.shopify_attributes }}>
+              <h3 class="biz-flow__title">{{ block.settings.title }}</h3>
+              <p class="biz-flow__text">{{ block.settings.text }}</p>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </section>
+  </div>
+
+  {%- comment -%} Form {%- endcomment -%}
+  <section class="biz-form-wrap" id="biz-form">
+    <div class="biz-form-inner">
+      <div class="biz-section__label">{{ section.settings.form_label }}</div>
+      <h2 class="biz-section__title">{{ section.settings.form_title }}</h2>
+      <p class="biz-form__note">{{ section.settings.form_note }}</p>
+
+      {%- form 'contact', id: 'BizContactForm', class: 'biz-form' -%}
+        {%- if form.posted_successfully? -%}
+          <div class="biz-form__success">
+            {{ section.settings.form_success | default: 'お問い合わせを受け付けました。担当より2営業日以内にご連絡いたします。' }}
+          </div>
+        {%- elsif form.errors -%}
+          <div class="biz-form__error">
+            入力内容にエラーがあります。ご確認ください。
+            <ul>
+              {%- for field in form.errors -%}
+                <li>{{ form.errors.translated_fields[field] }} {{ form.errors.messages[field] }}</li>
+              {%- endfor -%}
+            </ul>
+          </div>
+        {%- endif -%}
+
+        {%- comment -%} 隠しフィールド: 法人窓口経由と判別 {%- endcomment -%}
+        <input type="hidden" name="contact[お問い合わせ種別]" value="法人・業務用">
+
+        <div class="biz-form__row biz-form__row--2">
+          <div class="biz-form__field">
+            <label for="BizContactForm-company">会社名<span class="biz-required">*</span></label>
+            <input type="text" id="BizContactForm-company" name="contact[会社名]" required>
+          </div>
+          <div class="biz-form__field">
+            <label for="BizContactForm-industry">業種<span class="biz-required">*</span></label>
+            <select id="BizContactForm-industry" name="contact[業種]" required>
+              <option value="">選択してください</option>
+              <option value="設計事務所・インテリアデザイナー">設計事務所・インテリアデザイナー</option>
+              <option value="ホテル・宿泊施設">ホテル・宿泊施設</option>
+              <option value="カフェ・レストラン">カフェ・レストラン</option>
+              <option value="オフィス・法人">オフィス・法人</option>
+              <option value="店舗・小売">店舗・小売</option>
+              <option value="卸売・仕入れ">卸売・仕入れ</option>
+              <option value="その他">その他</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="biz-form__row biz-form__row--2">
+          <div class="biz-form__field">
+            <label for="BizContactForm-name">担当者名<span class="biz-required">*</span></label>
+            <input type="text" id="BizContactForm-name" name="contact[name]" required>
+          </div>
+          <div class="biz-form__field">
+            <label for="BizContactForm-phone">電話番号</label>
+            <input type="tel" id="BizContactForm-phone" name="contact[phone]">
+          </div>
+        </div>
+
+        <div class="biz-form__field">
+          <label for="BizContactForm-email">メールアドレス<span class="biz-required">*</span></label>
+          <input type="email" id="BizContactForm-email" name="contact[email]" required>
+        </div>
+
+        <div class="biz-form__row biz-form__row--2">
+          <div class="biz-form__field">
+            <label for="BizContactForm-quantity">想定点数</label>
+            <select id="BizContactForm-quantity" name="contact[想定点数]">
+              <option value="">選択してください</option>
+              <option value="〜10点">〜10点</option>
+              <option value="11-50点">11-50点</option>
+              <option value="51-100点">51-100点</option>
+              <option value="100点以上">100点以上</option>
+              <option value="未定">未定</option>
+            </select>
+          </div>
+          <div class="biz-form__field">
+            <label for="BizContactForm-deadline">希望納期</label>
+            <input type="text" id="BizContactForm-deadline" name="contact[希望納期]" placeholder="例：2026年12月まで">
+          </div>
+        </div>
+
+        <div class="biz-form__field">
+          <label for="BizContactForm-body">案件内容・ご要望<span class="biz-required">*</span></label>
+          <textarea id="BizContactForm-body" name="contact[body]" required placeholder="例：カフェ新店舗（30席）向けにダイニングテーブルと椅子を検討中。オーク材でカスタム対応可能か知りたい。"></textarea>
+        </div>
+
+        <p class="biz-form__consent">
+          送信いただいた内容は、担当営業からのご連絡・お見積・カタログ閲覧アカウント作成のためにのみ使用します。<br>
+          <a href="/policies/privacy-policy">プライバシーポリシー</a>に同意の上、送信してください。
+        </p>
+
+        <button type="submit" class="biz-form__submit">
+          お問い合わせを送信する
+        </button>
+      {%- endform -%}
+    </div>
+  </section>
+
+  {%- comment -%} FAQ {%- endcomment -%}
+  {%- assign has_faq = false -%}
+  {%- for block in section.blocks -%}
+    {%- if block.type == 'faq' -%}{%- assign has_faq = true -%}{%- endif -%}
+  {%- endfor -%}
+
+  {%- if has_faq -%}
+    <div class="biz-container">
+      <section class="biz-section biz-faq">
+        <div class="biz-section__label">{{ section.settings.faq_label }}</div>
+        <h2 class="biz-section__title">{{ section.settings.faq_title }}</h2>
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'faq' -%}
+            <details {{ block.shopify_attributes }}>
+              <summary>{{ block.settings.question }}</summary>
+              <div class="biz-faq__body">{{ block.settings.answer }}</div>
+            </details>
+          {%- endif -%}
+        {%- endfor -%}
+      </section>
+    </div>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "B2Bランディング",
+  "tag": "section",
+  "class": "section-6johan-business",
+  "settings": [
+    { "type": "header", "content": "ヒーロー" },
+    { "type": "text", "id": "hero_label", "label": "ラベル", "default": "FOR BUSINESS" },
+    { "type": "text", "id": "hero_title", "label": "タイトル", "default": "法人・業務用のお客様へ" },
+    { "type": "textarea", "id": "hero_lead", "label": "リード文", "default": "設計事務所・ホテル・カフェ・オフィス向けに、6JOHANの家具を一括見積・カスタム対応・大量発注割引でご提供します。" },
+
+    { "type": "header", "content": "対象業種" },
+    { "type": "text", "id": "targets_label", "label": "ラベル", "default": "OUR CLIENTS" },
+    { "type": "text", "id": "targets_title", "label": "タイトル", "default": "こんなお客様にご利用いただいています" },
+
+    { "type": "header", "content": "提供価値" },
+    { "type": "text", "id": "values_label", "label": "ラベル", "default": "WHAT WE OFFER" },
+    { "type": "text", "id": "values_title", "label": "タイトル", "default": "6JOHANが法人のお客様にお約束すること" },
+
+    { "type": "header", "content": "ご利用の流れ" },
+    { "type": "text", "id": "flow_label", "label": "ラベル", "default": "HOW IT WORKS" },
+    { "type": "text", "id": "flow_title", "label": "タイトル", "default": "ご利用の流れ" },
+
+    { "type": "header", "content": "お問い合わせフォーム" },
+    { "type": "text", "id": "form_label", "label": "ラベル", "default": "CONTACT" },
+    { "type": "text", "id": "form_title", "label": "タイトル", "default": "お問い合わせ・お見積依頼" },
+    { "type": "textarea", "id": "form_note", "label": "説明", "default": "以下フォームよりお問い合わせください。担当営業より2営業日以内にご連絡いたします。カタログ閲覧用アカウントも合わせてご案内します。" },
+    { "type": "text", "id": "form_success", "label": "送信完了メッセージ", "default": "お問い合わせを受け付けました。担当より2営業日以内にご連絡いたします。" },
+
+    { "type": "header", "content": "FAQ" },
+    { "type": "text", "id": "faq_label", "label": "ラベル", "default": "FAQ" },
+    { "type": "text", "id": "faq_title", "label": "タイトル", "default": "よくあるご質問" }
+  ],
+  "blocks": [
+    {
+      "type": "target",
+      "name": "対象業種",
+      "settings": [
+        { "type": "text", "id": "icon", "label": "アイコン(絵文字)", "default": "◇" },
+        { "type": "text", "id": "label", "label": "ラベル", "default": "設計事務所" }
+      ]
+    },
+    {
+      "type": "value",
+      "name": "提供価値",
+      "settings": [
+        { "type": "text", "id": "title", "label": "タイトル", "default": "一括見積・大量発注割引" },
+        { "type": "textarea", "id": "text", "label": "本文", "default": "10点以上のご発注で、通常価格からのお見積を承ります。" }
+      ]
+    },
+    {
+      "type": "flow_step",
+      "name": "ステップ",
+      "settings": [
+        { "type": "text", "id": "title", "label": "タイトル", "default": "お問い合わせ" },
+        { "type": "textarea", "id": "text", "label": "本文", "default": "フォームより案件内容をお知らせください。" }
+      ]
+    },
+    {
+      "type": "faq",
+      "name": "FAQ項目",
+      "settings": [
+        { "type": "text", "id": "question", "label": "質問", "default": "最小発注数量はありますか？" },
+        { "type": "richtext", "id": "answer", "label": "回答", "default": "<p>特に定めておりません。1点からでもご相談ください。</p>" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "B2Bランディング",
+      "blocks": [
+        { "type": "target", "settings": { "icon": "◇", "label": "設計事務所・デザイナー" } },
+        { "type": "target", "settings": { "icon": "◇", "label": "ホテル・宿泊施設" } },
+        { "type": "target", "settings": { "icon": "◇", "label": "カフェ・レストラン" } },
+        { "type": "target", "settings": { "icon": "◇", "label": "オフィス・法人" } },
+        { "type": "target", "settings": { "icon": "◇", "label": "店舗・小売" } },
+        { "type": "value", "settings": { "title": "一括見積・大量発注割引", "text": "10点以上のご発注で、通常価格からのお見積を承ります。数量に応じた価格調整が可能です。" } },
+        { "type": "value", "settings": { "title": "カスタム対応", "text": "サイズ・素材・仕上げなどのカスタマイズをご相談ください。受注生産は約4ヶ月でお届けします。" } },
+        { "type": "value", "settings": { "title": "納品・組立サポート", "text": "現場搬入から組立まで、専門スタッフが対応可能です(別途費用)。" } },
+        { "type": "value", "settings": { "title": "請求書払い・後払い対応", "text": "法人様向けに、請求書払い・掛売でのお取引を承ります(与信審査あり)。" } },
+        { "type": "flow_step", "settings": { "title": "お問い合わせ", "text": "フォームより案件内容をお知らせください。" } },
+        { "type": "flow_step", "settings": { "title": "ヒアリング", "text": "担当より2営業日以内にご連絡し、詳細をヒアリング。" } },
+        { "type": "flow_step", "settings": { "title": "お見積・カタログ閲覧", "text": "お見積書と、法人向けカタログの閲覧アカウントを発行。" } },
+        { "type": "flow_step", "settings": { "title": "ご発注・納品", "text": "内容確定後、製造・納品。組立サポートも可能です。" } },
+        { "type": "faq", "settings": { "question": "最小発注数量はありますか？", "answer": "<p>特に定めておりません。1点からでもご相談ください。ただし、大量発注割引は10点以上が目安となります。</p>" } },
+        { "type": "faq", "settings": { "question": "支払い方法は？", "answer": "<p>クレジットカード決済に加え、法人様には請求書払い(掛売)も承ります。ご希望の場合は与信審査をお願いしております。</p>" } },
+        { "type": "faq", "settings": { "question": "納期はどのくらいですか？", "answer": "<p>在庫商品は7日以内発送、受注生産品は約4ヶ月です。大量発注時は別途スケジュールをご相談させてください。</p>" } },
+        { "type": "faq", "settings": { "question": "カタログはもらえますか？", "answer": "<p>お問い合わせいただいた後、法人向けオンラインカタログの閲覧アカウントを発行いたします。全商品の詳細スペック・価格をご確認いただけます。</p>" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
