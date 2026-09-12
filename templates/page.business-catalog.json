@@ -1,0 +1,15 @@
+{
+  "sections": {
+    "main": {
+      "type": "6johan-business-catalog",
+      "settings": {
+        "title": "法人向けカタログ",
+        "gate_tag": "b2b-approved",
+        "max_products": 48,
+        "apply_url": "/pages/business",
+        "contact_url": "/pages/business#biz-form"
+      }
+    }
+  },
+  "order": ["main"]
+}

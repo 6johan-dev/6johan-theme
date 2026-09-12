@@ -1,0 +1,385 @@
+{% comment %}
+  6JOHAN Business Catalog (Gated) Section
+  顧客タグ 'b2b-approved' 保持者のみ商品を表示。それ以外はログイン/申込へ誘導。
+  Phase A: 見積依頼型(カート機能なし)。Phase B で卸価格・請求書払い対応予定。
+{% endcomment %}
+
+{%- assign gate_tag = section.settings.gate_tag | default: 'b2b-approved' -%}
+{%- assign is_approved = false -%}
+{%- if customer and customer.tags contains gate_tag -%}
+  {%- assign is_approved = true -%}
+{%- endif -%}
+
+{%- style -%}
+  .biz-cat { background: var(--6j-bg); color: var(--6j-text, #292724); }
+
+  /* Gate screens */
+  .biz-gate {
+    max-width: 560px;
+    margin: 0 auto;
+    padding: 100px 20px;
+    text-align: center;
+  }
+  .biz-gate__label {
+    font-size: var(--6j-font-size-xs);
+    letter-spacing: var(--6j-letter-spacing-label);
+    color: var(--6j-label);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .biz-gate__title {
+    font-size: 24px;
+    font-weight: var(--6j-font-weight-medium);
+    margin: 0 0 16px;
+  }
+  .biz-gate__lead {
+    font-size: var(--6j-font-size-base);
+    color: var(--6j-earth);
+    line-height: var(--6j-line-height-relaxed);
+    margin: 0 0 32px;
+  }
+  .biz-gate__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+  }
+  @media (min-width: 640px) {
+    .biz-gate__actions { flex-direction: row; justify-content: center; }
+  }
+  .biz-btn {
+    display: inline-block;
+    padding: 14px 28px;
+    border-radius: 4px;
+    font-size: var(--6j-font-size-md);
+    font-weight: var(--6j-font-weight-medium);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    transition: background 0.2s, color 0.2s;
+    cursor: pointer;
+  }
+  .biz-btn--primary {
+    background: var(--6j-accent);
+    color: #fff;
+    border: 1px solid var(--6j-accent);
+  }
+  .biz-btn--primary:hover { background: var(--6j-accent-hover); }
+  .biz-btn--outline {
+    background: transparent;
+    color: var(--6j-accent);
+    border: 1px solid var(--6j-accent);
+  }
+  .biz-btn--outline:hover { background: var(--6j-accent); color: #fff; }
+
+  /* Approved header */
+  .biz-cat__header {
+    padding: 60px 20px 40px;
+    text-align: center;
+    background: var(--6j-bg-sub);
+    border-bottom: 1px solid var(--6j-border);
+  }
+  .biz-cat__welcome {
+    font-size: var(--6j-font-size-xs);
+    letter-spacing: var(--6j-letter-spacing-label);
+    color: var(--6j-accent);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .biz-cat__title {
+    font-size: 28px;
+    font-weight: var(--6j-font-weight-medium);
+    margin: 0 0 12px;
+  }
+  .biz-cat__customer {
+    font-size: var(--6j-font-size-sm);
+    color: var(--6j-earth);
+    margin: 0;
+  }
+
+  /* Product grid */
+  .biz-cat__wrap {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 60px 20px;
+  }
+  .biz-cat__meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--6j-border);
+  }
+  .biz-cat__count {
+    font-size: var(--6j-font-size-sm);
+    color: var(--6j-earth);
+  }
+  .biz-cat__contact-link {
+    font-size: var(--6j-font-size-sm);
+    color: var(--6j-accent);
+    text-decoration: underline;
+  }
+  .biz-cat__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  @media (min-width: 750px) {
+    .biz-cat__grid { grid-template-columns: repeat(3, 1fr); gap: 32px; }
+  }
+  @media (min-width: 1024px) {
+    .biz-cat__grid { grid-template-columns: repeat(4, 1fr); }
+  }
+  .biz-prod {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border: 1px solid var(--6j-border);
+    border-radius: 4px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .biz-prod:hover { border-color: var(--6j-border-dark); }
+  .biz-prod__media {
+    aspect-ratio: 1;
+    background: var(--6j-bg-sub);
+    overflow: hidden;
+  }
+  .biz-prod__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .biz-prod__body {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+  .biz-prod__title {
+    font-size: var(--6j-font-size-base);
+    font-weight: var(--6j-font-weight-medium);
+    margin: 0 0 6px;
+    line-height: 1.4;
+  }
+  .biz-prod__title a { color: var(--6j-text, #292724); text-decoration: none; }
+  .biz-prod__price {
+    font-size: var(--6j-font-size-sm);
+    color: var(--6j-earth);
+    margin: 0 0 12px;
+  }
+  .biz-prod__price strong { color: var(--6j-text, #292724); font-weight: var(--6j-font-weight-medium); }
+  .biz-prod__note {
+    font-size: var(--6j-font-size-xs);
+    color: var(--6j-label);
+    margin: 0 0 16px;
+    line-height: 1.5;
+  }
+  .biz-prod__cta {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 10px 12px;
+    background: var(--6j-accent);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: var(--6j-font-size-sm);
+    font-weight: var(--6j-font-weight-medium);
+    text-decoration: none;
+    cursor: pointer;
+    margin-top: auto;
+  }
+  .biz-prod__cta:hover { background: var(--6j-accent-hover); }
+
+  .biz-cat__footer {
+    margin-top: 60px;
+    padding: 40px 20px;
+    background: var(--6j-bg-sub);
+    border: 1px solid var(--6j-border);
+    border-radius: 4px;
+    text-align: center;
+  }
+  .biz-cat__footer h3 {
+    font-size: var(--6j-font-size-lg);
+    font-weight: var(--6j-font-weight-medium);
+    margin: 0 0 12px;
+  }
+  .biz-cat__footer p {
+    font-size: var(--6j-font-size-base);
+    color: var(--6j-earth);
+    margin: 0 0 20px;
+  }
+{%- endstyle -%}
+
+<div class="biz-cat">
+
+{%- unless is_approved -%}
+
+  {%- comment -%} 未ログイン or 未承認 {%- endcomment -%}
+  {%- if customer -%}
+    {%- comment -%} ログイン済みだがタグなし {%- endcomment -%}
+    <div class="biz-gate">
+      <div class="biz-gate__label">FOR APPROVED BUSINESS CLIENTS</div>
+      <h1 class="biz-gate__title">法人向けカタログ閲覧の準備中です</h1>
+      <p class="biz-gate__lead">
+        現在、{{ customer.first_name | default: 'お客様' }} 様のアカウントは法人カタログの閲覧権限が未設定です。<br><br>
+        既にお問い合わせをいただいている場合は、担当者からの権限付与をお待ちください(通常2営業日以内)。<br>
+        まだお問い合わせをされていない場合は、下記より申込フォームをご送信ください。
+      </p>
+      <div class="biz-gate__actions">
+        <a href="{{ section.settings.apply_url | default: '/pages/business' }}" class="biz-btn biz-btn--primary">
+          法人窓口へお問い合わせ
+        </a>
+        <a href="/account" class="biz-btn biz-btn--outline">アカウント情報を確認</a>
+      </div>
+    </div>
+  {%- else -%}
+    {%- comment -%} 未ログイン {%- endcomment -%}
+    <div class="biz-gate">
+      <div class="biz-gate__label">RESTRICTED AREA</div>
+      <h1 class="biz-gate__title">法人向けカタログ</h1>
+      <p class="biz-gate__lead">
+        こちらは法人・業務用のお客様専用のカタログページです。<br>
+        ご利用には事前のお問い合わせと閲覧アカウントの発行が必要です。
+      </p>
+      <div class="biz-gate__actions">
+        <a href="/account/login?return_url={{ request.path | url_encode }}" class="biz-btn biz-btn--primary">
+          ログイン
+        </a>
+        <a href="{{ section.settings.apply_url | default: '/pages/business' }}" class="biz-btn biz-btn--outline">
+          はじめての方(申込)
+        </a>
+      </div>
+    </div>
+  {%- endif -%}
+
+{%- else -%}
+
+  {%- comment -%} 承認済み顧客: カタログ表示 {%- endcomment -%}
+  <section class="biz-cat__header">
+    <div class="biz-cat__welcome">FOR BUSINESS CLIENTS</div>
+    <h1 class="biz-cat__title">{{ section.settings.title | default: '法人向けカタログ' }}</h1>
+    <p class="biz-cat__customer">
+      {{ customer.first_name | default: 'お客様' }} 様、ご利用ありがとうございます
+    </p>
+  </section>
+
+  <div class="biz-cat__wrap">
+
+    {%- assign collection = collections[section.settings.collection] -%}
+    {%- assign show_products = collection.products -%}
+
+    <div class="biz-cat__meta">
+      <div class="biz-cat__count">
+        全 {{ show_products.size }} 商品
+      </div>
+      <a href="{{ section.settings.contact_url | default: '/pages/business#biz-form' }}" class="biz-cat__contact-link">
+        一括見積・カスタム相談はこちら →
+      </a>
+    </div>
+
+    {%- if show_products.size > 0 -%}
+      <div class="biz-cat__grid">
+        {%- for product in show_products limit: section.settings.max_products -%}
+          <div class="biz-prod">
+            <a href="{{ product.url }}" class="biz-prod__media">
+              {%- if product.featured_image -%}
+                <img src="{{ product.featured_image | image_url: width: 600 }}" alt="{{ product.title }}" loading="lazy" width="600" height="600">
+              {%- endif -%}
+            </a>
+            <div class="biz-prod__body">
+              <h3 class="biz-prod__title">
+                <a href="{{ product.url }}">{{ product.title }}</a>
+              </h3>
+              <div class="biz-prod__price">
+                参考小売価格: <strong>{{ product.price | money }}</strong>
+              </div>
+              <p class="biz-prod__note">
+                法人価格・数量割引はお見積にてご案内します
+              </p>
+              <a href="{{ section.settings.contact_url | default: '/pages/business#biz-form' }}?product={{ product.title | url_encode }}" class="biz-prod__cta">
+                この商品で見積を依頼
+              </a>
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- else -%}
+      <p style="text-align:center; padding: 60px 0; color: var(--6j-earth);">
+        表示する商品がありません。Adminで表示コレクションを設定してください。
+      </p>
+    {%- endif -%}
+
+    <div class="biz-cat__footer">
+      <h3>まとめて相談したい商品がありますか？</h3>
+      <p>複数商品の一括見積・カスタマイズ相談・納品スケジュールなど、お気軽にお問い合わせください。</p>
+      <a href="{{ section.settings.contact_url | default: '/pages/business#biz-form' }}" class="biz-btn biz-btn--primary">
+        まとめてお問い合わせ
+      </a>
+    </div>
+  </div>
+
+{%- endunless -%}
+
+</div>
+
+{% schema %}
+{
+  "name": "B2Bカタログ(ゲート)",
+  "tag": "section",
+  "class": "section-6johan-business-catalog",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "顧客タグ b2b-approved を持つログイン済み顧客のみに商品を表示します。それ以外はログイン/申込へ誘導。"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "カタログタイトル",
+      "default": "法人向けカタログ"
+    },
+    {
+      "type": "text",
+      "id": "gate_tag",
+      "label": "ゲート用顧客タグ",
+      "default": "b2b-approved",
+      "info": "この顧客タグを持つ顧客だけがカタログを閲覧できます"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "表示コレクション",
+      "info": "B2B向けに表示する商品コレクション"
+    },
+    {
+      "type": "range",
+      "id": "max_products",
+      "label": "最大表示商品数",
+      "min": 8,
+      "max": 100,
+      "step": 4,
+      "default": 48
+    },
+    {
+      "type": "url",
+      "id": "apply_url",
+      "label": "申込ページURL",
+      "info": "未ログイン/未承認時の申込ボタン遷移先"
+    },
+    {
+      "type": "url",
+      "id": "contact_url",
+      "label": "見積フォームURL",
+      "info": "各商品「見積を依頼」ボタンの遷移先"
+    }
+  ],
+  "presets": [
+    {
+      "name": "B2Bカタログ"
+    }
+  ]
+}
+{% endschema %}
