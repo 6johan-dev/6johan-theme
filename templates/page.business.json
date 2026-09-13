@@ -1,30 +1,52 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main": {
       "type": "6johan-business-page",
-      "settings": {
-        "hero_label": "FOR BUSINESS",
-        "hero_title": "法人・業務用のお客様へ",
-        "hero_lead": "設計事務所・ホテル・カフェ・オフィス向けに、6JOHANの家具を一括見積・カスタム対応・大量発注割引でご提供します。",
-        "targets_label": "OUR CLIENTS",
-        "targets_title": "こんなお客様にご利用いただいています",
-        "values_label": "WHAT WE OFFER",
-        "values_title": "6JOHANが法人のお客様にお約束すること",
-        "flow_label": "HOW IT WORKS",
-        "flow_title": "ご利用の流れ",
-        "form_label": "CONTACT",
-        "form_title": "お問い合わせ・お見積依頼",
-        "form_note": "以下フォームよりお問い合わせください。担当営業より2営業日以内にご連絡いたします。カタログ閲覧用アカウントも合わせてご案内します。",
-        "form_success": "お問い合わせを受け付けました。担当より2営業日以内にご連絡いたします。",
-        "faq_label": "FAQ",
-        "faq_title": "よくあるご質問"
-      },
       "blocks": {
-        "target_1": { "type": "target", "settings": { "icon": "◇", "label": "設計事務所・デザイナー" } },
-        "target_2": { "type": "target", "settings": { "icon": "◇", "label": "ホテル・宿泊施設" } },
-        "target_3": { "type": "target", "settings": { "icon": "◇", "label": "カフェ・レストラン" } },
-        "target_4": { "type": "target", "settings": { "icon": "◇", "label": "オフィス・法人" } },
-        "target_5": { "type": "target", "settings": { "icon": "◇", "label": "店舗・小売" } },
+        "target_1": {
+          "type": "target",
+          "settings": {
+            "icon": "◇",
+            "label": "設計事務所・デザイナー"
+          }
+        },
+        "target_2": {
+          "type": "target",
+          "settings": {
+            "icon": "◇",
+            "label": "ホテル・宿泊施設"
+          }
+        },
+        "target_3": {
+          "type": "target",
+          "settings": {
+            "icon": "◇",
+            "label": "カフェ・レストラン"
+          }
+        },
+        "target_4": {
+          "type": "target",
+          "settings": {
+            "icon": "◇",
+            "label": "オフィス・法人"
+          }
+        },
+        "target_5": {
+          "type": "target",
+          "settings": {
+            "icon": "◇",
+            "label": "店舗・小売"
+          }
+        },
         "value_1": {
           "type": "value",
           "settings": {
@@ -53,10 +75,34 @@
             "text": "法人様向けに、請求書払い・掛売でのお取引を承ります(与信審査あり)。"
           }
         },
-        "flow_1": { "type": "flow_step", "settings": { "title": "お問い合わせ", "text": "フォームより案件内容をお知らせください。" } },
-        "flow_2": { "type": "flow_step", "settings": { "title": "ヒアリング", "text": "担当より2営業日以内にご連絡し、詳細をヒアリング。" } },
-        "flow_3": { "type": "flow_step", "settings": { "title": "お見積・カタログ閲覧", "text": "お見積書と、法人向けカタログの閲覧アカウントを発行。" } },
-        "flow_4": { "type": "flow_step", "settings": { "title": "ご発注・納品", "text": "内容確定後、製造・納品。組立サポートも可能です。" } },
+        "flow_1": {
+          "type": "flow_step",
+          "settings": {
+            "title": "お問い合わせ",
+            "text": "フォームより案件内容をお知らせください。"
+          }
+        },
+        "flow_2": {
+          "type": "flow_step",
+          "settings": {
+            "title": "ヒアリング",
+            "text": "担当より2営業日以内にご連絡し、詳細をヒアリング。"
+          }
+        },
+        "flow_3": {
+          "type": "flow_step",
+          "settings": {
+            "title": "お見積・カタログ閲覧",
+            "text": "お見積書と、法人向けカタログの閲覧アカウントを発行。"
+          }
+        },
+        "flow_4": {
+          "type": "flow_step",
+          "settings": {
+            "title": "ご発注・納品",
+            "text": "内容確定後、製造・納品。組立サポートも可能です。"
+          }
+        },
         "faq_1": {
           "type": "faq",
           "settings": {
@@ -87,12 +133,44 @@
         }
       },
       "block_order": [
-        "target_1", "target_2", "target_3", "target_4", "target_5",
-        "value_1", "value_2", "value_3", "value_4",
-        "flow_1", "flow_2", "flow_3", "flow_4",
-        "faq_1", "faq_2", "faq_3", "faq_4"
-      ]
+        "target_1",
+        "target_2",
+        "target_3",
+        "target_4",
+        "target_5",
+        "value_1",
+        "value_2",
+        "value_3",
+        "value_4",
+        "flow_1",
+        "flow_2",
+        "flow_3",
+        "flow_4",
+        "faq_1",
+        "faq_2",
+        "faq_3",
+        "faq_4"
+      ],
+      "settings": {
+        "hero_label": "FOR BUSINESS",
+        "hero_title": "法人・業務用のお客様へ",
+        "hero_lead": "設計事務所・ホテル・カフェ・オフィス向けに、6JOHANの家具を\n一括見積・カスタム対応・大量発注割引でご提供します。",
+        "targets_label": "OUR CLIENTS",
+        "targets_title": "こんなお客様にご利用いただいています",
+        "values_label": "WHAT WE OFFER",
+        "values_title": "6JOHANが法人のお客様にお約束すること",
+        "flow_label": "HOW IT WORKS",
+        "flow_title": "ご利用の流れ",
+        "form_label": "CONTACT",
+        "form_title": "お問い合わせ・お見積依頼",
+        "form_note": "以下フォームよりお問い合わせください。担当営業より2営業日以内にご連絡いたします。カタログ閲覧用アカウントも合わせてご案内します。",
+        "form_success": "お問い合わせを受け付けました。担当より2営業日以内にご連絡いたします。",
+        "faq_label": "FAQ",
+        "faq_title": "よくあるご質問"
+      }
     }
   },
-  "order": ["main"]
+  "order": [
+    "main"
+  ]
 }
