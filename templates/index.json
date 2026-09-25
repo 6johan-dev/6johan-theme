@@ -64,8 +64,8 @@
         "banner_66waWc": {
           "type": "banner",
           "settings": {
-            "image": "shopify://shop_images/The_Best_of_May_PC.jpg",
-            "image_mobile": "shopify://shop_images/The_Best_of_May_SP.jpg",
+            "image": "shopify://shop_images/The_Best_of_September_PC.jpg",
+            "image_mobile": "shopify://shop_images/BestofSeptember_SP.jpg",
             "hide_overlay": true,
             "label": "",
             "title": "特集タイトル",
