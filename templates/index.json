@@ -29,7 +29,7 @@
             "title": "",
             "subtitle": "",
             "cta_text": "詳しく見る",
-            "url": "shopify://collections/リニューアルセール",
+            "url": "shopify://collections/オータムセール",
             "overlay_light": false
           }
         },
@@ -129,7 +129,7 @@
           "settings": {
             "icon": "sale",
             "label": "セール",
-            "link": "shopify://collections/リニューアルセール",
+            "link": "shopify://collections/オータムセール",
             "badge": "sale"
           }
         },
@@ -426,7 +426,7 @@
           "settings": {
             "image": "shopify://shop_images/RENEWAL_SALE_SP.jpg",
             "title": "リニューアルセール",
-            "url": "shopify://collections/リニューアルセール"
+            "url": "shopify://collections/オータムセール"
           }
         },
         "banner_Q3R3Lb": {
