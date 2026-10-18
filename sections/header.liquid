@@ -419,8 +419,31 @@
 <script type="application/ld+json">
   {
     "@context": "http://schema.org",
-    "@type": "Organization",
+    "@type": ["Organization", "OnlineStore"],
     "name": {{ shop.name | json }},
+    "alternateName": "ロクジョウハン",
+    "description": "北欧と日本の美意識を融合したJapandiスタイルの家具を、リーズナブルな価格で提供するオンライン家具ストア。ラタン・無垢材・レザー・スチールなど素材にこだわったミニマルなデザイン家具を取り扱い、最短7日発送・30日返品対応。",
+    "foundingDate": "2021",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "渋谷区",
+      "addressRegion": "東京都",
+      "postalCode": "150-0001",
+      "streetAddress": "神宮前6-23-4 桑野ビル2F",
+      "addressCountry": "JP"
+    },
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "email": "main@6johan.com",
+      "contactType": "customer service",
+      "availableLanguage": "Japanese"
+    },
+    "areaServed": {
+      "@type": "Country",
+      "name": "Japan"
+    },
+    "currenciesAccepted": "JPY",
+    "paymentAccepted": "Credit Card, Apple Pay, Google Pay, Shop Pay, Bank Transfer",
     {% if settings.logo %}
       "logo": {{ settings.logo | image_url: width: 500 | prepend: "https:" | json }},
     {% endif %}

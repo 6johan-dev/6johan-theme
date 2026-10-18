@@ -1,0 +1,58 @@
+{%- comment -%}
+  6JOHAN カスタム robots.txt
+  Shopifyデフォルトルール + AIクローラーの明示的許可
+{%- endcomment -%}
+{%- for group in robots.default_groups -%}
+  {{- group.user_agent }}
+
+  {%- for rule in group.rules -%}
+    {{ rule }}
+  {%- endfor -%}
+
+  {%- if group.sitemap != blank -%}
+    {{ group.sitemap }}
+  {%- endif -%}
+{%- endfor -%}
+
+# AI search crawlers — explicitly allowed for product & brand discovery
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /cart
+Disallow: /checkout
+Disallow: /account
+
+User-agent: GPTBot
+Allow: /
+Disallow: /cart
+Disallow: /checkout
+Disallow: /account
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /cart
+Disallow: /checkout
+Disallow: /account
+
+User-agent: Perplexity-User
+Allow: /
+
+User-agent: Storebot-Google
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /cart
+Disallow: /checkout
+Disallow: /account
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
