@@ -36,15 +36,17 @@
   .blp-hero { position: relative; min-height: 520px; display: flex; align-items: flex-end; overflow: hidden; background: var(--6j-sand, #E8E5DC); }
   .blp-hero__media { position: absolute; inset: 0; }
   .blp-hero__media img { width: 100%; height: 100%; object-fit: cover; }
-  .blp-hero__media::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(44,44,36,0) 30%, rgba(44,44,36,.55) 100%); }
-  .blp-hero__panel { position: relative; width: 100%; padding: 40px 20px 36px; color: #fff; }
+  .blp-hero--img .blp-hero__media::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(44,44,36,0) 30%, rgba(44,44,36,.55) 100%); }
+  .blp-hero__panel { position: relative; width: 100%; padding: 40px 20px 36px; color: var(--6j-charcoal, #2C2C24); }
+  .blp-hero--img .blp-hero__panel { color: #fff; }
+  .blp-hero .blp-hero__title, .blp-hero .blp-hero__kicker, .blp-hero .blp-hero__lead { color: inherit; }
   .blp-hero__kicker { font-size: 13px; letter-spacing: 0.08em; opacity: .9; margin-bottom: 10px; }
   .blp-hero__title { font-size: 32px; line-height: 1.3; margin-bottom: 14px; }
   .blp-hero__lead { font-size: 15px; line-height: 1.8; opacity: .95; max-width: 540px; margin-bottom: 24px; }
   .blp-hero__cta { display: flex; flex-wrap: wrap; gap: 12px; }
   @media (min-width: 750px) {
     .blp-hero { min-height: 640px; align-items: center; }
-    .blp-hero__media::after { background: linear-gradient(90deg, rgba(44,44,36,.62) 0%, rgba(44,44,36,.35) 45%, rgba(44,44,36,0) 75%); }
+    .blp-hero--img .blp-hero__media::after { background: linear-gradient(90deg, rgba(44,44,36,.62) 0%, rgba(44,44,36,.35) 45%, rgba(44,44,36,0) 75%); }
     .blp-hero__panel { max-width: 1120px; margin: 0 auto; padding: 60px 40px; }
     .blp-hero__title { font-size: 48px; }
     .blp-hero__lead { font-size: 17px; }
@@ -168,7 +170,7 @@
 <div class="blp" id="blp-{{ section.id }}">
 
   {%- comment -%} ========== HERO ========== {%- endcomment -%}
-  <section class="blp-hero">
+  <section class="blp-hero{% if section.settings.hero_image %} blp-hero--img{% endif %}">
     {%- if section.settings.hero_image -%}
       <div class="blp-hero__media">
         {{ section.settings.hero_image | image_url: width: 2400 | image_tag: loading: 'eager', fetchpriority: 'high', sizes: '100vw', widths: '750, 1100, 1600, 2400', alt: section.settings.hero_image.alt | default: section.settings.hero_title }}
@@ -498,9 +500,9 @@
     {
       "type": "stat", "name": "実績数値", "limit": 4,
       "settings": [
-        { "type": "text", "id": "number", "label": "数値", "default": "1.5" },
-        { "type": "text", "id": "unit", "label": "単位", "default": "億円" },
-        { "type": "text", "id": "label", "label": "ラベル", "default": "累計売上" }
+        { "type": "text", "id": "number", "label": "数値", "default": "4,000" },
+        { "type": "text", "id": "unit", "label": "単位", "default": "件" },
+        { "type": "text", "id": "label", "label": "ラベル", "default": "累計取引件数" }
       ]
     },
     {
@@ -538,8 +540,8 @@
     {
       "name": "6JOHAN 法人LP v2",
       "blocks": [
-        { "type": "stat", "settings": { "number": "1.5", "unit": "億円", "label": "累計売上" } },
-        { "type": "stat", "settings": { "number": "5", "unit": "万人", "label": "SNSフォロワー" } },
+        { "type": "stat", "settings": { "number": "4,000", "unit": "件", "label": "累計取引件数" } },
+        { "type": "stat", "settings": { "number": "4.6", "unit": "万人", "label": "SNSフォロワー" } },
         { "type": "stat", "settings": { "number": "7", "unit": "日", "label": "在庫品の最短発送" } },
         { "type": "stat", "settings": { "number": "30", "unit": "日", "label": "返品対応期間" } },
         { "type": "case", "settings": { "tag": "オフィス・コワーキング", "title": "働く人の気分を変えるオフィス家具", "text": "ミーティングスペースやラウンジに、温かみのあるラタンやウッドの家具を。無機質になりがちなオフィスに、居心地をつくります。" } },
