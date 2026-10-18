@@ -1765,3 +1765,6 @@ body,
   background: #C41E1E;
   color: #fff;
 }
+
+/*ratingスター色*/
+.rating-star { --color-rating-star: #6B5B4F; }
