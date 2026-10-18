@@ -158,6 +158,26 @@
         "heading": "このアイテムを購入した人は、一緒にこんな商品も購入しています",
         "max_products": 3
       }
+    },
+    "1792358897efba0eb3": {
+      "type": "apps",
+      "blocks": {
+        "judge_me_reviews_review_widget_YRkCJF": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "review_data": "sample_data",
+            "max_width": 1200,
+            "show_shop_reviews": false,
+            "empty_state": "empty_widget"
+          }
+        }
+      },
+      "block_order": [
+        "judge_me_reviews_review_widget_YRkCJF"
+      ],
+      "settings": {
+        "include_margins": true
+      }
     }
   },
   "order": [
@@ -166,6 +186,7 @@
     "6johan_product_coordinate_UiNUH3",
     "related-products",
     "6johan_recently_viewed_b7fYV8",
-    "6johan_cross_sell_7hJ9je"
+    "6johan_cross_sell_7hJ9je",
+    "1792358897efba0eb3"
   ]
 }
