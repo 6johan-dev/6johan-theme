@@ -752,9 +752,7 @@
     {%- comment -%} 6JOHAN 閲覧履歴を保存 {%- endcomment -%}
     {% render '6johan-track-view', product: product %}
 
-    <script type="application/ld+json">
-      {{ product | structured_data }}
-    </script>
+    {% render '6johan-product-schema' %}
   </div>
 </product-info>
 
