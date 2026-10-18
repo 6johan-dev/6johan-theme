@@ -1,0 +1,567 @@
+{% comment %}
+  6JOHAN Business LP v2 — 法人・業務用ランディングページ
+  写真主導・広告流入対応・コレクション連動商品表示・FAQPage schema
+{% endcomment %}
+
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .blp { color: var(--6j-charcoal, #2C2C24); background: #fff; }
+  .blp * { box-sizing: border-box; }
+  .blp img { display: block; max-width: 100%; }
+  .blp h1, .blp h2, .blp h3 { margin: 0; font-weight: 500; letter-spacing: 0.01em; }
+  .blp p { margin: 0; }
+  .blp__wrap { max-width: 1120px; margin: 0 auto; padding: 0 20px; }
+  .blp__section { padding: 72px 0; }
+  .blp__section--alt { background: var(--6j-parchment, #F5F4F0); }
+  .blp__h2 { font-size: 26px; line-height: 1.35; text-align: center; margin-bottom: 12px; }
+  .blp__sub { font-size: 15px; line-height: 1.8; color: var(--6j-earth, #6B6B5E); text-align: center; max-width: 620px; margin: 0 auto 44px; }
+  @media (min-width: 750px) {
+    .blp__section { padding: 104px 0; }
+    .blp__h2 { font-size: 32px; }
+  }
+
+  /* Buttons */
+  .blp-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 52px; padding: 0 30px; font-size: 15px; font-weight: 500; letter-spacing: 0.02em; border-radius: 999px; text-decoration: none; cursor: pointer; border: 1.5px solid transparent; transition: background .2s, color .2s, border-color .2s; }
+  .blp-btn--primary { background: #6B5B4F; color: #fff; }
+  .blp-btn--primary:hover { background: #594a40; }
+  .blp-btn--ghost { background: transparent; color: var(--6j-charcoal, #2C2C24); border-color: var(--6j-charcoal, #2C2C24); }
+  .blp-btn--ghost:hover { background: var(--6j-charcoal, #2C2C24); color: #fff; }
+  .blp-btn--light { background: #fff; color: var(--6j-charcoal, #2C2C24); }
+  .blp-btn--light:hover { background: var(--6j-parchment, #F5F4F0); }
+  .blp-btn:focus-visible { outline: 2px solid #6B5B4F; outline-offset: 3px; }
+
+  /* Hero */
+  .blp-hero { position: relative; min-height: 520px; display: flex; align-items: flex-end; overflow: hidden; background: var(--6j-sand, #E8E5DC); }
+  .blp-hero__media { position: absolute; inset: 0; }
+  .blp-hero__media img { width: 100%; height: 100%; object-fit: cover; }
+  .blp-hero__media::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(44,44,36,0) 30%, rgba(44,44,36,.55) 100%); }
+  .blp-hero__panel { position: relative; width: 100%; padding: 40px 20px 36px; color: #fff; }
+  .blp-hero__kicker { font-size: 13px; letter-spacing: 0.08em; opacity: .9; margin-bottom: 10px; }
+  .blp-hero__title { font-size: 32px; line-height: 1.3; margin-bottom: 14px; }
+  .blp-hero__lead { font-size: 15px; line-height: 1.8; opacity: .95; max-width: 540px; margin-bottom: 24px; }
+  .blp-hero__cta { display: flex; flex-wrap: wrap; gap: 12px; }
+  @media (min-width: 750px) {
+    .blp-hero { min-height: 640px; align-items: center; }
+    .blp-hero__media::after { background: linear-gradient(90deg, rgba(44,44,36,.62) 0%, rgba(44,44,36,.35) 45%, rgba(44,44,36,0) 75%); }
+    .blp-hero__panel { max-width: 1120px; margin: 0 auto; padding: 60px 40px; }
+    .blp-hero__title { font-size: 48px; }
+    .blp-hero__lead { font-size: 17px; }
+  }
+  @media (min-width: 990px) { .blp-hero__title { font-size: 54px; } }
+
+  /* Stats strip */
+  .blp-stats { border-bottom: 1px solid var(--6j-sand, #E8E5DC); }
+  .blp-stats__list { display: grid; grid-template-columns: 1fr 1fr; gap: 0; list-style: none; margin: 0; padding: 0; }
+  .blp-stats__item { padding: 24px 12px; text-align: center; border-bottom: 1px solid var(--6j-sand, #E8E5DC); }
+  .blp-stats__item:nth-child(odd) { border-right: 1px solid var(--6j-sand, #E8E5DC); }
+  .blp-stats__item:nth-last-child(-n+2) { border-bottom: 0; }
+  .blp-stats__num { font-size: 28px; font-weight: 500; line-height: 1.1; letter-spacing: -0.01em; }
+  .blp-stats__num small { font-size: 14px; font-weight: 400; margin-left: 2px; }
+  .blp-stats__label { font-size: 13px; color: var(--6j-earth, #6B6B5E); margin-top: 6px; }
+  @media (min-width: 750px) {
+    .blp-stats__list { grid-template-columns: repeat(4, 1fr); }
+    .blp-stats__item { padding: 32px 16px; border-bottom: 0 !important; border-right: 1px solid var(--6j-sand, #E8E5DC); }
+    .blp-stats__item:last-child { border-right: 0; }
+    .blp-stats__num { font-size: 34px; }
+  }
+
+  /* Use cases — alternating image/text */
+  .blp-case { display: grid; gap: 20px; align-items: center; margin-bottom: 56px; }
+  .blp-case:last-child { margin-bottom: 0; }
+  .blp-case__media { aspect-ratio: 4/3; overflow: hidden; background: var(--6j-sand, #E8E5DC); border-radius: 4px; }
+  .blp-case__media img { width: 100%; height: 100%; object-fit: cover; }
+  .blp-case__media--ph { display: flex; align-items: center; justify-content: center; color: var(--6j-stone, #8A8A7A); font-size: 13px; }
+  .blp-case__body { padding: 4px 4px 0; }
+  .blp-case__tag { display: inline-block; font-size: 12px; color: var(--6j-earth, #6B6B5E); border: 1px solid var(--6j-sand, #E8E5DC); border-radius: 999px; padding: 4px 12px; margin-bottom: 14px; }
+  .blp-case__title { font-size: 22px; line-height: 1.4; margin-bottom: 12px; }
+  .blp-case__text { font-size: 15px; line-height: 1.85; color: var(--6j-earth, #6B6B5E); }
+  .blp-case__text + .blp-case__text { margin-top: 8px; }
+  @media (min-width: 750px) {
+    .blp-case { grid-template-columns: 1fr 1fr; gap: 56px; margin-bottom: 96px; }
+    .blp-case:nth-child(even) .blp-case__media { order: 2; }
+    .blp-case__body { padding: 0 8px; }
+    .blp-case__title { font-size: 26px; }
+  }
+
+  /* Products */
+  .blp-products__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 12px; list-style: none; margin: 0; padding: 0; }
+  .blp-products__grid .card-wrapper { height: 100%; }
+  .blp-products__more { text-align: center; margin-top: 36px; }
+  @media (min-width: 750px) { .blp-products__grid { grid-template-columns: repeat(4, 1fr); gap: 28px 20px; } }
+
+  /* Pricing — stepped bar */
+  .blp-tiers { max-width: 880px; margin: 0 auto; }
+  .blp-tiers__bar { display: grid; gap: 8px; align-items: end; list-style: none; margin: 0; padding: 0; }
+  .blp-tier { position: relative; background: #fff; border: 1px solid var(--6j-sand, #E8E5DC); border-radius: 4px; padding: 20px 16px 18px; text-align: center; }
+  .blp-tier__rate { font-size: 34px; font-weight: 500; line-height: 1; color: #6B5B4F; letter-spacing: -0.02em; }
+  .blp-tier__rate small { font-size: 16px; margin-left: 2px; }
+  .blp-tier__cond { font-size: 13px; color: var(--6j-earth, #6B6B5E); margin-top: 10px; line-height: 1.5; }
+  .blp-tier--top { background: #6B5B4F; border-color: #6B5B4F; }
+  .blp-tier--top .blp-tier__rate { color: #fff; }
+  .blp-tier--top .blp-tier__cond { color: rgba(255,255,255,.85); }
+  .blp-tiers__notes { list-style: none; margin: 28px auto 0; padding: 0; font-size: 13px; line-height: 1.9; color: var(--6j-earth, #6B6B5E); max-width: 640px; }
+  .blp-tiers__notes li { padding-left: 16px; position: relative; }
+  .blp-tiers__notes li::before { content: ""; position: absolute; left: 0; top: 11px; width: 6px; height: 1px; background: var(--6j-stone, #8A8A7A); }
+  @media (min-width: 750px) {
+    .blp-tiers__bar { grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    .blp-tier { padding: 28px 16px 24px; }
+    .blp-tier:nth-child(1) { padding-top: 28px; }
+    .blp-tier:nth-child(2) { padding-top: 40px; }
+    .blp-tier:nth-child(3) { padding-top: 52px; }
+    .blp-tier:nth-child(4) { padding-top: 64px; }
+    .blp-tier__rate { font-size: 40px; }
+  }
+
+  /* Flow */
+  .blp-flow { display: grid; gap: 24px; list-style: none; margin: 0; padding: 0; counter-reset: step; max-width: 960px; margin: 0 auto; }
+  .blp-flow__item { position: relative; padding-left: 52px; }
+  .blp-flow__item::before { counter-increment: step; content: counter(step); position: absolute; left: 0; top: 0; width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid var(--6j-charcoal, #2C2C24); display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 500; }
+  .blp-flow__title { font-size: 17px; margin-bottom: 6px; }
+  .blp-flow__text { font-size: 14px; line-height: 1.8; color: var(--6j-earth, #6B6B5E); }
+  @media (min-width: 750px) {
+    .blp-flow { grid-template-columns: repeat(4, 1fr); gap: 32px; }
+    .blp-flow__item { padding-left: 0; padding-top: 52px; }
+    .blp-flow__item::before { top: 0; }
+    .blp-flow__item:not(:last-child)::after { content: ""; position: absolute; top: 18px; left: 44px; right: -32px; height: 1px; background: var(--6j-sand, #E8E5DC); }
+  }
+
+  /* FAQ */
+  .blp-faq { max-width: 760px; margin: 0 auto; }
+  .blp-faq details { border-top: 1px solid var(--6j-sand, #E8E5DC); }
+  .blp-faq details:last-child { border-bottom: 1px solid var(--6j-sand, #E8E5DC); }
+  .blp-faq summary { list-style: none; cursor: pointer; padding: 20px 36px 20px 0; font-size: 16px; font-weight: 500; position: relative; }
+  .blp-faq summary::-webkit-details-marker { display: none; }
+  .blp-faq summary::after { content: "+"; position: absolute; right: 4px; top: 50%; transform: translateY(-50%); font-size: 22px; font-weight: 300; color: var(--6j-stone, #8A8A7A); }
+  .blp-faq details[open] summary::after { content: "−"; }
+  .blp-faq__body { padding: 0 0 22px; font-size: 15px; line-height: 1.85; color: var(--6j-earth, #6B6B5E); }
+  .blp-faq__body p { margin: 0; }
+
+  /* Form */
+  .blp-form-wrap { background: var(--6j-parchment, #F5F4F0); }
+  .blp-form-inner { max-width: 680px; margin: 0 auto; }
+  .blp-form { display: grid; gap: 18px; }
+  .blp-form__row { display: grid; gap: 18px; }
+  @media (min-width: 750px) { .blp-form__row--2 { grid-template-columns: 1fr 1fr; } }
+  .blp-form__field label { display: block; font-size: 13px; font-weight: 500; margin-bottom: 7px; }
+  .blp-form__field .req { color: var(--6j-terracotta, #B5735A); margin-left: 3px; }
+  .blp-form__field input, .blp-form__field select, .blp-form__field textarea { width: 100%; min-height: 48px; padding: 12px 14px; font-size: 15px; font-family: inherit; color: var(--6j-charcoal, #2C2C24); background: #fff; border: 1px solid var(--6j-sand, #E8E5DC); border-radius: 4px; }
+  .blp-form__field textarea { min-height: 140px; resize: vertical; }
+  .blp-form__field input:focus, .blp-form__field select:focus, .blp-form__field textarea:focus { outline: none; border-color: #6B5B4F; box-shadow: 0 0 0 3px rgba(107,91,79,.12); }
+  .blp-form__consent { font-size: 12px; line-height: 1.7; color: var(--6j-earth, #6B6B5E); }
+  .blp-form__consent a { color: #6B5B4F; text-decoration: underline; }
+  .blp-form__submit { width: 100%; min-height: 56px; }
+  .blp-form__success, .blp-form__error { padding: 16px 18px; border-radius: 4px; font-size: 14px; line-height: 1.7; }
+  .blp-form__success { background: #EEF3EC; color: #3A5A3A; }
+  .blp-form__error { background: #F7EBE7; color: #8A3B2A; }
+  .blp-form__error ul { margin: 8px 0 0; padding-left: 18px; }
+
+  /* Sticky CTA (mobile) */
+  .blp-sticky { position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); background: rgba(255,255,255,.96); backdrop-filter: blur(8px); border-top: 1px solid var(--6j-sand, #E8E5DC); transform: translateY(110%); transition: transform .25s; }
+  .blp-sticky.is-visible { transform: translateY(0); }
+  .blp-sticky .blp-btn { width: 100%; min-height: 50px; }
+  @media (min-width: 750px) { .blp-sticky { display: none; } }
+  @media (prefers-reduced-motion: reduce) { .blp-btn, .blp-sticky { transition: none; } }
+{%- endstyle -%}
+
+<div class="blp" id="blp-{{ section.id }}">
+
+  {%- comment -%} ========== HERO ========== {%- endcomment -%}
+  <section class="blp-hero">
+    {%- if section.settings.hero_image -%}
+      <div class="blp-hero__media">
+        {{ section.settings.hero_image | image_url: width: 2400 | image_tag: loading: 'eager', fetchpriority: 'high', sizes: '100vw', widths: '750, 1100, 1600, 2400', alt: section.settings.hero_image.alt | default: section.settings.hero_title }}
+      </div>
+    {%- else -%}
+      <div class="blp-hero__media" style="background: linear-gradient(135deg, #E8E5DC, #D9D4C7);"></div>
+    {%- endif -%}
+    <div class="blp-hero__panel">
+      {%- if section.settings.hero_kicker != blank -%}<p class="blp-hero__kicker">{{ section.settings.hero_kicker }}</p>{%- endif -%}
+      <h1 class="blp-hero__title">{{ section.settings.hero_title }}</h1>
+      {%- if section.settings.hero_lead != blank -%}<p class="blp-hero__lead">{{ section.settings.hero_lead | newline_to_br }}</p>{%- endif -%}
+      <div class="blp-hero__cta">
+        <a href="#blp-form" class="blp-btn blp-btn--primary">{{ section.settings.hero_cta1 | default: 'お見積もりを依頼する' }}</a>
+        {%- if section.settings.hero_cta2 != blank -%}
+          <a href="{{ section.settings.hero_cta2_url | default: '#blp-products' }}" class="blp-btn blp-btn--light">{{ section.settings.hero_cta2 }}</a>
+        {%- endif -%}
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} ========== STATS ========== {%- endcomment -%}
+  {%- assign stat_blocks = section.blocks | where: 'type', 'stat' -%}
+  {%- if stat_blocks.size > 0 -%}
+    <section class="blp-stats">
+      <div class="blp__wrap">
+        <ul class="blp-stats__list">
+          {%- for b in stat_blocks -%}
+            <li class="blp-stats__item" {{ b.shopify_attributes }}>
+              <div class="blp-stats__num">{{ b.settings.number }}{%- if b.settings.unit != blank -%}<small>{{ b.settings.unit }}</small>{%- endif -%}</div>
+              <div class="blp-stats__label">{{ b.settings.label }}</div>
+            </li>
+          {%- endfor -%}
+        </ul>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment -%} ========== USE CASES ========== {%- endcomment -%}
+  {%- assign case_blocks = section.blocks | where: 'type', 'case' -%}
+  {%- if case_blocks.size > 0 -%}
+    <section class="blp__section">
+      <div class="blp__wrap">
+        <h2 class="blp__h2">{{ section.settings.cases_title }}</h2>
+        {%- if section.settings.cases_sub != blank -%}<p class="blp__sub">{{ section.settings.cases_sub }}</p>{%- endif -%}
+        <div class="blp-cases">
+          {%- for b in case_blocks -%}
+            <article class="blp-case" {{ b.shopify_attributes }}>
+              <div class="blp-case__media{% unless b.settings.image %} blp-case__media--ph{% endunless %}">
+                {%- if b.settings.image -%}
+                  {{ b.settings.image | image_url: width: 1200 | image_tag: loading: 'lazy', sizes: '(min-width: 750px) 50vw, 100vw', widths: '600, 900, 1200', alt: b.settings.image.alt | default: b.settings.title }}
+                {%- else -%}
+                  画像を設定してください
+                {%- endif -%}
+              </div>
+              <div class="blp-case__body">
+                {%- if b.settings.tag != blank -%}<span class="blp-case__tag">{{ b.settings.tag }}</span>{%- endif -%}
+                <h3 class="blp-case__title">{{ b.settings.title }}</h3>
+                <p class="blp-case__text">{{ b.settings.text | newline_to_br }}</p>
+              </div>
+            </article>
+          {%- endfor -%}
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment -%} ========== PRODUCTS ========== {%- endcomment -%}
+  {%- if section.settings.products_collection != blank -%}
+    {%- assign col = section.settings.products_collection -%}
+    {%- assign limit = section.settings.products_limit | default: 8 -%}
+    <section class="blp__section blp__section--alt" id="blp-products">
+      <div class="blp__wrap">
+        <h2 class="blp__h2">{{ section.settings.products_title }}</h2>
+        {%- if section.settings.products_sub != blank -%}<p class="blp__sub">{{ section.settings.products_sub }}</p>{%- endif -%}
+        <ul class="blp-products__grid">
+          {%- for product in col.products limit: limit -%}
+            <li>
+              {% render 'card-product', card_product: product, media_aspect_ratio: 'square', show_secondary_image: true, show_vendor: false, show_rating: false, lazy_load: true, section_id: section.id %}
+            </li>
+          {%- endfor -%}
+        </ul>
+        <div class="blp-products__more">
+          <a href="{{ col.url }}" class="blp-btn blp-btn--ghost">{{ section.settings.products_more | default: 'すべての商品を見る' }}</a>
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment -%} ========== PRICING TIERS ========== {%- endcomment -%}
+  {%- assign tier_blocks = section.blocks | where: 'type', 'tier' -%}
+  {%- if tier_blocks.size > 0 -%}
+    <section class="blp__section">
+      <div class="blp__wrap">
+        <h2 class="blp__h2">{{ section.settings.tiers_title }}</h2>
+        {%- if section.settings.tiers_sub != blank -%}<p class="blp__sub">{{ section.settings.tiers_sub }}</p>{%- endif -%}
+        <div class="blp-tiers">
+          <ul class="blp-tiers__bar">
+            {%- for b in tier_blocks -%}
+              <li class="blp-tier{% if forloop.last %} blp-tier--top{% endif %}" {{ b.shopify_attributes }}>
+                <div class="blp-tier__rate">{{ b.settings.rate }}<small>% OFF</small></div>
+                <div class="blp-tier__cond">{{ b.settings.condition }}</div>
+              </li>
+            {%- endfor -%}
+          </ul>
+          {%- if section.settings.tiers_notes != blank -%}
+            <ul class="blp-tiers__notes">
+              {%- assign notes = section.settings.tiers_notes | newline_to_br | split: '<br />' -%}
+              {%- for n in notes -%}{%- if n != blank -%}<li>{{ n | strip }}</li>{%- endif -%}{%- endfor -%}
+            </ul>
+          {%- endif -%}
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment -%} ========== FLOW ========== {%- endcomment -%}
+  {%- assign flow_blocks = section.blocks | where: 'type', 'flow' -%}
+  {%- if flow_blocks.size > 0 -%}
+    <section class="blp__section blp__section--alt">
+      <div class="blp__wrap">
+        <h2 class="blp__h2">{{ section.settings.flow_title }}</h2>
+        {%- if section.settings.flow_sub != blank -%}<p class="blp__sub">{{ section.settings.flow_sub }}</p>{%- endif -%}
+        <ol class="blp-flow">
+          {%- for b in flow_blocks -%}
+            <li class="blp-flow__item" {{ b.shopify_attributes }}>
+              <h3 class="blp-flow__title">{{ b.settings.title }}</h3>
+              <p class="blp-flow__text">{{ b.settings.text }}</p>
+            </li>
+          {%- endfor -%}
+        </ol>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment -%} ========== FAQ ========== {%- endcomment -%}
+  {%- assign faq_blocks = section.blocks | where: 'type', 'faq' -%}
+  {%- if faq_blocks.size > 0 -%}
+    <section class="blp__section">
+      <div class="blp__wrap">
+        <h2 class="blp__h2">{{ section.settings.faq_title }}</h2>
+        <div class="blp-faq">
+          {%- for b in faq_blocks -%}
+            <details {{ b.shopify_attributes }}>
+              <summary>{{ b.settings.question }}</summary>
+              <div class="blp-faq__body">{{ b.settings.answer }}</div>
+            </details>
+          {%- endfor -%}
+        </div>
+      </div>
+    </section>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {%- for b in faq_blocks -%}
+          {%- unless forloop.first -%},{%- endunless -%}
+          { "@type": "Question", "name": {{ b.settings.question | json }}, "acceptedAnswer": { "@type": "Answer", "text": {{ b.settings.answer | strip_html | json }} } }
+        {%- endfor -%}
+      ]
+    }
+    </script>
+  {%- endif -%}
+
+  {%- comment -%} ========== FORM ========== {%- endcomment -%}
+  <section class="blp__section blp-form-wrap" id="blp-form">
+    <div class="blp__wrap">
+      <div class="blp-form-inner">
+        <h2 class="blp__h2">{{ section.settings.form_title }}</h2>
+        {%- if section.settings.form_note != blank -%}<p class="blp__sub">{{ section.settings.form_note }}</p>{%- endif -%}
+
+        {%- form 'contact', id: 'BlpContactForm', class: 'blp-form' -%}
+          {%- if form.posted_successfully? -%}
+            <div class="blp-form__success">{{ section.settings.form_success | default: 'お問い合わせを受け付けました。担当より2営業日以内にご連絡いたします。' }}</div>
+          {%- elsif form.errors -%}
+            <div class="blp-form__error">入力内容にエラーがあります。ご確認ください。
+              <ul>{%- for field in form.errors -%}<li>{{ form.errors.translated_fields[field] }} {{ form.errors.messages[field] }}</li>{%- endfor -%}</ul>
+            </div>
+          {%- endif -%}
+
+          <input type="hidden" name="contact[お問い合わせ種別]" value="法人・業務用">
+          <input type="hidden" name="contact[流入元]" id="BlpSource" value="">
+
+          <div class="blp-form__row blp-form__row--2">
+            <div class="blp-form__field">
+              <label for="Blp-company">会社名<span class="req">*</span></label>
+              <input type="text" id="Blp-company" name="contact[会社名]" required autocomplete="organization">
+            </div>
+            <div class="blp-form__field">
+              <label for="Blp-industry">業種<span class="req">*</span></label>
+              <select id="Blp-industry" name="contact[業種]" required>
+                <option value="">選択してください</option>
+                <option>設計事務所・インテリアデザイナー</option>
+                <option>ホテル・宿泊施設</option>
+                <option>カフェ・レストラン</option>
+                <option>オフィス・法人</option>
+                <option>店舗・小売</option>
+                <option>撮影・メディア</option>
+                <option>その他</option>
+              </select>
+            </div>
+          </div>
+          <div class="blp-form__row blp-form__row--2">
+            <div class="blp-form__field">
+              <label for="Blp-name">担当者名<span class="req">*</span></label>
+              <input type="text" id="Blp-name" name="contact[name]" required autocomplete="name">
+            </div>
+            <div class="blp-form__field">
+              <label for="Blp-phone">電話番号</label>
+              <input type="tel" id="Blp-phone" name="contact[phone]" autocomplete="tel">
+            </div>
+          </div>
+          <div class="blp-form__field">
+            <label for="Blp-email">メールアドレス<span class="req">*</span></label>
+            <input type="email" id="Blp-email" name="contact[email]" required autocomplete="email">
+          </div>
+          <div class="blp-form__row blp-form__row--2">
+            <div class="blp-form__field">
+              <label for="Blp-budget">ご予算の目安</label>
+              <select id="Blp-budget" name="contact[予算]">
+                <option value="">選択してください</option>
+                <option>〜30万円</option>
+                <option>30〜50万円</option>
+                <option>50〜100万円</option>
+                <option>100〜150万円</option>
+                <option>150万円以上</option>
+                <option>未定</option>
+              </select>
+            </div>
+            <div class="blp-form__field">
+              <label for="Blp-deadline">希望納期</label>
+              <input type="text" id="Blp-deadline" name="contact[希望納期]" placeholder="例：2026年12月まで">
+            </div>
+          </div>
+          <div class="blp-form__field">
+            <label for="Blp-body">案件内容・ご要望<span class="req">*</span></label>
+            <textarea id="Blp-body" name="contact[body]" required placeholder="例：カフェ新店舗（30席）向けにダイニングテーブルと椅子を検討中。オーク材でカスタム対応可能か知りたい。"></textarea>
+          </div>
+          <p class="blp-form__consent">送信いただいた内容は、お見積・ご連絡のためにのみ使用します。<a href="/policies/privacy-policy">プライバシーポリシー</a>に同意の上、送信してください。</p>
+          <button type="submit" class="blp-btn blp-btn--primary blp-form__submit">{{ section.settings.form_submit | default: 'お見積もりを依頼する' }}</button>
+        {%- endform -%}
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} ========== STICKY CTA (mobile) ========== {%- endcomment -%}
+  <div class="blp-sticky" id="blp-sticky">
+    <a href="#blp-form" class="blp-btn blp-btn--primary">{{ section.settings.hero_cta1 | default: 'お見積もりを依頼する' }}</a>
+  </div>
+</div>
+
+<script>
+(function(){
+  var root = document.getElementById('blp-{{ section.id }}');
+  if (!root) return;
+  var sticky = document.getElementById('blp-sticky');
+  var hero = root.querySelector('.blp-hero');
+  var form = document.getElementById('blp-form');
+  if (sticky && hero && form && 'IntersectionObserver' in window) {
+    var heroOut = false, formIn = false;
+    function update(){ sticky.classList.toggle('is-visible', heroOut && !formIn); }
+    new IntersectionObserver(function(e){ heroOut = !e[0].isIntersecting; update(); }, {threshold: 0.05}).observe(hero);
+    new IntersectionObserver(function(e){ formIn = e[0].isIntersecting; update(); }, {threshold: 0.1}).observe(form);
+  }
+  var src = document.getElementById('BlpSource');
+  if (src) {
+    var p = new URLSearchParams(location.search);
+    var parts = [];
+    ['utm_source','utm_medium','utm_campaign','gclid','fbclid'].forEach(function(k){ if (p.get(k)) parts.push(k + '=' + p.get(k)); });
+    if (!parts.length && document.referrer) parts.push('ref=' + document.referrer);
+    src.value = parts.join(' | ');
+  }
+  root.querySelectorAll('a[href^="#"]').forEach(function(a){
+    a.addEventListener('click', function(ev){
+      var t = document.querySelector(a.getAttribute('href'));
+      if (t) { ev.preventDefault(); t.scrollIntoView({behavior: 'smooth', block: 'start'}); }
+    });
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "6JOHAN 法人LP v2",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    { "type": "header", "content": "ヒーロー" },
+    { "type": "image_picker", "id": "hero_image", "label": "背景画像（横長・部屋写真推奨）" },
+    { "type": "text", "id": "hero_kicker", "label": "小見出し", "default": "法人・業務用のお客様へ" },
+    { "type": "text", "id": "hero_title", "label": "タイトル", "default": "空間の印象を決める家具を、法人価格で。" },
+    { "type": "textarea", "id": "hero_lead", "label": "リード文", "default": "北欧と日本の美意識を融合したJapandi家具を、オフィス・ホテル・飲食店・設計案件向けに。\n最大20%OFFの法人特別価格、在庫品は最短7日でお届けします。" },
+    { "type": "text", "id": "hero_cta1", "label": "メインCTA（フォームへ）", "default": "お見積もりを依頼する" },
+    { "type": "text", "id": "hero_cta2", "label": "サブCTA", "default": "人気商品を見る" },
+    { "type": "url", "id": "hero_cta2_url", "label": "サブCTAリンク先（空欄で商品セクションへ）" },
+
+    { "type": "header", "content": "導入シーン" },
+    { "type": "text", "id": "cases_title", "label": "見出し", "default": "こんな空間でお選びいただいています" },
+    { "type": "textarea", "id": "cases_sub", "label": "サブテキスト", "default": "ワンルームから商業空間まで。6JOHANの家具は、スケールが変わっても空気感を崩しません。" },
+
+    { "type": "header", "content": "人気商品" },
+    { "type": "collection", "id": "products_collection", "label": "表示するコレクション" },
+    { "type": "range", "id": "products_limit", "label": "表示数", "min": 4, "max": 12, "step": 4, "default": 8 },
+    { "type": "text", "id": "products_title", "label": "見出し", "default": "法人のお客様に選ばれている商品" },
+    { "type": "textarea", "id": "products_sub", "label": "サブテキスト", "default": "表示価格は通常価格です。法人特別価格はお見積もり時にご案内します。" },
+    { "type": "text", "id": "products_more", "label": "もっと見るボタン", "default": "すべての商品を見る" },
+
+    { "type": "header", "content": "法人特別価格" },
+    { "type": "text", "id": "tiers_title", "label": "見出し", "default": "ご注文金額に応じた法人特別価格" },
+    { "type": "textarea", "id": "tiers_sub", "label": "サブテキスト", "default": "複数商品の組み合わせでも、合計金額（税込）で判定します。" },
+    { "type": "textarea", "id": "tiers_notes", "label": "注記（改行で区切り）", "default": "セール商品との併用はできません\n正式なお見積書（PDF）を発行します\n初回のお取引は銀行振込（前払い）またはクレジットカード決済です" },
+
+    { "type": "header", "content": "ご利用の流れ" },
+    { "type": "text", "id": "flow_title", "label": "見出し", "default": "お問い合わせから納品まで" },
+    { "type": "textarea", "id": "flow_sub", "label": "サブテキスト" },
+
+    { "type": "header", "content": "FAQ" },
+    { "type": "text", "id": "faq_title", "label": "見出し", "default": "よくあるご質問" },
+
+    { "type": "header", "content": "お問い合わせフォーム" },
+    { "type": "text", "id": "form_title", "label": "見出し", "default": "お見積もり・ご相談" },
+    { "type": "textarea", "id": "form_note", "label": "説明", "default": "ご希望の商品や点数が未定でもかまいません。担当より2営業日以内にご連絡いたします。" },
+    { "type": "text", "id": "form_submit", "label": "送信ボタン", "default": "お見積もりを依頼する" },
+    { "type": "textarea", "id": "form_success", "label": "送信完了メッセージ", "default": "お問い合わせを受け付けました。担当より2営業日以内にご連絡いたします。" }
+  ],
+  "blocks": [
+    {
+      "type": "stat", "name": "実績数値", "limit": 4,
+      "settings": [
+        { "type": "text", "id": "number", "label": "数値", "default": "1.5" },
+        { "type": "text", "id": "unit", "label": "単位", "default": "億円" },
+        { "type": "text", "id": "label", "label": "ラベル", "default": "累計売上" }
+      ]
+    },
+    {
+      "type": "case", "name": "導入シーン", "limit": 6,
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "写真（4:3推奨）" },
+        { "type": "text", "id": "tag", "label": "タグ", "default": "オフィス" },
+        { "type": "text", "id": "title", "label": "見出し", "default": "働く人の気分を変えるオフィス家具" },
+        { "type": "textarea", "id": "text", "label": "本文", "default": "ミーティングスペースやラウンジに、温かみのあるラタンやウッドの家具を。無機質になりがちなオフィスに、居心地をつくります。" }
+      ]
+    },
+    {
+      "type": "tier", "name": "割引ティア", "limit": 4,
+      "settings": [
+        { "type": "text", "id": "rate", "label": "割引率（数字のみ）", "default": "10" },
+        { "type": "text", "id": "condition", "label": "条件", "default": "30万円以上" }
+      ]
+    },
+    {
+      "type": "flow", "name": "ステップ", "limit": 6,
+      "settings": [
+        { "type": "text", "id": "title", "label": "見出し", "default": "お問い合わせ" },
+        { "type": "textarea", "id": "text", "label": "本文", "default": "フォームから案件内容をお知らせください。" }
+      ]
+    },
+    {
+      "type": "faq", "name": "FAQ", "limit": 10,
+      "settings": [
+        { "type": "text", "id": "question", "label": "質問", "default": "最小発注数量はありますか？" },
+        { "type": "richtext", "id": "answer", "label": "回答", "default": "<p>特に定めておりません。1点からでもご相談ください。</p>" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "6JOHAN 法人LP v2",
+      "blocks": [
+        { "type": "stat", "settings": { "number": "1.5", "unit": "億円", "label": "累計売上" } },
+        { "type": "stat", "settings": { "number": "5", "unit": "万人", "label": "SNSフォロワー" } },
+        { "type": "stat", "settings": { "number": "7", "unit": "日", "label": "在庫品の最短発送" } },
+        { "type": "stat", "settings": { "number": "30", "unit": "日", "label": "返品対応期間" } },
+        { "type": "case", "settings": { "tag": "オフィス・コワーキング", "title": "働く人の気分を変えるオフィス家具", "text": "ミーティングスペースやラウンジに、温かみのあるラタンやウッドの家具を。無機質になりがちなオフィスに、居心地をつくります。" } },
+        { "type": "case", "settings": { "tag": "ホテル・宿泊施設", "title": "客室の記憶に残る、一脚の椅子", "text": "ベッドサイドのラウンジチェアやサイドテーブルに。同一品番を複数室に揃えても、受注生産で対応できます。" } },
+        { "type": "case", "settings": { "tag": "カフェ・飲食店", "title": "写真に撮りたくなる席をつくる", "text": "ダイニングテーブルとチェアの組み合わせで、店の世界観を決める。SNSで拡散される空間づくりをお手伝いします。" } },
+        { "type": "case", "settings": { "tag": "設計事務所・コーディネーター", "title": "施主提案に使える、価格と納期の明確さ", "text": "商品ごとの納期・サイズ・素材を明記。法人特別価格のお見積書は提案資料にそのまま使えます。" } },
+        { "type": "tier", "settings": { "rate": "10", "condition": "30万円以上" } },
+        { "type": "tier", "settings": { "rate": "12", "condition": "50万円以上" } },
+        { "type": "tier", "settings": { "rate": "15", "condition": "100万円以上" } },
+        { "type": "tier", "settings": { "rate": "20", "condition": "150万円以上" } },
+        { "type": "flow", "settings": { "title": "お問い合わせ", "text": "フォームから案件内容をお知らせください。商品が未定でも大丈夫です。" } },
+        { "type": "flow", "settings": { "title": "お見積もり", "text": "2営業日以内にお見積書（PDF）をメールでお送りします。" } },
+        { "type": "flow", "settings": { "title": "ご発注・お支払い", "text": "お見積もり内容をご確認後、銀行振込またはクレジットカードでお支払いください。" } },
+        { "type": "flow", "settings": { "title": "納品", "text": "在庫品は入金確認後7日以内に発送。受注生産品は約4ヶ月でお届けします。" } },
+        { "type": "faq", "settings": { "question": "最小発注数量はありますか？", "answer": "<p>特に定めておりません。1点からでもご相談ください。法人特別価格はご注文金額30万円以上から適用されます。</p>" } },
+        { "type": "faq", "settings": { "question": "支払い方法は？", "answer": "<p>銀行振込（前払い）またはクレジットカード決済でお願いしております。法人割引を適用する場合は、お見積もり後にディスカウントコードを発行いたします。</p>" } },
+        { "type": "faq", "settings": { "question": "納期はどのくらいですか？", "answer": "<p>在庫品はご入金確認後7営業日以内に発送、受注生産品は約4ヶ月です。大量注文の場合は分割納品になることがあります。</p>" } },
+        { "type": "faq", "settings": { "question": "カスタマイズはできますか？", "answer": "<p>一部商品でカラー・素材・サイズ変更、ロゴ刻印に対応しています。カスタマイズ品は受注生産となり、納期は通常より2〜4週間長くなる場合があります。</p>" } },
+        { "type": "faq", "settings": { "question": "キャンセルはできますか？", "answer": "<p>在庫品は出荷手配前であればキャンセル可能です。受注生産品はご注文から24時間以内であればキャンセル可能、生産着手後は商品代金の50%をキャンセル料として申し受けます。</p>" } },
+        { "type": "faq", "settings": { "question": "個人事業主でも利用できますか？", "answer": "<p>はい、ご利用いただけます。屋号でお問い合わせください。</p>" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
