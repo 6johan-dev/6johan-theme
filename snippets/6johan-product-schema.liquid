@@ -1,0 +1,46 @@
+{%- liquid
+  assign rating_value = product.metafields.reviews.rating.value.rating
+  assign rating_count = product.metafields.reviews.rating_count.value | default: 0
+  assign is_backorder = false
+  if product.tags contains '受注生産'
+    assign is_backorder = true
+  endif
+-%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": {{ product.title | json }},
+  "url": {{ request.origin | append: product.url | json }},
+  "image": [{% for image in product.images limit: 5 %}{{ image | image_url: width: 1200 | prepend: 'https:' | json }}{% unless forloop.last %},{% endunless %}{% endfor %}],
+  "description": {{ product.description | strip_html | strip_newlines | truncate: 500 | json }},
+  "brand": { "@type": "Brand", "name": "6JOHAN" },
+  {%- if product.selected_or_first_available_variant.sku != blank %}
+  "sku": {{ product.selected_or_first_available_variant.sku | json }},
+  {%- endif %}
+  {%- if rating_count > 0 %}
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": {{ rating_value | round: 1 }},
+    "reviewCount": {{ rating_count }},
+    "bestRating": 5,
+    "worstRating": 1
+  },
+  {%- endif %}
+  "offers": [
+  {%- for variant in product.variants %}
+    {
+      "@type": "Offer",
+      "url": {{ request.origin | append: variant.url | json }},
+      "priceCurrency": {{ cart.currency.iso_code | json }},
+      "price": {{ variant.price | divided_by: 100 }},
+      "availability": "{% if variant.available %}{% if is_backorder %}https://schema.org/PreOrder{% else %}https://schema.org/InStock{% endif %}{% else %}https://schema.org/OutOfStock{% endif %}",
+      "itemCondition": "https://schema.org/NewCondition"
+      {%- if variant.sku != blank -%},
+      "sku": {{ variant.sku | json }}
+      {%- endif %}
+    }{% unless forloop.last %},{% endunless %}
+  {%- endfor %}
+  ]
+}
+</script>
