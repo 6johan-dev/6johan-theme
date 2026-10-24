@@ -1768,3 +1768,16 @@ body,
 
 /*ratingスター色*/
 .rating-star { --color-rating-star: #6B5B4F; }
+
+/* 法人LP：見出しを読点・句点で折り返す */
+.blp-hero__title,
+.blp-hero__lead,
+.blp-case__title {
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+/* 法人LP：リード文の手動改行はPCのみ */
+@media screen and (max-width: 749px) {
+  .blp-hero__lead br { display: none; }
+}
