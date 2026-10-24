@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main": {
@@ -191,11 +200,13 @@
         "q6"
       ],
       "settings": {
+        "hero_image": "shopify://shop_images/business_hero.jpg",
         "hero_kicker": "法人・業務用のお客様へ",
         "hero_title": "空間の印象を決める家具を、法人価格で。",
         "hero_lead": "北欧と日本の美意識を融合したJapandi家具を、オフィス・ホテル・飲食店・設計案件向けに。\n最大20%OFFの法人特別価格、在庫品は最短7日でお届けします。",
         "hero_cta1": "お見積もりを依頼する",
         "hero_cta2": "人気商品を見る",
+        "hero_cta2_url": "",
         "cases_title": "こんな空間でお選びいただいています",
         "cases_sub": "ワンルームから商業空間まで。6JOHANの家具は、スケールが変わっても空気感を崩しません。",
         "products_collection": "pick-up",
@@ -207,6 +218,7 @@
         "tiers_sub": "複数商品の組み合わせでも、合計金額（税込）で判定します。",
         "tiers_notes": "セール商品との併用はできません\n正式なお見積書（PDF）を発行します\n初回のお取引は銀行振込（前払い）またはクレジットカード決済です",
         "flow_title": "お問い合わせから納品まで",
+        "flow_sub": "",
         "faq_title": "よくあるご質問",
         "form_title": "お見積もり・ご相談",
         "form_note": "ご希望の商品や点数が未定でもかまいません。担当より2営業日以内にご連絡いたします。",
