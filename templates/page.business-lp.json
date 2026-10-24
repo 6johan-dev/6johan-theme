@@ -55,6 +55,7 @@
         "c2": {
           "type": "case",
           "settings": {
+            "image": "shopify://shop_images/business_hotel.jpg",
             "tag": "ホテル・宿泊施設",
             "title": "客室の記憶に残る、一脚の椅子",
             "text": "ベッドサイドのラウンジチェアやサイドテーブルに。同一品番を複数室に揃えても、受注生産で対応できます。"
@@ -63,6 +64,7 @@
         "c3": {
           "type": "case",
           "settings": {
+            "image": "shopify://shop_images/business_cafe.jpg",
             "tag": "カフェ・飲食店",
             "title": "写真に撮りたくなる席をつくる",
             "text": "ダイニングテーブルとチェアの組み合わせで、店の世界観を決める。SNSで拡散される空間づくりをお手伝いします。"
