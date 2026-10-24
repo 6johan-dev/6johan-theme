@@ -141,32 +141,6 @@
     el.addEventListener('change', function() { setTimeout(onVariantChange, 100); });
   });
 
-  /* --- 在庫ドット付与 --- */
-  function addStockDots() {
-    var fieldsets = document.querySelectorAll('variant-radios fieldset, variant-selects fieldset');
-    if (!fieldsets.length) return;
-    var allStates = Object.values(variantStates);
-
-    fieldsets.forEach(function(fieldset, optionIndex) {
-      var inputs = fieldset.querySelectorAll('input[type="radio"]');
-      inputs.forEach(function(input) {
-        var label = fieldset.querySelector('label[for="' + input.id + '"]');
-        if (!label || label.querySelector('.sixj-stock-dot')) return;
-        var optionValue = input.value;
-
-        var hasStock = allStates.some(function(v) {
-          return v.options[optionIndex] === optionValue && v.state === 'instock';
-        });
-
-        var dot = document.createElement('span');
-        dot.className = 'sixj-stock-dot ' + (hasStock ? 'sixj-stock-dot--in' : 'sixj-stock-dot--out');
-        dot.setAttribute('aria-hidden', 'true');
-        label.appendChild(dot);
-      });
-    });
-  }
-
-  addStockDots();
   updateBackorderNote('{{ stock_state }}');
 })();
 </script>

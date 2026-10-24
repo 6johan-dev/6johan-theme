@@ -1694,27 +1694,6 @@ body,
   line-height: 0;
 }
 
-/* --- バリアント在庫ドット --- */
-.sixj-stock-dot {
-  display: inline-block;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  margin-left: 6px;
-  vertical-align: middle;
-  flex-shrink: 0;
-}
-
-.sixj-stock-dot--in {
-  background-color: #5E7A5E;
-}
-
-.sixj-stock-dot--out {
-  background-color: #C4956A;
-}
-
-/* バリアントラベルにドットを入れるためのflex化 */
-
 /* ============================================
    以下を削除（既存CSSから）:
    - .sixj-product-status 関連のスタイル
