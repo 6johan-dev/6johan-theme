@@ -1781,3 +1781,9 @@ body,
 @media screen and (max-width: 749px) {
   .blp-hero__lead br { display: none; }
 }
+/* コレクション説明：上は1段落のみ、全文はグリッド下 */
+.blp-col-intro { margin-bottom: 1.2rem; }
+.blp-col-body { margin: 4rem auto 2rem; max-width: 72rem; color: #555; font-size: 1.4rem; line-height: 1.9; }
+@media screen and (max-width: 749px) {
+  .blp-col-body { margin: 3rem auto 1rem; padding: 0 1.5rem; }
+}

@@ -1,0 +1,22 @@
+{%- comment -%}
+  6JOHAN コレクション説明の分割表示
+  mode: 'intro' → 1段落目のみ（バナー用）
+  mode: 'body'  → 2段落目以降（商品グリッド下用）
+{%- endcomment -%}
+{%- if collection.description != blank -%}
+  {%- assign parts = collection.description | split: '</p>' -%}
+  {%- if mode == 'intro' -%}
+    {%- if parts.size > 0 and parts[0] != blank -%}
+      <div class="collection-hero__description rte blp-col-intro">{{ parts[0] | append: '</p>' }}</div>
+    {%- endif -%}
+  {%- elsif mode == 'body' -%}
+    {%- if parts.size > 1 -%}
+      {%- assign rest = parts | slice: 1, 100 | join: '</p>' -%}
+      {%- if rest != blank -%}
+        <div class="page-width blp-col-body">
+          <div class="rte">{{ rest | append: '</p>' }}</div>
+        </div>
+      {%- endif -%}
+    {%- endif -%}
+  {%- endif -%}
+{%- endif -%}
