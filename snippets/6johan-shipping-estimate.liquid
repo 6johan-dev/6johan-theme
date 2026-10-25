@@ -19,7 +19,7 @@
   assign uid = section.id | default: product.id
 -%}
 
-{%- if size_num > 0 -%}
+{%- if size_num > 0 and product.available -%}
 <div class="sixj-ship" data-sixj-ship data-size="{{ size_num }}" data-price="{{ current_variant.price }}" data-product-id="{{ product.id }}">
   <div class="sixj-ship__head">
     <span class="sixj-ship__label">送料</span>
