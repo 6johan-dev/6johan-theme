@@ -15,7 +15,7 @@
   assign size_raw = size_metafield | strip
   assign size_num = size_raw | replace: 'サイズ', '' | replace: ' ', '' | plus: 0
   assign current_variant = product.selected_or_first_available_variant
-  assign shipping_guide_url = '/pages/035'
+  assign shipping_guide_url = '/pages/022'
   assign uid = section.id | default: product.id
 -%}
 
