@@ -11,7 +11,7 @@
 {% endcomment %}
 
 {%- liquid
-  assign size_metafield = product.metafields.custom.size
+  assign size_metafield = product.metafields.custom['_new']
   assign size_raw = size_metafield | strip
   assign size_num = size_raw | replace: 'サイズ', '' | replace: ' ', '' | plus: 0
   assign current_variant = product.selected_or_first_available_variant
