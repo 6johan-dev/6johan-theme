@@ -1,0 +1,257 @@
+{% comment %}
+  6JOHAN 送料目安（都道府県を選ぶと送料と総額を表示）
+  使い方: {% render '6johan-shipping-estimate', product: product %}
+  配置: snippets/6johan-delivery-box.liquid の内側、または main-product.liquid の CTA 直上
+
+  前提:
+    - 梱包サイズは商品メタフィールドから取得。キー名は下の size_metafield を実際の定義に合わせる
+    - 送料表は 2026-10 時点の配送プロファイル（サイズ×エリア）。変更時は SHIPPING_TABLE を更新する
+    - 同一商品を複数点購入した場合は重量4段階（1点=X, 2点=2X, 3点=3X, 4点以上=4X）に合わせて点数分を加算
+    - 沖縄県は配送プロファイルに料金がないため「お問い合わせ」を表示
+{% endcomment %}
+
+{%- liquid
+  assign size_metafield = product.metafields.custom.package_size
+  assign size_raw = size_metafield | strip
+  assign size_num = size_raw | replace: 'サイズ', '' | replace: ' ', '' | plus: 0
+  assign current_variant = product.selected_or_first_available_variant
+  assign shipping_guide_url = '/pages/035'
+  assign uid = section.id | default: product.id
+-%}
+
+{%- if size_num > 0 -%}
+<div class="sixj-ship" data-sixj-ship data-size="{{ size_num }}" data-price="{{ current_variant.price }}" data-product-id="{{ product.id }}">
+  <div class="sixj-ship__head">
+    <span class="sixj-ship__label">送料</span>
+    <span class="sixj-ship__note">地域により異なります（梱包サイズ {{ size_num }}）</span>
+  </div>
+
+  <label class="sixj-ship__row" for="sixj-ship-pref-{{ uid }}">
+    <span class="sixj-ship__row-label">お届け先</span>
+    <select id="sixj-ship-pref-{{ uid }}" class="sixj-ship__select" data-sixj-ship-pref>
+      <option value="">都道府県を選択</option>
+      <optgroup label="北海道・東北">
+        <option value="北海道">北海道</option>
+        <option value="青森県">青森県</option><option value="秋田県">秋田県</option><option value="岩手県">岩手県</option>
+        <option value="宮城県">宮城県</option><option value="山形県">山形県</option><option value="福島県">福島県</option>
+      </optgroup>
+      <optgroup label="関東">
+        <option value="茨城県">茨城県</option><option value="栃木県">栃木県</option><option value="群馬県">群馬県</option>
+        <option value="埼玉県">埼玉県</option><option value="千葉県">千葉県</option><option value="東京都">東京都</option>
+        <option value="神奈川県">神奈川県</option>
+      </optgroup>
+      <optgroup label="信越・東海・北陸">
+        <option value="山梨県">山梨県</option><option value="新潟県">新潟県</option><option value="長野県">長野県</option>
+        <option value="富山県">富山県</option><option value="岐阜県">岐阜県</option><option value="福井県">福井県</option>
+        <option value="石川県">石川県</option><option value="静岡県">静岡県</option><option value="愛知県">愛知県</option>
+      </optgroup>
+      <optgroup label="関西">
+        <option value="大阪府">大阪府</option><option value="京都府">京都府</option><option value="兵庫県">兵庫県</option>
+        <option value="滋賀県">滋賀県</option><option value="三重県">三重県</option><option value="奈良県">奈良県</option>
+        <option value="和歌山県">和歌山県</option>
+      </optgroup>
+      <optgroup label="中国・四国">
+        <option value="岡山県">岡山県</option><option value="広島県">広島県</option><option value="鳥取県">鳥取県</option>
+        <option value="島根県">島根県</option><option value="山口県">山口県</option><option value="香川県">香川県</option>
+        <option value="徳島県">徳島県</option><option value="愛媛県">愛媛県</option><option value="高知県">高知県</option>
+      </optgroup>
+      <optgroup label="九州・沖縄">
+        <option value="福岡県">福岡県</option><option value="佐賀県">佐賀県</option><option value="長崎県">長崎県</option>
+        <option value="大分県">大分県</option><option value="熊本県">熊本県</option><option value="宮崎県">宮崎県</option>
+        <option value="鹿児島県">鹿児島県</option><option value="沖縄県">沖縄県</option>
+      </optgroup>
+    </select>
+  </label>
+
+  <div class="sixj-ship__result" data-sixj-ship-result aria-live="polite">
+    <span class="sixj-ship__placeholder">都道府県を選ぶと送料と合計金額を表示します</span>
+  </div>
+
+  <a href="{{ shipping_guide_url }}" class="sixj-ship__link">送料・配送について詳しく見る</a>
+</div>
+
+<style>
+  .sixj-ship {
+    font-family: var(--6j-font-body, -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic Medium", "Yu Gothic", "Meiryo", sans-serif);
+    border: 1px solid #E8E5E0;
+    padding: 14px 16px;
+    margin: 12px 0;
+    background: #FFFFFF;
+    color: #292724;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .sixj-ship__head { display: flex; align-items: baseline; gap: 8px; margin-bottom: 10px; }
+  .sixj-ship__label { font-weight: 600; font-size: 14px; }
+  .sixj-ship__note { color: #6B6B5E; font-size: 12px; }
+  .sixj-ship__row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .sixj-ship__row-label { flex: 0 0 auto; color: #6B6B5E; font-size: 12px; }
+  .sixj-ship__select {
+    flex: 1 1 auto;
+    min-height: 40px;
+    padding: 6px 10px;
+    border: 1px solid #C9C5BE;
+    border-radius: 0;
+    background: #FFFFFF;
+    color: #292724;
+    font-size: 14px;
+    font-family: inherit;
+  }
+  .sixj-ship__result { min-height: 22px; }
+  .sixj-ship__placeholder { color: #8A8A7A; font-size: 12px; }
+  .sixj-ship__fee { font-weight: 600; font-size: 15px; }
+  .sixj-ship__area { color: #6B6B5E; font-size: 12px; margin-left: 4px; }
+  .sixj-ship__total { display: block; margin-top: 2px; }
+  .sixj-ship__total strong { font-size: 15px; }
+  .sixj-ship__multi { display: block; margin-top: 2px; color: #6B6B5E; font-size: 12px; }
+  .sixj-ship__contact { color: #6B6B5E; }
+  .sixj-ship__link {
+    display: inline-block;
+    margin-top: 8px;
+    color: var(--6j-accent, #6B5B4F);
+    font-size: 12px;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+</style>
+
+<script>
+(function () {
+  if (window.__sixjShipInit) return;
+  window.__sixjShipInit = true;
+
+  var STORAGE_KEY = '6johan_pref';
+  var MAX_MULTIPLIER = 4;
+
+  // 配送プロファイル（2026-10）: サイズ → エリア別送料（円）
+  var SHIPPING_TABLE = {
+    120: { flat: 2250 },
+    140: { flat: 2500 },
+    160: { flat: 2750 },
+    180: { hokkaido: 3750, tohoku: 3440, kanto: 3130, chubu: 3500, kansai: 3750, chushikoku: 4000, kyushu: 4380 },
+    200: { hokkaido: 4750, tohoku: 4000, kanto: 3630, chubu: 4130, kansai: 4380, chushikoku: 4750, kyushu: 5130 },
+    220: { hokkaido: 5750, tohoku: 4880, kanto: 4380, chubu: 5000, kansai: 5250, chushikoku: 5750, kyushu: 6250 },
+    240: { hokkaido: 7750, tohoku: 6500, kanto: 5500, chubu: 6250, kansai: 6500, chushikoku: 7000, kyushu: 7750 },
+    260: { hokkaido: 10000, tohoku: 8380, kanto: 6750, chubu: 7500, kansai: 7940, chushikoku: 8500, kyushu: 10000 }
+  };
+
+  var AREA_LABEL = {
+    hokkaido: '北海道', tohoku: '東北', kanto: '関東', chubu: '信越・東海・北陸',
+    kansai: '関西', chushikoku: '四国・中国', kyushu: '九州'
+  };
+
+  var PREF_AREA = {
+    '北海道': 'hokkaido',
+    '青森県': 'tohoku', '秋田県': 'tohoku', '岩手県': 'tohoku', '宮城県': 'tohoku', '山形県': 'tohoku', '福島県': 'tohoku',
+    '茨城県': 'kanto', '栃木県': 'kanto', '群馬県': 'kanto', '埼玉県': 'kanto', '千葉県': 'kanto', '東京都': 'kanto', '神奈川県': 'kanto',
+    '山梨県': 'chubu', '新潟県': 'chubu', '長野県': 'chubu', '富山県': 'chubu', '岐阜県': 'chubu', '福井県': 'chubu', '石川県': 'chubu', '静岡県': 'chubu', '愛知県': 'chubu',
+    '大阪府': 'kansai', '京都府': 'kansai', '兵庫県': 'kansai', '滋賀県': 'kansai', '三重県': 'kansai', '奈良県': 'kansai', '和歌山県': 'kansai',
+    '岡山県': 'chushikoku', '広島県': 'chushikoku', '鳥取県': 'chushikoku', '島根県': 'chushikoku', '山口県': 'chushikoku',
+    '香川県': 'chushikoku', '徳島県': 'chushikoku', '愛媛県': 'chushikoku', '高知県': 'chushikoku',
+    '福岡県': 'kyushu', '佐賀県': 'kyushu', '長崎県': 'kyushu', '大分県': 'kyushu', '熊本県': 'kyushu', '宮崎県': 'kyushu', '鹿児島県': 'kyushu'
+    // 沖縄県は配送プロファイルに料金なし → お問い合わせ
+  };
+
+  function yen(n) { return '¥' + Math.round(n).toLocaleString('ja-JP'); }
+
+  function lookupFee(size, pref) {
+    var row = SHIPPING_TABLE[size];
+    if (!row) return null;
+    if (row.flat != null) return { fee: row.flat, area: '全国一律' };
+    var area = PREF_AREA[pref];
+    if (!area || row[area] == null) return null;
+    return { fee: row[area], area: AREA_LABEL[area] };
+  }
+
+  function getQuantity(root) {
+    var form = root.closest('product-info, .product, section') || document;
+    var input = form.querySelector('input.quantity__input, input[name="quantity"]');
+    var q = input ? parseInt(input.value, 10) : 1;
+    if (!q || q < 1) q = 1;
+    return q;
+  }
+
+  function getVariantPrice(root) {
+    // Dawn はバリアント変更時に URL の ?variant= を更新する。見つからなければ初期値を使う
+    var fallback = parseInt(root.getAttribute('data-price'), 10) || 0;
+    var m = location.search.match(/[?&]variant=(\d+)/);
+    if (!m || !window.__sixjVariants) return fallback;
+    var v = window.__sixjVariants[m[1]];
+    return v != null ? v : fallback;
+  }
+
+  function render(root) {
+    var result = root.querySelector('[data-sixj-ship-result]');
+    var select = root.querySelector('[data-sixj-ship-pref]');
+    var pref = select.value;
+    if (!pref) {
+      result.innerHTML = '<span class="sixj-ship__placeholder">都道府県を選ぶと送料と合計金額を表示します</span>';
+      return;
+    }
+    var size = parseInt(root.getAttribute('data-size'), 10);
+    var hit = lookupFee(size, pref);
+    if (!hit) {
+      result.innerHTML = '<span class="sixj-ship__contact">' + pref + 'へのお届けは送料を個別にご案内します。ご注文前にお問い合わせください。</span>';
+      return;
+    }
+    var qty = getQuantity(root);
+    var mult = Math.min(qty, MAX_MULTIPLIER);
+    var fee = hit.fee * mult;
+    var price = getVariantPrice(root) / 100; // Shopify の price は銭単位
+    var total = price * qty + fee;
+
+    var html = '<span class="sixj-ship__fee">送料 ' + yen(fee) + '</span>' +
+               '<span class="sixj-ship__area">（' + hit.area + '）</span>' +
+               '<span class="sixj-ship__total">商品と合わせて <strong>' + yen(total) + '</strong>（税込）</span>';
+    if (qty > 1) {
+      html += '<span class="sixj-ship__multi">' + qty + '点の場合の目安です（送料は' + mult + '点分）</span>';
+    }
+    result.innerHTML = html;
+  }
+
+  function init(root) {
+    var select = root.querySelector('[data-sixj-ship-pref]');
+    if (!select) return;
+
+    try {
+      var saved = localStorage.getItem(STORAGE_KEY);
+      if (saved && (PREF_AREA[saved] !== undefined || saved === '沖縄県')) select.value = saved;
+    } catch (e) {}
+
+    select.addEventListener('change', function () {
+      try { localStorage.setItem(STORAGE_KEY, select.value); } catch (e) {}
+      render(root);
+    });
+
+    // 数量・バリアント変更に追従
+    document.addEventListener('change', function (e) {
+      if (e.target.matches('input.quantity__input, input[name="quantity"], variant-selects *, variant-radios *, variant-picker *, [name^="options"]')) {
+        setTimeout(function () { render(root); }, 150);
+      }
+    });
+    document.addEventListener('click', function (e) {
+      if (e.target.closest('.quantity__button')) setTimeout(function () { render(root); }, 150);
+    });
+    if (typeof window.subscribe === 'function' && window.PUB_SUB_EVENTS && window.PUB_SUB_EVENTS.variantChange) {
+      window.subscribe(window.PUB_SUB_EVENTS.variantChange, function () { setTimeout(function () { render(root); }, 50); });
+    }
+
+    render(root);
+  }
+
+  function boot() {
+    document.querySelectorAll('[data-sixj-ship]').forEach(init);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+</script>
+
+<script>
+  // バリアントID → 価格（銭）。バリアント切替時の総額計算に使う
+  window.__sixjVariants = window.__sixjVariants || {};
+  {%- for v in product.variants -%}
+    window.__sixjVariants[{{ v.id }}] = {{ v.price }};
+  {%- endfor -%}
+</script>
+{%- endif -%}
