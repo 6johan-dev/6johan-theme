@@ -22,8 +22,8 @@
         "banner_mykBrA": {
           "type": "banner",
           "settings": {
-            "image": "shopify://shop_images/1600_x_800_px.png",
-            "image_mobile": "shopify://shop_images/Instagram_2.png",
+            "image": "shopify://shop_images/autumn_to_winter_sale_pc.png",
+            "image_mobile": "shopify://shop_images/autumn_to_winter_sale_mobile.png",
             "hide_overlay": true,
             "label": "",
             "title": "",
