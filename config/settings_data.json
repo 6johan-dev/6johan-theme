@@ -141,8 +141,8 @@
             "type": "trust_item",
             "settings": {
               "icon_type": "shipping",
-              "text": "最短7日配送",
-              "subtext": ""
+              "text": "即納商品は最短7日配送",
+              "subtext": "受注生産品は2〜4ヶ月"
             }
           },
           "trust_item_mxXCUX": {
