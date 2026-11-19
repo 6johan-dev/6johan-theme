@@ -1,0 +1,87 @@
+{% comment %}
+  6JOHAN 法人リード計測（GA4 generate_lead）
+  ------------------------------------------------------------------------------
+  なぜ必要か:
+    - Shopify のカスタムピクセル「GA4 B2B LEAD」は、サンドボックス内で document / window を
+      参照できないため gtag を直接呼べず、generate_lead を一度も送れていなかった（データ列が空）。
+    - 法人フォーム（contact フォーム）は送信後に同じページへ再読み込みされるので、
+      テーマのインラインスクリプトから Shopify.analytics.publish しても、ピクセルの購読登録より
+      先に発火して取りこぼしていた。
+  どう直したか:
+    - 法人フォームのあるページだけ、送信完了時に GA4（gtag.js）を読み込み（send_page_view: false）、
+      generate_lead を1回だけ送る。Google & YouTube アプリが送る page_view 等とは二重にしない。
+    - 送信前に sessionStorage へ「送信した」印を付け、完了ページでそれを消費する。
+      リロードや直リンクでは送らない（二重計上防止）。
+  使い方（フォームの外・セクション末尾に1回）:
+    {% render '6johan-lead-tracking', form_id: 'BlpContactForm', lead_type: 'b2b_quote' %}
+{% endcomment %}
+
+<script>
+(function () {
+  var formId = {{ form_id | json }};
+  var leadType = {{ lead_type | default: 'b2b_quote' | json }};
+  var GA4_ID = 'G-TJM14TGTBE';
+  var PENDING_KEY = 'sixj_lead_pending_' + formId;
+  var SENT_KEY = 'sixj_lead_sent_' + formId;
+
+  /* 送信の痕跡を残す（フォームがこのドキュメントにあれば） */
+  var form = document.getElementById(formId);
+  if (form) {
+    form.addEventListener('submit', function () {
+      try { window.sessionStorage.setItem(PENDING_KEY, String(Date.now())); } catch (e) {}
+    });
+  }
+
+  /* 送信完了ページでのみ計測する（Shopify は ?contact_posted=true を付けて戻す） */
+  var params = new URLSearchParams(window.location.search);
+  if (params.get('contact_posted') !== 'true') return;
+
+  var pending = null;
+  try {
+    pending = window.sessionStorage.getItem(PENDING_KEY);
+    window.sessionStorage.removeItem(PENDING_KEY);
+  } catch (e) {}
+  if (!pending) return;                                       // リロード・直リンクでは送らない
+  if (Date.now() - Number(pending) > 60 * 60 * 1000) return;  // 1時間以上前の送信は追わない
+
+  try {
+    var sent = window.sessionStorage.getItem(SENT_KEY);
+    if (sent && Date.now() - Number(sent) < 5 * 60 * 1000) return;  // 二重送信ガード
+    window.sessionStorage.setItem(SENT_KEY, String(Date.now()));
+  } catch (e) {}
+
+  function loadGA4() {
+    if (window.__sixjGa4LeadLoaded) return;
+    window.__sixjGa4LeadLoaded = true;
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
+    window.gtag('js', new Date());
+    window.gtag('config', GA4_ID, { send_page_view: false });
+    var s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA4_ID;
+    document.head.appendChild(s);
+  }
+
+  function send() {
+    try {
+      if (typeof window.gtag !== 'function') return false;
+      window.gtag('event', 'generate_lead', {
+        lead_type: leadType,
+        form_id: formId,
+        page_location: window.location.href
+      });
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  loadGA4();
+  var tries = 0;
+  (function attempt() {
+    if (send()) return;
+    if (++tries < 40) setTimeout(attempt, 250);
+  })();
+})();
+</script>

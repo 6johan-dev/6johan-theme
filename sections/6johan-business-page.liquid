@@ -451,6 +451,9 @@
           お問い合わせを送信する
         </button>
       {%- endform -%}
+
+      {%- comment -%} 法人リード計測（GA4 generate_lead）送信完了時に1回だけ送信 {%- endcomment -%}
+      {% render '6johan-lead-tracking', form_id: 'BizContactForm', lead_type: 'b2b_quote' %}
     </div>
   </section>
 

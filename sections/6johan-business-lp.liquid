@@ -345,11 +345,6 @@
         {%- form 'contact', id: 'BlpContactForm', class: 'blp-form' -%}
           {%- if form.posted_successfully? -%}
             <div class="blp-form__success">{{ section.settings.form_success | default: 'お問い合わせを受け付けました。担当より2営業日以内にご連絡いたします。' }}</div>
-            <script>
-              if (window.Shopify && Shopify.analytics) {
-                Shopify.analytics.publish('b2b_lead_submitted', { page: 'business_lp' });
-              }
-            </script>
           {%- elsif form.errors -%}
             <div class="blp-form__error">入力内容にエラーがあります。ご確認ください。
               <ul>{%- for field in form.errors -%}<li>{{ form.errors.translated_fields[field] }} {{ form.errors.messages[field] }}</li>{%- endfor -%}</ul>
@@ -418,6 +413,9 @@
           <p class="blp-form__consent">送信いただいた内容は、お見積・ご連絡のためにのみ使用します。<a href="/policies/privacy-policy">プライバシーポリシー</a>に同意の上、送信してください。</p>
           <button type="submit" class="blp-btn blp-btn--primary blp-form__submit">{{ section.settings.form_submit | default: 'お見積もりを依頼する' }}</button>
         {%- endform -%}
+
+        {%- comment -%} 法人リード計測（GA4 generate_lead）送信完了時に1回だけ送信 {%- endcomment -%}
+        {% render '6johan-lead-tracking', form_id: 'BlpContactForm', lead_type: 'b2b_quote' %}
       </div>
     </div>
   </section>
