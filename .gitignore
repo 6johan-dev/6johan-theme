@@ -8,3 +8,6 @@
 ehthumbs.db
 Thumbs.db
 .shopify
+
+# 一時データ（スクレイピング/監査用）
+_data/
