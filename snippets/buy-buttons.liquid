@@ -56,7 +56,7 @@
           class="product-variant-id"
         >
         {%- comment -%} 配送区分は配送BOX・納期バッジと共通の判定ソース（6johan-delivery-state）から作る {%- endcomment -%}
-        {%- capture _ds -%}{%- render '6johan-delivery-state', product: product -%}{%- endcapture -%}
+        {%- capture _ds -%}{%- render '6johan-delivery-state', variant: product.selected_or_first_available_variant, product: product -%}{%- endcapture -%}
         {%- assign _ds = _ds | split: '|' -%}
         {%- assign _dbox_state = _ds[0] -%}
         {%- assign _sixj_lead = _ds[1] -%}

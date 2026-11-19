@@ -135,7 +135,7 @@
 -%}
 
 {%- comment -%} 即納／受注生産は納期バッジ・配送BOX・カートの配送区分と同じ判定を使う {%- endcomment -%}
-{%- capture _ds_raw -%}{%- render '6johan-delivery-state', product: product -%}{%- endcapture -%}
+{%- capture _ds_raw -%}{%- render '6johan-delivery-state', variant: product.selected_or_first_available_variant, product: product -%}{%- endcapture -%}
 {%- assign _ds = _ds_raw | split: '|' -%}
 {%- assign is_in_stock = false -%}
 {%- assign is_made_to_order = false -%}

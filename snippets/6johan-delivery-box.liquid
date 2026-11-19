@@ -7,7 +7,7 @@
   納期区分は 6johan-delivery-state に集約（バッジ／カートの properties[配送区分] と共通）。
   sixj_lead は受注生産時の納期（例外3商品のみ約4ヶ月）。
 {%- endcomment -%}
-{%- capture _ds -%}{%- render '6johan-delivery-state', product: product -%}{%- endcapture -%}
+{%- capture _ds -%}{%- render '6johan-delivery-state', variant: product.selected_or_first_available_variant, product: product -%}{%- endcapture -%}
 {%- assign _ds = _ds | split: '|' -%}
 {%- assign stock_state = _ds[0] -%}
 {%- assign sixj_lead = _ds[1] -%}

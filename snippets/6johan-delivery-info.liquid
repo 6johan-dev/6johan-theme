@@ -96,7 +96,7 @@
 </style>
 
 {%- comment -%} 納期区分は配送BOX・納期バッジ・カートと同じ判定ソース（6johan-delivery-state）を使う {%- endcomment -%}
-{%- capture _ds_raw -%}{%- render '6johan-delivery-state', product: product -%}{%- endcapture -%}
+{%- capture _ds_raw -%}{%- render '6johan-delivery-state', variant: product.selected_or_first_available_variant, product: product -%}{%- endcapture -%}
 {%- assign _ds = _ds_raw | split: '|' -%}
 {%- liquid
   assign is_in_stock = false

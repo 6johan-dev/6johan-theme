@@ -60,7 +60,7 @@
   受注生産の商品（ウッドサークルテーブル等）でも「最短7日発送」と表示され、カートの
   「受注生産品（お届けまで約4ヶ月）」と食い違っていた。
 {%- endcomment -%}
-{%- capture _ds -%}{%- render '6johan-delivery-state', product: product -%}{%- endcapture -%}
+{%- capture _ds -%}{%- render '6johan-delivery-state', variant: product.selected_or_first_available_variant, product: product -%}{%- endcapture -%}
 {%- assign _ds = _ds | split: '|' -%}
 {%- assign _sixj_state = _ds[0] -%}
 {%- assign _sixj_lead = _ds[1] -%}
