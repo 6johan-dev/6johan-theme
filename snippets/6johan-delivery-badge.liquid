@@ -39,7 +39,7 @@
 -%}
 
 {%- if _sixj_state == 'instock' -%}
-  <span class="sixj-dbadge sixj-dbadge--express">最短7日で発送</span>
+  <span class="leadbadge leadbadge--express">最短7日で発送</span>
 {%- elsif _sixj_state == 'backorder' -%}
-  <span class="sixj-dbadge sixj-dbadge--backorder">{{ _sixj_lead }}</span>
+  <span class="leadbadge leadbadge--backorder">{{ _sixj_lead }}</span>
 {%- endif -%}

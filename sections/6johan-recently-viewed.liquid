@@ -218,7 +218,7 @@
     grid.innerHTML = filteredItems.map(item => {
       // 納期バッジ（詳細ページの納期判定と同一ロジックで、商品閲覧時に保存した区分を表示）
       const badge = (item.delivery && item.delivery.label)
-        ? `<span class="sixj-dbadge ${item.delivery.type === 'instock' ? 'sixj-dbadge--express' : 'sixj-dbadge--backorder'}">${item.delivery.label}</span>`
+        ? `<span class="leadbadge ${item.delivery.type === 'instock' ? 'leadbadge--express' : 'leadbadge--backorder'}">${item.delivery.label}</span>`
         : '';
       return `
       <article class="recently-viewed__item">
