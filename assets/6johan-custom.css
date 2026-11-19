@@ -1786,6 +1786,7 @@ body,
   border-radius: 0;
   white-space: nowrap;
   z-index: 2;
+  pointer-events: none; /* バッジ部分もカードのリンクとしてタップできるようにする */
 }
 
 .leadbadge--express {
