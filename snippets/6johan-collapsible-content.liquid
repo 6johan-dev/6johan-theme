@@ -8,6 +8,10 @@
 {%- liquid
   assign heading_text = heading | strip
   assign content_output = ''
+  assign sixj_lead = '約2〜3ヶ月'
+  if product.id == 7212370067654 or product.id == 10986623435063 or product.id == 7089798054086
+    assign sixj_lead = '約4ヶ月'
+  endif
 -%}
 
 {%- case heading_text -%}
@@ -29,7 +33,7 @@
       <p><strong>配送について</strong></p>
       <ul>
         <li>在庫がある商品：ご注文から7日以内に発送</li>
-        <li>受注生産品：ご注文から約3ヶ月でお届け</li>
+        <li>受注生産品：ご注文から{{ sixj_lead }}でお届け</li>
         <li>配送業者：佐川急便（大型家具便）</li>
         <li>配送エリア：日本全国（一部離島を除く）</li>
       </ul>

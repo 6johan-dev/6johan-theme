@@ -5,6 +5,12 @@
 
 {%- assign cv = product.selected_or_first_available_variant -%}
 
+{%- comment -%} 受注生産の納期表記：除外3商品のみ約4ヶ月、それ以外は約2〜3ヶ月 {%- endcomment -%}
+{%- assign sixj_lead = '約2〜3ヶ月' -%}
+{%- if product.id == 7212370067654 or product.id == 10986623435063 or product.id == 7089798054086 -%}
+  {%- assign sixj_lead = '約4ヶ月' -%}
+{%- endif -%}
+
 {%- comment -%} Liquid側で全バリアントの在庫状態を事前計算 {%- endcomment -%}
 <script type="application/json" id="sixj-variant-states-{{ product.id }}">
 {
@@ -54,7 +60,7 @@
       </svg>
     </div>
     <div class="sixj-dbox__text">
-      <div class="sixj-dbox__main sixj-dbox__main--backorder">受注生産 — お届けまで約4ヶ月</div>
+      <div class="sixj-dbox__main sixj-dbox__main--backorder">受注生産 — お届けまで{{ sixj_lead }}</div>
       <div class="sixj-dbox__sub sixj-dbox__sub--backorder">ご注文後にお作りいたします</div>
     </div>
   </div>
@@ -109,7 +115,7 @@
     var prop = document.getElementById('sixj-delivery-prop');
     if (prop == null) return;
     if (state === 'backorder') {
-      prop.value = '受注生産品（お届けまで約4ヶ月）';
+      prop.value = '受注生産品（お届けまで{{ sixj_lead }}）';
     } else if (state === 'instock') {
       prop.value = '在庫品（最短7日発送）';
     }
