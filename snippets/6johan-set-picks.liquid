@@ -1,50 +1,176 @@
 {% comment %}
   6JOHAN セット割: 候補商品から「今すぐ買える（在庫あり）」商品を選ぶ
-  Outputs: カンマ区切りの商品handle（例: round-mirror,natural-modern-circle-side-table）
-  Accepts:
-  - candidates: {Array} 商品handleの配列（優先順）
-  - exclude: {String} 除外する作品handleのカンマ区切り（現在の商品・カート内の商品）
-  - limit: {Number} 返す最大件数
+  Outputs: カンマ区切りの商品handle（例: natural-rattan-chair,iron-modern-shelf）
+
+  Accepts（2モード）:
+  1) families モード（カテゴリ違い優先・COORDINATEで使用）
+     - families:   {String} 優先順のカテゴリ（'chair,other' など。chair / table / sofa / other）
+     - own_cats:   {String} 現在の商品が属するコレクションhandleのカンマ区切り。
+                   'other' を選ぶとき、同じカテゴリ（同じコレクション）の商品を除外する
+     - match_tags: {String} 現在の商品のタグ（カンマ区切り）。同じ系統（ジャパンディ・ラタン・黒など）を先に選ぶ
+  2) candidates モード（従来・カート内の買い足し候補などで使用）
+     - candidates: {Array} 商品handleの配列（優先順）
+
+  共通:
+   - exclude: {String} 除外する商品handleのカンマ区切り（現在の商品・カート内の商品）
+   - limit:   {Number} 返す最大件数
   Notes:
-  - 「在庫あり」= available かつ（在庫管理なし or inventory_quantity > 0）
-  - 休止中の商品・売り切れは自動で飛ばす（フォールバック）
+  - 「在庫あり」= available かつ（在庫管理なし or inventory_quantity > 0）。
+    snippets/6johan-set-card.liquid が出せる商品だけを返す（必ずカート追加できる）
+  - families モード: カテゴリ優先順に走査し、足りなければ次のカテゴリで埋める。
+    同じカテゴリの中で「系統タグが一致する在庫あり」→「その他の在庫あり」の順。
+  - 1カテゴリからの取りすぎ防止: テーブル系・ソファは最大1点（チェア系はペア想定で2点）
+  - 'other' は1コレクションにつき最大1点（シェルフ・ミラー・照明等を多様に出す）
 {% endcomment %}
-{%- assign out = '' -%}
-{%- assign count = 0 -%}
-{%- assign limit_n = limit | default: 2 -%}
-{%- assign hay = ',' | append: exclude | append: ',' -%}
+{%- liquid
+  assign out = ''
+  assign count = 0
+  assign limit_n = limit | default: 2
+  assign hay = ',' | append: exclude | append: ','
+  assign own_hay = ',' | append: own_cats | append: ','
+  assign fam_mode = false
+  if families != blank
+    assign fam_mode = true
+  endif
+  # 系統タグ（色・素材・テイスト）だけを相性判定に使う。機能タグや「リビング」等の広いタグは除く
+  assign style_ok = ',ジャパンディ,韓国,インダストリアル,ミニマル,カジュアル,リゾート,南国,モノトーン,デザイナーズ,ラタン,アイアン,レザー,木製,無垢材,ガラス,クリア,ブラック,黒,ホワイト,白,ブラウン,茶,ベージュ,シンプル,'
+  assign match_hay = ',' | append: match_tags | append: ','
+  assign used_colls = ''
+-%}
 
-{%- for handle in candidates -%}
-  {%- if count >= limit_n -%}{%- break -%}{%- endif -%}
-  {%- assign hh = handle | strip -%}
-  {%- if hh == blank -%}{%- continue -%}{%- endif -%}
-
-  {%- assign test = ',' | append: hh | append: ',' -%}
-  {%- if hay contains test -%}{%- continue -%}{%- endif -%}
-  {%- assign seen = ',' | append: out | append: ',' -%}
-  {%- if seen contains test -%}{%- continue -%}{%- endif -%}
-
-  {%- assign p = all_products[hh] -%}
-  {%- if p == blank or p.id == blank -%}{%- continue -%}{%- endif -%}
-  {%- if p.handle == blank or p.url == blank -%}{%- continue -%}{%- endif -%}
-
-  {%- assign purchasable = false -%}
-  {%- for v in p.variants -%}
-    {%- if v.available -%}
-      {%- if v.inventory_management != 'shopify' or v.inventory_quantity > 0 -%}
-        {%- assign purchasable = true -%}
-        {%- break -%}
-      {%- endif -%}
+{%- if fam_mode -%}
+  {%- assign fam_arr = families | split: ',' -%}
+  {%- for fam in fam_arr -%}
+    {%- if count >= limit_n -%}{%- break -%}{%- endif -%}
+    {%- assign fam_k = fam | strip -%}
+    {%- assign seq = '' -%}
+    {%- case fam_k -%}
+      {%- when 'chair' -%}
+        {%- assign seq = 'collections-chairs' -%}
+      {%- when 'table' -%}
+        {%- assign seq = 'collections-desks-tables,collections-side-tables-low-tables' -%}
+      {%- when 'sofa' -%}
+        {%- assign seq = 'ソファ' -%}
+      {%- else -%}
+        {%- assign seq = 'collections-shelves-bookshelves,collections-interior-goods,collections-cabinets-sideboards,collections-chests,collections-tv-boards,collections-mirrors,collections-lighting,collections-rugs-carpets' -%}
+    {%- endcase -%}
+    {%- assign seq_arr = seq | split: ',' -%}
+    {%- assign fam_cap = 2 -%}
+    {%- if fam_k == 'table' or fam_k == 'sofa' -%}
+      {%- assign fam_cap = 1 -%}
     {%- endif -%}
-  {%- endfor -%}
-  {%- unless purchasable -%}{%- continue -%}{%- endunless -%}
+    {%- assign one_per_coll = false -%}
+    {%- if fam_k == 'other' -%}
+      {%- assign one_per_coll = true -%}
+    {%- endif -%}
+    {%- assign taken_in_fam = 0 -%}
 
-  {%- if out == blank -%}
-    {%- assign out = hh -%}
-  {%- else -%}
-    {%- assign out = out | append: ',' | append: hh -%}
-  {%- endif -%}
-  {%- assign count = count | plus: 1 -%}
-{%- endfor -%}
+    {%- comment -%} round 0: 系統タグが合う在庫あり → round 1: その他の在庫あり {%- endcomment -%}
+    {%- for round in (0..1) -%}
+      {%- if count >= limit_n or taken_in_fam >= fam_cap -%}{%- break -%}{%- endif -%}
+      {%- for ch in seq_arr -%}
+        {%- if count >= limit_n or taken_in_fam >= fam_cap -%}{%- break -%}{%- endif -%}
+        {%- assign coll = collections[ch] -%}
+        {%- if coll == blank or coll.products_count == 0 -%}{%- continue -%}{%- endif -%}
+        {%- if fam_k == 'other' and round == 1 -%}
+          {%- assign used_test = ',' | append: used_colls | append: ',' -%}
+          {%- assign ch_test = ',' | append: ch | append: ',' -%}
+          {%- if used_test contains ch_test -%}{%- continue -%}{%- endif -%}
+        {%- endif -%}
+        {%- assign taken_in_coll = 0 -%}
+        {%- for p in coll.products -%}
+          {%- if count >= limit_n or taken_in_fam >= fam_cap -%}{%- break -%}{%- endif -%}
+          {%- if one_per_coll and taken_in_coll >= 1 -%}{%- break -%}{%- endif -%}
+          {%- assign hh = p.handle -%}
+          {%- if hh == blank -%}{%- continue -%}{%- endif -%}
+          {%- assign test = ',' | append: hh | append: ',' -%}
+          {%- if hay contains test -%}{%- continue -%}{%- endif -%}
+          {%- assign seen = ',' | append: out | append: ',' -%}
+          {%- if seen contains test -%}{%- continue -%}{%- endif -%}
+
+          {%- if one_per_coll -%}
+            {%- assign same_cat = false -%}
+            {%- for pc in p.collections -%}
+              {%- assign pc_test = ',' | append: pc.handle | append: ',' -%}
+              {%- if own_hay contains pc_test -%}
+                {%- assign same_cat = true -%}
+                {%- break -%}
+              {%- endif -%}
+            {%- endfor -%}
+            {%- if same_cat -%}{%- continue -%}{%- endif -%}
+          {%- endif -%}
+
+          {%- if round == 0 -%}
+            {%- assign style_hit = false -%}
+            {%- for t in p.tags -%}
+              {%- assign tt = ',' | append: t | append: ',' -%}
+              {%- if style_ok contains tt and match_hay contains tt -%}
+                {%- assign style_hit = true -%}
+                {%- break -%}
+              {%- endif -%}
+            {%- endfor -%}
+            {%- unless style_hit -%}{%- continue -%}{%- endunless -%}
+          {%- endif -%}
+
+          {%- assign purchasable = false -%}
+          {%- for v in p.variants -%}
+            {%- if v.available -%}
+              {%- if v.inventory_management != 'shopify' or v.inventory_quantity > 0 -%}
+                {%- assign purchasable = true -%}
+                {%- break -%}
+              {%- endif -%}
+            {%- endif -%}
+          {%- endfor -%}
+          {%- unless purchasable -%}{%- continue -%}{%- endunless -%}
+
+          {%- if out == blank -%}
+            {%- assign out = hh -%}
+          {%- else -%}
+            {%- assign out = out | append: ',' | append: hh -%}
+          {%- endif -%}
+          {%- assign count = count | plus: 1 -%}
+          {%- assign taken_in_fam = taken_in_fam | plus: 1 -%}
+          {%- assign taken_in_coll = taken_in_coll | plus: 1 -%}
+          {%- if fam_k == 'other' -%}
+            {%- assign used_colls = used_colls | append: ch | append: ',' -%}
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endfor -%}
+    {%- endfor -%}
+  {%- endfor -%}
+{%- else -%}
+  {%- for handle in candidates -%}
+    {%- if count >= limit_n -%}{%- break -%}{%- endif -%}
+    {%- assign hh = handle | strip -%}
+    {%- if hh == blank -%}{%- continue -%}{%- endif -%}
+
+    {%- assign test = ',' | append: hh | append: ',' -%}
+    {%- if hay contains test -%}{%- continue -%}{%- endif -%}
+    {%- assign seen = ',' | append: out | append: ',' -%}
+    {%- if seen contains test -%}{%- continue -%}{%- endif -%}
+
+    {%- assign p = all_products[hh] -%}
+    {%- if p == blank or p.id == blank -%}{%- continue -%}{%- endif -%}
+    {%- if p.handle == blank or p.url == blank -%}{%- continue -%}{%- endif -%}
+
+    {%- assign purchasable = false -%}
+    {%- for v in p.variants -%}
+      {%- if v.available -%}
+        {%- if v.inventory_management != 'shopify' or v.inventory_quantity > 0 -%}
+          {%- assign purchasable = true -%}
+          {%- break -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- endfor -%}
+    {%- unless purchasable -%}{%- continue -%}{%- endunless -%}
+
+    {%- if out == blank -%}
+      {%- assign out = hh -%}
+    {%- else -%}
+      {%- assign out = out | append: ',' | append: hh -%}
+    {%- endif -%}
+    {%- assign count = count | plus: 1 -%}
+  {%- endfor -%}
+{%- endif -%}
 
 {{- out -}}

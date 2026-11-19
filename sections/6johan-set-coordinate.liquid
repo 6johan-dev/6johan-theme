@@ -1,60 +1,74 @@
 {% comment %}
   6JOHAN COORDINATE｜一緒に合わせたいおすすめ家具
   設計: work/6johan/bundle_and_campaign_plan.md §4-2（商品ページ下部）
-  - 商品のカテゴリ（テーブル／ローテーブル／チェア／ソファ／収納／デスク）ごとに
-    相性のよい商品を優先順に並べ、在庫ありのものだけを表示
-  - 候補が取れない場合は「在庫あり鉄板アイテム」でフォールバック
+  - 現在の商品のカテゴリ（テーブル系／チェア系／その他）を商品のコレクション所属で判定し、
+    「違うカテゴリ」を優先して在庫ありの商品だけを最大2点表示する
+      テーブル系 → チェア・ベンチ・スツール系 → 照明・ミラー・シェルフ等（同カテゴリは出さない）
+      チェア系   → テーブル・デスク系 → シェルフ・照明等（同カテゴリは出さない）
+      その他     → テーブル系 → チェア系 → 別カテゴリのその他
+  - 2026-11-19修正: 従来はhandleの固定リストで、wood-circle-table（タグにコーヒーテーブル）が
+    lowtable扱いになりサイドテーブル→サイドテーブルと同じカテゴリが並んでいた。
+    コレクション所属（collections-desks-tables / collections-chairs / …）で判定する方式に変更。
   - 追加はAjax（/cart/add.js）→ カート通知／ドロワーが開く
   クラス名に sixj- / 6johan を含めないこと（[class*="sixj-"]{background:#fff!important} 回避）
 {% endcomment %}
 
 {%- liquid
-  assign ptype = product.type | downcase
-  assign ptags = product.tags | join: ' ' | downcase
-  assign phandle = product.handle | downcase
-  assign cat = 'default'
-
-  if ptype contains 'sofa' or ptags contains 'ソファ'
-    assign cat = 'sofa'
-  elsif ptype contains 'chair' or ptags contains 'チェア'
-    assign cat = 'chair'
-  elsif ptype contains 'storage' or ptags contains '収納'
-    assign cat = 'storage'
-  elsif ptype contains 'table'
-    if ptags contains 'ローテーブル' or ptags contains 'コーヒーテーブル' or ptags contains 'センターテーブル' or phandle contains 'low-table'
-      assign cat = 'lowtable'
+  # ---- 現在の商品のカテゴリ判定（コレクション所属 → 型/タグのフォールバック） ----
+  assign fam = ''
+  assign own_cats = ''
+  for c in product.collections
+    assign ch = c.handle
+    if own_cats == blank
+      assign own_cats = ch
     else
-      assign cat = 'table'
+      assign own_cats = own_cats | append: ',' | append: ch
+    endif
+    case ch
+      when 'collections-chairs'
+        assign fam = 'chair'
+      when 'collections-desks-tables', 'collections-side-tables-low-tables'
+        unless fam == 'chair'
+          assign fam = 'table'
+        endunless
+      when 'ソファ'
+        if fam == blank
+          assign fam = 'sofa'
+        endif
+    endcase
+  endfor
+
+  if fam == blank
+    assign ptype = product.type | downcase
+    assign ptags = product.tags | join: ' ' | downcase
+    if ptype contains 'chair' or ptags contains 'チェア' or ptags contains 'スツール'
+      assign fam = 'chair'
+    elsif ptype contains 'sofa' or ptags contains 'ソファ'
+      assign fam = 'sofa'
+    elsif ptype contains 'table' or ptags contains 'テーブル'
+      assign fam = 'table'
+    else
+      assign fam = 'other'
     endif
   endif
-  if ptype contains 'desk' or phandle contains 'desk'
-    assign cat = 'desk'
-  endif
 
-  case cat
+  case fam
     when 'table'
-      assign cand = 'natural-rattan-chair,armrest-leather-chair,round-mirror,straight-leg-chair,natural-rattan-stool'
-    when 'lowtable'
-      assign cand = 'natural-modern-circle-side-table,the-low-table-short,block-sofa,round-mirror'
+      assign families = 'chair,other'
     when 'chair'
-      assign cand = 'solid-wood-steel-table,the-low-table-short,iron-modern-shelf,round-mirror'
+      assign families = 'table,other'
     when 'sofa'
-      assign cand = 'natural-modern-circle-side-table,round-mirror,natural-rattan-bench-chair,iron-modern-shelf'
-    when 'storage'
-      assign cand = 'round-mirror,natural-rattan-bench-chair,the-low-table-short,iron-modern-shelf'
-    when 'desk'
-      assign cand = 'armrest-leather-chair,iron-modern-shelf,round-mirror'
+      assign families = 'table,other'
     else
-      assign cand = 'round-mirror,natural-modern-circle-side-table,iron-modern-shelf'
+      assign families = 'table,chair,other'
   endcase
 
-  assign cand = cand | append: ',round-mirror,natural-modern-circle-side-table,iron-modern-shelf,the-low-table-short,straight-leg-chair,natural-rattan-stool'
-  assign cand_arr = cand | split: ','
+  assign match_tags = product.tags | join: ','
   assign max_show = section.settings.max_products | default: 2
 -%}
 
 {%- capture picked_handles -%}
-  {%- render '6johan-set-picks', candidates: cand_arr, exclude: product.handle, limit: max_show -%}
+  {%- render '6johan-set-picks', families: families, own_cats: own_cats, match_tags: match_tags, exclude: product.handle, limit: max_show -%}
 {%- endcapture -%}
 {%- assign picked_arr = picked_handles | strip | split: ',' -%}
 
