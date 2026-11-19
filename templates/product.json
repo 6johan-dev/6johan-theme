@@ -124,7 +124,8 @@
         "show_set_cta": false,
         "set_url": "",
         "set_cta_text": "セットで購入 — 10% OFF →"
-      }
+      },
+      "disabled": true
     },
     "related-products": {
       "type": "related-products",
@@ -183,10 +184,20 @@
       "settings": {
         "include_margins": true
       }
+    },
+    "6johan_set_coordinate": {
+      "type": "6johan-set-coordinate",
+      "name": "6JOHAN セットコーディネート",
+      "settings": {
+        "label": "COORDINATE",
+        "heading": "一緒に合わせたいおすすめ家具",
+        "max_products": 2
+      }
     }
   },
   "order": [
     "main",
+    "6johan_set_coordinate",
     "6johan_product_story",
     "6johan_product_coordinate_UiNUH3",
     "related-products",

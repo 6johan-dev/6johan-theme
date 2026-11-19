@@ -475,6 +475,11 @@
         </form>
       </cart-drawer-items>
       <div class="drawer__footer">
+        {%- comment -%} 6JOHAN セット割: 1点なら「あと1点」、2点以上なら「適用中」 {%- endcomment -%}
+        {%- if cart != empty -%}
+          {%- render '6johan-set-cart-offer', context: 'drawer', limit: 2 -%}
+        {%- endif -%}
+
         {%- if settings.show_cart_note -%}
           <details id="Details-CartDrawer">
             <summary>

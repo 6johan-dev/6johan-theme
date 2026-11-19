@@ -1,0 +1,62 @@
+{% comment %}
+  6JOHAN セット割: カート内の動的案内
+  - 1点: 「あと1点追加で5%OFFが自動適用されます」＋在庫ありの買い足し候補（Ajax追加）
+  - 2点以上: 「2点以上5%OFF（セット割）が適用中」
+  Accepts:
+  - context: {String} 'drawer' | 'page'
+  - limit: {Number} 買い足し候補として出す商品数（既定2）
+  Notes:
+  - 割引額は cart.cart_level_discount_applications がある場合のみ表示（チェックアウトで確定）
+  - 送料の話はしない（2点で送料が上がるため）
+{% endcomment %}
+
+{%- if cart.item_count > 0 -%}
+  {%- assign applied = cart.cart_level_discount_applications | first -%}
+  <div class="cartboost cartboost--{{ context | default: 'page' }}">
+    {%- if cart.item_count >= 2 -%}
+      <p class="cartboost__title">
+        <span class="cartboost__tag">セット割</span>2点以上5%OFF（セット割）が適用中
+      </p>
+      {%- if applied -%}
+        <p class="cartboost__sub">
+          {{ applied.title | escape }}　−{{ applied.total_allocated_amount | money }}
+        </p>
+      {%- else -%}
+        <p class="cartboost__sub">チェックアウトで自動的に適用されます。</p>
+      {%- endif -%}
+    {%- else -%}
+      <p class="cartboost__title">あと1点追加で<span class="cartboost__em">5%OFF</span>が自動適用されます</p>
+      <p class="cartboost__sub">クーポンコードは不要です。組み合わせは自由です。</p>
+
+      {%- assign in_cart = '' -%}
+      {%- for item in cart.items -%}
+        {%- if in_cart == blank -%}
+          {%- assign in_cart = item.product.handle -%}
+        {%- else -%}
+          {%- assign in_cart = in_cart | append: ',' | append: item.product.handle -%}
+        {%- endif -%}
+      {%- endfor -%}
+
+      {%- assign cand = 'round-mirror,natural-modern-circle-side-table,iron-modern-shelf,the-low-table-short,straight-leg-chair,natural-rattan-stool' -%}
+      {%- assign cand_arr = cand | split: ',' -%}
+      {%- assign show_n = limit | default: 2 -%}
+      {%- capture picked_handles -%}
+        {%- render '6johan-set-picks', candidates: cand_arr, exclude: in_cart, limit: show_n -%}
+      {%- endcapture -%}
+      {%- assign picked_arr = picked_handles | strip | split: ',' -%}
+
+      {%- if picked_arr.size > 0 and picked_handles != blank -%}
+        <div class="cartboost__list">
+          {%- for h in picked_arr -%}
+            {%- assign hh = h | strip -%}
+            {%- if hh == blank -%}{%- continue -%}{%- endif -%}
+            {%- assign p = all_products[hh] -%}
+            {%- if p != blank -%}
+              {%- render '6johan-set-card', product: p, style: 'mini' -%}
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+{%- endif -%}

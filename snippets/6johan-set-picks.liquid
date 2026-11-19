@@ -1,0 +1,50 @@
+{% comment %}
+  6JOHAN セット割: 候補商品から「今すぐ買える（在庫あり）」商品を選ぶ
+  Outputs: カンマ区切りの商品handle（例: round-mirror,natural-modern-circle-side-table）
+  Accepts:
+  - candidates: {Array} 商品handleの配列（優先順）
+  - exclude: {String} 除外する作品handleのカンマ区切り（現在の商品・カート内の商品）
+  - limit: {Number} 返す最大件数
+  Notes:
+  - 「在庫あり」= available かつ（在庫管理なし or inventory_quantity > 0）
+  - 休止中の商品・売り切れは自動で飛ばす（フォールバック）
+{% endcomment %}
+{%- assign out = '' -%}
+{%- assign count = 0 -%}
+{%- assign limit_n = limit | default: 2 -%}
+{%- assign hay = ',' | append: exclude | append: ',' -%}
+
+{%- for handle in candidates -%}
+  {%- if count >= limit_n -%}{%- break -%}{%- endif -%}
+  {%- assign hh = handle | strip -%}
+  {%- if hh == blank -%}{%- continue -%}{%- endif -%}
+
+  {%- assign test = ',' | append: hh | append: ',' -%}
+  {%- if hay contains test -%}{%- continue -%}{%- endif -%}
+  {%- assign seen = ',' | append: out | append: ',' -%}
+  {%- if seen contains test -%}{%- continue -%}{%- endif -%}
+
+  {%- assign p = all_products[hh] -%}
+  {%- if p == blank or p.id == blank -%}{%- continue -%}{%- endif -%}
+  {%- if p.handle == blank or p.url == blank -%}{%- continue -%}{%- endif -%}
+
+  {%- assign purchasable = false -%}
+  {%- for v in p.variants -%}
+    {%- if v.available -%}
+      {%- if v.inventory_management != 'shopify' or v.inventory_quantity > 0 -%}
+        {%- assign purchasable = true -%}
+        {%- break -%}
+      {%- endif -%}
+    {%- endif -%}
+  {%- endfor -%}
+  {%- unless purchasable -%}{%- continue -%}{%- endunless -%}
+
+  {%- if out == blank -%}
+    {%- assign out = hh -%}
+  {%- else -%}
+    {%- assign out = out | append: ',' | append: hh -%}
+  {%- endif -%}
+  {%- assign count = count | plus: 1 -%}
+{%- endfor -%}
+
+{{- out -}}

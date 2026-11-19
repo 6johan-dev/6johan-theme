@@ -1,0 +1,65 @@
+{% comment %}
+  6JOHAN セット割: 商品カード（画像・タイトル・価格・カート追加ボタン）
+  Accepts:
+  - product: {Object}
+  - style: {String} 'wide'（商品ページのCOORDINATE） | 'mini'（カート内の買い足し候補）
+  Notes:
+  - 在庫ありのバリエーションを自動選択（売り切れの色は出さない）
+  - 追加はDawnの product-form（Ajax /cart/add.js）。追加後にカート通知/ドロワーが開く
+{% endcomment %}
+
+{%- liquid
+  assign pv = nil
+  for v in product.variants
+    if v.available
+      if v.inventory_management != 'shopify' or v.inventory_quantity > 0
+        assign pv = v
+        break
+      endif
+    endif
+  endfor
+-%}
+
+{%- if pv -%}
+  <div class="coordset__card coordset__card--{{ style | default: 'wide' }}">
+    <a class="coordset__media" href="{{ product.url }}" tabindex="-1" aria-hidden="true">
+      {%- if product.featured_image -%}
+        <img
+          src="{{ product.featured_image | image_url: width: 360 }}"
+          alt="{{ product.featured_image.alt | default: product.title | escape }}"
+          width="180"
+          height="180"
+          loading="lazy"
+        >
+      {%- endif -%}
+    </a>
+    <div class="coordset__info">
+      <a class="coordset__title" href="{{ product.url }}">{{ product.title }}</a>
+      {%- unless product.has_only_default_variant -%}
+        <p class="coordset__variant">{{ pv.title }}</p>
+      {%- endunless -%}
+      <p class="coordset__price">{{ pv.price | money }}</p>
+
+      <product-form class="coordset__form">
+        <form
+          method="post"
+          action="{{ routes.cart_add_url }}"
+          accept-charset="UTF-8"
+          class="form"
+          enctype="multipart/form-data"
+          novalidate="novalidate"
+          data-type="add-to-cart-form"
+          data-6j-set-offer="true"
+        >
+          <input type="hidden" name="id" value="{{ pv.id }}">
+          <input type="hidden" name="quantity" value="1">
+          <input type="hidden" name="properties[配送区分]" value="在庫品（最短7日発送）">
+          <button type="submit" name="add" class="coordset__btn" aria-label="{{ product.title | escape }}をカートに追加">
+            <span class="coordset__btn-label">＋ カートに追加（5%OFF対象）</span>
+            {%- render 'loading-spinner' -%}
+          </button>
+        </form>
+      </product-form>
+    </div>
+  </div>
+{%- endif -%}

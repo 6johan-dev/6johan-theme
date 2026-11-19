@@ -35,6 +35,8 @@
         </button>
       </div>
       <div id="cart-notification-product" class="cart-notification-product"></div>
+      {%- comment -%} 6JOHAN セット割: 点数に応じた1行案内（cart-notification.jsが更新） {%- endcomment -%}
+      <p id="cart-notification-setoffer" class="setoffer-pop" hidden></p>
       <div class="cart-notification__links">
         <a
           href="{{ routes.cart_url }}"

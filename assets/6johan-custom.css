@@ -1808,3 +1808,323 @@ body,
   font-size: 9px;
   letter-spacing: 0.02em;
 }
+
+/* ============================================================
+   セット割（2点以上5%OFF）: SET OFFER / COORDINATE / カート内案内
+   2026-11-19 追加
+   ※ 新規クラスに sixj- / 6johan を含めない
+      （[class*="sixj-"]{background:#fff!important} を避けるため）
+   ============================================================ */
+
+/* ---- 商品ページ: カートボタン直下の控えめな案内 ---- */
+.setoffer-note {
+  margin: 10px 0 14px;
+  padding: 9px 12px;
+  border: 1px solid var(--6j-border, #E8E5E0);
+  background: var(--6j-bg-sub, #FAF9F7);
+  font-family: var(--6j-font-primary, sans-serif);
+  font-size: 11px;
+  line-height: 1.6;
+  letter-spacing: 0.02em;
+  color: var(--6j-text, #292724);
+}
+
+.setoffer-note__label {
+  font-weight: 600;
+  letter-spacing: 0.14em;
+}
+
+.setoffer-note__pipe {
+  color: var(--6j-border-dark, #D5D0C8);
+  margin: 0 4px;
+}
+
+@media screen and (max-width: 749px) {
+  .setoffer-note {
+    font-size: 10.5px;
+    padding: 8px 10px;
+  }
+}
+
+/* ---- 商品ページ: COORDINATE セクション ---- */
+.coordset {
+  border-top: 1px solid var(--6j-border, #E8E5E0);
+  background: #fff;
+  padding: 28px 0 8px;
+}
+
+.coordset__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.coordset__head {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0;
+  margin: 0 0 14px;
+}
+
+.coordset__label {
+  font-family: var(--6j-font-primary, sans-serif);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--6j-label, #8A7A6A);
+}
+
+.coordset__pipe {
+  color: var(--6j-border-dark, #D5D0C8);
+  margin: 0 6px;
+  font-size: 11px;
+}
+
+.coordset__heading {
+  font-family: var(--6j-font-primary, sans-serif);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  color: var(--6j-text, #292724);
+}
+
+.coordset__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+@media screen and (min-width: 750px) {
+  .coordset__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+}
+
+.coordset__card {
+  display: flex;
+  gap: 12px;
+  padding: 10px;
+  border: 1px solid var(--6j-border, #E8E5E0);
+  background: #fff;
+  align-items: stretch;
+  min-width: 0;
+}
+
+.coordset__media {
+  flex: 0 0 108px;
+  width: 108px;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: var(--6j-bg-sub, #FAF9F7);
+  display: block;
+}
+
+.coordset__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.coordset__info {
+  min-width: 0;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.coordset__title {
+  font-family: var(--6j-font-primary, sans-serif);
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--6j-text, #292724);
+  text-decoration: none;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.coordset__title:hover {
+  text-decoration: underline;
+}
+
+.coordset__variant {
+  margin: 2px 0 0;
+  font-size: 10.5px;
+  color: var(--6j-text-sub, #807C76);
+  line-height: 1.4;
+}
+
+.coordset__price {
+  margin: 4px 0 8px;
+  font-size: 12px;
+  color: var(--6j-text, #292724);
+  letter-spacing: 0.01em;
+}
+
+.coordset__form {
+  margin-top: auto;
+  display: block;
+}
+
+.coordset__btn {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 9px 8px;
+  border: 1px solid var(--6j-text, #292724);
+  background: #fff;
+  color: var(--6j-text, #292724);
+  font-family: var(--6j-font-primary, sans-serif);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, opacity 0.2s ease;
+}
+
+.coordset__btn:hover {
+  background: var(--6j-text, #292724);
+  color: #fff;
+}
+
+.coordset__btn.loading {
+  opacity: 0.65;
+  pointer-events: none;
+}
+
+.coordset__btn .loading__spinner {
+  width: 14px;
+  height: 14px;
+}
+
+.coordset__note {
+  margin: 14px 0 0;
+  font-size: 10.5px;
+  line-height: 1.7;
+  color: var(--6j-text-sub, #807C76);
+}
+
+/* カート内の買い足し候補（小さいカード） */
+.coordset__card--mini {
+  padding: 8px;
+  gap: 10px;
+}
+
+.coordset__card--mini .coordset__media {
+  flex-basis: 64px;
+  width: 64px;
+}
+
+.coordset__card--mini .coordset__title {
+  font-size: 11.5px;
+  -webkit-line-clamp: 2;
+}
+
+.coordset__card--mini .coordset__price {
+  font-size: 11.5px;
+  margin: 2px 0 6px;
+}
+
+.coordset__card--mini .coordset__btn {
+  font-size: 10.5px;
+  padding: 7px 6px;
+}
+
+@media screen and (max-width: 749px) {
+  .coordset {
+    padding: 22px 0 4px;
+  }
+  .coordset__media {
+    flex-basis: 92px;
+    width: 92px;
+  }
+}
+
+/* ---- カート内の動的案内 ---- */
+.cartboost {
+  border: 1px solid var(--6j-border, #E8E5E0);
+  background: var(--6j-bg-sub, #FAF9F7);
+  padding: 12px 14px;
+  margin: 0 0 14px;
+}
+
+.cartboost__title {
+  margin: 0;
+  font-family: var(--6j-font-primary, sans-serif);
+  font-size: 12.5px;
+  font-weight: 600;
+  line-height: 1.6;
+  color: var(--6j-text, #292724);
+}
+
+.cartboost__tag {
+  display: inline-block;
+  margin-right: 6px;
+  padding: 1px 6px;
+  border: 1px solid var(--6j-accent, #6B5B4F);
+  color: var(--6j-accent, #6B5B4F);
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  vertical-align: 1px;
+}
+
+.cartboost__em {
+  color: var(--6j-accent, #6B5B4F);
+  font-weight: 600;
+}
+
+.cartboost__sub {
+  margin: 4px 0 0;
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--6j-text-sub, #807C76);
+}
+
+.cartboost__list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+@media screen and (min-width: 750px) {
+  .cartboost--page .cartboost__list {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  }
+}
+
+/* カート通知（追加直後のポップアップ） */
+.setoffer-pop {
+  margin: 10px 0 0;
+  padding: 9px 12px;
+  border: 1px solid var(--6j-border, #E8E5E0);
+  background: var(--6j-bg-sub, #FAF9F7);
+  font-family: var(--6j-font-primary, sans-serif);
+  font-size: 11.5px;
+  line-height: 1.6;
+  color: var(--6j-text, #292724);
+}
+
+.setoffer-pop[hidden] {
+  display: none !important;
+}
+
+.setoffer-pop__tag {
+  display: inline-block;
+  margin-right: 6px;
+  padding: 1px 6px;
+  border: 1px solid var(--6j-accent, #6B5B4F);
+  color: var(--6j-accent, #6B5B4F);
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  vertical-align: 1px;
+}

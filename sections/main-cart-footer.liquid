@@ -44,6 +44,11 @@
               {% render block %}
             {%- when 'subtotal' -%}
               <div class="js-contents" {{ block.shopify_attributes }}>
+                {%- comment -%} 6JOHAN セット割: 点数に応じた動的案内＋買い足し候補 {%- endcomment -%}
+                {%- if cart != empty -%}
+                  {%- render '6johan-set-cart-offer', context: 'page', limit: 3 -%}
+                {%- endif -%}
+
                 <div>
                   {%- if cart.cart_level_discount_applications.size > 0 -%}
                     <ul class="discounts list-unstyled" role="list" aria-label="{{ 'customer.order.discount' | t }}">
