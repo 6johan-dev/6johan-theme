@@ -15,27 +15,33 @@
 
 {%- liquid
   # ---- 現在の商品のカテゴリ判定（コレクション所属 → 型/タグのフォールバック） ----
+  # own_cats には「カテゴリコレクション」だけを入れる（即納・セール等の広いコレクションは
+  # 同じ商品同士で必ず重なるため、同カテゴリ判定に使うと候補が消える）
+  assign cat_list = ',collections-chairs,collections-desks-tables,collections-side-tables-low-tables,ソファ,collections-cabinets-sideboards,collections-shelves-bookshelves,collections-chests,collections-tv-boards,collections-mirrors,collections-lighting,collections-rugs-carpets,collections-interior-goods,'
   assign fam = ''
   assign own_cats = ''
   for c in product.collections
     assign ch = c.handle
-    if own_cats == blank
-      assign own_cats = ch
-    else
-      assign own_cats = own_cats | append: ',' | append: ch
+    assign ch_test = ',' | append: ch | append: ','
+    if cat_list contains ch_test
+      if own_cats == blank
+        assign own_cats = ch
+      else
+        assign own_cats = own_cats | append: ',' | append: ch
+      endif
+      case ch
+        when 'collections-chairs'
+          assign fam = 'chair'
+        when 'collections-desks-tables', 'collections-side-tables-low-tables'
+          unless fam == 'chair'
+            assign fam = 'table'
+          endunless
+        when 'ソファ'
+          if fam == blank
+            assign fam = 'sofa'
+          endif
+      endcase
     endif
-    case ch
-      when 'collections-chairs'
-        assign fam = 'chair'
-      when 'collections-desks-tables', 'collections-side-tables-low-tables'
-        unless fam == 'chair'
-          assign fam = 'table'
-        endunless
-      when 'ソファ'
-        if fam == blank
-          assign fam = 'sofa'
-        endif
-    endcase
   endfor
 
   if fam == blank
