@@ -49,6 +49,8 @@
         {%- assign seq = 'collections-chairs' -%}
       {%- when 'table' -%}
         {%- assign seq = 'collections-desks-tables,collections-side-tables-low-tables' -%}
+      {%- when 'lowtable' -%}
+        {%- assign seq = 'collections-side-tables-low-tables,collections-desks-tables' -%}
       {%- when 'sofa' -%}
         {%- assign seq = 'ソファ' -%}
       {%- else -%}
@@ -56,7 +58,7 @@
     {%- endcase -%}
     {%- assign seq_arr = seq | split: ',' -%}
     {%- assign fam_cap = 2 -%}
-    {%- if fam_k == 'table' or fam_k == 'sofa' -%}
+    {%- if fam_k == 'table' or fam_k == 'lowtable' or fam_k == 'sofa' -%}
       {%- assign fam_cap = 1 -%}
     {%- endif -%}
     {%- assign one_per_coll = false -%}
