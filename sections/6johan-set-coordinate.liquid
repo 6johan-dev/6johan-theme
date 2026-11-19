@@ -21,13 +21,13 @@
   elsif ptype contains 'storage' or ptags contains '収納'
     assign cat = 'storage'
   elsif ptype contains 'table'
-    if ptags contains 'ローテーブル' or ptags contains 'コーヒーテーブル' or phandle contains 'low-table'
+    if ptags contains 'ローテーブル' or ptags contains 'コーヒーテーブル' or ptags contains 'センターテーブル' or phandle contains 'low-table'
       assign cat = 'lowtable'
     else
       assign cat = 'table'
     endif
   endif
-  if ptags contains 'デスク' or ptype contains 'desk'
+  if ptype contains 'desk' or phandle contains 'desk'
     assign cat = 'desk'
   endif
 
