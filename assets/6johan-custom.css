@@ -1839,9 +1839,14 @@ body,
   margin: 0 4px;
 }
 
+.setoffer-note__opt {
+  display: inline-block;
+}
+
 @media screen and (max-width: 749px) {
   .setoffer-note {
-    font-size: 10.5px;
+    font-size: 10px;
+    letter-spacing: 0;
     padding: 8px 10px;
   }
 }
