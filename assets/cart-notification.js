@@ -54,32 +54,42 @@ class CartNotification extends HTMLElement {
     const el = document.getElementById('cart-notification-setoffer');
     if (!el) return;
 
-    const count = parseInt(parsedState.item_count, 10) || 0;
-
-    if (count >= 2) {
-      let amount = '';
-      const apps = parsedState.cart_level_discount_applications || [];
-      if (apps.length && typeof apps[0].total_allocated_amount === 'number') {
-        try {
-          amount =
-            '　−' +
-            new Intl.NumberFormat('ja-JP', {
-              style: 'currency',
-              currency: 'JPY',
-              maximumFractionDigits: 0,
-            }).format(apps[0].total_allocated_amount / 100);
-        } catch (e) {
-          amount = '';
+    const paint = (count, apps) => {
+      if (count >= 2) {
+        let amount = '';
+        if (apps && apps.length && typeof apps[0].total_allocated_amount === 'number') {
+          try {
+            amount =
+              '　−' +
+              new Intl.NumberFormat('ja-JP', {
+                style: 'currency',
+                currency: 'JPY',
+                maximumFractionDigits: 0,
+              }).format(apps[0].total_allocated_amount / 100);
+          } catch (e) {
+            amount = '';
+          }
         }
+        el.innerHTML = '<span class="setoffer-pop__tag">セット割</span>2点以上5%OFFが適用中' + amount;
+        el.hidden = false;
+      } else if (count === 1) {
+        el.innerHTML = 'あと1点追加で<strong>5%OFF</strong>が自動適用されます';
+        el.hidden = false;
+      } else {
+        el.hidden = true;
       }
-      el.innerHTML = '<span class="setoffer-pop__tag">セット割</span>2点以上5%OFFが適用中' + amount;
-      el.hidden = false;
-    } else if (count === 1) {
-      el.innerHTML = 'あと1点追加で<strong>5%OFF</strong>が自動適用されます';
-      el.hidden = false;
-    } else {
-      el.hidden = true;
+    };
+
+    // /cart/add の応答に item_count が無い場合があるため /cart.js で補う
+    if (parsedState && parsedState.item_count !== undefined && parsedState.item_count !== null) {
+      paint(parseInt(parsedState.item_count, 10) || 0, parsedState.cart_level_discount_applications || []);
+      return;
     }
+
+    fetch(`${window.routes.cart_url}.js`, { headers: { Accept: 'application/json' } })
+      .then((response) => response.json())
+      .then((cart) => paint(parseInt(cart.item_count, 10) || 0, cart.cart_level_discount_applications || []))
+      .catch(() => {});
   }
 
   getSectionsToRender() {
