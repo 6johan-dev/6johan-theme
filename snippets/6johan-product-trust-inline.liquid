@@ -3,27 +3,24 @@
   商品ページ用インライン信頼バッジ（カートボタン直下用）
 {% endcomment %}
 
+{%- comment -%} 納期区分は配送BOX・納期バッジ・カートと同じ判定ソース（6johan-delivery-state）を使う {%- endcomment -%}
+{%- capture _ds_raw -%}{%- render '6johan-delivery-state', product: product -%}{%- endcapture -%}
+{%- assign _ds = _ds_raw | split: '|' -%}
 {%- liquid
   assign is_in_stock = false
   assign is_made_to_order = false
+  assign sixj_lead = _ds[1]
   assign needs_assembly = true
+  if _ds[0] == 'instock'
+    assign is_in_stock = true
+  elsif _ds[0] == 'backorder'
+    assign is_made_to_order = true
+  endif
   
   for tag in product.tags
     assign tag_lower = tag | downcase
-    if tag_lower == '即納' or tag_lower == 'in-stock' or tag_lower == 'in_stock'
-      assign is_in_stock = true
-    endif
-    if tag_lower == '受注生産' or tag_lower == 'made-to-order' or tag_lower == 'made_to_order'
-      assign is_made_to_order = true
-    endif
     if tag_lower == '完成品' or tag_lower == 'assembled' or tag_lower == 'no-assembly'
       assign needs_assembly = false
-    endif
-  endfor
-  
-  for collection in product.collections
-    if collection.handle == '即納商品' or collection.handle == 'in-stock'
-      assign is_in_stock = true
     endif
   endfor
   
@@ -32,20 +29,6 @@
       assign needs_assembly = true
     else
       assign needs_assembly = false
-    endif
-  endif
-  
-  if is_in_stock == false and is_made_to_order == false
-    if product.available
-      assign total_inventory = 0
-      for variant in product.variants
-        assign total_inventory = total_inventory | plus: variant.inventory_quantity
-      endfor
-      if total_inventory > 0
-        assign is_in_stock = true
-      else
-        assign is_made_to_order = true
-      endif
     endif
   endif
 -%}
@@ -148,7 +131,7 @@
           <line x1="3" y1="10" x2="21" y2="10"/>
         </svg>
       </span>
-      <span>受注生産 — お届けまで約3ヶ月</span>
+      <span>受注生産 — お届けまで{{ sixj_lead }}</span>
     </div>
   {% endif %}
   

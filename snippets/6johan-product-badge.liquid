@@ -105,7 +105,7 @@
   {% assign is_on_sale = true %}
 {% endif %}
 
-{% comment %} Check stock status via tags or availability {% endcomment %}
+{% comment %} Check badges via tags (stock status is handled below by 6johan-delivery-state) {% endcomment %}
 {% assign is_in_stock = false %}
 {% assign is_made_to_order = false %}
 {% assign is_popular = false %}
@@ -115,12 +115,6 @@
 
 {% for tag in product.tags %}
   {% assign tag_lower = tag | downcase %}
-  {% if tag_lower == '即納' or tag_lower == 'in-stock' or tag_lower == 'in_stock' %}
-    {% assign is_in_stock = true %}
-  {% endif %}
-  {% if tag_lower == '受注生産' or tag_lower == 'made-to-order' or tag_lower == 'made_to_order' %}
-    {% assign is_made_to_order = true %}
-  {% endif %}
   {% if tag_lower == '人気' or tag_lower == 'popular' or tag_lower == 'bestseller' %}
     {% assign is_popular = true %}
   {% endif %}
@@ -135,15 +129,26 @@
   {% endif %}
 {% endfor %}
 
-{% comment %} Also check if in 即納商品 collection {% endcomment %}
+{% comment %} Also check if in popular collection {% endcomment %}
 {% for collection in product.collections %}
-  {% if collection.handle == '即納商品' or collection.handle == 'in-stock' %}
-    {% assign is_in_stock = true %}
-  {% endif %}
   {% if collection.handle == 'pick-up' or collection.handle == 'bestsellers' %}
     {% assign is_popular = true %}
   {% endif %}
 {% endfor %}
+
+{%- comment -%}
+  即納／受注生産は、隣に並ぶ納期バッジ（6johan-delivery-badge）とカートの配送区分と同じ
+  判定ソース（6johan-delivery-state）を使う。全バリエーションの在庫合計で判定すると、
+  既定バリエーションが受注生産の商品に「即納」が出て納期バッジと食い違うため。
+{%- endcomment -%}
+{%- capture _ds -%}{%- render '6johan-delivery-state', product: product -%}{%- endcapture -%}
+{%- assign _ds = _ds | split: '|' -%}
+{%- assign _sixj_ds_state = _ds[0] -%}
+{% if _sixj_ds_state == 'instock' %}
+  {% assign is_in_stock = true %}
+{% elsif _sixj_ds_state == 'backorder' %}
+  {% assign is_made_to_order = true %}
+{% endif %}
 
 {% comment %} Output badges {% endcomment %}
 {% if product.available == false %}

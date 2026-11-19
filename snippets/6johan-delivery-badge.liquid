@@ -17,26 +17,10 @@
     （既にバッジ用のスタックコンテナ内に置く場合は in_stack: true）
 {% endcomment %}
 
-{%- liquid
-  assign _cv = product.selected_or_first_available_variant
-  assign _sixj_state = 'unavailable'
-  if _cv.available
-    if _cv.inventory_management == 'shopify'
-      if _cv.inventory_quantity > 0
-        assign _sixj_state = 'instock'
-      else
-        assign _sixj_state = 'backorder'
-      endif
-    else
-      assign _sixj_state = 'instock'
-    endif
-  endif
-
-  assign _sixj_lead = '約2〜3ヶ月'
-  if product.id == 7212370067654 or product.id == 10986623435063 or product.id == 7089798054086
-    assign _sixj_lead = '約4ヶ月'
-  endif
--%}
+{%- capture _ds -%}{%- render '6johan-delivery-state', product: product -%}{%- endcapture -%}
+{%- assign _ds = _ds | split: '|' -%}
+{%- assign _sixj_state = _ds[0] -%}
+{%- assign _sixj_lead = _ds[1] -%}
 
 {%- if _sixj_state == 'instock' -%}
   <span class="leadbadge leadbadge--express">最短7日で発送</span>

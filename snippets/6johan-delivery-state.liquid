@@ -1,0 +1,54 @@
+{%- comment -%}
+  6JOHAN Delivery State — 納期区分の唯一の判定ソース（Liquid）
+
+  商品ページのバッジ／配送BOX／カートの properties[配送区分]／一覧カードの納期バッジは
+  すべてこのスニペットの結果を使う。判定を分散させると表示が食い違うため、ここ以外で
+  在庫から納期区分を判定しないこと。
+
+  判定ルール（1バリエーション単位）
+    - variant.available が false                                  → unavailable
+    - inventory_management が 'shopify' かつ inventory_quantity > 0 → instock（在庫品・最短7日）
+    - inventory_management が 'shopify' かつ inventory_quantity <= 0 → backorder（受注生産）
+    - inventory_management が 'shopify' 以外（在庫管理なし）        → instock
+
+  引数
+    - variant : 判定対象のバリエーション（省略時は product.selected_or_first_available_variant）
+    - product : 納期の例外商品（約4ヶ月）の判定に使用
+
+  出力
+    "<state>|<lead>"   state = instock / backorder / unavailable
+                       lead  = 約2〜3ヶ月（例外3商品は約4ヶ月）。instock でも常に出力する。
+
+  使い方
+    {%- capture _ds -%}{%- render '6johan-delivery-state', variant: v, product: product -%}{%- endcapture -%}
+    {%- assign _ds = _ds | split: '|' -%}
+    {%- assign _state = _ds[0] -%}
+    {%- assign _lead = _ds[1] -%}
+{%- endcomment -%}
+{%- liquid
+  assign _ds_variant = variant
+  assign _ds_product = product
+  if _ds_variant == blank and _ds_product != blank
+    assign _ds_variant = _ds_product.selected_or_first_available_variant
+  endif
+
+  assign _ds_state = 'unavailable'
+  if _ds_variant != blank and _ds_variant.available
+    if _ds_variant.inventory_management == 'shopify'
+      if _ds_variant.inventory_quantity > 0
+        assign _ds_state = 'instock'
+      else
+        assign _ds_state = 'backorder'
+      endif
+    else
+      assign _ds_state = 'instock'
+    endif
+  endif
+
+  assign _ds_lead = '約2〜3ヶ月'
+  if _ds_product != blank
+    if _ds_product.id == 7212370067654 or _ds_product.id == 10986623435063 or _ds_product.id == 7089798054086
+      assign _ds_lead = '約4ヶ月'
+    endif
+  endif
+-%}{{- _ds_state -}}|{{- _ds_lead -}}

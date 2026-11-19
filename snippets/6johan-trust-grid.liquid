@@ -54,38 +54,23 @@
 }
 </style>
 
-{%- liquid
-  assign is_in_stock = false
-  assign delivery_text = '7日以内発送'
-  
-  for tag in product.tags
-    assign tag_lower = tag | downcase
-    if tag_lower == '即納' or tag_lower == 'in-stock' or tag_lower == 'in_stock'
-      assign is_in_stock = true
-    endif
-  endfor
-  
-  for collection in product.collections
-    if collection.handle == '即納商品' or collection.handle == 'in-stock'
-      assign is_in_stock = true
-    endif
-  endfor
-  
-  if is_in_stock == false
-    if product.available
-      assign total_inventory = 0
-      for variant in product.variants
-        assign total_inventory = total_inventory | plus: variant.inventory_quantity
-      endfor
-      if total_inventory > 0
-        assign delivery_text = "即納"
-        assign is_in_stock = true
-      else
-        assign delivery_text = '約3ヶ月'
-      endif
-    endif
-  endif
--%}
+{%- comment -%}
+  納期区分は配送BOX・カートの properties[配送区分] と共通の判定ソース（6johan-delivery-state）を使う。
+  以前は「全バリエーションの在庫合計 > 0 なら即納」で判定していたため、既定バリエーションが
+  受注生産の商品（ウッドサークルテーブル等）でも「最短7日発送」と表示され、カートの
+  「受注生産品（お届けまで約4ヶ月）」と食い違っていた。
+{%- endcomment -%}
+{%- capture _ds -%}{%- render '6johan-delivery-state', product: product -%}{%- endcapture -%}
+{%- assign _ds = _ds | split: '|' -%}
+{%- assign _sixj_state = _ds[0] -%}
+{%- assign _sixj_lead = _ds[1] -%}
+
+{%- assign delivery_text = '最短7日発送' -%}
+{%- if _sixj_state == 'backorder' -%}
+  {%- assign delivery_text = 'お届けまで' | append: _sixj_lead -%}
+{%- elsif _sixj_state == 'unavailable' -%}
+  {%- assign delivery_text = '在庫切れ' -%}
+{%- endif -%}
 
 <div class="trust-grid">
   <div class="trust-grid__item">
@@ -97,7 +82,7 @@
         <circle cx="18.5" cy="18.5" r="2.5"/>
       </svg>
     </div>
-    <div class="trust-grid__text">最短7日発送</div>
+    <div class="trust-grid__text" data-sixj-delivery-text>{{ delivery_text }}</div>
   </div>
   
   <div class="trust-grid__item">
@@ -120,3 +105,19 @@
     <div class="trust-grid__text">相談OK</div>
   </div>
 </div>
+
+<script>
+  /* 配送BOXのバリアント変更に合わせて、価格直下の納期表示も切り替える */
+  (function () {
+    var LABELS = {
+      instock: '最短7日発送',
+      backorder: 'お届けまで{{ _sixj_lead }}',
+      unavailable: '在庫切れ'
+    };
+    window.sixjSetDeliveryState = function (state) {
+      var el = document.querySelector('[data-sixj-delivery-text]');
+      if (!el || !LABELS[state]) return;
+      el.textContent = LABELS[state];
+    };
+  })();
+</script>

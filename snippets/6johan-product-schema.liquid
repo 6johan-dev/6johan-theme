@@ -1,10 +1,6 @@
 {%- liquid
   assign rating_value = product.metafields.reviews.rating.value.rating
   assign rating_count = product.metafields.reviews.rating_count.value | default: 0
-  assign is_backorder = false
-  if product.tags contains '受注生産'
-    assign is_backorder = true
-  endif
 -%}
 <script type="application/ld+json">
 {
@@ -29,12 +25,15 @@
   {%- endif %}
   "offers": [
   {%- for variant in product.variants %}
+    {%- comment -%} 表示バッジと揃えるため、在庫状況は 6johan-delivery-state で判定 {%- endcomment -%}
+    {%- capture _vds -%}{%- render '6johan-delivery-state', variant: variant, product: product -%}{%- endcapture -%}
+    {%- assign _vds = _vds | split: '|' -%}
     {
       "@type": "Offer",
       "url": {{ request.origin | append: variant.url | json }},
       "priceCurrency": {{ cart.currency.iso_code | json }},
       "price": {{ variant.price | divided_by: 100 }},
-      "availability": "{% if variant.available %}{% if is_backorder %}https://schema.org/PreOrder{% else %}https://schema.org/InStock{% endif %}{% else %}https://schema.org/OutOfStock{% endif %}",
+      "availability": "{% if _vds[0] == 'instock' %}https://schema.org/InStock{% elsif _vds[0] == 'backorder' %}https://schema.org/PreOrder{% else %}https://schema.org/OutOfStock{% endif %}",
       "itemCondition": "https://schema.org/NewCondition"
       {%- if variant.sku != blank -%},
       "sku": {{ variant.sku | json }}
