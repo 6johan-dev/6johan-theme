@@ -142,6 +142,72 @@
     el.addEventListener('change', function() { setTimeout(onVariantChange, 100); });
   });
 
+  /* --- 初期表示を「在庫あり」バリアントに揃える ---------------------------------
+     Shopify は在庫0でも「販売を続ける」設定なら available 扱いのため、
+     先頭バリアントが受注生産だと商品ページを開いた瞬間に「受注生産」になり、
+     別カラーに在庫があっても「すぐ届く」導線と噛み合わない。
+     ?variant 未指定のときだけ、最初の在庫あり（インストック）バリアントを選ぶ。
+     選択後は通常のバリアント切替と同じ経路（change イベント）に乗せるので、
+     価格・画像・配送BOX・カートの配送区分は product-info がサーバー描画で揃える。
+  ------------------------------------------------------------------------- */
+  function selectFirstInStockVariant() {
+    if (new URLSearchParams(window.location.search).get('variant')) return;
+    var targetId = null;
+    Object.keys(variantStates).forEach(function(id) {
+      if (!targetId && variantStates[id].state === 'instock') targetId = id;
+    });
+    if (!targetId) return;
+
+    var idInput = document.querySelector('form[action*="/cart/add"] [name="id"]');
+    if (idInput && String(idInput.value) === String(targetId)) return;
+
+    var picker = document.querySelector('variant-selects, variant-radios');
+    if (!picker) return;
+    var values = variantStates[targetId].options || [];
+    var controls = picker.querySelectorAll('input[type="radio"], select');
+    var lastChanged = null;
+
+    values.forEach(function(val) {
+      for (var i = 0; i < controls.length; i++) {
+        var el = controls[i];
+        if (el.tagName === 'SELECT') {
+          var match = null;
+          for (var j = 0; j < el.options.length; j++) {
+            if (el.options[j].value === val) { match = el.options[j]; break; }
+          }
+          if (!match) continue;
+          if (el.value !== val) {
+            el.value = val;
+            for (var k = 0; k < el.options.length; k++) {
+              el.options[k].removeAttribute('selected');
+            }
+            match.setAttribute('selected', 'selected');
+            lastChanged = el;
+          }
+          break;
+        }
+        if (el.value === val) {
+          if (!el.checked) {
+            el.checked = true;
+            lastChanged = el;
+          }
+          break;
+        }
+      }
+    });
+
+    if (!lastChanged) return;
+    lastChanged.dispatchEvent(new Event('change', { bubbles: true }));
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(selectFirstInStockVariant, 0);
+    });
+  } else {
+    setTimeout(selectFirstInStockVariant, 0);
+  }
+
   updateDeliveryBox('{{ stock_state }}');
 })();
 </script>

@@ -12,7 +12,7 @@
     - inventory_management が 'shopify' 以外（在庫管理なし）        → instock
 
   引数
-    - variant : 判定対象のバリエーション（省略時は product.selected_or_first_available_variant）
+    - variant : 判定対象のバリエーション（省略時は「在庫あり（インストック）の最初のバリエーション」）
     - product : 納期の例外商品（約4ヶ月）の判定に使用
 
   出力
@@ -25,11 +25,31 @@
     {%- assign _state = _ds[0] -%}
     {%- assign _lead = _ds[1] -%}
 {%- endcomment -%}
+{%- comment -%}
+  商品単位の代表バリエーション（variant 省略時）:
+  Shopify の selected_or_first_available_variant は「受注生産（在庫0・販売継続設定）」も
+  available とみなすため、先頭バリアントが在庫0だと、別カラーに在庫があっても
+  一覧カードや初期表示が「受注生産」になってしまう。
+  そのため、在庫あり（インストック）の最初のバリエーションを代表として使う。
+{%- endcomment -%}
 {%- liquid
   assign _ds_variant = variant
   assign _ds_product = product
   if _ds_variant == blank and _ds_product != blank
     assign _ds_variant = _ds_product.selected_or_first_available_variant
+    for _ds_v in _ds_product.variants
+      if _ds_v.available
+        if _ds_v.inventory_management == 'shopify'
+          if _ds_v.inventory_quantity > 0
+            assign _ds_variant = _ds_v
+            break
+          endif
+        else
+          assign _ds_variant = _ds_v
+          break
+        endif
+      endif
+    endfor
   endif
 
   assign _ds_state = 'unavailable'
