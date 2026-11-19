@@ -215,17 +215,24 @@
       return;
     }
     
-    grid.innerHTML = filteredItems.map(item => `
+    grid.innerHTML = filteredItems.map(item => {
+      // 納期バッジ（詳細ページの納期判定と同一ロジックで、商品閲覧時に保存した区分を表示）
+      const badge = (item.delivery && item.delivery.label)
+        ? `<span class="sixj-dbadge ${item.delivery.type === 'instock' ? 'sixj-dbadge--express' : 'sixj-dbadge--backorder'}">${item.delivery.label}</span>`
+        : '';
+      return `
       <article class="recently-viewed__item">
         <a href="${item.url}" class="recently-viewed__image-wrap">
           <img src="${item.image}" alt="${item.title}" class="recently-viewed__image" loading="lazy">
+          ${badge}
         </a>
         <div class="recently-viewed__info">
           <h3 class="recently-viewed__name"><a href="${item.url}">${item.title}</a></h3>
           <p class="recently-viewed__price">${item.price}</p>
         </div>
       </article>
-    `).join('');
+    `;
+    }).join('');
   }
   
   // Initialize

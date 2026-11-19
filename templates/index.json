@@ -141,13 +141,23 @@
             "link": "shopify://collections/pick-up",
             "badge": "none"
           }
+        },
+        "category_express": {
+          "type": "category",
+          "settings": {
+            "icon": "truck",
+            "label": "すぐ届く",
+            "link": "shopify://collections/express-deliver",
+            "badge": "none"
+          }
         }
       },
       "block_order": [
         "category_KCghBj",
         "category_3Ggfj3",
         "category_Y8jjwH",
-        "category_RG4tre"
+        "category_RG4tre",
+        "category_express"
       ],
       "name": "6JOHAN クイックカテゴリ",
       "settings": {}

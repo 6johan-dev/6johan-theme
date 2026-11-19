@@ -9,9 +9,10 @@
 .card-badges {
   position: absolute;
   top: 8px;
-  left: 8px;
+  right: 8px;
   display: flex;
   flex-direction: column;
+  align-items: flex-end;
   gap: 4px;
   z-index: 2;
 }
@@ -164,23 +165,18 @@
       {% assign badge_count = badge_count | plus: 1 %}
     {% endif %}
     
-    {%- comment -%} 在庫ステータス {%- endcomment -%}
-    {% if badge_count < 2 %}
-      {% if is_low_stock %}
-        <span class="card-badge card-badge--low-stock">残りわずか</span>
-      {% elsif is_in_stock %}
-        <span class="card-badge card-badge--in-stock">
-          <span class="card-badge__icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <polyline points="20 6 9 17 4 12"/>
-            </svg>
-          </span>
-          即納
-        </span>
-      {% comment %}受注生産は非表示{% endcomment %}{% elsif is_made_to_order and false %}
-        <span class="card-badge card-badge--backorder">受注生産</span>
-      {% endif %}
+    {%- comment -%} 残りわずか {%- endcomment -%}
+    {% if is_low_stock and badge_count < 2 %}
+      <span class="card-badge card-badge--low-stock">残りわずか</span>
+      {% assign badge_count = badge_count | plus: 1 %}
     {% endif %}
+
+    {%- comment -%}
+      納期バッジ（最短7日で発送 ／ 約2〜3ヶ月 ／ 約4ヶ月）
+      判定は商品詳細ページの配送BOXと同一ロジック（snippets/6johan-delivery-badge.liquid）
+      SOLD OUT の場合は上の分岐で SOLD OUT のみを表示し、このバッジは出さない
+    {%- endcomment -%}
+    {% render '6johan-delivery-badge', product: product %}
     
   </div>
 {% endif %}

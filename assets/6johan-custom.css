@@ -1766,3 +1766,42 @@ body,
 @media screen and (max-width: 749px) {
   .blp-col-body { margin: 3rem auto 1rem; padding: 0 1.5rem; }
 }
+
+/* =============================================
+   納期バッジ（商品カード右上）
+   最短7日で発送＝チャコール／受注生産＝ベージュ
+   既存 SOLD OUT バッジと同じ位置・同じ最小矩形トーン
+   ============================================= */
+.sixj-dbadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 8px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+  border-radius: 0;
+  white-space: nowrap;
+  z-index: 2;
+}
+
+.sixj-dbadge--express {
+  background: #3D3D3C;
+  color: #FFFFFF;
+}
+
+.sixj-dbadge--backorder {
+  background: #DDD1C4;
+  color: #3E362C;
+}
+
+/* 最近チェックした商品（JS描画・小さいカード）用 */
+.recently-viewed__image-wrap .sixj-dbadge {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  padding: 3px 6px;
+  font-size: 9px;
+  letter-spacing: 0.02em;
+}

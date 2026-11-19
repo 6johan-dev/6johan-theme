@@ -416,7 +416,7 @@
                 <span class="ranking-section__rank ranking-section__rank--{{ forloop.index }}">{{ forloop.index }}</span>
                 <a href="{{ product.url }}" class="ranking-section__image-wrap">
                   <img src="{{ product.featured_image | image_url: width: 500 }}" alt="{{ product.featured_image.alt | escape }}" class="ranking-section__image" loading="lazy">
-                  <div class="ranking-section__badges">{% render '6johan-product-badge', product: product %}</div>
+                  <div class="ranking-section__badges">{% render '6johan-product-badge', product: product %}{% render '6johan-delivery-badge', product: product %}</div>
                 </a>
                 <div class="ranking-section__info">
                   <h3 class="ranking-section__name"><a href="{{ product.url }}">{{ product.title }}</a></h3>
@@ -433,7 +433,7 @@
                 <span class="ranking-section__rank ranking-section__rank--1">1</span>
                 <a href="{{ product.url }}" class="ranking-section__image-wrap">
                   <img src="{{ product.featured_image | image_url: width: 500 }}" alt="{{ product.featured_image.alt | escape }}" class="ranking-section__image" loading="lazy">
-                  <div class="ranking-section__badges">{% render '6johan-product-badge', product: product %}</div>
+                  <div class="ranking-section__badges">{% render '6johan-product-badge', product: product %}{% render '6johan-delivery-badge', product: product %}</div>
                 </a>
                 <div class="ranking-section__info">
                   <h3 class="ranking-section__name"><a href="{{ product.url }}">{{ product.title }}</a></h3>
@@ -455,7 +455,7 @@
                     <span class="ranking-section__rank ranking-section__rank--{{ rank }}">{{ rank }}</span>
                     <a href="{{ product.url }}" class="ranking-section__image-wrap">
                       <img src="{{ product.featured_image | image_url: width: 300 }}" alt="{{ product.featured_image.alt | escape }}" class="ranking-section__image" loading="lazy">
-                      <div class="ranking-section__badges">{% render '6johan-product-badge', product: product %}</div>
+                      <div class="ranking-section__badges">{% render '6johan-product-badge', product: product %}{% render '6johan-delivery-badge', product: product %}</div>
                     </a>
                     <div class="ranking-section__info">
                       <p class="ranking-section__price">{{ product.price | money }}</p>
@@ -469,7 +469,7 @@
                     <span class="ranking-section__rank ranking-section__rank--{{ rank }}">{{ rank }}</span>
                     <a href="{{ product.url }}" class="ranking-section__image-wrap">
                       <img src="{{ product.featured_image | image_url: width: 300 }}" alt="{{ product.featured_image.alt | escape }}" class="ranking-section__image" loading="lazy">
-                      <div class="ranking-section__badges">{% render '6johan-product-badge', product: product %}</div>
+                      <div class="ranking-section__badges">{% render '6johan-product-badge', product: product %}{% render '6johan-delivery-badge', product: product %}</div>
                     </a>
                     <div class="ranking-section__info">
                       <p class="ranking-section__price">{{ product.price | money }}</p>

@@ -1,0 +1,45 @@
+{% comment %}
+  6JOHAN Delivery Badge — 商品カード用の納期バッジ（右上・ミニマル矩形）
+
+  ★判定ロジックは商品詳細の配送BOX（snippets/6johan-delivery-box.liquid）と完全一致させること★
+     - cv = product.selected_or_first_available_variant（詳細ページと同じ基準）
+     - cv.available でなければ unavailable（= SOLD OUT。このバッジは出さない）
+     - inventory_management が 'shopify' かつ inventory_quantity > 0 → instock
+     - inventory_management が 'shopify' かつ inventory_quantity <= 0 → backorder
+     - inventory_management が shopify 以外 → instock（在庫管理なし＝受注可）
+
+  表示:
+     - instock   … 「最短7日で発送」（チャコール背景・白文字）
+     - backorder … 「約2〜3ヶ月」／例外3商品は「約4ヶ月」（ベージュ背景・濃文字）
+
+  使用方法:
+    {% render '6johan-delivery-badge', product: product %}
+    （既にバッジ用のスタックコンテナ内に置く場合は in_stack: true）
+{% endcomment %}
+
+{%- liquid
+  assign _cv = product.selected_or_first_available_variant
+  assign _sixj_state = 'unavailable'
+  if _cv.available
+    if _cv.inventory_management == 'shopify'
+      if _cv.inventory_quantity > 0
+        assign _sixj_state = 'instock'
+      else
+        assign _sixj_state = 'backorder'
+      endif
+    else
+      assign _sixj_state = 'instock'
+    endif
+  endif
+
+  assign _sixj_lead = '約2〜3ヶ月'
+  if product.id == 7212370067654 or product.id == 10986623435063 or product.id == 7089798054086
+    assign _sixj_lead = '約4ヶ月'
+  endif
+-%}
+
+{%- if _sixj_state == 'instock' -%}
+  <span class="sixj-dbadge sixj-dbadge--express">最短7日で発送</span>
+{%- elsif _sixj_state == 'backorder' -%}
+  <span class="sixj-dbadge sixj-dbadge--backorder">{{ _sixj_lead }}</span>
+{%- endif -%}

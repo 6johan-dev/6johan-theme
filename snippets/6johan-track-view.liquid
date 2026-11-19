@@ -3,6 +3,31 @@
   使用方法: 商品ページのテンプレートに {% render '6johan-track-view', product: product %} を追加
 {% endcomment %}
 
+{%- liquid
+  # 納期区分（商品詳細の配送BOX／6johan-delivery-badge.liquid と同一ロジック）
+  assign _cv = product.selected_or_first_available_variant
+  assign _sixj_state = 'unavailable'
+  if _cv.available
+    if _cv.inventory_management == 'shopify'
+      if _cv.inventory_quantity > 0
+        assign _sixj_state = 'instock'
+      else
+        assign _sixj_state = 'backorder'
+      endif
+    else
+      assign _sixj_state = 'instock'
+    endif
+  endif
+  assign _sixj_label = ''
+  if _sixj_state == 'instock'
+    assign _sixj_label = '最短7日で発送'
+  elsif _sixj_state == 'backorder'
+    assign _sixj_label = '約2〜3ヶ月'
+    if product.id == 7212370067654 or product.id == 10986623435063 or product.id == 7089798054086
+      assign _sixj_label = '約4ヶ月'
+    endif
+  endif
+-%}
 <script>
 (function() {
   const STORAGE_KEY = '6johan_recently_viewed';
@@ -15,6 +40,7 @@
     url: '{{ product.url }}',
     image: '{{ product.featured_image | image_url: width: 400 }}',
     price: '{{ product.price | money }}',
+    delivery: { type: '{{ _sixj_state }}', label: '{{ _sixj_label }}' },
     viewedAt: Date.now()
   };
   
