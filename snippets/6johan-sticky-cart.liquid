@@ -6,6 +6,12 @@
    - 価格の下に安心材料を1行追加（在庫あり=最短7日発送／受注生産=受注生産、いずれも30日返品OK。
      納期の月数は直上の配送BOXが持つため、バーでは矛盾しない短い表現にする）
    - 押下を GA4 `sticky_cart_click` として送信（gtag / dataLayer / Shopify analytics の順で利用可能なもの）
+
+  Phase 2 (2026-11-21):
+   - 追従バー表示中に Channel Talk のチャットバブルが右端のお気に入り♡ボタンへ重なる問題を解消。
+     CTはアプリ（App embed）が後読み込みで自前の bottom を再適用するため、
+     ①CSS（body.sticky-cart-active のときランチャーをバーの上へ持ち上げる）を主手段にし、
+     ②JSはそのCSSが効かない構造のときのフォールバックとして動かす（毎回でなく、必要時のみ）。
 {% endcomment %}
 
 {%- style -%}
@@ -113,6 +119,21 @@
 body.sticky-cart-active {
   padding-bottom: 72px;
 }
+
+/*
+  Channel Talk のチャットバブルを追従バーの上へ逃がす。
+  ランチャーは固定配置のラッパー（class に LauncherButtonWrapper を含む）の中にあり、
+  インライン style で bottom を持つ。スタイルシートの !important がインラインより優先されるため、
+  CTが後から bottom を書き直してもこのルールが勝つ。
+*/
+@media screen and (max-width: 989px) {
+  body.sticky-cart-active div[class*="LauncherButtonWrapper"],
+  body.sticky-cart-active #ch-plugin-launcher[data-sixj-ct-moved="1"] {
+    bottom: 84px !important;
+    transition: bottom 0.25s ease !important;
+  }
+}
+
 @media (min-width: 990px) {
   .sticky-cart-bar { display: none; }
   body.sticky-cart-active { padding-bottom: 0; }
@@ -312,35 +333,74 @@ body.sticky-cart-active {
     }
   });
 
-  /* Channel Talk position sync */
-  function moveChannelTalk(up) {
-    var offset = up ? '80px' : '16px';
-    /* Try multiple selectors for Channel Talk */
-    var selectors = ['#ch-plugin', '#ch-plugin-entry', '[id^="ch-"]'];
-    selectors.forEach(function(sel) {
-      var els = document.querySelectorAll(sel);
-      els.forEach(function(el) {
-        el.style.setProperty('bottom', offset, 'important');
-        el.style.setProperty('transition', 'bottom 0.3s ease', 'important');
-      });
-    });
-    /* Also try iframe approach */
-    var iframes = document.querySelectorAll('iframe[title*="Channel"], iframe[id*="ch-"]');
-    iframes.forEach(function(iframe) {
-      var parent = iframe.parentElement;
-      if (parent) {
-        parent.style.setProperty('bottom', offset, 'important');
-        parent.style.setProperty('transition', 'bottom 0.3s ease', 'important');
+  /* Channel Talk position sync
+     CTはShopifyアプリが後読み込みし、ランチャーは固定配置のラッパー内でインライン bottom を持つ。
+     主対応はCSS（body.sticky-cart-active … LauncherButtonWrapper）で、ここはCSSが効かない構造
+     （ラッパーのclass名が変わった等）のときのフォールバック。
+     バブルは高さ60px → バー（69px）＋余白12px＝84px 上に置くと重ならない。 */
+  var CT_OFFSET = '84px';
+
+  function ctLaunchTargets() {
+    var list = [];
+    var btn = document.getElementById('ch-plugin-launcher');
+    if (btn) {
+      var el = btn;
+      while (el && el !== document.body) {
+        if (window.getComputedStyle(el).position === 'fixed') break;
+        el = el.parentElement;
       }
-    });
+      list.push(el && el !== document.body ? el : btn);
+    }
+    var wrappers = document.querySelectorAll('[class*="LauncherButtonWrapper"]');
+    for (var i = 0; i < wrappers.length; i++) {
+      if (list.indexOf(wrappers[i]) === -1) list.push(wrappers[i]);
+    }
+    return list;
   }
 
-  /* Observe sticky bar visibility and sync Channel Talk */
-  var barObserver = new MutationObserver(function() {
-    var isVisible = stickyBar.classList.contains('sticky-cart-bar--visible');
-    moveChannelTalk(isVisible);
-  });
+  function syncChannelTalk() {
+    var up = document.body.classList.contains('sticky-cart-active');
+    var isMobile = window.matchMedia('(max-width: 989px)').matches;
+    var targets = ctLaunchTargets();
+    for (var i = 0; i < targets.length; i++) {
+      var el = targets[i];
+      var styled = el.getAttribute('data-sixj-ct-inline') === '1';
+      /* CSS側でラッパーを掴めている場合はJSで触らない（CTの再描画と競合しないため） */
+      var coveredByCss = el.id !== 'ch-plugin-launcher' && (el.className || '').toString().indexOf('LauncherButtonWrapper') !== -1;
+      if (coveredByCss) continue;
+      if (up && isMobile) {
+        if (!styled) {
+          el.setAttribute('data-sixj-ct-saved-bottom', el.style.bottom || '');
+          el.setAttribute('data-sixj-ct-inline', '1');
+          el.id === 'ch-plugin-launcher' && el.setAttribute('data-sixj-ct-moved', '1');
+        }
+        el.style.setProperty('bottom', CT_OFFSET, 'important');
+        el.style.setProperty('transition', 'bottom 0.25s ease', 'important');
+      } else if (styled) {
+        var saved = el.getAttribute('data-sixj-ct-saved-bottom') || '';
+        el.style.removeProperty('bottom');
+        el.style.removeProperty('transition');
+        if (saved) el.style.bottom = saved;
+        el.removeAttribute('data-sixj-ct-inline');
+        el.removeAttribute('data-sixj-ct-saved-bottom');
+        if (el.id === 'ch-plugin-launcher') el.removeAttribute('data-sixj-ct-moved');
+      }
+    }
+  }
+
+  /* バーの表示切替に合わせて追従 */
+  var barObserver = new MutationObserver(syncChannelTalk);
   barObserver.observe(stickyBar, { attributes: true, attributeFilter: ['class'] });
+  window.addEventListener('resize', syncChannelTalk);
+  window.addEventListener('load', syncChannelTalk);
+
+  /* CTの後読み込み・再接続に備えて、起動後しばらくだけ軽く追従する */
+  var ctTicks = 0;
+  var ctTimer = setInterval(function () {
+    syncChannelTalk();
+    if (++ctTicks >= 24) clearInterval(ctTimer);
+  }, 500);
+  syncChannelTalk();
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initObserver);

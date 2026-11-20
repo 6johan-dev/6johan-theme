@@ -1,33 +1,46 @@
 {% comment %}
   6JOHAN Product Story Section
   メタフィールドから商品ストーリー（タイトル+説明文+画像 × 4ブロック）を読み込んで表示。
-  
+
   使用メタフィールド:
   - custom.descriptiontitle1〜4 (単一行テキスト)
   - custom.description1〜4 (複数行テキスト)
   - custom.descriptionimage1〜4 (ファイル)
   - custom.desctiptionimage3 (ファイル) … 3枚目だけ店側の定義キーが綴り誤り（rがt）。
     120商品のデータはこのキーに入っているため、両方を見て表示する。
+
+  Phase 2 (2026-11-21):
+   - スマホで3,000〜4,000px（ページの47〜58%）あったストーリーを、冒頭1ブロック＋画像1枚の
+     要約＋「商品ストーリーを詳しく見る」の折りたたみに変更（全文は<details>内に残す）。
+   - 見出し・余白を詰め、ヘッダーのタイトルは商品名の繰り返しをやめた。
 {% endcomment %}
 
 {%- liquid
-  assign t1 = product.metafields.custom.descriptiontitle1
-  assign t2 = product.metafields.custom.descriptiontitle2
-  assign t3 = product.metafields.custom.descriptiontitle3
-  assign t4 = product.metafields.custom.descriptiontitle4
-  assign d1 = product.metafields.custom.description1
-  assign d2 = product.metafields.custom.description2
-  assign d3 = product.metafields.custom.description3
-  assign d4 = product.metafields.custom.description4
-  assign i1 = product.metafields.custom.descriptionimage1
-  assign i2 = product.metafields.custom.descriptionimage2
-  assign i3 = product.metafields.custom.descriptionimage3 | default: product.metafields.custom.desctiptionimage3
-  assign i4 = product.metafields.custom.descriptionimage4
+  assign story_count = 0
+  assign story_imgs = 0
+  for i in (1..4)
+    assign dkey = 'description' | append: i
+    assign ikey = 'descriptionimage' | append: i
+    assign dval_check = product.metafields.custom[dkey]
+    assign ival_check = product.metafields.custom[ikey]
+    if i == 3 and ival_check == blank
+      assign ival_check = product.metafields.custom.desctiptionimage3
+    endif
+    if dval_check != blank
+      assign story_count = story_count | plus: 1
+      if ival_check != blank
+        assign story_imgs = story_imgs | plus: 1
+      endif
+    endif
+  endfor
 
   assign has_story = false
-  if d1 != blank or d2 != blank or d3 != blank or d4 != blank
+  if story_count > 0
     assign has_story = true
   endif
+
+  assign story_heading = section.settings.title | default: 'この商品について'
+  assign lead_cut = false
 -%}
 
 {%- if has_story -%}
@@ -36,63 +49,102 @@
 
     <div class="product-story__header">
       <span class="product-story__label">{{ section.settings.label | default: 'ABOUT THIS PRODUCT' }}</span>
-      <h2 class="product-story__title">{{ section.settings.title | default: product.title }}</h2>
+      <h2 class="product-story__title">{{ story_heading }}</h2>
     </div>
 
-    {%- if d1 != blank -%}
-      <div class="product-story__block">
-        <div class="product-story__text">
-          {%- if t1 != blank -%}<h3 class="product-story__heading">{{ t1 }}</h3>{%- endif -%}
-          <div class="product-story__body">{{ d1 | newline_to_br }}</div>
-        </div>
-        {%- if i1 != blank -%}
-          <div class="product-story__image">
-            <img src="{{ i1 | image_url: width: 1200 }}" alt="{{ t1 | default: product.title | escape }}" loading="lazy" width="1200" height="800">
-          </div>
-        {%- endif -%}
-      </div>
-    {%- endif -%}
+    {%- comment -%} 冒頭ブロック：最初の段落だけを出し、続きは折りたたみへ {%- endcomment -%}
+    {%- assign lead_done = false -%}
+    {%- for i in (1..4) -%}
+      {%- assign dkey = 'description' | append: i -%}
+      {%- assign tkey = 'descriptiontitle' | append: i -%}
+      {%- assign ikey = 'descriptionimage' | append: i -%}
+      {%- assign dval = product.metafields.custom[dkey] -%}
+      {%- assign tval = product.metafields.custom[tkey] -%}
+      {%- assign ival = product.metafields.custom[ikey] -%}
+      {%- if i == 3 and ival == blank -%}
+        {%- assign ival = product.metafields.custom.desctiptionimage3 -%}
+      {%- endif -%}
 
-    {%- if d2 != blank -%}
-      <div class="product-story__block">
-        <div class="product-story__text">
-          {%- if t2 != blank -%}<h3 class="product-story__heading">{{ t2 }}</h3>{%- endif -%}
-          <div class="product-story__body">{{ d2 | newline_to_br }}</div>
-        </div>
-        {%- if i2 != blank -%}
-          <div class="product-story__image">
-            <img src="{{ i2 | image_url: width: 1200 }}" alt="{{ t2 | default: product.title | escape }}" loading="lazy" width="1200" height="800">
-          </div>
-        {%- endif -%}
-      </div>
-    {%- endif -%}
+      {%- if dval != blank and lead_done == false -%}
+        {%- assign paras = dval | newline_to_br | split: '<br />' -%}
+        {%- assign lead_para = paras | first | strip -%}
+        {%- assign lead_text = lead_para | truncate: 150, '…' -%}
+        {%- if lead_text != lead_para -%}{%- assign lead_cut = true -%}{%- endif -%}
 
-    {%- if d3 != blank -%}
-      <div class="product-story__block">
-        <div class="product-story__text">
-          {%- if t3 != blank -%}<h3 class="product-story__heading">{{ t3 }}</h3>{%- endif -%}
-          <div class="product-story__body">{{ d3 | newline_to_br }}</div>
-        </div>
-        {%- if i3 != blank -%}
-          <div class="product-story__image">
-            <img src="{{ i3 | image_url: width: 1200 }}" alt="{{ t3 | default: product.title | escape }}" loading="lazy" width="1200" height="800">
+        <div class="product-story__lead">
+          <div class="product-story__text">
+            {%- if tval != blank -%}<h3 class="product-story__heading">{{ tval }}</h3>{%- endif -%}
+            <div class="product-story__body">{{ lead_text }}</div>
           </div>
-        {%- endif -%}
-      </div>
-    {%- endif -%}
+          {%- if ival != blank -%}
+            <div class="product-story__image">
+              <img src="{{ ival | image_url: width: 1200 }}" alt="{{ tval | default: product.title | escape }}" loading="lazy" width="1200" height="800">
+            </div>
+          {%- endif -%}
+        </div>
+        {%- assign lead_done = true -%}
+      {%- endif -%}
+    {%- endfor -%}
 
-    {%- if d4 != blank -%}
-      <div class="product-story__block">
-        <div class="product-story__text">
-          {%- if t4 != blank -%}<h3 class="product-story__heading">{{ t4 }}</h3>{%- endif -%}
-          <div class="product-story__body">{{ d4 | newline_to_br }}</div>
+    {%- if story_count > 1 or lead_cut -%}
+      <details class="product-story__more">
+        <summary>
+          <span class="product-story__more-label">商品ストーリーを詳しく見る</span>
+          <span class="product-story__more-meta">{% if story_count > 1 %}全{{ story_count }}章{% endif %}{% if story_imgs > 0 %}・写真{{ story_imgs }}枚{% endif %}</span>
+          <svg class="product-story__more-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+        </summary>
+        <div class="product-story__more-body">
+
+          {%- assign more_done = false -%}
+          {%- for i in (1..4) -%}
+            {%- assign dkey = 'description' | append: i -%}
+            {%- assign tkey = 'descriptiontitle' | append: i -%}
+            {%- assign ikey = 'descriptionimage' | append: i -%}
+            {%- assign dval = product.metafields.custom[dkey] -%}
+            {%- assign tval = product.metafields.custom[tkey] -%}
+            {%- assign ival = product.metafields.custom[ikey] -%}
+            {%- if i == 3 and ival == blank -%}
+              {%- assign ival = product.metafields.custom.desctiptionimage3 -%}
+            {%- endif -%}
+
+            {%- if dval != blank -%}
+              {%- if more_done == false -%}
+                {%- assign more_done = true -%}
+                {%- if lead_cut -%}
+                  {%- comment -%} 冒頭が途中で切れている場合は全文をここに出す（取りこぼし防止） {%- endcomment -%}
+                  <div class="product-story__block">
+                    {%- if tval != blank -%}<h3 class="product-story__heading">{{ tval }}</h3>{%- endif -%}
+                    <div class="product-story__body">{{ dval | newline_to_br }}</div>
+                  </div>
+                {%- else -%}
+                  {%- assign paras = dval | newline_to_br | split: '<br />' -%}
+                  {%- for p in paras offset: 1 -%}
+                    {%- assign p_str = p | strip -%}
+                    {%- if p_str != '' -%}
+                      <div class="product-story__block product-story__block--cont">
+                        <div class="product-story__body">{{ p_str | newline_to_br }}</div>
+                      </div>
+                    {%- endif -%}
+                  {%- endfor -%}
+                {%- endif -%}
+              {%- else -%}
+                <div class="product-story__block">
+                  <div class="product-story__text">
+                    {%- if tval != blank -%}<h3 class="product-story__heading">{{ tval }}</h3>{%- endif -%}
+                    <div class="product-story__body">{{ dval | newline_to_br }}</div>
+                  </div>
+                  {%- if ival != blank -%}
+                    <div class="product-story__image">
+                      <img src="{{ ival | image_url: width: 1200 }}" alt="{{ tval | default: product.title | escape }}" loading="lazy" width="1200" height="800">
+                    </div>
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+            {%- endif -%}
+          {%- endfor -%}
+
         </div>
-        {%- if i4 != blank -%}
-          <div class="product-story__image">
-            <img src="{{ i4 | image_url: width: 1200 }}" alt="{{ t4 | default: product.title | escape }}" loading="lazy" width="1200" height="800">
-          </div>
-        {%- endif -%}
-      </div>
+      </details>
     {%- endif -%}
 
   </div>
@@ -100,7 +152,7 @@
 
 <style>
 .product-story {
-  padding: 48px 0;
+  padding: 28px 0 20px;
   border-top: 1px solid #F2F2F0;
 }
 
@@ -112,52 +164,44 @@
 
 .product-story__header {
   text-align: center;
-  margin-bottom: 48px;
+  margin-bottom: 18px;
 }
 
 .product-story__label {
   display: block;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.15em;
   color: #999;
   text-transform: uppercase;
-  margin-bottom: 12px;
+  margin-bottom: 6px;
 }
 
 .product-story__title {
-  font-size: 22px;
+  font-size: 17px;
   font-weight: 500;
   line-height: 1.5;
   margin: 0;
   color: #292724;
 }
 
-.product-story__block {
-  margin-bottom: 56px;
-}
-
-.product-story__block:last-child {
-  margin-bottom: 0;
-}
-
 .product-story__heading {
-  font-size: 17px;
+  font-size: 15px;
   font-weight: 600;
-  line-height: 1.6;
-  margin: 0 0 16px;
+  line-height: 1.55;
+  margin: 0 0 8px;
   color: #292724;
 }
 
 .product-story__body {
-  font-size: 14px;
-  line-height: 2.0;
+  font-size: 13.5px;
+  line-height: 1.9;
   color: #555;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.02em;
 }
 
 .product-story__image {
-  margin-top: 24px;
+  margin-top: 14px;
 }
 
 .product-story__image img {
@@ -166,9 +210,67 @@
   display: block;
 }
 
+.product-story__block {
+  margin-bottom: 28px;
+}
+
+.product-story__block--cont {
+  margin-bottom: 10px;
+}
+
+.product-story__block:last-child {
+  margin-bottom: 0;
+}
+
+.product-story__more {
+  margin-top: 18px;
+  border-top: 1px solid #EFEDE7;
+}
+
+.product-story__more summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 15px 0;
+  cursor: pointer;
+  list-style: none;
+  color: #292724;
+}
+
+.product-story__more summary::-webkit-details-marker {
+  display: none;
+}
+
+.product-story__more-label {
+  flex: 1;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.product-story__more-meta {
+  font-size: 11px;
+  color: #999;
+  white-space: nowrap;
+}
+
+.product-story__more-icon {
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+  color: #8A7A7A;
+}
+
+.product-story__more[open] .product-story__more-icon {
+  transform: rotate(180deg);
+}
+
+.product-story__more-body {
+  padding: 6px 0 4px;
+}
+
 @media screen and (min-width: 750px) {
   .product-story {
-    padding: 80px 0;
+    padding: 56px 0 40px;
   }
 
   .product-story__container {
@@ -176,33 +278,46 @@
   }
 
   .product-story__header {
-    margin-bottom: 64px;
+    margin-bottom: 28px;
   }
 
   .product-story__title {
-    font-size: 28px;
+    font-size: 22px;
   }
 
-  .product-story__block {
-    margin-bottom: 80px;
-  }
-
-  .product-story__text {
+  .product-story__lead .product-story__text {
     max-width: 700px;
     margin: 0 auto;
   }
 
   .product-story__heading {
-    font-size: 19px;
-    margin-bottom: 20px;
+    font-size: 17px;
+    margin-bottom: 10px;
   }
 
   .product-story__body {
-    font-size: 15px;
+    font-size: 14.5px;
+    line-height: 2;
   }
 
   .product-story__image {
-    margin-top: 32px;
+    margin-top: 20px;
+  }
+
+  .product-story__block {
+    margin-bottom: 48px;
+  }
+
+  .product-story__block--cont {
+    margin-bottom: 12px;
+  }
+
+  .product-story__more summary {
+    padding: 18px 0;
+  }
+
+  .product-story__more-label {
+    font-size: 14px;
   }
 }
 </style>
@@ -221,7 +336,7 @@
     {
       "type": "text",
       "id": "title",
-      "label": "タイトル（空欄で商品名を表示）"
+      "label": "タイトル（空欄で「この商品について」）"
     }
   ],
   "presets": [
