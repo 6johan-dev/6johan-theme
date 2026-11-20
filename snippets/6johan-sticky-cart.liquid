@@ -134,6 +134,23 @@ body.sticky-cart-active {
   }
 }
 
+/*
+  フォールバック: CTのランチャーがどうしても動かせない環境では、
+  バー右側を空けて（♡はページ内の「お気に入りに追加」と重複するため隠す）バブルと重ならないようにする。
+*/
+.sticky-cart-bar--ct-safe {
+  padding-right: 76px;
+}
+.sticky-cart-bar--ct-safe .sticky-cart-bar__fav-btn {
+  display: none;
+}
+.sticky-cart-bar--ct-safe .sticky-cart-bar__cart-btn {
+  font-size: 14px;
+  padding: 14px 12px;
+  min-width: 0;
+  overflow: hidden;
+}
+
 @media (min-width: 990px) {
   .sticky-cart-bar { display: none; }
   body.sticky-cart-active { padding-bottom: 0; }
@@ -334,26 +351,56 @@ body.sticky-cart-active {
   });
 
   /* Channel Talk position sync
-     CTはShopifyアプリが後読み込みし、ランチャーは固定配置のラッパー内でインライン bottom を持つ。
-     主対応はCSS（body.sticky-cart-active … LauncherButtonWrapper）で、ここはCSSが効かない構造
-     （ラッパーのclass名が変わった等）のときのフォールバック。
+     CTはShopifyアプリが後読み込みし、ランチャー（チャットバブル）は #ch-plugin-entry の
+     シャドウDOM内の固定配置ラッパーにある。ラッパーは自前の bottom（2px前後）を
+     インラインで持つため、CSS（外側からは届かない）ではなくシャドウDOM内へJSで
+     inline !important を書き込んで持ち上げる。
      バブルは高さ60px → バー（69px）＋余白12px＝84px 上に置くと重ならない。 */
   var CT_OFFSET = '84px';
+  var CT_IDS = ['ch-plugin', 'ch-plugin-entry', 'ch-plugin-script'];
+  var ctStyledTargets = [];
+
+  function ctRoots() {
+    var roots = [document];
+    CT_IDS.forEach(function (id) {
+      var host = document.getElementById(id);
+      if (host && host.shadowRoot) roots.push(host.shadowRoot);
+    });
+    /* 1段だけ入れ子のシャドウルートも拾う */
+    var extra = [];
+    roots.forEach(function (root) {
+      var els;
+      try { els = root.querySelectorAll('*'); } catch (e) { return; }
+      for (var i = 0; i < els.length; i++) {
+        if (els[i].shadowRoot && roots.indexOf(els[i].shadowRoot) === -1) extra.push(els[i].shadowRoot);
+      }
+    });
+    return roots.concat(extra);
+  }
+
+  function ctFixedAncestor(el) {
+    var node = el;
+    var guard = 0;
+    while (node && guard++ < 20) {
+      try {
+        if (window.getComputedStyle(node).position === 'fixed') return node;
+      } catch (e) {}
+      node = node.parentElement || (node.getRootNode && node.getRootNode().host) || null;
+    }
+    return el.parentElement || el;
+  }
 
   function ctLaunchTargets() {
     var list = [];
-    var btn = document.getElementById('ch-plugin-launcher');
-    if (btn) {
-      var el = btn;
-      while (el && el !== document.body) {
-        if (window.getComputedStyle(el).position === 'fixed') break;
-        el = el.parentElement;
+    var roots = ctRoots();
+    for (var r = 0; r < roots.length; r++) {
+      var found;
+      try { found = roots[r].querySelectorAll('#ch-plugin-launcher, [class*="LauncherButtonWrapper"]'); } catch (e) { continue; }
+      for (var i = 0; i < found.length; i++) {
+        var el = found[i];
+        if (el.id === 'ch-plugin-launcher') el = ctFixedAncestor(el);
+        if (el && list.indexOf(el) === -1) list.push(el);
       }
-      list.push(el && el !== document.body ? el : btn);
-    }
-    var wrappers = document.querySelectorAll('[class*="LauncherButtonWrapper"]');
-    for (var i = 0; i < wrappers.length; i++) {
-      if (list.indexOf(wrappers[i]) === -1) list.push(wrappers[i]);
     }
     return list;
   }
@@ -362,30 +409,66 @@ body.sticky-cart-active {
     var up = document.body.classList.contains('sticky-cart-active');
     var isMobile = window.matchMedia('(max-width: 989px)').matches;
     var targets = ctLaunchTargets();
+
     for (var i = 0; i < targets.length; i++) {
       var el = targets[i];
-      var styled = el.getAttribute('data-sixj-ct-inline') === '1';
       if (up && isMobile) {
-        if (!styled) {
+        if (el.getAttribute('data-sixj-ct-inline') !== '1') {
           el.setAttribute('data-sixj-ct-saved-bottom', el.style.bottom || '');
           el.setAttribute('data-sixj-ct-inline', '1');
-          el.id === 'ch-plugin-launcher' && el.setAttribute('data-sixj-ct-moved', '1');
+          if (ctStyledTargets.indexOf(el) === -1) ctStyledTargets.push(el);
         }
-        /* CTは自前の bottom を inline !important で持つことがある。
-           JSの setProperty(..., 'important') は同じ宣言を上書きするので、こちらが勝つ。 */
         el.style.setProperty('bottom', CT_OFFSET, 'important');
         el.style.setProperty('transition', 'bottom 0.25s ease', 'important');
-      } else if (styled) {
-        var saved = el.getAttribute('data-sixj-ct-saved-bottom') || '';
-        el.style.removeProperty('bottom');
-        el.style.removeProperty('transition');
-        if (saved) el.style.bottom = saved;
-        el.removeAttribute('data-sixj-ct-inline');
-        el.removeAttribute('data-sixj-ct-saved-bottom');
-        if (el.id === 'ch-plugin-launcher') el.removeAttribute('data-sixj-ct-moved');
+      }
+    }
+
+    /* バーが隠れたら元に戻す（持ち上げた要素だけ） */
+    if (!up || !isMobile) {
+      for (var j = ctStyledTargets.length - 1; j >= 0; j--) {
+        var t = ctStyledTargets[j];
+        if (!t || !t.isConnected) { ctStyledTargets.splice(j, 1); continue; }
+        if (targets.indexOf(t) !== -1 && up && isMobile) continue;
+        var saved = t.getAttribute('data-sixj-ct-saved-bottom') || '';
+        t.style.removeProperty('bottom');
+        t.style.removeProperty('transition');
+        if (saved) t.style.bottom = saved;
+        t.removeAttribute('data-sixj-ct-inline');
+        t.removeAttribute('data-sixj-ct-saved-bottom');
+        ctStyledTargets.splice(j, 1);
       }
     }
   }
+
+  function ctBubbleRect() {
+    var roots = ctRoots();
+    for (var r = 0; r < roots.length; r++) {
+      var el = null;
+      try {
+        el = roots[r].querySelector('#ch-plugin-launcher') || roots[r].querySelector('[class*="LauncherButtonWrapper"]');
+      } catch (e) {}
+      if (el) {
+        var rect = el.getBoundingClientRect();
+        if (rect.width > 10 && rect.height > 10) return rect;
+      }
+    }
+    return null;
+  }
+
+  /* バブルがバーに重なったままなら、右側を空けるフォールバックに切り替える */
+  function guardOverlap() {
+    var rect = ctBubbleRect();
+    var barRect = stickyBar.getBoundingClientRect();
+    var barVisible = stickyBar.classList.contains('sticky-cart-bar--visible');
+    var clash = !!(rect && barVisible && rect.bottom > barRect.top + 2 && rect.top < barRect.bottom);
+    stickyBar.classList.toggle('sticky-cart-bar--ct-safe', clash);
+  }
+
+  var syncChannelTalkBase = syncChannelTalk;
+  syncChannelTalk = function () {
+    syncChannelTalkBase();
+    guardOverlap();
+  };
 
   /* バーの表示切替に合わせて追従 */
   var barObserver = new MutationObserver(syncChannelTalk);
@@ -397,31 +480,38 @@ body.sticky-cart-active {
   var ctTicks = 0;
   var ctTimer = setInterval(function () {
     syncChannelTalk();
-    if (++ctTicks >= 24) clearInterval(ctTimer);
+    if (++ctTicks >= 30) clearInterval(ctTimer);
   }, 500);
   syncChannelTalk();
 
-  /* CTは開閉などでランチャーを作り直すことがあるため、#ch-plugin の変化にも追従（間引き） */
+  /* CTは開閉などでランチャーを作り直す（シャドウDOM内も）ため、変化に追従（間引き） */
   var ctThrottle = null;
-  var ctHostObserver = new MutationObserver(function () {
+  function ctScheduleSync() {
     if (ctThrottle) return;
     ctThrottle = setTimeout(function () {
       ctThrottle = null;
       syncChannelTalk();
     }, 300);
-  });
-  function watchChannelTalkHost() {
-    var host = document.getElementById('ch-plugin');
-    if (host) {
-      ctHostObserver.observe(host, { childList: true, subtree: true });
-      syncChannelTalk();
-      return true;
-    }
-    return false;
   }
-  if (!watchChannelTalkHost()) {
+  var ctObserver = new MutationObserver(ctScheduleSync);
+  var ctWatched = [];
+  function watchChannelTalk() {
+    var roots = [document];
+    CT_IDS.forEach(function (id) {
+      var host = document.getElementById(id);
+      if (host && host.shadowRoot) roots.push(host.shadowRoot);
+    });
+    var added = false;
+    roots.forEach(function (root) {
+      if (ctWatched.indexOf(root) !== -1) return;
+      try { ctObserver.observe(root, { childList: true, subtree: true }); ctWatched.push(root); added = true; } catch (e) {}
+    });
+    if (added) syncChannelTalk();
+    return roots.length > 1;
+  }
+  if (!watchChannelTalk()) {
     var ctWait = setInterval(function () {
-      if (watchChannelTalkHost()) clearInterval(ctWait);
+      if (watchChannelTalk()) clearInterval(ctWait);
     }, 1000);
     setTimeout(function () { clearInterval(ctWait); }, 20000);
   }
