@@ -13,6 +13,12 @@
   assign size_line = ''
   if measurements_raw != blank
     assign size_line = measurements_raw | strip | newline_to_br | split: '<br />' | first | strip
+    # メタフィールドの1行目が「・幅80cm…」のように箇条書き記号で始まる商品があるため、先頭の記号と空白を落とす
+
+    assign first_char = size_line | slice: 0
+    if first_char == '・' or first_char == '·' or first_char == '、' or first_char == '-' or first_char == '*'
+      assign size_line = size_line | slice: 1, 200 | strip
+    endif
   endif
 -%}
 
