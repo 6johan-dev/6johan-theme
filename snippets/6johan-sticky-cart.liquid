@@ -365,15 +365,14 @@ body.sticky-cart-active {
     for (var i = 0; i < targets.length; i++) {
       var el = targets[i];
       var styled = el.getAttribute('data-sixj-ct-inline') === '1';
-      /* CSS側でラッパーを掴めている場合はJSで触らない（CTの再描画と競合しないため） */
-      var coveredByCss = el.id !== 'ch-plugin-launcher' && (el.className || '').toString().indexOf('LauncherButtonWrapper') !== -1;
-      if (coveredByCss) continue;
       if (up && isMobile) {
         if (!styled) {
           el.setAttribute('data-sixj-ct-saved-bottom', el.style.bottom || '');
           el.setAttribute('data-sixj-ct-inline', '1');
           el.id === 'ch-plugin-launcher' && el.setAttribute('data-sixj-ct-moved', '1');
         }
+        /* CTは自前の bottom を inline !important で持つことがある。
+           JSの setProperty(..., 'important') は同じ宣言を上書きするので、こちらが勝つ。 */
         el.style.setProperty('bottom', CT_OFFSET, 'important');
         el.style.setProperty('transition', 'bottom 0.25s ease', 'important');
       } else if (styled) {
@@ -401,6 +400,31 @@ body.sticky-cart-active {
     if (++ctTicks >= 24) clearInterval(ctTimer);
   }, 500);
   syncChannelTalk();
+
+  /* CTは開閉などでランチャーを作り直すことがあるため、#ch-plugin の変化にも追従（間引き） */
+  var ctThrottle = null;
+  var ctHostObserver = new MutationObserver(function () {
+    if (ctThrottle) return;
+    ctThrottle = setTimeout(function () {
+      ctThrottle = null;
+      syncChannelTalk();
+    }, 300);
+  });
+  function watchChannelTalkHost() {
+    var host = document.getElementById('ch-plugin');
+    if (host) {
+      ctHostObserver.observe(host, { childList: true, subtree: true });
+      syncChannelTalk();
+      return true;
+    }
+    return false;
+  }
+  if (!watchChannelTalkHost()) {
+    var ctWait = setInterval(function () {
+      if (watchChannelTalkHost()) clearInterval(ctWait);
+    }, 1000);
+    setTimeout(function () { clearInterval(ctWait); }, 20000);
+  }
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initObserver);
