@@ -1,0 +1,223 @@
+{{ '6johan-article-b.css' | asset_url | stylesheet_tag }}
+
+{%- comment -%}
+  6JOHAN MAGAZINE — 記事テンプレート 案B（スマート比較・即決型）
+  使い方: 記事のテーマテンプレートで「magazine-b」を選ぶ（templates/article.magazine-b.json）。
+  - 見出し・タグ・リード・日付・アイキャッチは記事の標準フィールドから描画
+  - 本文（article.content）は案Bの部品クラス（jhb-*）でそのまま描画
+  - 比較表 / 商品カード / FAQ は、記事メタフィールドが入っていれば自動で描画する
+      custom.compare_products : 商品参照（リスト）
+      custom.related_products : 商品参照（リスト）
+      custom.faq              : JSON [{"q":"…","a":"…"}]
+    メタフィールドが未設定でも、本文内に同部品があれば二重表示はしない。
+{%- endcomment -%}
+
+{%- liquid
+  assign cmp = article.metafields.custom.compare_products.value
+  assign rel = article.metafields.custom.related_products.value
+  assign faq = article.metafields.custom.faq.value
+  assign has_body_table = false
+  if article.content contains 'jhb-tablecard'
+    assign has_body_table = true
+  endif
+  assign has_body_cards = false
+  if article.content contains 'jhb-cards'
+    assign has_body_cards = true
+  endif
+  assign has_body_faq = false
+  if article.content contains 'jhb-faq'
+    assign has_body_faq = true
+  endif
+-%}
+
+<div class="jhB">
+  <div class="jhb-wrap">
+
+    <div class="jhb-head">
+      <div class="jhb-head__main">
+        {%- if article.tags.size > 0 -%}
+          <div class="jhb-tags">
+            {%- for tag in article.tags limit: 4 -%}
+              <span{% if forloop.first %} class="hot"{% endif %}>{{ tag | escape }}</span>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+        <h1>{{ article.title | escape }}</h1>
+        {%- if article.excerpt != blank -%}
+          <p class="jhb-sub">{{ article.excerpt | strip_html }}</p>
+        {%- endif -%}
+        <div class="jhb-meta">
+          {%- if section.settings.show_date -%}
+            <b>{{ article.published_at | time_tag: format: 'date' }}</b>
+          {%- endif -%}
+          {%- if section.settings.supervisor != blank -%}<span>{{ section.settings.supervisor }}</span>{%- endif -%}
+          {%- if section.settings.stock_note != blank -%}<span>{{ section.settings.stock_note }}</span>{%- endif -%}
+        </div>
+      </div>
+      {%- if article.image -%}
+        <figure class="jhb-head__img">
+          <img
+            src="{{ article.image | image_url: width: 800 }}"
+            srcset="{{ article.image | image_url: width: 600 }} 600w, {{ article.image | image_url: width: 800 }} 800w"
+            sizes="(min-width: 750px) 300px, 100vw"
+            alt="{{ article.image.alt | default: article.title | escape }}"
+            width="{{ article.image.width }}"
+            height="{{ article.image.height }}"
+            loading="eager"
+            fetchpriority="high"
+          >
+          {%- if article.image.alt != blank -%}
+            <figcaption>{{ article.image.alt | escape }}</figcaption>
+          {%- endif -%}
+        </figure>
+      {%- endif -%}
+    </div>
+
+    <div class="jhb-body">
+      {{ article.content }}
+    </div>
+
+    {%- comment -%} メタフィールド駆動の比較表（本文に表が無いときだけ） {%- endcomment -%}
+    {%- if cmp != blank and has_body_table == false -%}
+      <div class="jhb-tablecard">
+        <div class="jhb-tablecard__head">
+          <div class="t"><b>3秒で分かる</b>{{ article.title | escape | truncate: 34 }}</div>
+          <div class="n">サイズ / 価格 / 納期・在庫</div>
+        </div>
+        <div class="jhb-tablewrap">
+          <table class="jhb-table">
+            <thead>
+              <tr><th>商品</th><th>サイズ W×D×H</th><th>価格</th><th>納期・在庫</th><th></th></tr>
+            </thead>
+            <tbody>
+              {%- for p in cmp -%}
+                {%- capture ds -%}{%- render '6johan-delivery-state', product: p -%}{%- endcapture -%}
+                {%- assign ds = ds | strip | split: '|' -%}
+                {%- assign st = ds[0] -%}
+                {%- assign lead = ds[1] -%}
+                {%- assign utm = '?utm_source=blog&utm_medium=article&utm_campaign=' | append: article.handle | append: '&utm_content=' | append: p.handle -%}
+                {%- assign meas = p.metafields.custom.measurements.value | default: '' | newline_to_br | split: '<br />' | first | remove: '<br>' | strip -%}
+                {%- assign mat = p.metafields.custom.material.value | default: '' | newline_to_br | split: '<br />' | first | remove: '<br>' | strip -%}
+                <tr{% if forloop.first %} class="rec"{% endif %}>
+                  <td>
+                    <div class="p">
+                      {%- if p.featured_image -%}
+                        {{ p.featured_image | image_url: width: 160 | image_tag: loading: 'lazy', alt: p.title, width: 56, height: 56 }}
+                      {%- endif -%}
+                      <div class="nm">{{ p.title }}{% if forloop.first %}<span class="rec-label">おすすめ</span>{% endif %}{% if mat != blank %}<em>{{ mat | truncate: 26 }}</em>{% endif %}</div>
+                    </div>
+                  </td>
+                  <td class="dim">{{ meas | default: '—' | remove: '・' }}{% if p.variants.size > 1 %}<em>{{ p.variants.size }}タイプ展開</em>{% endif %}</td>
+                  <td class="price">{{ p.price | money }}<em>税込・2点以上5%OFF</em></td>
+                  <td>
+                    {%- if st == 'instock' -%}
+                      <span class="jhb-pill jhb-pill--in">最短7日発送</span>
+                    {%- elsif st == 'backorder' -%}
+                      <span class="jhb-pill jhb-pill--pre">{{ lead | default: '約2〜3ヶ月' }}</span>
+                    {%- else -%}
+                      <span class="jhb-pill jhb-pill--out">在庫切れ</span>
+                    {%- endif -%}
+                  </td>
+                  <td><a class="jhb-btn{% unless forloop.first %} jhb-btn--ghost{% endunless %}" href="{{ p.url }}{{ utm }}">商品ページへ</a></td>
+                </tr>
+              {%- endfor -%}
+            </tbody>
+          </table>
+        </div>
+        <div class="jhb-hint">横にスクロールすると価格・納期・商品ページへのボタンが表示されます</div>
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} メタフィールド駆動の商品カード（本文にカードが無いときだけ） {%- endcomment -%}
+    {%- if rel != blank and has_body_cards == false -%}
+      <div class="jhb-cards">
+        {%- for p in rel -%}
+          {%- capture ds -%}{%- render '6johan-delivery-state', product: p -%}{%- endcapture -%}
+          {%- assign ds = ds | strip | split: '|' -%}
+          {%- assign st = ds[0] -%}
+          {%- assign lead = ds[1] -%}
+          {%- assign utm = '?utm_source=blog&utm_medium=article&utm_campaign=' | append: article.handle | append: '&utm_content=' | append: p.handle -%}
+          <article class="jhb-card">
+            <a class="jhb-card__img" href="{{ p.url }}{{ utm }}" aria-label="{{ p.title | escape }}">
+              {%- if p.featured_image -%}
+                {{ p.featured_image | image_url: width: 900 | image_tag: loading: 'lazy', alt: p.title }}
+              {%- endif -%}
+              {%- if st == 'instock' -%}
+                <span class="jhb-pill jhb-pill--in">最短7日発送</span>
+              {%- elsif st == 'backorder' -%}
+                <span class="jhb-pill jhb-pill--pre">{{ lead | default: '約2〜3ヶ月' }}</span>
+              {%- else -%}
+                <span class="jhb-pill jhb-pill--out">在庫切れ</span>
+              {%- endif -%}
+            </a>
+            <div class="jhb-card__body">
+              <div class="jhb-card__name">{{ p.title }}</div>
+              <div class="jhb-card__price">{{ p.price | money }}<em>税込</em></div>
+              <a class="jhb-btn" href="{{ p.url }}{{ utm }}">商品ページへ</a>
+            </div>
+          </article>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} メタフィールド駆動のFAQ（本文にFAQが無いときだけ） {%- endcomment -%}
+    {%- if faq != blank and has_body_faq == false -%}
+      <div class="jhb-faq">
+        {%- for item in faq -%}
+          <details>
+            <summary><span class="q">Q</span>{{ item.q }}</summary>
+            <div class="a"><span class="q">A</span><p>{{ item.a }}</p></div>
+          </details>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+  </div>
+</div>
+
+{%- comment -%} 記事→商品クリックの計測（GA4: article_product_click） {%- endcomment -%}
+<script>
+  (function () {
+    function send(name, params) {
+      if (typeof window.gtag === 'function') { window.gtag('event', name, params); return; }
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push(Object.assign({ event: name }, params));
+    }
+    document.addEventListener('click', function (e) {
+      var el = e.target.closest ? e.target.closest('[data-ga-event]') : null;
+      if (!el) return;
+      send(el.getAttribute('data-ga-event'), {
+        article: el.getAttribute('data-ga-article') || '',
+        product: el.getAttribute('data-ga-product') || '',
+        link_url: el.getAttribute('href') || ''
+      });
+    }, true);
+  })();
+</script>
+
+{%- comment -%} 構造化データ（Article + FAQPage） {%- endcomment -%}
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": {{ article.title | json }},
+    "datePublished": {{ article.published_at | date: '%Y-%m-%d' | json }},
+    "dateModified": {{ article.updated_at | date: '%Y-%m-%d' | json }},
+    "author": { "@type": "Organization", "name": "6JOHAN" },
+    "publisher": { "@type": "Organization", "name": "6JOHAN", "url": "https://6johan.com/" }
+    {%- if article.image -%}
+    , "image": [{{ article.image | image_url: width: 1200 | prepend: 'https:' | json }}]
+    {%- endif -%}
+  }
+</script>
+
+{% schema %}
+{
+  "name": "記事テンプレート 案B",
+  "settings": [
+    { "type": "checkbox", "id": "show_date", "label": "公開日を表示", "default": true },
+    { "type": "text", "id": "supervisor", "label": "監修表記", "default": "監修：6JOHAN バイヤーチーム" },
+    { "type": "text", "id": "stock_note", "label": "在庫基準日の注記", "default": "在庫状況は2026年11月20日時点" }
+  ]
+}
+{% endschema %}
