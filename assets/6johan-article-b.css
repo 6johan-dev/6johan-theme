@@ -323,3 +323,5 @@
   .jhb-links { grid-template-columns: minmax(0, 1fr); padding: 16px 16px; margin-top: 40px; }
   .jhb-links a { font-size: 11.5px; }
 }
+
+/* synctest-20261120T2030 */
