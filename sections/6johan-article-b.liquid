@@ -16,15 +16,10 @@
   assign cmp = article.metafields.custom.compare_products.value
   assign rel = article.metafields.custom.related_products.value
   assign faq = article.metafields.custom.faq.value
-  comment
-    長文HTMLは管理画面エディタがフリーズするため、本文をテーマのスニペット（snippets/6johan-body-<handle>.liquid）から描画できる。
-    新しい記事を量産するときは、スニペットを作って下の case に1行足す（記事の本文欄は空のままでOK）。
-  endcomment
   assign custom_body = false
-  case article.handle
-    when 'wooden-lounge-chair-guide' or 'rattan-sideboard-guide'
-      assign custom_body = true
-  endcase
+  if article.handle == 'wooden-lounge-chair-guide' or article.handle == 'rattan-sideboard-guide'
+    assign custom_body = true
+  endif
 
   assign has_body_table = false
   if custom_body
@@ -49,7 +44,7 @@
   endif
 -%}
 
-<div class="jhB"><!--SYNCTEST-2036-->
+<div class="jhB">
   <div class="jhb-wrap">
 
     <div class="jhb-head">
