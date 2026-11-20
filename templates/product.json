@@ -114,6 +114,18 @@
         "title": ""
       }
     },
+    "6johan_product_guides_gdA1k7": {
+      "type": "6johan-product-guides",
+      "name": "選び方ガイド（記事）",
+      "settings": {
+        "label": "GUIDES & COMPARISON",
+        "heading": "この商品の選び方・比較記事",
+        "all_text": "ガイド一覧を見る",
+        "all_url": "/blogs/6johan-magazine",
+        "blog_handle": "6johan-magazine",
+        "blog_name": "6JOHAN MAGAZINE"
+      }
+    },
     "6johan_product_coordinate_UiNUH3": {
       "type": "6johan-product-coordinate",
       "name": "6JOHAN コーディネート提案",
@@ -199,6 +211,7 @@
     "main",
     "6johan_set_coordinate",
     "6johan_product_story",
+    "6johan_product_guides_gdA1k7",
     "6johan_product_coordinate_UiNUH3",
     "related-products",
     "6johan_recently_viewed_b7fYV8",
