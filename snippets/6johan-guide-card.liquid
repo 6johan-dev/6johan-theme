@@ -1,0 +1,46 @@
+{%- comment -%}
+  6JOHAN 商品ページ「選び方ガイド」カード1枚
+  params:
+    a     : article オブジェクト
+    lead  : 先頭カードなら true（塗りCTA＋「この商品の比較」タグ）
+    maxw  : サムネイルの sizes 用（任意）
+{%- endcomment -%}
+{%- liquid
+  assign read_min = a.content | strip_html | size | divided_by: 400.0 | ceil
+  if read_min < 2
+    assign read_min = 2
+  endif
+  assign tag1 = a.tags[0] | default: 'GUIDE'
+  assign tag2 = a.tags[1] | default: '比較ガイド'
+  assign summ = a.excerpt | default: a.content
+  assign utm = '?utm_source=product&utm_medium=guide&utm_campaign=' | append: a.handle | append: '&utm_content=' | append: product.handle
+-%}
+<li>
+  <a class="jguide-card{% if lead %} jguide-card--lead{% endif %}"
+     href="{{ a.url }}{{ utm }}"
+     data-ga-event="product_to_article"
+     data-ga-article="{{ a.handle }}"
+     data-ga-product="{{ product.handle }}">
+    <span class="jguide-card__thumb">
+      {%- if a.image -%}
+        <img src="{{ a.image | image_url: width: 600 }}"
+             srcset="{{ a.image | image_url: width: 400 }} 400w, {{ a.image | image_url: width: 600 }} 600w"
+             sizes="(min-width: 990px) 232px, (min-width: 750px) 190px, 100vw"
+             alt="{{ a.image.alt | default: a.title | escape }}" width="600" height="400" loading="lazy">
+      {%- elsif product.featured_image -%}
+        {{ product.featured_image | image_url: width: 600 | image_tag: loading: 'lazy', alt: a.title }}
+      {%- endif -%}
+      {%- if lead -%}<span class="jguide-card__flag">この商品の比較</span>{%- endif -%}
+    </span>
+    <span class="jguide-card__body">
+      <span class="jguide-card__kicker"><span class="tag">{{ tag1 | upcase | escape }}</span><span>{{ tag2 | escape }}</span></span>
+      <h3 class="jguide-card__title">{{ a.title | escape }}</h3>
+      <p class="jguide-card__sum">{{ summ | strip_html | normalize_whitespace | truncate: 70 }}</p>
+      <span class="jguide-card__meta">
+        <span>読了 {{ read_min }}分</span>
+        <span>{{ a.published_at | date: '%Y.%m.%d' }} 公開</span>
+      </span>
+    </span>
+    <span class="jguide-card__cta">ガイドを読む <i>→</i></span>
+  </a>
+</li>

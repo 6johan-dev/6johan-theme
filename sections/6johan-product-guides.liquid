@@ -1,30 +1,79 @@
 {%- comment -%}
   6JOHAN 商品ページ内「選び方・比較ガイド」枠（案Bトーン）
-  - 配置: templates/product.json の 6johan_product_story の直後
-  - 商品メタフィールド custom.guide_articles（記事参照・リスト）に入っている記事だけを表示
-  - 未設定・記事が未公開のときはセクションごと非表示（空枠を出さない）
-  - 任意: custom.guide_note（単一行テキスト）で注記文を差し替え
-  - 記事→商品のリンクに UTM（utm_source=product / utm_medium=guide / utm_campaign=記事ハンドル / utm_content=商品ハンドル）と
-    GA4 用 data-ga-event="product_to_article" を付与
+  配置: templates/product.json の 6johan_product_story の直後
+
+  表示条件（どちらかに入っていれば表示・どちらも無ければセクションごと非表示）
+   A) 商品メタフィールド custom.guide_articles（記事参照・リスト）  … 明示的に固定したいとき
+   B) 記事メタフィールド custom.guide_products（商品参照・リスト）  … 記事側から指定（量産向き）
+      → ブログ（既定: 6johan-magazine）の公開記事のうち、この商品を含む記事を新しい順に最大 max_cards 枚
+
+  記事→商品リンクには UTM（utm_source=product / utm_medium=guide / utm_campaign=記事ハンドル / utm_content=商品ハンドル）と
+  GA4 用 data-ga-event="product_to_article" を付与。
+  任意: 商品メタフィールド custom.guide_note（単一行/複数行テキスト）で注記文を差し替え
 {%- endcomment -%}
 
 {%- liquid
-  assign guides = product.metafields.custom.guide_articles.value
-  assign note = product.metafields.custom.guide_note.value
   assign blog_handle = section.settings.blog_handle | default: '6johan-magazine'
+  assign mag = blogs[blog_handle]
+  assign max_cards = section.settings.max_cards | default: 2
+  assign pinned = product.metafields.custom.guide_articles.value
+  assign note = product.metafields.custom.guide_note.value
   assign all_url = section.settings.all_url | default: '/blogs/6johan-magazine'
-
-  assign shown = 0
-  if guides != blank
-    for g in guides
-      if g.handle != blank and g.title != blank
-        assign shown = shown | plus: 1
-      endif
-    endfor
-  endif
+  assign shown = ''
+  assign count = 0
 -%}
 
-{%- if shown > 0 -%}
+{%- capture cards -%}
+  {%- if pinned != blank -%}
+    {%- for a in pinned -%}
+      {%- if count < max_cards and a.handle != blank and a.title != blank -%}
+        {%- assign dup = '|' | append: shown | append: '|' -%}
+        {%- assign key = '|' | append: a.handle | append: '|' -%}
+        {%- unless dup contains key -%}
+          {%- if count == 0 -%}
+            {%- render '6johan-guide-card', a: a, lead: true -%}
+          {%- else -%}
+            {%- render '6johan-guide-card', a: a, lead: false -%}
+          {%- endif -%}
+          {%- assign shown = shown | append: a.handle | append: '|' -%}
+          {%- assign count = count | plus: 1 -%}
+        {%- endunless -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+
+  {%- if mag != blank and count < max_cards -%}
+    {%- for a in mag.articles limit: 50 -%}
+      {%- if count < max_cards -%}
+        {%- assign dup = '|' | append: shown | append: '|' -%}
+        {%- assign key = '|' | append: a.handle | append: '|' -%}
+        {%- unless dup contains key -%}
+          {%- assign cov = a.metafields.custom.guide_products.value -%}
+          {%- assign hit = false -%}
+          {%- if cov != blank -%}
+            {%- for p in cov -%}
+              {%- if p.handle == product.handle -%}
+                {%- assign hit = true -%}
+                {%- break -%}
+              {%- endif -%}
+            {%- endfor -%}
+          {%- endif -%}
+          {%- if hit -%}
+            {%- if count == 0 -%}
+              {%- render '6johan-guide-card', a: a, lead: true -%}
+            {%- else -%}
+              {%- render '6johan-guide-card', a: a, lead: false -%}
+            {%- endif -%}
+            {%- assign shown = shown | append: a.handle | append: '|' -%}
+            {%- assign count = count | plus: 1 -%}
+          {%- endif -%}
+        {%- endunless -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+{%- endcapture -%}
+
+{%- if cards contains 'jguide-card__title' -%}
 <section class="jguide" id="ProductGuide-{{ section.id }}">
   <div class="jguide__inner">
     <div class="jguide__head">
@@ -36,46 +85,7 @@
       <a class="jguide__all" href="{{ all_url }}" data-ga-event="guide_list_click">{{ section.settings.all_text | default: 'ガイド一覧を見る' }}</a>
     </div>
 
-    <ul class="jguide__list">
-      {%- for g in guides -%}
-        {%- if g.handle == blank or g.title == blank -%}{%- continue -%}{%- endif -%}
-        {%- assign read_min = g.content | strip_html | size | divided_by: 400.0 | ceil -%}
-        {%- if read_min < 2 -%}{%- assign read_min = 2 -%}{%- endif -%}
-        {%- assign utm = '?utm_source=product&utm_medium=guide&utm_campaign=' | append: g.handle | append: '&utm_content=' | append: product.handle -%}
-        {%- assign tag1 = g.tags[0] | default: 'GUIDE' -%}
-        {%- assign tag2 = g.tags[1] | default: '比較ガイド' -%}
-        {%- assign summ = g.excerpt | default: g.content -%}
-        <li>
-          <a class="jguide-card{% if forloop.first %} jguide-card--lead{% endif %}"
-             href="{{ g.url }}{{ utm }}"
-             data-ga-event="product_to_article"
-             data-ga-article="{{ g.handle }}"
-             data-ga-product="{{ product.handle }}">
-            <span class="jguide-card__thumb">
-              {%- if g.image -%}
-                <img src="{{ g.image | image_url: width: 600 }}"
-                     srcset="{{ g.image | image_url: width: 400 }} 400w, {{ g.image | image_url: width: 600 }} 600w"
-                     sizes="(min-width: 990px) 232px, (min-width: 750px) 190px, 100vw"
-                     alt="{{ g.image.alt | default: g.title | escape }}" width="600" height="400" loading="lazy">
-              {%- elsif product.featured_image -%}
-                {{ product.featured_image | image_url: width: 600 | image_tag: loading: 'lazy', alt: g.title }}
-              {%- endif -%}
-              {%- if forloop.first -%}<span class="jguide-card__flag">この商品の比較</span>{%- endif -%}
-            </span>
-            <span class="jguide-card__body">
-              <span class="jguide-card__kicker"><span class="tag">{{ tag1 | upcase | escape }}</span><span>{{ tag2 | escape }}</span></span>
-              <h3 class="jguide-card__title">{{ g.title | escape }}</h3>
-              <p class="jguide-card__sum">{{ summ | strip_html | normalize_whitespace | truncate: 70 }}</p>
-              <span class="jguide-card__meta">
-                <span>読了 {{ read_min }}分</span>
-                <span>{{ g.published_at | date: '%Y.%m.%d' }} 公開</span>
-              </span>
-            </span>
-            <span class="jguide-card__cta">ガイドを読む <i>→</i></span>
-          </a>
-        </li>
-      {%- endfor -%}
-    </ul>
+    <ul class="jguide__list">{{ cards }}</ul>
 
     <p class="jguide__note">{{ note | default: section.settings.note | default: '記事内の在庫・納期は更新時点の情報です。最新の納期は各商品ページでご確認ください。' }}記事は <a href="{{ all_url }}">{{ section.settings.blog_name | default: '6JOHAN MAGAZINE' }}</a> で公開しています。</p>
   </div>
@@ -174,8 +184,9 @@
     { "type": "text", "id": "heading", "label": "見出し", "default": "この商品の選び方・比較記事" },
     { "type": "text", "id": "all_text", "label": "一覧リンクの文言", "default": "ガイド一覧を見る" },
     { "type": "url", "id": "all_url", "label": "一覧リンク先" },
-    { "type": "text", "id": "blog_handle", "label": "ブログのハンドル（参照用）", "default": "6johan-magazine" },
+    { "type": "text", "id": "blog_handle", "label": "ブログのハンドル", "default": "6johan-magazine" },
     { "type": "text", "id": "blog_name", "label": "ブログ名（注記内）", "default": "6JOHAN MAGAZINE" },
+    { "type": "range", "id": "max_cards", "label": "最大表示数", "min": 1, "max": 4, "step": 1, "default": 2 },
     { "type": "textarea", "id": "note", "label": "注記（空欄で既定文）" }
   ],
   "presets": [{ "name": "選び方ガイド（記事）" }],
