@@ -8,8 +8,8 @@
 {%- liquid
   assign body_size = a.content | strip_html | size
   assign read_min = body_size | divided_by: 400.0 | ceil
+  # 本文をテーマのスニペットで描画している記事（本文欄が空／約7〜8分の読み物）は固定表記
   if body_size < 800
-    comment 本文をテーマのスニペットで描画している記事（約7〜8分の読み物）は固定表記
     assign read_min = 8
   endif
   assign tag1 = ''
