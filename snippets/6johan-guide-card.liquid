@@ -10,8 +10,22 @@
   if read_min < 2
     assign read_min = 2
   endif
-  assign tag1 = a.tags[0] | default: 'GUIDE'
-  assign tag2 = a.tags[1] | default: '比較ガイド'
+  assign tag1 = ''
+  assign tag2 = ''
+  for t in a.tags
+    if tag1 == '' and t contains 'MODEL'
+      assign tag1 = t
+    endif
+    if tag2 == '' and t == '比較ガイド'
+      assign tag2 = t
+    endif
+  endfor
+  if tag1 == ''
+    assign tag1 = a.tags[0] | default: 'GUIDE'
+  endif
+  if tag2 == ''
+    assign tag2 = '比較ガイド'
+  endif
   assign summ = a.excerpt | default: a.content
   assign utm = '?utm_source=product&utm_medium=guide&utm_campaign=' | append: a.handle | append: '&utm_content=' | append: product.handle
 -%}
