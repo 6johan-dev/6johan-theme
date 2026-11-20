@@ -63,6 +63,7 @@
   letter-spacing: 0.01em;
   margin: 20px 0 0;
   text-wrap: balance;
+  word-break: auto-phrase;
 }
 .jhb-sub {
   font-size: 13.5px;
@@ -170,7 +171,7 @@
 .jhb-sec__head { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; border-bottom: 1px solid var(--jhb-ink); padding-bottom: 12px; }
 .jhb-sec__head .l { display: flex; align-items: center; gap: 12px; }
 .jhb-sec__head .num { font-size: 11px; font-weight: 700; color: #fff; background: var(--jhb-ink); padding: 3px 7px; letter-spacing: 0.06em; }
-.jhb-sec__head h2 { font-size: 21px; font-weight: 700; letter-spacing: 0.02em; margin: 0; }
+.jhb-sec__head h2 { font-size: 21px; font-weight: 700; letter-spacing: 0.02em; margin: 0; word-break: auto-phrase; }
 .jhb-sec__head .r { font-size: 10.5px; color: var(--jhb-sub); letter-spacing: 0.04em; }
 
 /* ---------- product cards ---------- */
