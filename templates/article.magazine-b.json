@@ -5,9 +5,11 @@
       "settings": {
         "show_date": true,
         "supervisor": "監修：6JOHAN バイヤーチーム",
-        "stock_note": "在庫状況は2026年11月20日時点"
+        "stock_note": "在庫状況は各商品ページでご確認ください"
       }
     }
   },
-  "order": ["main"]
+  "order": [
+    "main"
+  ]
 }
