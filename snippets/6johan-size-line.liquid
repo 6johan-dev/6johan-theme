@@ -1,0 +1,48 @@
+{%- comment -%}
+  6JOHAN Size Line — 寸法の1行表示（Phase 1 / 2026-11-20）
+
+  目的: 「サイズ・寸法」アコーディオンが全タップの約11%を占める最大関心事なのに
+        購入ボタンより下の折りたたみの奥にあったため、色選択の直後に1行だけ常時表示する。
+  データ: custom.measurements（複数行テキスト）。1行目のみを使い、空なら何も出さない
+        （空枠・ラベルだけの表示はしない）。
+  使い方: {% render '6johan-size-line', product: product %}
+{%- endcomment -%}
+
+{%- liquid
+  assign measurements_raw = product.metafields.custom.measurements.value | default: product.metafields.custom.measurements
+  assign size_line = ''
+  if measurements_raw != blank
+    assign size_line = measurements_raw | strip | newline_to_br | split: '<br />' | first | strip
+  endif
+-%}
+
+{%- if size_line != blank -%}
+<style>
+  .sixj-size-line {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin: 10px 0 2px;
+    font-family: var(--6j-font-body, -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic Medium", "Yu Gothic", "Meiryo", sans-serif);
+    font-size: 13px;
+    line-height: 1.5;
+    color: #292724;
+  }
+  .sixj-size-line__label {
+    flex: 0 0 auto;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: #8A7A6E;
+  }
+  .sixj-size-line__value {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+</style>
+<div class="sixj-size-line" data-sixj-size-line>
+  <span class="sixj-size-line__label">SIZE</span>
+  <span class="sixj-size-line__value">{{ size_line | escape }}</span>
+</div>
+{%- endif -%}

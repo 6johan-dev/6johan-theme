@@ -66,7 +66,7 @@
     </div>
   </div>
 </div>
-{% render '6johan-shipping-estimate', product: product %}
+{%- comment -%} 送料目安はカートボタンの下へ移動（Phase 1 / 2026-11-20）: main-product.liquid の buy_buttons ブロックで描画 {%- endcomment -%}
 <script>
 (function() {
   var productId = '{{ product.id }}';

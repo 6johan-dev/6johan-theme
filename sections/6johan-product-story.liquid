@@ -5,7 +5,9 @@
   使用メタフィールド:
   - custom.descriptiontitle1〜4 (単一行テキスト)
   - custom.description1〜4 (複数行テキスト)
-  - custom.descriptionimage1〜4 (ファイル) ← キー要確認
+  - custom.descriptionimage1〜4 (ファイル)
+  - custom.desctiptionimage3 (ファイル) … 3枚目だけ店側の定義キーが綴り誤り（rがt）。
+    120商品のデータはこのキーに入っているため、両方を見て表示する。
 {% endcomment %}
 
 {%- liquid
@@ -19,7 +21,7 @@
   assign d4 = product.metafields.custom.description4
   assign i1 = product.metafields.custom.descriptionimage1
   assign i2 = product.metafields.custom.descriptionimage2
-  assign i3 = product.metafields.custom.desctiptionimage3
+  assign i3 = product.metafields.custom.descriptionimage3 | default: product.metafields.custom.desctiptionimage3
   assign i4 = product.metafields.custom.descriptionimage4
 
   assign has_story = false

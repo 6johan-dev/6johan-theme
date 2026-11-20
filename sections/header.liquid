@@ -408,7 +408,10 @@
     }
 
     closeSearchModal() {
+      /* このテーマの検索は search-form / .search-modal で、details-modal は存在しない。
+         要素がない状態で close() を呼ぶと毎スクロールで例外が出るため null ガードする。 */
       this.searchModal = this.searchModal || this.header.querySelector('details-modal');
+      if (!this.searchModal || typeof this.searchModal.close !== 'function') return;
       this.searchModal.close(false);
     }
   }

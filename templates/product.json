@@ -27,10 +27,6 @@
             "swatch_shape": "circle"
           }
         },
-        "quantity_selector": {
-          "type": "quantity_selector",
-          "settings": {}
-        },
         "buy_buttons": {
           "type": "buy_buttons",
           "settings": {
@@ -83,7 +79,6 @@
         "title",
         "price",
         "variant_picker",
-        "quantity_selector",
         "buy_buttons",
         "collapsible-row-0",
         "collapsible-row-1",
@@ -209,13 +204,13 @@
   },
   "order": [
     "main",
-    "6johan_set_coordinate",
     "6johan_product_story",
-    "6johan_product_guides_gdA1k7",
+    "6johan_set_coordinate",
     "6johan_product_coordinate_UiNUH3",
     "related-products",
-    "6johan_recently_viewed_b7fYV8",
+    "1792358897efba0eb3",
+    "6johan_product_guides_gdA1k7",
     "6johan_cross_sell_7hJ9je",
-    "1792358897efba0eb3"
+    "6johan_recently_viewed_b7fYV8"
   ]
 }

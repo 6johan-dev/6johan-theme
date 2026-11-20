@@ -50,9 +50,6 @@
     {%- if product.metafields.custom.measurements != blank -%}
       {%- capture content_output -%}
         <p>{{ product.metafields.custom.measurements | newline_to_br }}</p>
-        {%- if product.metafields.custom._new != blank -%}
-          <p><strong>梱包サイズ：</strong>{{ product.metafields.custom._new }}</p>
-        {%- endif -%}
       {%- endcapture -%}
     {%- else -%}
       {%- capture content_output -%}

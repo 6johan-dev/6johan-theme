@@ -1,6 +1,11 @@
 {% comment %}
   6JOHAN Sticky Cart Bar
   固定カートバー — スクロール時に画面下部に表示
+
+  Phase 1 (2026-11-20):
+   - 価格の下に安心材料を1行追加（在庫あり=最短7日発送／受注生産=受注生産、いずれも30日返品OK。
+     納期の月数は直上の配送BOXが持つため、バーでは矛盾しない短い表現にする）
+   - 押下を GA4 `sticky_cart_click` として送信（gtag / dataLayer / Shopify analytics の順で利用可能なもの）
 {% endcomment %}
 
 {%- style -%}
@@ -25,6 +30,16 @@
 }
 .sticky-cart-bar__price {
   flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.sticky-cart-bar__trust {
+  margin-top: 2px;
+  font-size: 10px;
+  line-height: 1.3;
+  color: var(--6j-stone, #8A7A7A);
+  white-space: nowrap;
 }
 .sticky-cart-bar__price-current {
   font-size: 18px;
@@ -110,6 +125,7 @@ body.sticky-cart-active {
       <div class="sticky-cart-bar__price-compare">{{ product.compare_at_price | money }}</div>
     {%- endif -%}
     <div class="sticky-cart-bar__price-current" data-sticky-price>{{ product.selected_or_first_available_variant.price | money }}</div>
+    <div class="sticky-cart-bar__trust" data-sticky-trust></div>
   </div>
 
   <button type="button" class="sticky-cart-bar__cart-btn" id="stickyCartBtn"
@@ -137,6 +153,69 @@ body.sticky-cart-active {
   var stickyBtn = document.getElementById('stickyCartBtn');
   var stickyFavBtn = document.getElementById('stickyFavBtn');
   if (!stickyBar) return;
+
+  var productHandle = {{ product.handle | json }};
+  var trustEl = stickyBar.querySelector('[data-sticky-trust]');
+
+  /* 納期区分（配送BOXの表示状態を正とする。納期は在庫/受注生産で矛盾しない表現にする） */
+  function currentDeliveryState() {
+    var box = document.getElementById('sixj-delivery-box');
+    if (box) {
+      var back = box.querySelector('.sixj-dbox--backorder');
+      var inst = box.querySelector('.sixj-dbox--instock');
+      if (back && back.style.display !== 'none') return 'backorder';
+      if (inst && inst.style.display !== 'none') return 'instock';
+      return 'unavailable';
+    }
+    return 'instock';
+  }
+
+  function trustText(state) {
+    if (state === 'backorder') return '受注生産・30日返品OK';
+    if (state === 'unavailable') return '30日返品OK';
+    return '最短7日発送・30日返品OK';
+  }
+
+  function syncTrust() {
+    if (trustEl) trustEl.textContent = trustText(currentDeliveryState());
+  }
+
+  /* GA4 計測: sticky_cart_click
+     このテーマには gtag.js を直接埋めていない（GA4はGoogle & YouTubeアプリのWebピクセル側）ため、
+     利用可能な送信先に順に送る。送れない場合も押下体験は止めない。 */
+  function sixjTrack(name, params) {
+    try {
+      if (typeof window.gtag === 'function') {
+        window.gtag('event', name, params);
+      } else if (window.dataLayer && typeof window.dataLayer.push === 'function') {
+        var payload = { event: name };
+        for (var k in params) { if (Object.prototype.hasOwnProperty.call(params, k)) payload[k] = params[k]; }
+        window.dataLayer.push(payload);
+      }
+    } catch (e) {}
+    try {
+      if (window.Shopify && window.Shopify.analytics && typeof window.Shopify.analytics.publish === 'function') {
+        window.Shopify.analytics.publish(name, params);
+      }
+    } catch (e) {}
+    try {
+      document.dispatchEvent(new CustomEvent('sixj:' + name, { detail: params }));
+    } catch (e) {}
+  }
+
+  function priceYen() {
+    var el = stickyBar.querySelector('[data-sticky-price]');
+    if (!el) return 0;
+    var digits = (el.textContent || '').replace(/[^0-9]/g, '');
+    return digits ? parseInt(digits, 10) : 0;
+  }
+
+  syncTrust();
+  document.addEventListener('change', function (e) {
+    if (e.target && e.target.closest && e.target.closest('variant-radios, variant-selects, product-info')) {
+      setTimeout(syncTrust, 250);
+    }
+  });
 
   function findMainCartBtn() {
     var forms = document.querySelectorAll('product-form form, form[action*="/cart/add"]');
@@ -183,12 +262,21 @@ body.sticky-cart-active {
 
   stickyBtn.addEventListener('click', function() {
     if (stickyBtn.disabled) return;
+    var state = currentDeliveryState();
+    sixjTrack('sticky_cart_click', {
+      method: 'sticky_bar',
+      product_handle: productHandle,
+      delivery_state: state,
+      price: priceYen(),
+      currency: 'JPY',
+      quantity: 1
+    });
     var realBtn = findMainCartBtn();
     if (realBtn) realBtn.click();
   });
 
   if (stickyFavBtn) {
-    var handle = '{{ product.handle }}';
+    var handle = productHandle;
     var STORAGE_KEY = '6johan_favorites';
 
     function isFav() {

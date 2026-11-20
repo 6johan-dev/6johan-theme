@@ -23,7 +23,7 @@
 <div class="sixj-ship" data-sixj-ship data-size="{{ size_num }}" data-price="{{ current_variant.price }}" data-product-id="{{ product.id }}">
   <div class="sixj-ship__head">
     <span class="sixj-ship__label">送料</span>
-    <span class="sixj-ship__note">地域により異なります（梱包サイズ {{ size_num }}）</span>
+    <span class="sixj-ship__note">お届け先別・税込</span>
   </div>
 
   <label class="sixj-ship__row" for="sixj-ship-pref-{{ uid }}">
@@ -217,6 +217,9 @@
       var saved = localStorage.getItem(STORAGE_KEY);
       if (saved && (PREF_AREA[saved] !== undefined || saved === '沖縄県')) select.value = saved;
     } catch (e) {}
+    /* 未選択のまま「総額不明」で止まらないよう、初期値は東京都（Phase 1 / 2026-11-20）。
+       選び直した値は上の localStorage で次回も使う。 */
+    if (!select.value) select.value = '東京都';
 
     select.addEventListener('change', function () {
       try { localStorage.setItem(STORAGE_KEY, select.value); } catch (e) {}
