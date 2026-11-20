@@ -18,7 +18,7 @@
   assign faq = article.metafields.custom.faq.value
   assign art_slug = article.handle | split: '/' | last
   assign custom_body = false
-  if art_slug == 'wooden-lounge-chair-guide' or art_slug == 'rattan-sideboard-guide'
+  if art_slug == 'wooden-lounge-chair-guide' or art_slug == 'rattan-sideboard-guide' or art_slug == 'rattan-dining-chair-guide' or art_slug == 'low-table-side-table-guide' or art_slug == 'leather-lounge-chair-guide'
     assign custom_body = true
   endif
 
@@ -94,6 +94,12 @@
           {%- render '6johan-body-wooden-lounge-chair-guide' -%}
         {%- elsif art_slug == 'rattan-sideboard-guide' -%}
           {%- render '6johan-body-rattan-sideboard-guide' -%}
+        {%- elsif art_slug == 'rattan-dining-chair-guide' -%}
+          {%- render '6johan-body-rattan-dining-chair-guide' -%}
+        {%- elsif art_slug == 'low-table-side-table-guide' -%}
+          {%- render '6johan-body-low-table-side-table-guide' -%}
+        {%- elsif art_slug == 'leather-lounge-chair-guide' -%}
+          {%- render '6johan-body-leather-lounge-chair-guide' -%}
         {%- endif -%}
       {%- else -%}
         {{ article.content }}
