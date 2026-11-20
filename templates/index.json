@@ -481,6 +481,15 @@
     "6johan_news_FQiVyx": {
       "type": "6johan-news",
       "blocks": {
+        "news_item_payN7f2": {
+          "type": "news_item",
+          "settings": {
+            "date": "2026.11.19",
+            "category": "info",
+            "text": "新しいお支払い方法を追加いたしました（コンビニ決済・あと払いペイディ・PayPay・メルペイ）",
+            "url": "shopify://blogs/information/034"
+          }
+        },
         "news_item_kPgDEW": {
           "type": "news_item",
           "settings": {
@@ -510,9 +519,9 @@
         }
       },
       "block_order": [
+        "news_item_payN7f2",
         "news_item_kPgDEW",
-        "news_item_CX7Yaj",
-        "news_item_ri3UpY"
+        "news_item_CX7Yaj"
       ],
       "name": "6JOHAN ニュース",
       "settings": {
