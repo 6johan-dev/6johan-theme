@@ -16,15 +16,34 @@
   assign cmp = article.metafields.custom.compare_products.value
   assign rel = article.metafields.custom.related_products.value
   assign faq = article.metafields.custom.faq.value
+  comment
+    長文HTMLは管理画面エディタがフリーズするため、本文をテーマのスニペット（snippets/6johan-body-<handle>.liquid）から描画できる。
+    新しい記事を量産するときは、スニペットを作って下の case に1行足す（記事の本文欄は空のままでOK）。
+  endcomment
+  assign custom_body = false
+  case article.handle
+    when 'wooden-lounge-chair-guide' or 'rattan-sideboard-guide'
+      assign custom_body = true
+  endcase
+
   assign has_body_table = false
+  if custom_body
+    assign has_body_table = true
+  endif
   if article.content contains 'jhb-tablecard'
     assign has_body_table = true
   endif
   assign has_body_cards = false
+  if custom_body
+    assign has_body_cards = true
+  endif
   if article.content contains 'jhb-cards'
     assign has_body_cards = true
   endif
   assign has_body_faq = false
+  if custom_body
+    assign has_body_faq = true
+  endif
   if article.content contains 'jhb-faq'
     assign has_body_faq = true
   endif
@@ -74,7 +93,16 @@
     </div>
 
     <div class="jhb-body">
-      {{ article.content }}
+      {%- if custom_body -%}
+        {%- case article.handle -%}
+          {%- when 'wooden-lounge-chair-guide' -%}
+            {%- render '6johan-body-wooden-lounge-chair-guide' -%}
+          {%- when 'rattan-sideboard-guide' -%}
+            {%- render '6johan-body-rattan-sideboard-guide' -%}
+        {%- endcase -%}
+      {%- else -%}
+        {{ article.content }}
+      {%- endif -%}
     </div>
 
     {%- comment -%} メタフィールド駆動の比較表（本文に表が無いときだけ） {%- endcomment -%}
