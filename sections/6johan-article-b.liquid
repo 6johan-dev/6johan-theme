@@ -16,8 +16,9 @@
   assign cmp = article.metafields.custom.compare_products.value
   assign rel = article.metafields.custom.related_products.value
   assign faq = article.metafields.custom.faq.value
+  assign art_slug = article.handle | split: '/' | last
   assign custom_body = false
-  if article.handle == 'wooden-lounge-chair-guide' or article.handle == 'rattan-sideboard-guide'
+  if art_slug == 'wooden-lounge-chair-guide' or art_slug == 'rattan-sideboard-guide'
     assign custom_body = true
   endif
 
@@ -44,7 +45,7 @@
   endif
 -%}
 
-<div class="jhB"><!--DBG:{{ article.handle }}:{{ custom_body }}-->
+<div class="jhB">
   <div class="jhb-wrap">
 
     <div class="jhb-head">
@@ -89,12 +90,11 @@
 
     <div class="jhb-body">
       {%- if custom_body -%}
-        {%- case article.handle -%}
-          {%- when 'wooden-lounge-chair-guide' -%}
-            {%- render '6johan-body-wooden-lounge-chair-guide' -%}
-          {%- when 'rattan-sideboard-guide' -%}
-            {%- render '6johan-body-rattan-sideboard-guide' -%}
-        {%- endcase -%}
+        {%- if art_slug == 'wooden-lounge-chair-guide' -%}
+          {%- render '6johan-body-wooden-lounge-chair-guide' -%}
+        {%- elsif art_slug == 'rattan-sideboard-guide' -%}
+          {%- render '6johan-body-rattan-sideboard-guide' -%}
+        {%- endif -%}
       {%- else -%}
         {{ article.content }}
       {%- endif -%}
