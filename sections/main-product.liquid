@@ -702,6 +702,9 @@
                 </product-recommendations>
               {%- when 'icon-with-text' -%}
                 {% render 'icon-with-text', block: block %}
+              {%- when 'ai_concierge' -%}
+                {%- comment -%} 6JOHAN AI接客: 質問チップ＋1行入力＋即答カード（カートボタン直上） {%- endcomment -%}
+                {% render 'ai-concierge', product: product, block: block %}
             {%- endcase -%}
           {%- endfor -%}
           <a href="{{ product.url }}" class="link product__view-details animate-arrow">
@@ -781,6 +784,73 @@
   "blocks": [
     {
       "type": "@app"
+    },
+    {
+      "type": "ai_concierge",
+      "name": "AIコンシェルジュ（即答チップ）",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "enabled",
+          "label": "表示する",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "見出しラベル",
+          "default": "AI CONCIERGE"
+        },
+        {
+          "type": "text",
+          "id": "badge",
+          "label": "右側のタグ",
+          "default": "1秒で即答"
+        },
+        {
+          "type": "text",
+          "id": "chip_delivery",
+          "label": "チップ1（納期）",
+          "default": "いつ届く？"
+        },
+        {
+          "type": "text",
+          "id": "chip_size",
+          "label": "チップ2（寸法）",
+          "default": "サイズ感"
+        },
+        {
+          "type": "text",
+          "id": "chip_return",
+          "label": "チップ3（返品）",
+          "default": "返品"
+        },
+        {
+          "type": "text",
+          "id": "placeholder",
+          "label": "入力欄のプレースホルダ",
+          "default": "搬入・納期・素材…ひとことどうぞ"
+        },
+        {
+          "type": "text",
+          "id": "human_label",
+          "label": "相談ボタンの文言",
+          "default": "担当者に相談"
+        },
+        {
+          "type": "url",
+          "id": "human_url",
+          "label": "相談リンク",
+          "info": "空の場合は6JOHAN LINE公式（@505xknxn）へのメッセージを開きます"
+        },
+        {
+          "type": "color",
+          "id": "accent",
+          "label": "アクセント色",
+          "default": "#6B5B4F"
+        }
+      ]
     },
     {
       "type": "text",

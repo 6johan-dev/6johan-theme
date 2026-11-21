@@ -1,0 +1,160 @@
+{%- comment -%}
+  6JOHAN AI CONCIERGE — 商品ページ即答チップ（MVP / 2026-11-21）
+
+  使い方: main-product の block「ai_concierge」から render される
+    {% render 'ai-concierge', product: product, block: block %}
+
+  事実（寸法・在庫/納期・送料・返品）はLiquidで商品データから確定させ、
+  JS（assets/ai-concierge.js）はそれを文章にするだけ。数値を作らせない。
+
+  参照データ
+    - 寸法      : product.metafields.custom.measurements（複数行・1行目を使用）
+    - 素材      : product.metafields.custom.material
+    - 組み立て  : product.metafields.custom.is_assembly（boolean）
+    - 梱包サイズ: product.metafields.custom._new（配送サイズ区分の数値。送料表のキー）
+    - 在庫/納期 : snippets/6johan-delivery-state（商品ページ共通の唯一の判定ソース）
+    - 送料      : snippets/6johan-shipping-estimate の SHIPPING_TABLE と同じ料金（関東）
+    - 返品      : /policies/refund-policy（30日以内・理由を問わず）
+
+  クラス名は j6ac- 接頭辞。テーマ共通CSSの [class*="sixj-"] / [class*="6johan"]
+  { background:#fff !important } を避けるため（のし帖の教訓と同じ）。
+{%- endcomment -%}
+
+{%- liquid
+  assign ac_enabled = block.settings.enabled
+  if ac_enabled == nil
+    assign ac_enabled = true
+  endif
+
+  assign measurements_raw = product.metafields.custom.measurements.value | default: product.metafields.custom.measurements
+  assign size_line = ''
+  if measurements_raw != blank
+    assign size_line = measurements_raw | strip | newline_to_br | split: '<br />' | first | strip
+    assign first_char = size_line | slice: 0
+    if first_char == '・' or first_char == '·' or first_char == '、' or first_char == '-' or first_char == '*'
+      assign size_line = size_line | slice: 1, 200 | strip
+    endif
+  endif
+
+  assign ac_material = product.metafields.custom.material.value | default: product.metafields.custom.material
+  assign ac_assembly = product.metafields.custom.is_assembly.value
+  if ac_assembly == blank
+    assign ac_assembly = product.metafields.custom.is_assembly
+  endif
+
+  assign ac_size_num = product.metafields.custom['_new'] | strip | replace: 'サイズ', '' | replace: ' ', '' | plus: 0
+
+  assign ac_variant = product.selected_or_first_available_variant
+  capture _ac_ds
+    render '6johan-delivery-state', variant: ac_variant, product: product
+  endcapture
+  assign _ac_ds = _ac_ds | split: '|'
+  assign ac_state = _ac_ds[0] | strip
+  assign ac_lead = _ac_ds[1] | strip
+
+  # 送料（関東）: snippets/6johan-shipping-estimate の SHIPPING_TABLE と同じ値
+  assign ac_ship = 0
+  if ac_size_num > 0
+    if ac_size_num <= 120
+      assign ac_ship = 2250
+    elsif ac_size_num <= 140
+      assign ac_ship = 2500
+    elsif ac_size_num <= 160
+      assign ac_ship = 2750
+    elsif ac_size_num <= 180
+      assign ac_ship = 3130
+    elsif ac_size_num <= 200
+      assign ac_ship = 3630
+    elsif ac_size_num <= 220
+      assign ac_ship = 4380
+    elsif ac_size_num <= 240
+      assign ac_ship = 5500
+    elsif ac_size_num <= 260
+      assign ac_ship = 6750
+    endif
+  endif
+
+  assign ac_price = ac_variant.price | divided_by: 100
+  assign ac_accent = block.settings.accent | default: '#6B5B4F'
+  assign ac_line_text = product.title | append: ' について相談'
+-%}
+
+{%- if ac_enabled and product != blank -%}
+  <div
+    class="j6ac"
+    id="j6ac-{{ block.id }}"
+    style="--j6ac-accent: {{ ac_accent }};"
+    data-j6ac
+    data-j6ac-product="{{ product.id }}"
+    data-j6ac-handle="{{ product.handle | escape }}"
+  >
+    <div class="j6ac__label">
+      <b>{{ block.settings.label | default: 'AI CONCIERGE' }}</b>
+      <i aria-hidden="true"></i>
+      <em>{{ block.settings.badge | default: '1秒で即答' }}</em>
+    </div>
+    <p class="j6ac__hint">この商品の<b>寸法・在庫・送料</b>を見て、その場でお答えします。</p>
+
+    <div class="j6ac__chips" role="group" aria-label="よくある質問">
+      <button type="button" class="j6ac__chip" data-j6ac-chip="delivery">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7.6 12 3l9 4.6v8.8L12 21l-9-4.6z"/><path d="M3 7.6 12 12.2l9-4.6"/><path d="M12 12.2V21"/></svg>
+        <span>{{ block.settings.chip_delivery | default: 'いつ届く？' }}</span>
+      </button>
+      <button type="button" class="j6ac__chip" data-j6ac-chip="size">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 15.5 15.5 4.5l4 4L8.5 19.5z"/><path d="M8 12l1.8 1.8M11 9l1.8 1.8M14 6l1.8 1.8"/></svg>
+        <span>{{ block.settings.chip_size | default: 'サイズ感' }}</span>
+      </button>
+      <button type="button" class="j6ac__chip" data-j6ac-chip="return">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h9.5a6 6 0 0 1 0 12H10"/></svg>
+        <span>{{ block.settings.chip_return | default: '返品' }}</span>
+      </button>
+    </div>
+
+    <form class="j6ac__ask" data-j6ac-form>
+      <label class="j6ac__sr" for="j6ac-input-{{ block.id }}">この商品について質問する</label>
+      <input
+        type="text"
+        id="j6ac-input-{{ block.id }}"
+        class="j6ac__input"
+        placeholder="{{ block.settings.placeholder | default: '搬入・納期・素材…ひとことどうぞ' }}"
+        autocomplete="off"
+        enterkeyhint="send"
+      >
+      <button type="submit" class="j6ac__send" aria-label="送信">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h14M13 6l6 6-6 6"/></svg>
+      </button>
+    </form>
+
+    <div class="j6ac__thread" data-j6ac-thread hidden aria-live="polite"></div>
+    <p class="j6ac__disclaimer" data-j6ac-disclaimer hidden>AIによる自動回答です</p>
+
+    <script type="application/json" data-j6ac-data>
+      {
+        "productId": {{ product.id | json }},
+        "title": {{ product.title | json }},
+        "handle": {{ product.handle | json }},
+        "url": {{ product.url | json }},
+        "size": {{ size_line | json }},
+        "material": {{ ac_material | default: '' | json }},
+        "assembly": {% if ac_assembly == true %}true{% elsif ac_assembly == false %}false{% else %}null{% endif %},
+        "state": {{ ac_state | json }},
+        "lead": {{ ac_lead | json }},
+        "shipKanto": {{ ac_ship | json }},
+        "price": {{ ac_price | json }},
+        "variantId": {{ ac_variant.id | json }},
+        "variantTitle": {{ ac_variant.title | json }},
+        "variants": [
+          {%- for v in product.variants -%}
+            {"id": {{ v.id | json }}, "price": {{ v.price | divided_by: 100 | json }}, "available": {{ v.available | json }}, "title": {{ v.title | json }}}{%- unless forloop.last -%},{%- endunless -%}
+          {%- endfor -%}
+        ],
+        "humanLabel": {{ block.settings.human_label | default: '担当者に相談' | json }},
+        "humanUrl": {{ block.settings.human_url | default: '' | json }},
+        "lineUrl": "https://line.me/R/oaMessage/@505xknxn/?text={{ ac_line_text | url_encode }}"
+      }
+    </script>
+  </div>
+
+  {{ 'ai-concierge.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'ai-concierge.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}

@@ -27,6 +27,21 @@
             "swatch_shape": "circle"
           }
         },
+        "ai_concierge": {
+          "type": "ai_concierge",
+          "settings": {
+            "enabled": true,
+            "label": "AI CONCIERGE",
+            "badge": "1秒で即答",
+            "chip_delivery": "いつ届く？",
+            "chip_size": "サイズ感",
+            "chip_return": "返品",
+            "placeholder": "搬入・納期・素材…ひとことどうぞ",
+            "human_label": "担当者に相談",
+            "human_url": "",
+            "accent": "#6B5B4F"
+          }
+        },
         "buy_buttons": {
           "type": "buy_buttons",
           "settings": {
@@ -79,6 +94,7 @@
         "title",
         "price",
         "variant_picker",
+        "ai_concierge",
         "buy_buttons",
         "collapsible-row-0",
         "collapsible-row-1",

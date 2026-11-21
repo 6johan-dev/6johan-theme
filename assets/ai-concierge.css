@@ -1,0 +1,457 @@
+/* ============================================================
+   6JOHAN AI CONCIERGE — 商品ページ即答チップ
+   トークン: #FFFFFF / #FAF9F7 / #292724 / #807C76 / #6B5B4F / #E8E5E0 / 角丸0 / 罫線アイコン
+   クラス接頭辞 j6ac-（[class*="sixj-"] の background:#fff!important を避ける）
+   ============================================================ */
+
+.j6ac {
+  --j6ac-bg: #ffffff;
+  --j6ac-bgsub: #faf9f7;
+  --j6ac-ink: #292724;
+  --j6ac-muted: #807c76;
+  --j6ac-brown: #6b5b4f;
+  --j6ac-brown-h: #5a4a3f;
+  --j6ac-brown-l: #8a7a6a;
+  --j6ac-line: #e8e5e0;
+  --j6ac-line-d: #d5d0c8;
+  --j6ac-accent: #6b5b4f;
+  --j6ac-font: var(--6j-font-body, -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic Medium", "Yu Gothic", Meiryo, sans-serif);
+  --j6ac-font-latin: "Assistant", var(--j6ac-font);
+
+  box-sizing: border-box;
+  margin: 16px 0 20px;
+  padding: 0;
+  font-family: var(--j6ac-font);
+  color: var(--j6ac-ink);
+  letter-spacing: 0.02em;
+  -webkit-font-smoothing: antialiased;
+}
+
+.j6ac *,
+.j6ac *::before,
+.j6ac *::after {
+  box-sizing: border-box;
+}
+
+/* ---------- 見出し ---------- */
+.j6ac__label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 6px;
+}
+.j6ac__label b {
+  font-family: var(--j6ac-font-latin);
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  color: var(--j6ac-brown-l);
+  text-transform: none;
+  line-height: 1.2;
+}
+.j6ac__label i {
+  flex: 1 1 auto;
+  height: 1px;
+  background: var(--j6ac-line);
+}
+.j6ac__label em {
+  font-style: normal;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  color: var(--j6ac-brown-l);
+  border: 1px solid #e7ded3;
+  background: #fbf9f6;
+  padding: 2px 5px;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+
+.j6ac__hint {
+  margin: 0 0 6px;
+  font-size: 10.5px;
+  line-height: 1.5;
+  color: var(--j6ac-muted);
+  letter-spacing: 0.02em;
+}
+.j6ac__hint b {
+  color: var(--j6ac-ink);
+  font-weight: 600;
+}
+
+/* ---------- チップ ---------- */
+.j6ac__chips {
+  display: flex;
+  gap: 6px;
+  margin: 0 0 6px;
+}
+.j6ac__chip {
+  flex: 1 1 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin: 0;
+  padding: 7px 4px;
+  min-width: 0;
+  border: 1px solid var(--j6ac-line-d);
+  border-radius: 0;
+  background: #ffffff;
+  color: #4a4743;
+  font-family: inherit;
+  font-size: 10.5px;
+  line-height: 1.2;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  cursor: pointer;
+  box-shadow: none;
+  text-transform: none;
+  min-height: 0;
+  text-decoration: none;
+  appearance: none;
+  -webkit-appearance: none;
+}
+.j6ac__chip svg {
+  width: 12px;
+  height: 12px;
+  flex: 0 0 auto;
+  stroke: var(--j6ac-brown);
+  fill: none;
+  stroke-width: 1.35;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+.j6ac__chip:hover,
+.j6ac__chip.is-active {
+  border-color: var(--j6ac-accent);
+  background: #fbf9f6;
+  color: var(--j6ac-ink);
+}
+.j6ac__chip:focus-visible {
+  outline: 1px solid var(--j6ac-accent);
+  outline-offset: 2px;
+}
+
+/* ---------- 1行入力 ---------- */
+.j6ac__ask {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  margin: 0;
+  border: 1px solid var(--j6ac-ink);
+  border-radius: 0;
+  background: #ffffff;
+}
+.j6ac__input {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 38px;
+  margin: 0;
+  padding: 0 0 0 11px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--j6ac-ink);
+  font-family: inherit;
+  font-size: 11px;
+  line-height: 38px;
+  letter-spacing: 0.02em;
+  box-shadow: none;
+  appearance: none;
+  -webkit-appearance: none;
+}
+.j6ac__input:focus {
+  outline: none;
+  box-shadow: none;
+}
+.j6ac__input::placeholder {
+  color: #a8a49e;
+  opacity: 1;
+}
+.j6ac__send {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 38px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: var(--j6ac-ink);
+  cursor: pointer;
+  box-shadow: none;
+  min-height: 0;
+}
+.j6ac__send svg {
+  width: 15px;
+  height: 15px;
+  stroke: #ffffff;
+  fill: none;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ---------- 会話 ---------- */
+.j6ac__thread {
+  margin-top: 8px;
+}
+.j6ac__thread[hidden] {
+  display: none !important;
+}
+.j6ac__q {
+  display: flex;
+  justify-content: flex-end;
+  margin: 0 0 6px;
+}
+.j6ac__q p {
+  margin: 0;
+  max-width: 260px;
+  padding: 7px 10px;
+  background: var(--j6ac-ink);
+  color: #ffffff;
+  font-size: 11px;
+  line-height: 1.55;
+  letter-spacing: 0.02em;
+  border-radius: 0;
+}
+.j6ac__a {
+  position: relative;
+  margin: 0;
+  padding: 9px 10px 10px;
+  border: 1px solid var(--j6ac-line);
+  border-top: 2px solid var(--j6ac-accent);
+  background: #ffffff;
+}
+.j6ac__who {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+.j6ac__who .j6ac__dot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  background: var(--j6ac-accent);
+  color: #ffffff;
+  font-family: var(--j6ac-font-latin);
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 0;
+  flex: 0 0 auto;
+}
+.j6ac__who b {
+  font-family: var(--j6ac-font-latin);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--j6ac-accent);
+}
+.j6ac__who span {
+  font-size: 8.5px;
+  letter-spacing: 0.04em;
+  color: var(--j6ac-muted);
+}
+.j6ac__txt {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.66;
+  letter-spacing: 0.02em;
+  color: #33302c;
+}
+.j6ac__txt b {
+  font-weight: 600;
+}
+.j6ac__src {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 6px;
+  font-size: 8.5px;
+  letter-spacing: 0.03em;
+  color: var(--j6ac-muted);
+}
+.j6ac__src i {
+  font-style: normal;
+  padding: 2px 4px;
+  border: 1px solid var(--j6ac-line);
+  background: var(--j6ac-bgsub);
+  color: #6f6b65;
+}
+.j6ac__src a {
+  color: var(--j6ac-brown);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.j6ac__acts {
+  display: flex;
+  gap: 6px;
+  margin-top: 7px;
+}
+.j6ac__buy {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 34px;
+  margin: 0;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 0;
+  background: var(--j6ac-ink);
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: none;
+  min-height: 0;
+  white-space: nowrap;
+}
+.j6ac__buy svg {
+  width: 13px;
+  height: 13px;
+  flex: 0 0 auto;
+  stroke: #ffffff;
+  fill: none;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.j6ac__buy:hover {
+  background: #1b1917;
+}
+.j6ac__buy[disabled] {
+  opacity: 0.55;
+  cursor: default;
+}
+.j6ac__human {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 104px;
+  height: 34px;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--j6ac-line-d);
+  border-radius: 0;
+  background: #ffffff;
+  color: #4a4743;
+  font-family: inherit;
+  font-size: 10px;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: none;
+  min-height: 0;
+  white-space: nowrap;
+}
+.j6ac__human:hover {
+  border-color: var(--j6ac-accent);
+  color: var(--j6ac-ink);
+}
+.j6ac__human svg {
+  width: 12px;
+  height: 12px;
+  flex: 0 0 auto;
+  stroke: var(--j6ac-brown);
+  fill: none;
+  stroke-width: 1.35;
+  stroke-linecap: round;
+}
+.j6ac__disclaimer {
+  margin: 4px 0 0;
+  font-size: 8px;
+  letter-spacing: 0.03em;
+  color: #a8a49e;
+  text-align: right;
+}
+.j6ac__disclaimer[hidden] {
+  display: none !important;
+}
+
+/* 読み上げ用ラベル */
+.j6ac__sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- デスクトップ（商品情報カラム内で読みやすいサイズへ） ---------- */
+@media screen and (min-width: 750px) {
+  .j6ac {
+    margin: 20px 0 24px;
+  }
+  .j6ac__label b {
+    font-size: 10px;
+  }
+  .j6ac__label em {
+    font-size: 9.5px;
+  }
+  .j6ac__hint {
+    font-size: 12px;
+  }
+  .j6ac__chip {
+    font-size: 12px;
+    padding: 9px 6px;
+  }
+  .j6ac__chip svg {
+    width: 14px;
+    height: 14px;
+  }
+  .j6ac__ask {
+    height: 44px;
+  }
+  .j6ac__input {
+    height: 42px;
+    font-size: 13px;
+    line-height: 42px;
+  }
+  .j6ac__send {
+    width: 44px;
+    height: 42px;
+  }
+  .j6ac__q p {
+    font-size: 12.5px;
+  }
+  .j6ac__txt {
+    font-size: 12.5px;
+  }
+  .j6ac__who span {
+    font-size: 10px;
+  }
+  .j6ac__who b {
+    font-size: 10.5px;
+  }
+  .j6ac__src {
+    font-size: 10px;
+  }
+  .j6ac__buy {
+    height: 40px;
+    font-size: 12.5px;
+  }
+  .j6ac__human {
+    height: 40px;
+    width: 120px;
+    font-size: 11px;
+  }
+  .j6ac__disclaimer {
+    font-size: 9px;
+  }
+}
