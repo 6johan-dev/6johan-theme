@@ -1,0 +1,328 @@
+/* ============================================================
+   6JOHAN AI CONCIERGE — 全ページ版（商品ページ以外）
+   右下のフローティングランチャー＋LINE風シート。
+   シート本体の見た目は ai-concierge.css の .j6ac-sheet / .j6ac-line を再利用し、
+   ここでは「ランチャー」「全ページ版のヘッダー」「下部のLINE・ガイド導線」
+   「シート内の追加質問（suggests）」だけを定義する。
+   トークン: #292724 / #6B5B4F / #807C76 / #E8E5E0 / #FAF9F7
+   ============================================================ */
+
+.j6ag {
+  --j6ag-font: var(--6j-font-body, -apple-system, BlinkMacSystemFont, "Hiragino Sans",
+      "Hiragino Kaku Gothic ProN", "Yu Gothic Medium", "Yu Gothic", Meiryo, sans-serif);
+  --j6ag-accent: #292724;
+  --j6ag-shadow: 0 8px 22px rgba(41, 39, 36, 0.26);
+  font-family: var(--j6ag-font);
+}
+
+.j6ag *,
+.j6ag *::before,
+.j6ag *::after {
+  box-sizing: border-box;
+}
+
+/* ---------- ランチャー（右下のフローティングボタン） ---------- */
+.j6ag__launcher {
+  position: fixed;
+  right: 16px;
+  /* プレビューバー（Shopifyの下固定バー）があるときは --j6ag-bar-offset の分だけ上へ */
+  bottom: calc(18px + var(--j6ag-bar-offset, 0px) + env(safe-area-inset-bottom, 0px));
+  /* Channel Talk（#ch-plugin / z-index 10,000,000）より前面。
+     シート（10000100）の下に置く。 */
+  z-index: 10000050;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 52px;
+  margin: 0;
+  padding: 0 16px 0 14px;
+  min-width: 0;
+  min-height: 0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  background: var(--j6ag-accent, #292724);
+  color: #ffffff;
+  font-family: var(--j6ag-font);
+  text-transform: none;
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  box-shadow: var(--j6ag-shadow);
+  appearance: none;
+  -webkit-appearance: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.16s ease, box-shadow 0.16s ease, background-color 0.16s ease,
+    opacity 0.2s ease, visibility 0.2s ease;
+  animation: j6ag-rise 0.5s cubic-bezier(0.22, 0.61, 0.36, 1) 0.6s both;
+}
+.j6ag__launcher:hover {
+  background: #1b1917;
+  transform: translateY(-1px);
+  box-shadow: 0 10px 26px rgba(41, 39, 36, 0.32);
+}
+.j6ag__launcher:active {
+  transform: translateY(0);
+}
+.j6ag__launcher:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 3px;
+}
+
+.j6ag__icon {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+}
+.j6ag__icon svg {
+  width: 19px;
+  height: 19px;
+  stroke: #ffffff;
+  fill: none;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.j6ag__copy {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  white-space: nowrap;
+}
+.j6ag__copy b {
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  line-height: 1;
+  color: #ffffff;
+}
+.j6ag__copy em {
+  font-style: normal;
+  font-size: 8.5px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  line-height: 1;
+  padding: 4px 6px 3px;
+  border: 0;
+  background: rgba(255, 255, 255, 0.16);
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+/* シートを開いている間はランチャーを退かす */
+.j6ag.is-open .j6ag__launcher {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(6px);
+  pointer-events: none;
+}
+
+/* Channel Talk を残す設定（keep）では、吹き出しの上に積む */
+.j6ag--keep-channel .j6ag__launcher {
+  bottom: calc(92px + var(--j6ag-bar-offset, 0px) + env(safe-area-inset-bottom, 0px));
+}
+
+@keyframes j6ag-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ---------- シート（全ページ版のヘッダー） ---------- */
+.j6ag-sheet .j6ac-sheet__head {
+  padding-top: 15px;
+}
+.j6ag-head .j6ac-sheet__meta {
+  white-space: normal;
+  font-size: 9px;
+  line-height: 1.45;
+  letter-spacing: 0.02em;
+}
+
+/* ---------- 下部：カテゴリチップ ---------- */
+.j6ag-chips {
+  flex-wrap: nowrap;
+  margin: 0 0 8px;
+  padding-bottom: 1px;
+}
+.j6ag-chips .j6ac__chip--mini {
+  font-size: 10.5px;
+  padding: 5px 9px;
+  white-space: nowrap;
+}
+
+/* ---------- 下部：LINEで担当者に相談／ショッピングガイド ---------- */
+.j6ag-actions {
+  display: block;
+  margin: 9px 0 0;
+}
+.j6ag-line {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--j6ac-ink, #292724);
+  border-radius: 0;
+  background: #ffffff;
+  color: var(--j6ac-ink, #292724);
+  font-family: var(--j6ag-font);
+  font-size: 12.5px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+.j6ag-line:hover {
+  background: var(--j6ac-ink, #292724);
+  color: #ffffff;
+}
+.j6ag-line:hover .j6ag-line__ico svg {
+  stroke: #ffffff;
+}
+.j6ag-line:focus-visible {
+  outline: 1px solid var(--j6ac-accent, #6b5b4f);
+  outline-offset: 2px;
+}
+.j6ag-line__ico {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+}
+.j6ag-line__ico svg {
+  width: 15px;
+  height: 15px;
+  stroke: #06c755;
+  fill: none;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.j6ag-line__txt {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.j6ag-line i {
+  font-style: normal;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.j6ag-guide {
+  display: block;
+  margin: 7px 0 0;
+  color: var(--j6ac-brown, #6b5b4f);
+  font-family: var(--j6ag-font);
+  font-size: 10.5px;
+  letter-spacing: 0.03em;
+  line-height: 1.5;
+  text-align: center;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.j6ag-guide:hover {
+  color: var(--j6ac-ink, #292724);
+}
+
+/* ---------- 吹き出し内の追加質問（suggests） ---------- */
+.j6ag-suggests {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 12px 34px;
+  animation: j6ac-pop 0.2s ease both;
+}
+.j6ag-suggest {
+  margin: 0;
+  padding: 6px 10px;
+  min-height: 0;
+  border: 1px solid var(--j6ac-line-d, #d5d0c8);
+  border-radius: 999px;
+  background: #ffffff;
+  color: #4a4743;
+  font-family: var(--j6ag-font);
+  font-size: 10.5px;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+  white-space: nowrap;
+  cursor: pointer;
+  box-shadow: none;
+  transition: border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+}
+.j6ag-suggest:hover {
+  border-color: var(--j6ac-accent, #6b5b4f);
+  background: #fbf9f6;
+  color: var(--j6ac-ink, #292724);
+}
+.j6ag-suggest:focus-visible {
+  outline: 1px solid var(--j6ac-accent, #6b5b4f);
+  outline-offset: 2px;
+}
+
+/* シート内のリンク（マイページ・ショッピングガイド等） */
+.j6ag-sheet .j6ac-line__bubble a {
+  color: var(--j6ac-brown, #6b5b4f);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* ---------- デスクトップ ---------- */
+@media screen and (min-width: 750px) {
+  .j6ag__launcher {
+    right: 28px;
+    bottom: calc(26px + var(--j6ag-bar-offset, 0px));
+    height: 54px;
+    padding: 0 18px 0 15px;
+    gap: 9px;
+  }
+  .j6ag__copy b {
+    font-size: 13px;
+  }
+  .j6ag__copy em {
+    font-size: 9px;
+  }
+  .j6ag--keep-channel .j6ag__launcher {
+    bottom: calc(100px + var(--j6ag-bar-offset, 0px));
+  }
+  .j6ag-head .j6ac-sheet__meta {
+    font-size: 9.5px;
+  }
+  .j6ag-chips .j6ac__chip--mini {
+    font-size: 11px;
+    padding: 6px 10px;
+  }
+  .j6ag-line {
+    height: 46px;
+    font-size: 13px;
+  }
+  .j6ag-guide {
+    font-size: 11px;
+  }
+  .j6ag-suggests {
+    margin-left: 34px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .j6ag__launcher,
+  .j6ag-suggests,
+  .j6ac-line__bubble {
+    animation: none !important;
+    transition: none !important;
+  }
+}
