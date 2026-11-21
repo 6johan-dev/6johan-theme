@@ -1,26 +1,28 @@
 {%- comment -%}
   6JOHAN LINE 友だち追加バンド（フッター設置用）
   URL: https://line.me/R/ti/p/@505xknxn
+  注意: テーマの 6johan-custom.css に [class*="sixj-"] / [class*="6johan"] { background:#fff !important } が
+        あるため、クラス名にその接頭辞を使わない（j6line- を使用）。
 {%- endcomment -%}
 <style>
-  .sixj-line-band {
+  .j6line-band {
     background: #faf8f5;
     border-top: 1px solid #e2dcd3;
     padding: 44px 20px 46px;
     text-align: center;
   }
-  .sixj-line-band__inner {
+  .j6line-band__inner {
     max-width: 640px;
     margin: 0 auto;
   }
-  .sixj-line-band__eyebrow {
+  .j6line-band__eyebrow {
     margin: 0 0 14px;
     font-size: 10px;
     letter-spacing: 0.28em;
     color: #a08460;
     text-transform: uppercase;
   }
-  .sixj-line-band__title {
+  .j6line-band__title {
     margin: 0 0 10px;
     font-family: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif;
     font-size: 21px;
@@ -29,17 +31,17 @@
     color: #292724;
     line-height: 1.5;
   }
-  .sixj-line-band__title em {
+  .j6line-band__title em {
     font-style: normal;
   }
-  .sixj-line-band__text {
+  .j6line-band__text {
     margin: 0 0 22px;
     font-size: 12px;
     line-height: 1.9;
     color: #786e6a;
     letter-spacing: 0.02em;
   }
-  .sixj-line-band__btn {
+  .j6line-band__btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -53,34 +55,34 @@
     border-radius: 2px;
     transition: background 0.2s ease, opacity 0.2s ease;
   }
-  .sixj-line-band__btn:hover {
+  .j6line-band__btn:hover {
     background: #6b5b4f;
     color: #faf8f5;
   }
-  .sixj-line-band__btn svg {
+  .j6line-band__btn svg {
     display: block;
     width: 15px;
     height: 15px;
     flex: 0 0 auto;
   }
-  .sixj-line-band__note {
+  .j6line-band__note {
     margin: 14px 0 0;
     font-size: 10px;
     color: #9a938c;
     letter-spacing: 0.04em;
   }
   @media screen and (max-width: 749px) {
-    .sixj-line-band {
+    .j6line-band {
       padding: 34px 18px 36px;
     }
-    .sixj-line-band__title {
+    .j6line-band__title {
       font-size: 18px;
     }
-    .sixj-line-band__text {
+    .j6line-band__text {
       font-size: 11.5px;
       margin-bottom: 18px;
     }
-    .sixj-line-band__btn {
+    .j6line-band__btn {
       width: 100%;
       max-width: 330px;
       padding: 15px 20px;
@@ -88,16 +90,16 @@
   }
 </style>
 
-<div class="sixj-line-band">
-  <div class="sixj-line-band__inner">
-    <p class="sixj-line-band__eyebrow">LINE Official</p>
-    <p class="sixj-line-band__title">LINE登録で<em>2,000円OFF</em>クーポン</p>
-    <p class="sixj-line-band__text">
+<div class="j6line-band">
+  <div class="j6line-band__inner">
+    <p class="j6line-band__eyebrow">LINE Official</p>
+    <p class="j6line-band__title">LINE登録で<em>2,000円OFF</em>クーポン</p>
+    <p class="j6line-band__text">
       ¥30,000以上のご購入で使えるクーポンと、再入荷のお知らせをお届けします。<br>
       サイズ・納期のご相談もLINEで承ります。
     </p>
     <a
-      class="sixj-line-band__btn"
+      class="j6line-band__btn"
       href="https://line.me/R/ti/p/@505xknxn"
       target="_blank"
       rel="noopener"
@@ -108,6 +110,6 @@
       </svg>
       LINEで友だち追加
     </a>
-    <p class="sixj-line-band__note">クーポンコードは追加後のトークに届きます（お一人さま1回）</p>
+    <p class="j6line-band__note">クーポンコードは追加後のトークに届きます（お一人さま1回）</p>
   </div>
 </div>

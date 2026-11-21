@@ -1,8 +1,10 @@
 {%- comment -%}
   6JOHAN LINE 導線（商品ページ・購入検討エリア下部の小さな1行リンク）
+  注意: テーマの 6johan-custom.css に [class*="sixj-"] / [class*="6johan"] { background:#fff !important } が
+        あるため、クラス名にその接頭辞を使わない（j6line- を使用）。
 {%- endcomment -%}
 <style>
-  .sixj-line-inline {
+  .j6line-inline {
     display: flex;
     align-items: center;
     gap: 11px;
@@ -15,12 +17,12 @@
     text-decoration: none;
     transition: border-color 0.2s ease, background 0.2s ease;
   }
-  .sixj-line-inline:hover {
+  .j6line-inline:hover {
     background: #f6f2ec;
     border-color: #cfc5b8;
     color: #292724;
   }
-  .sixj-line-inline__tag {
+  .j6line-inline__tag {
     flex: 0 0 auto;
     font-size: 9px;
     letter-spacing: 0.16em;
@@ -30,24 +32,24 @@
     padding: 3px 6px 2px;
     line-height: 1;
   }
-  .sixj-line-inline__body {
+  .j6line-inline__body {
     flex: 1 1 auto;
     min-width: 0;
   }
-  .sixj-line-inline__lead {
+  .j6line-inline__lead {
     display: block;
     font-size: 9.5px;
     letter-spacing: 0.08em;
     color: #9a938c;
     line-height: 1.5;
   }
-  .sixj-line-inline__text {
+  .j6line-inline__text {
     display: block;
     font-size: 12px;
     line-height: 1.6;
     letter-spacing: 0.01em;
   }
-  .sixj-line-inline__price {
+  .j6line-inline__price {
     flex: 0 0 auto;
     font-size: 11px;
     font-weight: 600;
@@ -55,24 +57,24 @@
     color: #a08460;
     white-space: nowrap;
   }
-  .sixj-line-inline__arrow {
+  .j6line-inline__arrow {
     flex: 0 0 auto;
     font-size: 12px;
     color: #a08460;
   }
   @media screen and (max-width: 749px) {
-    .sixj-line-inline {
+    .j6line-inline {
       margin: 16px 0 0;
       padding: 11px 10px;
       gap: 8px;
     }
-    .sixj-line-inline__text {
+    .j6line-inline__text {
       font-size: 11px;
     }
-    .sixj-line-inline__price {
+    .j6line-inline__price {
       font-size: 10px;
     }
-    .sixj-line-inline__tag {
+    .j6line-inline__tag {
       font-size: 8.5px;
       padding: 2px 5px;
     }
@@ -80,17 +82,17 @@
 </style>
 
 <a
-  class="sixj-line-inline"
+  class="j6line-inline"
   href="https://line.me/R/ti/p/@505xknxn"
   target="_blank"
   rel="noopener"
   aria-label="6JOHAN公式LINEへ（再入荷の通知と2,000円OFFクーポン）"
 >
-  <span class="sixj-line-inline__tag">LINE</span>
-  <span class="sixj-line-inline__body">
-    <span class="sixj-line-inline__lead">じっくり検討中の方へ</span>
-    <span class="sixj-line-inline__text">再入荷・限定クーポンはLINE公式へ</span>
+  <span class="j6line-inline__tag">LINE</span>
+  <span class="j6line-inline__body">
+    <span class="j6line-inline__lead">じっくり検討中の方へ</span>
+    <span class="j6line-inline__text">再入荷・限定クーポンはLINE公式へ</span>
   </span>
-  <span class="sixj-line-inline__price">¥2,000 OFF</span>
-  <span class="sixj-line-inline__arrow" aria-hidden="true">→</span>
+  <span class="j6line-inline__price">¥2,000 OFF</span>
+  <span class="j6line-inline__arrow" aria-hidden="true">→</span>
 </a>
