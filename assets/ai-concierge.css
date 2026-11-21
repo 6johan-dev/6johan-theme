@@ -446,6 +446,23 @@
   line-height: 1.4;
 }
 
+/* カラー切替の区切り（切替後の在庫区分を会話に残す） */
+.j6ac-line__notice {
+  display: flex;
+  justify-content: center;
+  margin: 0 0 12px;
+}
+.j6ac-line__notice span {
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: transparent;
+  border: 1px solid #e8e4dc;
+  color: var(--j6ac-muted);
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  line-height: 1.4;
+}
+
 /* 1行＝1発話 */
 .j6ac-line {
   display: flex;

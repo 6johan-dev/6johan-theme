@@ -222,14 +222,49 @@
 
   /* ---------------- 部品 ---------------- */
 
+  /* いま選ばれているバリエーション（カートフォームの hidden id → URLの?variant= の順で見る） */
   function currentVariant(d) {
-    var idInput = document.querySelector('form[data-type="add-to-cart-form"] input[name="id"]');
-    var id = idInput && idInput.value ? String(idInput.value) : String(d.variantId);
+    var idInput =
+      document.querySelector('form[data-type="add-to-cart-form"] input[name="id"]') ||
+      document.querySelector('form[action*="/cart/add"] input[name="id"]');
+    var id = idInput && idInput.value ? String(idInput.value) : '';
+    if (!id) {
+      try {
+        id = String(new URLSearchParams(window.location.search).get('variant') || '');
+      } catch (e) {
+        id = '';
+      }
+    }
+    if (!id) id = String(d.variantId);
     var list = d.variants || [];
     for (var i = 0; i < list.length; i++) {
       if (String(list[i].id) === id) return list[i];
     }
-    return { id: d.variantId, price: d.price, available: d.state !== 'unavailable', title: d.variantTitle };
+    return { id: d.variantId, price: d.price, available: d.state !== 'unavailable', title: d.variantTitle, state: d.state, lead: d.lead };
+  }
+
+  /* バリエーション単位の在庫区分（未指定のときだけページ初期値にフォールバック） */
+  function variantState(variant, d) {
+    if (variant && variant.state === 'instock') return 'instock';
+    if (variant && variant.state === 'backorder') return 'backorder';
+    if (variant && variant.state === 'unavailable') return 'unavailable';
+    if (variant && variant.available === false) return 'unavailable';
+    return d.state;
+  }
+
+  /* 回答を作る直前に、選択中バリエーションの在庫・納期を重ねたデータを返す */
+  function withVariant(d) {
+    var variant = currentVariant(d);
+    var out = {};
+    for (var k in d) {
+      if (Object.prototype.hasOwnProperty.call(d, k)) out[k] = d[k];
+    }
+    out.state = variantState(variant, d);
+    out.lead = (variant && variant.lead) || d.lead;
+    if (variant && typeof variant.price === 'number') out.price = variant.price;
+    out.variantId = (variant && variant.id) || d.variantId;
+    out.variantTitle = (variant && variant.title) || d.variantTitle;
+    return out;
   }
 
   function humanHref(d, question) {
@@ -301,12 +336,38 @@
 
   function syncHead(ui, d) {
     var variant = currentVariant(d);
+    var state = variantState(variant, d);
     if (ui.price) ui.price.textContent = yen(variant.price);
-    if (ui.variant) ui.variant.textContent = variant.title && variant.title !== 'Default Title' ? variant.title : '';
+    if (ui.variant)
+      ui.variant.textContent = variant.title && variant.title !== 'Default Title' ? variant.title : '';
     if (ui.stock) {
-      ui.stock.textContent =
-        d.state === 'backorder' ? '受注生産' : d.state === 'unavailable' ? '在庫切れ' : '在庫あり';
+      ui.stock.textContent = state === 'backorder' ? '受注生産' : state === 'unavailable' ? '在庫切れ' : '在庫あり';
+      ui.stock.setAttribute('data-j6ac-state', state);
     }
+  }
+
+  /* カラー（バリエーション）切替にヘッダー・価格・相談文面を追随させる */
+  function refreshVariant(ui) {
+    if (!ui) return;
+    var d = withVariant(ui.data);
+    var key = String(d.variantId) + '|' + d.state;
+    syncHead(ui, d);
+    setHumanHref(ui, null);
+    /* 会話が始まっていれば、切替後の在庫区分を区切りとして1行だけ残す */
+    if (ui.lastKey && key !== ui.lastKey && ui.greeted && ui.thread) {
+      appendNotice(ui.thread, d);
+      scrollBottom(ui.thread);
+    }
+    ui.lastKey = key;
+  }
+
+  function appendNotice(thread, d) {
+    var label = d.variantTitle && d.variantTitle !== 'Default Title' ? d.variantTitle : '';
+    var stateText = d.state === 'backorder' ? '受注生産' : d.state === 'unavailable' ? '在庫切れ' : '在庫あり';
+    var row = document.createElement('div');
+    row.className = 'j6ac-line__notice';
+    row.innerHTML = '<span>' + esc(label ? label + '（' + stateText + '）に切り替えました' : stateText + 'に切り替えました') + '</span>';
+    thread.appendChild(row);
   }
 
   function setHumanHref(ui, question) {
@@ -531,7 +592,8 @@
       buy: sheet ? sheet.querySelector('[data-j6ac-add]') : null,
       open: false,
       greeted: false,
-      lastTrigger: null
+      lastTrigger: null,
+      lastKey: null
     };
     if (!sheet) return;
 
@@ -557,7 +619,7 @@
     var sheetInput = sheet.querySelector('[data-j6ac-input="sheet"]');
 
     function ask(type, label, trigger) {
-      var answer = chipAnswer(type, d);
+      var answer = chipAnswer(type, withVariant(d));
       track('ai_chip_click', { chip: type, product_id: d.productId, product_handle: d.handle });
       openSheet(ui, trigger);
       root.querySelectorAll('.j6ac__bar .j6ac__chip').forEach(function (c) {
@@ -577,7 +639,7 @@
     sheet.querySelectorAll('.j6ac-sheet__quick [data-j6ac-chip]').forEach(function (chip) {
       chip.addEventListener('click', function () {
         var type = chip.getAttribute('data-j6ac-chip');
-        var answer = chipAnswer(type, d);
+        var answer = chipAnswer(type, withVariant(d));
         track('ai_chip_click', { chip: type, product_id: d.productId, product_handle: d.handle, source: 'sheet' });
         appendTurn(ui, chip.textContent.trim(), answer);
       });
@@ -592,7 +654,7 @@
           if (inlineInput) inlineInput.focus();
           return;
         }
-        var answer = answerFor(text, d);
+        var answer = answerFor(text, withVariant(d));
         track('ai_question_submit', {
           product_id: d.productId,
           product_handle: d.handle,
@@ -616,7 +678,7 @@
           if (sheetInput) sheetInput.focus();
           return;
         }
-        var answer = answerFor(text, d);
+        var answer = answerFor(text, withVariant(d));
         track('ai_question_submit', {
           product_id: d.productId,
           product_handle: d.handle,
@@ -666,6 +728,37 @@
         scrollBottom(ui.thread);
       });
     }
+
+    /* カラー（バリエーション）切替に追随：ヘッダーの在庫表示・価格・相談文面
+       - テーマの商品情報（variant-radios / variant-selects → ?variant= 更新）
+       - Shopify標準の publish/subscribe（variantChange）
+       - ブラウザの戻る／進む
+       のどれでも同じ処理に乗せる。 */
+    var variantTimer = null;
+    function onVariantChange() {
+      window.clearTimeout(variantTimer);
+      variantTimer = window.setTimeout(function () {
+        refreshVariant(ui);
+      }, 80);
+    }
+    document.querySelectorAll('variant-radios, variant-selects').forEach(function (el) {
+      el.addEventListener('change', onVariantChange);
+    });
+    window.addEventListener('popstate', onVariantChange);
+    var _pushState = history.pushState;
+    history.pushState = function () {
+      _pushState.apply(history, arguments);
+      onVariantChange();
+    };
+    var _replaceState = history.replaceState;
+    history.replaceState = function () {
+      _replaceState.apply(history, arguments);
+      onVariantChange();
+    };
+    if (typeof window.subscribe === 'function' && window.PUB_SUB_EVENTS && window.PUB_SUB_EVENTS.variantChange) {
+      window.subscribe(window.PUB_SUB_EVENTS.variantChange, onVariantChange);
+    }
+    refreshVariant(ui);
 
     /* Esc で閉じる / Tab をシート内に閉じ込める */
     document.addEventListener('keydown', function (e) {
