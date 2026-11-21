@@ -6,10 +6,13 @@
 {%- endcomment -%}
 <style>
   .j6line-band {
+    /* サイト正式フォント（6johan-custom.css の --6j-font-body と同じシステムフォントスタック） */
+    --j6line-font: var(--6j-font-body, -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic Medium", "Yu Gothic", Meiryo, sans-serif);
     background: #faf8f5;
     border-top: 1px solid #e2dcd3;
     padding: 44px 20px 46px;
     text-align: center;
+    font-family: var(--j6line-font);
   }
   .j6line-band__inner {
     max-width: 640px;
@@ -17,17 +20,19 @@
   }
   .j6line-band__eyebrow {
     margin: 0 0 14px;
-    font-size: 10px;
-    letter-spacing: 0.28em;
+    font-family: var(--j6line-font);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.24em;
     color: #a08460;
     text-transform: uppercase;
   }
   .j6line-band__title {
     margin: 0 0 10px;
-    font-family: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif;
+    font-family: var(--j6line-font);
     font-size: 21px;
     font-weight: 500;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.03em;
     color: #292724;
     line-height: 1.5;
   }
@@ -36,6 +41,7 @@
   }
   .j6line-band__text {
     margin: 0 0 22px;
+    font-family: var(--j6line-font);
     font-size: 12px;
     line-height: 1.9;
     color: #786e6a;
@@ -49,7 +55,9 @@
     padding: 14px 30px;
     background: #292724;
     color: #faf8f5;
+    font-family: var(--j6line-font);
     font-size: 13px;
+    font-weight: 500;
     letter-spacing: 0.1em;
     text-decoration: none;
     border-radius: 2px;
@@ -67,6 +75,7 @@
   }
   .j6line-band__note {
     margin: 14px 0 0;
+    font-family: var(--j6line-font);
     font-size: 10px;
     color: #9a938c;
     letter-spacing: 0.04em;
