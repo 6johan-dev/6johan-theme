@@ -76,7 +76,6 @@
 
   assign ac_price = ac_variant.price | divided_by: 100
   assign ac_accent = block.settings.accent | default: '#6B5B4F'
-  assign ac_line_text = product.title | append: ' について相談'
 -%}
 
 {%- if ac_enabled and product != blank -%}
@@ -150,7 +149,7 @@
         ],
         "humanLabel": {{ block.settings.human_label | default: '担当者に相談' | json }},
         "humanUrl": {{ block.settings.human_url | default: '' | json }},
-        "lineUrl": "https://line.me/R/oaMessage/@505xknxn/?text={{ ac_line_text | url_encode }}"
+        "lineUrl": "https://line.me/R/oaMessage/@505xknxn/"
       }
     </script>
   </div>

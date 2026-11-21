@@ -217,11 +217,9 @@
   function humanHref(d, question) {
     if (d.humanUrl) return d.humanUrl;
     var base = d.lineUrl || 'https://line.me/R/ti/p/@505xknxn';
-    if (d.lineUrl && question) {
-      var sep = d.lineUrl.indexOf('?') > -1 ? '&' : '?';
-      return d.lineUrl + sep + 'text=' + encodeURIComponent(d.title + '｜' + question);
-    }
-    return base;
+    var sep = base.indexOf('?') > -1 ? '&' : '?';
+    var text = d.title + 'について相談' + (question ? '：' + question : '');
+    return base + sep + 'text=' + encodeURIComponent(text);
   }
 
   function buildCard(root, d, answer, question) {
