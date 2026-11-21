@@ -121,6 +121,15 @@
   pointer-events: none;
 }
 
+/* カートドロワー・メニュードロワー・モーダルが開いている間も退かす
+   （テーマが body に付ける overflow-hidden / overflow-hidden-* を見る） */
+body.overflow-hidden .j6ag__launcher,
+body[class*="overflow-hidden-"] .j6ag__launcher {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
 /* Channel Talk を残す設定（keep）では、吹き出しの上に積む */
 .j6ag--keep-channel .j6ag__launcher {
   bottom: calc(92px + var(--j6ag-bar-offset, 0px) + env(safe-area-inset-bottom, 0px));
