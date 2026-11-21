@@ -391,6 +391,9 @@
       <script src="{{ 'cart-drawer.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
 
+    {%- comment -%} 6JOHAN AIコンシェルジュ（商品ページ以外の全ページ・右下ランチャー） {%- endcomment -%}
+    {% section 'ai-concierge-global' %}
+
     {%- render '6johan-line-interstitial' -%}
   </body>
 </html>

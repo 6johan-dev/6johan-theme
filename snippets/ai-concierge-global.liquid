@@ -1,0 +1,153 @@
+{%- comment -%}
+  6JOHAN AI CONCIERGE（全ページ版）— 2026-11-21
+  商品ページ以外（トップ・コレクション・カート・アカウント・固定ページ等）で
+  右下にフローティングのランチャーを出し、LINE風チャットシートで即答する。
+
+  使い方: sections/ai-concierge-global.liquid から render される
+    {% render 'ai-concierge-global', enabled: ..., channel_mode: ..., ... %}
+
+  構成
+    ① 画面右下に「質問・相談（AI即答）」のフローティングボタン（チャコール #292724）。
+    ② タップで下からLINE風のシートが立ち上がる（商品ページ版と同じ見た目・同じCSS）。
+       AI＝左の吹き出し、自分＝右の吹き出し。
+    ③ 下部は「カテゴリのチップ」「1行入力」「LINEで担当者に相談」「ショッピングガイド」。
+       カートに追加は出さない（商品ページ専用）。
+    ④ 回答の中身（7カテゴリ・シリアス案件・エスカレーション）は
+       assets/ai-concierge-global.js の TOPICS に持つ。ここでは文言と設定だけ渡す。
+
+  事実の出典: work/6johan/line/cs_knowledge.md・cs_templates_from_info_2026-11-21.md
+  クラス接頭辞は j6ag-（シート本体は商品ページ版と同じ j6ac- を再利用）。
+{%- endcomment -%}
+
+{%- liquid
+  assign g_enabled = enabled
+  if g_enabled == nil
+    assign g_enabled = true
+  endif
+  assign g_channel = channel_mode | default: 'hide'
+  assign g_label = launcher_label | default: '質問・相談'
+  assign g_badge = launcher_badge | default: 'AI即答'
+  assign g_accent = accent | default: '#292724'
+  assign g_line = line_url | default: 'https://line.me/R/oaMessage/@505xknxn/'
+  assign g_guide = guide_url | default: '/pages/035'
+  assign g_sheet_id = 'j6ag-sheet'
+-%}
+
+{%- if g_enabled -%}
+  <div
+    class="j6ag{% if g_channel == 'keep' %} j6ag--keep-channel{% endif %}"
+    data-j6ag
+    data-j6ag-channel="{{ g_channel }}"
+    style="--j6ag-accent: {{ g_accent }};"
+  >
+    <button
+      type="button"
+      class="j6ag__launcher"
+      data-j6ag-open
+      aria-controls="{{ g_sheet_id }}"
+      aria-expanded="false"
+      aria-label="{{ g_label }}（{{ g_badge }}）AIコンシェルジュを開く"
+    >
+      <span class="j6ag__icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M20 12.4c0 4-3.6 7-8 7-1 0-2-.2-2.9-.5L4 20.5l1.3-3.6A6.7 6.7 0 0 1 4 12.4c0-4 3.6-7 8-7s8 3 8 7Z"/></svg>
+      </span>
+      <span class="j6ag__copy">
+        <b>{{ g_label }}</b>
+        <em>{{ g_badge }}</em>
+      </span>
+    </button>
+
+    <div class="j6ac-sheet j6ag-sheet" id="{{ g_sheet_id }}" data-j6ag-sheet hidden aria-hidden="true">
+      <div class="j6ac-sheet__scrim" data-j6ag-close aria-hidden="true"><i></i></div>
+
+      <div
+        class="j6ac-sheet__panel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="{{ g_sheet_id }}-title"
+        tabindex="-1"
+        data-j6ag-panel
+      >
+        <header class="j6ac-sheet__head j6ag-head">
+          <span class="j6ac-sheet__avatar" aria-hidden="true"><b>AI</b></span>
+          <div class="j6ac-sheet__ident">
+            <span class="j6ac-sheet__name">
+              <b>AI CONCIERGE</b>
+              <em>1秒で即答</em>
+            </span>
+            <span class="j6ac-sheet__title" id="{{ g_sheet_id }}-title">6JOHAN サポート窓口</span>
+            <span class="j6ac-sheet__meta">営業時間 平日10:00-17:00（土日祝休）</span>
+          </div>
+          <button type="button" class="j6ac-sheet__close" data-j6ag-close aria-label="閉じる">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+          </button>
+        </header>
+
+        <div class="j6ac-sheet__thread" data-j6ag-thread aria-live="polite" aria-relevant="additions"></div>
+
+        <div class="j6ac-sheet__foot">
+          <div class="j6ac-sheet__quick j6ag-chips" role="group" aria-label="よくあるご質問">
+            <button type="button" class="j6ac__chip j6ac__chip--mini" data-j6ag-chip="account"><span>会員登録</span></button>
+            <button type="button" class="j6ac__chip j6ac__chip--mini" data-j6ag-chip="products"><span>商品</span></button>
+            <button type="button" class="j6ac__chip j6ac__chip--mini" data-j6ag-chip="orders"><span>ご注文・納期</span></button>
+            <button type="button" class="j6ac__chip j6ac__chip--mini" data-j6ag-chip="payment"><span>お支払い</span></button>
+            <button type="button" class="j6ac__chip j6ac__chip--mini" data-j6ag-chip="shipping"><span>配送・送料</span></button>
+            <button type="button" class="j6ac__chip j6ac__chip--mini" data-j6ag-chip="returns"><span>返品・交換</span></button>
+            <button type="button" class="j6ac__chip j6ac__chip--mini" data-j6ag-chip="other"><span>その他</span></button>
+          </div>
+
+          <form class="j6ac__ask j6ac__ask--sheet" data-j6ag-form>
+            <label class="j6ac__sr" for="{{ g_sheet_id }}-input">ご質問を入力</label>
+            <input
+              type="text"
+              id="{{ g_sheet_id }}-input"
+              class="j6ac__input"
+              data-j6ag-input
+              placeholder="ご注文・お支払い・配送など、ひとことどうぞ"
+              autocomplete="off"
+              enterkeyhint="send"
+            >
+            <button type="submit" class="j6ac__send" aria-label="送信">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h14M13 6l6 6-6 6"/></svg>
+            </button>
+          </form>
+
+          <div class="j6ag-actions">
+            <a
+              class="j6ag-line"
+              href="{{ g_line }}"
+              target="_blank"
+              rel="noopener"
+              data-j6ag-human
+            >
+              <span class="j6ag-line__ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M12 3.6c-4.8 0-8.6 3.2-8.6 7.2 0 2.3 1.4 4.4 3.6 5.7l-.7 3 3.1-1.7c.8.2 1.7.3 2.6.3 4.8 0 8.6-3.2 8.6-7.2S16.8 3.6 12 3.6Z"/></svg>
+              </span>
+              <span class="j6ag-line__txt">LINEで担当者に相談</span>
+              <i aria-hidden="true">›</i>
+            </a>
+            <a class="j6ag-guide" href="{{ g_guide }}" data-j6ag-guide>ショッピングガイドを見る</a>
+          </div>
+
+          <p class="j6ac__disclaimer">AIによる自動回答です。確実なことは担当者にご確認ください。</p>
+        </div>
+      </div>
+    </div>
+
+    <script type="application/json" data-j6ag-data>
+      {
+        "channelMode": {{ g_channel | json }},
+        "lineUrl": {{ g_line | json }},
+        "guideUrl": {{ g_guide | json }},
+        "greeting": {{ greeting | default: 'こんにちは。6JOHANのAIコンシェルジュです。ご注文・お支払い・配送・返品など、よくあるご質問はその場でお答えします。' | json }},
+        "greetingSub": {{ greeting_sub | default: '下のボタンから選ぶか、そのまま入力してください。担当者におつなぎするときは、いちばん下の「LINEで担当者に相談」からどうぞ。' | json }},
+        "pageType": {{ template.name | json }},
+        "pageTitle": {{ page_title | json }}
+      }
+    </script>
+  </div>
+
+  {{ 'ai-concierge.css' | asset_url | stylesheet_tag }}
+  {{ 'ai-concierge-global.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'ai-concierge-global.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}

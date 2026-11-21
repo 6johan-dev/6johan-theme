@@ -1,0 +1,88 @@
+{%- comment -%}
+  6JOHAN AIコンシェルジュ（全ページ版）— 静的セクション
+  layout/theme.liquid から {% section 'ai-concierge-global' %} で読み込む。
+  商品ページ（template.name == 'product'）では、商品ページ専用の
+  snippets/ai-concierge.liquid（ページ内チップ＋固定カートCTA）が動くため、
+  このセクションは何も描画しない。
+{%- endcomment -%}
+
+{%- if template.name != 'product' and template.name != 'password' -%}
+  {%- render 'ai-concierge-global',
+    enabled: section.settings.enabled,
+    channel_mode: section.settings.channel_mode,
+    launcher_label: section.settings.launcher_label,
+    launcher_badge: section.settings.launcher_badge,
+    accent: section.settings.accent,
+    line_url: section.settings.line_url,
+    guide_url: section.settings.guide_url,
+    greeting: section.settings.greeting,
+    greeting_sub: section.settings.greeting_sub
+  -%}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "AIコンシェルジュ（全ページ）",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enabled",
+      "label": "全ページで表示する（商品ページを除く）",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "channel_mode",
+      "label": "Channel Talk のランチャー",
+      "options": [
+        { "value": "hide", "label": "隠す（AIコンシェルジュを優先）" },
+        { "value": "keep", "label": "両方表示（AIは上に積む）" }
+      ],
+      "default": "hide",
+      "info": "「隠す」はAIコンシェルジュがあるページで Channel Talk の吹き出しを非表示にします（チャットはLINE・お問い合わせへ）。"
+    },
+    {
+      "type": "text",
+      "id": "launcher_label",
+      "label": "ランチャーの文言",
+      "default": "質問・相談"
+    },
+    {
+      "type": "text",
+      "id": "launcher_badge",
+      "label": "ランチャーのバッジ",
+      "default": "AI即答"
+    },
+    {
+      "type": "color",
+      "id": "accent",
+      "label": "アクセント色",
+      "default": "#292724"
+    },
+    {
+      "type": "text",
+      "id": "line_url",
+      "label": "LINE相談URL",
+      "default": "https://line.me/R/oaMessage/@505xknxn/"
+    },
+    {
+      "type": "text",
+      "id": "guide_url",
+      "label": "ショッピングガイドURL",
+      "default": "/pages/035"
+    },
+    {
+      "type": "textarea",
+      "id": "greeting",
+      "label": "あいさつ文",
+      "default": "こんにちは。6JOHANのAIコンシェルジュです。ご注文・お支払い・配送・返品など、よくあるご質問はその場でお答えします。"
+    },
+    {
+      "type": "textarea",
+      "id": "greeting_sub",
+      "label": "あいさつ文（2通目）",
+      "default": "下のボタンから選ぶか、そのまま入力してください。担当者におつなぎするときは、いちばん下の「LINEで担当者に相談」からどうぞ。"
+    }
+  ]
+}
+{% endschema %}

@@ -196,7 +196,7 @@
     return {
       id: 'human_fallback',
       html:
-        'この内容は担当者が確認してご案内します。平日10–18時にお返事します。' +
+        'この内容は担当者が確認してご案内します。平日10–17時にお返事します。' +
         '画面下の「担当者に相談」からそのままご連絡いただけます。',
       human: true
     };
@@ -269,10 +269,10 @@
 
   function humanHref(d, question) {
     if (d.humanUrl) return d.humanUrl;
-    var base = d.lineUrl || 'https://line.me/R/ti/open?@505xknxn';
-    var sep = base.indexOf('?') > -1 ? '&' : '?';
+    var base = d.lineUrl || 'https://line.me/R/oaMessage/@505xknxn/';
+    /* LINE公式の書式: oaMessage/{ID}/?{URLエンコードした文章}（?text= は使わない） */
     var text = d.title + 'について相談' + (question ? '：' + question : '');
-    return base + sep + 'text=' + encodeURIComponent(text);
+    return base + (base.indexOf('?') > -1 ? '&' : '?') + encodeURIComponent(text);
   }
 
   /* ---- LINE風の吹き出し ---- */
