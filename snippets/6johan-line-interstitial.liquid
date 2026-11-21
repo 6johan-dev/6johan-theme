@@ -1,0 +1,357 @@
+{%- comment -%}
+  6JOHAN LINE 友だち追加 インタースティシャル（商品ページ・中央コンパクトモーダル）
+  リンク: https://line.me/R/ti/p/@505xknxn （クーポン LINE2000 / 2,000円OFF・¥30,000以上）
+  設計: work/6johan/line_crm/line_shopify_crm_design_2026-11-21.md §8
+  注意:
+    - テーマCSSの [class*="sixj-"] / [class*="6johan"] { background:#fff !important } を避けるため接頭辞は j6line-is-。
+    - 表示は商品ページのみ・1ブラウザ1回（localStorage: j6line_is_seen_v1）・12秒 or 60%スクロール。
+    - AIコンシェルジュのシート（.j6ac-sheet.is-open / z-index 10000100）が開いていたら待機し、
+      当バナーはその下（z-index 10000050）に置く。Channel Talk のランチャー（10,000,000）より上。
+{%- endcomment -%}
+{%- if template.name == 'product' -%}
+<style>
+  .j6line-is {
+    --j6line-is-font: var(--6j-font-body, "Assistant", "Noto Sans JP", -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic Medium", "Yu Gothic", Meiryo, sans-serif);
+    position: fixed;
+    inset: 0;
+    /* AIシート(10000100)より下・Channel Talk ランチャー(10000000)より上 */
+    z-index: 10000050;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 18px 22px;
+    font-family: var(--j6line-is-font);
+  }
+  .j6line-is[hidden] { display: none !important; }
+  .j6line-is:focus, .j6line-is__close:focus { outline: none; }
+  .j6line-is__close:focus-visible::before { box-shadow: inset 0 0 0 2px #a08460; }
+  .j6line-is__scrim {
+    position: absolute;
+    inset: 0;
+    background: rgba(41, 39, 36, 0.46);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .j6line-is__card {
+    position: relative;
+    width: 100%;
+    max-width: 338px;
+    background: #faf9f7;
+    border-radius: 0;
+    overflow: hidden;
+    text-align: center;
+    box-shadow: 0 20px 48px rgba(24, 21, 19, 0.34), 0 2px 6px rgba(24, 21, 19, 0.16);
+    font-family: var(--j6line-is-font);
+    animation: j6line-is-up 0.28s ease both;
+  }
+  @keyframes j6line-is-up {
+    from { transform: translateY(16px); opacity: 0; }
+    to { transform: none; opacity: 1; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .j6line-is__card { animation: none; }
+  }
+  .j6line-is__close {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    z-index: 3;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .j6line-is__close::before {
+    content: "";
+    position: absolute;
+    inset: 7px;
+    border-radius: 50%;
+    background: rgba(250, 249, 247, 0.9);
+  }
+  .j6line-is__close span {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: 13px;
+    height: 13px;
+  }
+  .j6line-is__close span::before,
+  .j6line-is__close span::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 6px;
+    width: 13px;
+    height: 1px;
+    background: #4a4239;
+  }
+  .j6line-is__close span::before { transform: rotate(45deg); }
+  .j6line-is__close span::after { transform: rotate(-45deg); }
+  .j6line-is__media {
+    position: relative;
+    height: 172px;
+    overflow: hidden;
+    background: #efeae2;
+  }
+  .j6line-is__media img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 44%;
+  }
+  .j6line-is__media::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(41, 39, 36, 0.1) 0%, rgba(41, 39, 36, 0) 38%, rgba(250, 249, 247, 0.42) 100%);
+  }
+  .j6line-is__body { padding: 18px 24px 20px; }
+  .j6line-is__eyebrow {
+    margin: 0;
+    font-family: var(--j6line-is-font);
+    font-size: 8px;
+    font-weight: 500;
+    letter-spacing: 0.32em;
+    color: #a08460;
+  }
+  .j6line-is__kicker {
+    margin: 11px 0 0;
+    font-family: var(--j6line-is-font);
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    color: #6b5b4f;
+  }
+  .j6line-is__title {
+    margin: 3px 0 0;
+    font-family: var(--j6line-is-font);
+    font-size: 32px;
+    line-height: 1.2;
+    font-weight: 300;
+    letter-spacing: 0.01em;
+    color: #292724;
+  }
+  .j6line-is__text {
+    margin: 12px auto 0;
+    max-width: 270px;
+    font-family: var(--j6line-is-font);
+    font-size: 10.5px;
+    line-height: 1.95;
+    color: #6b5b4f;
+    letter-spacing: 0.02em;
+  }
+  .j6line-is__cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 47px;
+    margin-top: 17px;
+    background: #292724;
+    color: #faf9f7;
+    font-family: var(--j6line-is-font);
+    font-size: 11.5px;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    border-radius: 0;
+  }
+  .j6line-is__cta:visited { color: #faf9f7; }
+  .j6line-is__badge {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: #faf9f7;
+    color: #292724;
+    font-size: 5px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    letter-spacing: 0;
+  }
+  .j6line-is__note {
+    margin: 11px 0 0;
+    font-family: var(--j6line-is-font);
+    font-size: 8.5px;
+    line-height: 1.6;
+    color: #9a938c;
+  }
+  @media (max-width: 360px) {
+    .j6line-is { padding-left: 16px; padding-right: 16px; }
+    .j6line-is__title { font-size: 28px; }
+    .j6line-is__media { height: 150px; }
+  }
+</style>
+
+<div id="j6line-is" class="j6line-is" hidden tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="j6line-is-t">
+  <div class="j6line-is__scrim" data-j6line-is-close aria-hidden="true"></div>
+  <div class="j6line-is__card">
+    <button type="button" class="j6line-is__close" data-j6line-is-close aria-label="閉じる"><span></span></button>
+    <div class="j6line-is__media">
+      <img src="{{ 'line-interstitial-sofa.jpg' | asset_url }}" alt="" width="338" height="172" loading="lazy" decoding="async">
+    </div>
+    <div class="j6line-is__body">
+      <p class="j6line-is__eyebrow">6JOHAN LINE OFFICIAL</p>
+      <p class="j6line-is__kicker">LINE友だち登録で</p>
+      <p class="j6line-is__title" id="j6line-is-t">2,000円OFF</p>
+      <p class="j6line-is__text">¥30,000以上のご注文で使えるクーポンと、<br>再入荷のお知らせをお届けします。</p>
+      <a class="j6line-is__cta" href="https://line.me/R/ti/p/@505xknxn?utm_source=6johan_site&amp;utm_medium=interstitial&amp;utm_campaign=line2000" target="_blank" rel="noopener" data-j6line-is-cta><span class="j6line-is__badge">LINE</span>LINEで友だち追加（無料）</a>
+      <p class="j6line-is__note">クーポンコードは追加後のトークに届きます（お一人さま1回）</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var KEY_SEEN = 'j6line_is_seen_v1';
+    var DELAY_MS = 12000;
+    var SCROLL_RATIO = 0.6;
+
+    function readSeen() {
+      try { return window.localStorage.getItem(KEY_SEEN); } catch (e) { return null; }
+    }
+    function writeSeen() {
+      try { window.localStorage.setItem(KEY_SEEN, String(Date.now())); } catch (e) {}
+    }
+
+    if (readSeen()) return;
+    if (window.Shopify && window.Shopify.designMode) return;
+    if (/[?&]preview_theme_id=/.test(window.location.search)) return;
+
+    var el = document.getElementById('j6line-is');
+    if (!el) return;
+
+    var opened = false;
+    var settled = false;
+    var aiPending = false;
+    var lastFocus = null;
+    var timer = null;
+
+    function aiSheetOpen() {
+      var sheet = document.querySelector('.j6ac-sheet');
+      return !!(sheet && !sheet.hidden && sheet.classList.contains('is-open'));
+    }
+
+    function inlineVisible() {
+      // 商品ページ下部の LINE 1行リンクが「ほぼ全部」視界にあるときだけ抑止する
+      var n = document.querySelector('.j6line-inline');
+      if (!n) return false;
+      var r = n.getBoundingClientRect();
+      if (r.height <= 0) return false;
+      var vh = window.innerHeight || 0;
+      var visible = Math.min(r.bottom, vh) - Math.max(r.top, 0);
+      return visible >= r.height * 0.5;
+    }
+
+    function track(name) {
+      if (typeof window.gtag === 'function') {
+        window.gtag('event', name, { event_category: 'line_interstitial', page_path: window.location.pathname });
+      }
+    }
+
+    function clearTriggers() {
+      if (timer) { clearTimeout(timer); timer = null; }
+      window.removeEventListener('scroll', onScroll);
+    }
+
+    function show() {
+      if (opened || settled) return;
+      // AIコンシェルジュのシートが開いている間は被せない（閉じたら表示）
+      if (aiSheetOpen()) { waitForAi(); return; }
+      // 商品ページ下部の LINE 1行リンクが視界にあるなら、そちらに任せて出さない
+      if (inlineVisible()) { settled = true; clearTriggers(); return; }
+
+      opened = true;
+      settled = true;
+      clearTriggers();
+      lastFocus = document.activeElement;
+      el.hidden = false;
+      document.documentElement.style.overflow = 'hidden';
+      writeSeen();
+      track('line_is_view');
+      try { el.focus({ preventScroll: true }); } catch (e) { try { el.focus(); } catch (e2) {} }
+    }
+
+    function close() {
+      if (!opened || el.hidden) return;
+      el.hidden = true;
+      document.documentElement.style.overflow = '';
+      track('line_is_close');
+      if (lastFocus && typeof lastFocus.focus === 'function') {
+        try { lastFocus.focus({ preventScroll: true }); } catch (e) {}
+      }
+    }
+
+    function onScroll() {
+      var h = document.documentElement.scrollHeight - window.innerHeight;
+      if (h > 0 && (window.scrollY || window.pageYOffset) / h > SCROLL_RATIO) show();
+    }
+
+    el.querySelectorAll('[data-j6line-is-close]').forEach(function (b) {
+      b.addEventListener('click', close);
+    });
+
+    el.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' || e.key === 'Esc') { close(); return; }
+      if (e.key !== 'Tab') return;
+      var f = el.querySelectorAll('button, a[href]');
+      if (!f.length) return;
+      var first = f[0];
+      var last = f[f.length - 1];
+      if (e.shiftKey && (document.activeElement === first || document.activeElement === el)) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    });
+
+    var cta = el.querySelector('[data-j6line-is-cta]');
+    if (cta) {
+      cta.addEventListener('click', function () {
+        track('line_is_click');
+        // クリック後は閉じておく（戻ってきたときに暗幕が残らないように）
+        setTimeout(close, 150);
+      });
+    }
+
+    // AIシートが閉じたタイミングで待機中の表示を再開（観測＋ポーリングの二段構え）
+    var aiPoll = null;
+    function resumeIfAiClosed() {
+      if (!aiPending || aiSheetOpen()) return;
+      aiPending = false;
+      if (aiPoll) { clearInterval(aiPoll); aiPoll = null; }
+      if (opened || settled) return;
+      setTimeout(function () { show(); }, 600);
+    }
+    function waitForAi() {
+      aiPending = true;
+      if (aiPoll) return;
+      aiPoll = setInterval(resumeIfAiClosed, 1000);
+    }
+    function watchSheet(sheet) {
+      if (!sheet || !window.MutationObserver || sheet.__j6lineIsWatched) return;
+      sheet.__j6lineIsWatched = true;
+      new MutationObserver(resumeIfAiClosed).observe(sheet, {
+        attributes: true,
+        attributeFilter: ['class', 'hidden', 'aria-hidden']
+      });
+    }
+    watchSheet(document.querySelector('.j6ac-sheet'));
+
+    var mount = function () {
+      if (opened || settled) return;
+      timer = setTimeout(show, DELAY_MS);
+      window.addEventListener('scroll', onScroll, { passive: true });
+      // 開いた直後にすでに60%以上スクロールしている場合（戻る/リロード）も判定
+      onScroll();
+    };
+
+    if ('requestIdleCallback' in window) {
+      window.requestIdleCallback(mount, { timeout: 2500 });
+    } else {
+      setTimeout(mount, 800);
+    }
+  })();
+</script>
+{%- endif -%}
