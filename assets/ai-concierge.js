@@ -700,7 +700,7 @@
   }
 
   /* 行の表示（サムネ・価格・在庫バッジ・色名）を選択中バリエーションに合わせる */
-  function paintItem(row, it) {
+  function paintItem(row, it, ui) {
     if (!row) return;
     row.setAttribute('data-variant-id', String(it.variantId));
     row.setAttribute('data-variant-title', it.variantTitle || '');
@@ -736,6 +736,9 @@
 
     var select = row.querySelector('[data-j6ac-upsell-select]');
     if (select && select.value !== String(it.variantId)) select.value = String(it.variantId);
+
+    /* 「✓ 追加済み」は、いま選んでいるバリエーションがカートにあるかで付け替える */
+    if (ui) paintAddState(ui, row);
   }
 
   function createUpsellItem(ui, it) {
@@ -797,7 +800,7 @@
         }
         if (!picked) return;
         setItemVariant(it, picked);
-        paintItem(row, it);
+        paintItem(row, it, ui);
         trackUpsell('ai_upsell_variant_select', {
           product_id: ui.data.productId,
           product_handle: ui.data.handle,
@@ -845,7 +848,7 @@
     row.appendChild(body);
     row.appendChild(btn);
 
-    paintItem(row, it);
+    paintItem(row, it, ui);
     return row;
   }
 
@@ -896,6 +899,8 @@
         ui.thread.appendChild(card);
         ui.upsellEl = card;
         scrollBottom(ui.thread);
+        /* 先にカートを読んでいた場合も含め、既にカートにある色は「✓ 追加済み」で描く */
+        refreshCartCount(ui);
         var ids = [];
         var names = [];
         var variants = [];
@@ -920,22 +925,125 @@
       });
   }
 
+  /* ---- カート内容 ⇔ アップセルボタンの同期 ---- */
+
+  /* /cart.js の明細を variantId -> 数量 のマップに */
+  function cartVariantMap(cart) {
+    var map = {};
+    var items = (cart && cart.items) || [];
+    for (var i = 0; i < items.length; i++) {
+      var line = items[i];
+      if (!line) continue;
+      var vid =
+        line.variant_id != null
+          ? String(line.variant_id)
+          : String(line.id || '').split(':')[0];
+      if (!vid) continue;
+      map[vid] = (map[vid] || 0) + (Number(line.quantity) || 0);
+    }
+    return map;
+  }
+
+  function isVariantInCart(ui, variantId) {
+    return !!(ui && ui.cartMap && variantId && ui.cartMap[String(variantId)]);
+  }
+
+  /* 1行の「カートに追加」を在カート状態に合わせる（追加通信中は触らない） */
+  function paintAddState(ui, row) {
+    if (!row) return;
+    var btn = row.querySelector('[data-j6ac-upsell-add]');
+    if (!btn || btn.classList.contains('is-busy')) return;
+    var label = btn.querySelector('span') || btn;
+    if (isVariantInCart(ui, row.getAttribute('data-variant-id'))) {
+      /* カートから外れるまで「✓ 追加済み」を保つ（誤タップの二重追加を防ぐ） */
+      btn.classList.add('is-done');
+      btn.disabled = true;
+      btn.setAttribute('aria-disabled', 'true');
+      label.textContent = '✓ 追加済み';
+    } else {
+      btn.classList.remove('is-done');
+      btn.disabled = false;
+      btn.removeAttribute('aria-disabled');
+      label.textContent = '＋ カートに追加';
+    }
+  }
+
+  function paintCardCartState(ui) {
+    if (!ui.upsellEl || !ui.upsellEl.parentNode) return;
+    var rows = ui.upsellEl.querySelectorAll('[data-j6ac-upsell-item]');
+    var anyInCart = false;
+    for (var i = 0; i < rows.length; i++) {
+      paintAddState(ui, rows[i]);
+      if (isVariantInCart(ui, rows[i].getAttribute('data-variant-id'))) anyInCart = true;
+    }
+    var note = ui.upsellEl.querySelector('[data-j6ac-upsell-note]');
+    if (note) note.textContent = upsellNoteText(ui);
+    /* カートから外されたら「カートに追加しました」の一言も引っ込める */
+    var done = ui.upsellEl.querySelector('[data-j6ac-upsell-done]');
+    if (done && !anyInCart) done.hidden = true;
+  }
+
+  function applyCartToUpsell(ui, cart) {
+    if (!ui) return;
+    ui.cartCount = (cart && cart.item_count) || 0;
+    ui.cartMap = cartVariantMap(cart);
+    paintCardCartState(ui);
+  }
+
+  /* カートの内容を取り直し、件数・案内文・ボタンの状態を合わせる */
   function refreshCartCount(ui) {
-    if (typeof fetch !== 'function') return;
-    fetch('/cart.js', {headers: {Accept: 'application/json'}})
+    if (!ui || typeof fetch !== 'function') return Promise.resolve();
+    if (ui.cartFetching) {
+      ui.cartFetchAgain = true;
+      return ui.cartFetching;
+    }
+    ui.cartFetching = fetch('/cart.js', { headers: { Accept: 'application/json' } })
       .then(function (r) {
         return r.json();
       })
       .then(function (cart) {
-        ui.cartCount = cart.item_count || 0;
-        if (ui.upsellEl) {
-          var note = ui.upsellEl.querySelector('[data-j6ac-upsell-note]');
-          if (note) note.textContent = upsellNoteText(ui);
-        }
+        applyCartToUpsell(ui, cart);
       })
       .catch(function () {
         /* カート件数が取れなくてもカードは出す */
+      })
+      .then(function () {
+        ui.cartFetching = null;
+        if (ui.cartFetchAgain) {
+          ui.cartFetchAgain = false;
+          refreshCartCount(ui);
+        }
       });
+    return ui.cartFetching;
+  }
+
+  /* シートを開いている間だけカートの変化を見張る（ドロワー・カートページでの削除も拾う） */
+  function startCartSync(ui) {
+    if (!ui) return;
+    if (!ui.cartSyncBound) {
+      ui.cartSyncBound = true;
+      var resync = function () {
+        if (!ui.open) return;
+        refreshCartCount(ui);
+      };
+      ['cart:refresh', 'cart:updated', 'cart:update', 'shopify:cart:update'].forEach(function (name) {
+        document.addEventListener(name, resync);
+      });
+      document.addEventListener('visibilitychange', function () {
+        if (!document.hidden) resync();
+      });
+    }
+    if (ui.cartPoll) window.clearInterval(ui.cartPoll);
+    ui.cartPoll = window.setInterval(function () {
+      if (ui.open) refreshCartCount(ui);
+    }, 7000);
+  }
+
+  function stopCartSync(ui) {
+    if (ui && ui.cartPoll) {
+      window.clearInterval(ui.cartPoll);
+      ui.cartPoll = null;
+    }
   }
 
   function cartDiscount(cart) {
@@ -1033,11 +1141,14 @@
         });
       })
       .then(function (cart) {
-        ui.cartCount = cart.item_count || 0;
         var disc = cartDiscount(cart);
         btn.classList.remove('is-busy');
         btn.classList.add('is-done');
+        /* 追加後はカートから外れるまで「✓ 追加済み」のまま（4秒で戻すと二重追加を誘う） */
+        btn.disabled = true;
+        btn.setAttribute('aria-disabled', 'true');
         label.textContent = '✓ 追加済み';
+        applyCartToUpsell(ui, cart);
         showUpsellDone(ui, row, disc, cart);
         trackUpsell('ai_upsell_add_to_cart', {
           product_id: ui.data.productId,
@@ -1054,18 +1165,13 @@
           discount_amount: disc ? disc.amount : 0
         });
         document.dispatchEvent(new CustomEvent('cart:refresh'));
-        window.setTimeout(function () {
-          btn.disabled = false;
-          btn.classList.remove('is-done');
-          label.textContent = '＋ カートに追加';
-        }, 4000);
       })
       .catch(function () {
         btn.classList.remove('is-busy');
         btn.disabled = false;
         label.textContent = '追加できませんでした';
         window.setTimeout(function () {
-          label.textContent = '＋ カートに追加';
+          paintAddState(ui, row);
         }, 2600);
       });
   }
@@ -1239,11 +1345,13 @@
     /* すでにカートに1点あるかを取り、提案文と5%OFFの案内を合わせる */
     refreshCartCount(ui);
     loadUpsellItems(ui);
+    startCartSync(ui);
   }
 
   function closeSheet(ui) {
     if (!ui.sheet || !ui.open) return;
     ui.open = false;
+    stopCartSync(ui);
     ui.sheet.classList.remove('is-open');
     ui.sheet.classList.add('is-closing');
     ui.sheet.setAttribute('aria-hidden', 'true');
@@ -1416,6 +1524,11 @@
       lastTrigger: null,
       lastKey: null,
       cartCount: typeof d.cartItemCount === 'number' ? d.cartItemCount : 0,
+      cartMap: null,
+      cartFetching: null,
+      cartFetchAgain: false,
+      cartPoll: null,
+      cartSyncBound: false,
       upsellEl: null,
       upsellLoading: null
     };

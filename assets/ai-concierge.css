@@ -1027,6 +1027,18 @@ body.j6ac-lock {
   color: #ffffff;
   opacity: 1;
 }
+/* 追加済みは disabled にする（カートから外れるまで押せない＝二重追加なし）。色は薄くしない */
+.j6ac-upsell__add[disabled] {
+  cursor: default;
+}
+.j6ac-upsell__add.is-done[disabled],
+.j6ac-upsell__add.is-done[disabled]:hover {
+  border-color: var(--j6ac-brown);
+  background: var(--j6ac-brown);
+  color: #ffffff;
+  -webkit-text-fill-color: #ffffff;
+  opacity: 1;
+}
 .j6ac-upsell__note {
   margin: 8px 0 0;
   color: var(--j6ac-muted);
