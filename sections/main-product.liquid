@@ -712,6 +712,9 @@
       </div>
     </div>
 
+    {%- comment -%} 6JOHAN LINE 導線（購入検討エリア下部・追従しない位置） {%- endcomment -%}
+    {% render '6johan-line-inline' %}
+
     {% render 'product-media-modal', variant_images: variant_images %}
 
     {% assign popups = section.blocks | where: 'type', 'popup' %}

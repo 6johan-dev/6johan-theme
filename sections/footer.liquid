@@ -27,6 +27,9 @@
   }
 {%- endstyle -%}
 
+{%- comment -%} 6JOHAN LINE 友だち追加バンド（フッター直前・全ページ共通） {%- endcomment -%}
+{% render '6johan-line-band' %}
+
 <footer class="footer color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
   {%- liquid
     assign has_social_icons = true
