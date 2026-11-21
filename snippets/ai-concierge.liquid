@@ -275,6 +275,7 @@
         {%- endcomment -%}
         {% render 'ai-concierge-variant-map' %}
         "discountTitle": "2点以上で5%OFF（セット・コーディネート）",
+        "cartItemCount": {{ cart.item_count | json }},
         "upsellTitle": "一緒に買うとお得",
         "upsellBadge": "2点以上で5%OFF",
         "upsellNote": "2点以上で自動5%OFF（セット・コーディネート）が適用されます。",

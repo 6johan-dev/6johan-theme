@@ -817,14 +817,19 @@
       meta.appendChild(colorName);
     }
 
+    var price = document.createElement('span');
+    price.className = 'j6ac-upsell__price';
+
+    var amount = document.createElement('span');
+    amount.className = 'j6ac-upsell__amount';
+    amount.setAttribute('data-j6ac-upsell-price', '');
+
     var badge = document.createElement('span');
     badge.className = 'j6ac-upsell__state';
     badge.setAttribute('data-j6ac-upsell-state', '');
-    meta.appendChild(badge);
 
-    var price = document.createElement('span');
-    price.className = 'j6ac-upsell__price';
-    price.setAttribute('data-j6ac-upsell-price', '');
+    price.appendChild(amount);
+    price.appendChild(badge);
 
     body.appendChild(name);
     body.appendChild(meta);
@@ -1410,7 +1415,7 @@
       greeted: false,
       lastTrigger: null,
       lastKey: null,
-      cartCount: 0,
+      cartCount: typeof d.cartItemCount === 'number' ? d.cartItemCount : 0,
       upsellEl: null,
       upsellLoading: null
     };
