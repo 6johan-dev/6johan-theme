@@ -483,6 +483,12 @@
     };
     if (!sheet) return;
 
+    /* テーマの共通CSS（div:empty{display:none} 等）で暗幕が消されている場合の保険 */
+    var scrim = sheet.querySelector('.j6ac-sheet__scrim');
+    if (scrim && window.getComputedStyle(scrim).display === 'none') {
+      scrim.style.setProperty('display', 'block', 'important');
+    }
+
     /* 親の overflow / transform に邪魔されないよう body 直下へ移す */
     if (sheet.parentNode !== document.body) {
       var accent = root.style.getPropertyValue('--j6ac-accent');

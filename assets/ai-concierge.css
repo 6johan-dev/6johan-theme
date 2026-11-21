@@ -35,6 +35,11 @@
   -webkit-font-smoothing: antialiased;
 }
 
+/* 商品情報カラムの「.product__info-container > * + * {margin:1.5rem 0}」より優先させる */
+.j6ac.j6ac {
+  margin: 14px 0 16px;
+}
+
 .j6ac *,
 .j6ac *::before,
 .j6ac *::after,
@@ -222,6 +227,15 @@
   background: rgba(41, 39, 36, 0.46);
   opacity: 0;
   transition: opacity 0.24s ease;
+}
+
+/* テーマ共通CSSの div:empty{display:none} を打ち消す（暗幕が消えないように） */
+.j6ac-sheet .j6ac-sheet__scrim,
+.j6ac-sheet .j6ac-sheet__scrim:empty {
+  display: block;
+}
+.j6ac-sheet .j6ac-sheet__thread:empty {
+  display: block;
 }
 
 .j6ac-sheet__panel {
