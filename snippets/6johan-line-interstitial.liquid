@@ -31,6 +31,11 @@
     background: rgba(41, 39, 36, 0.46);
     -webkit-tap-highlight-color: transparent;
   }
+  /* テーマ共通CSSの div:empty{display:none}（assets/base.css）で暗幕が消えるのを打ち消す */
+  .j6line-is .j6line-is__scrim,
+  .j6line-is .j6line-is__scrim:empty {
+    display: block;
+  }
   .j6line-is__card {
     position: relative;
     width: 100%;
@@ -188,7 +193,7 @@
 </style>
 
 <div id="j6line-is" class="j6line-is" hidden tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="j6line-is-t">
-  <div class="j6line-is__scrim" data-j6line-is-close aria-hidden="true"></div>
+  <div class="j6line-is__scrim" data-j6line-is-close aria-hidden="true"><i></i></div>
   <div class="j6line-is__card">
     <button type="button" class="j6line-is__close" data-j6line-is-close aria-label="閉じる"><span></span></button>
     <div class="j6line-is__media">
