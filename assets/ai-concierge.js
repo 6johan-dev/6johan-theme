@@ -39,6 +39,51 @@
     }
   }
 
+  /* ---------------- アップセルの計測（GA4＋localStorage集計） ----------------
+     外販アプリ「AI Concierge」の実績データ用に、インプレッション・クリック・
+     カート追加を1日単位で localStorage にも積む（送信失敗時も端末側に残す）。 */
+  var STAT_KEY = 'j6ac_upsell_stats_v1';
+
+  function pad2(n) {
+    return (n < 10 ? '0' : '') + n;
+  }
+
+  function dayKey() {
+    var d = new Date();
+    return d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate());
+  }
+
+  function readStats() {
+    try {
+      return JSON.parse(window.localStorage.getItem(STAT_KEY) || '{}') || {};
+    } catch (e) {
+      return {};
+    }
+  }
+
+  function bumpStat(key) {
+    try {
+      var s = readStats();
+      var day = dayKey();
+      s.days = s.days || {};
+      var row = s.days[day] || {};
+      row[key] = (row[key] || 0) + 1;
+      s.days[day] = row;
+      s[key] = (s[key] || 0) + 1;
+      s.updated_at = new Date().toISOString();
+      window.localStorage.setItem(STAT_KEY, JSON.stringify(s));
+    } catch (e) {
+      /* プライベートモード等で保存できなくてもUIは動かす */
+    }
+  }
+
+  function trackUpsell(event, params) {
+    track(event, params);
+    if (event === 'ai_upsell_impression') bumpStat('impressions');
+    if (event === 'ai_upsell_click') bumpStat('clicks');
+    if (event === 'ai_upsell_add_to_cart') bumpStat('adds');
+  }
+
   function isMobile() {
     return window.matchMedia && window.matchMedia('(max-width: 749px)').matches;
   }
@@ -202,6 +247,18 @@
     };
   }
 
+  function answerUpsell() {
+    return {
+      id: 'upsell',
+      upsell: true,
+      html:
+        '合わせて使うなら、こちらの商品がおすすめです。' +
+        '<b>2点以上で自動5%OFF</b>（セット・コーディネート）が適用されます。' +
+        'いま在庫のある商品だけを出しています。',
+      human: false
+    };
+  }
+
   var KEYWORDS = [
     { re: /エレベーター|エレベータ|搬入|搬送|階段|間口|入る|通る|運搬/, fn: function (d) { return answerCarry(d); } },
     { re: /送料|配送料|送料は|いくら|費用|料金/, fn: function (d) { return answerShipping(d); } },
@@ -273,6 +330,504 @@
     var sep = base.indexOf('?') > -1 ? '&' : '?';
     var text = d.title + 'について相談' + (question ? '：' + question : '');
     return base + sep + 'text=' + encodeURIComponent(text);
+  }
+
+  /* ---------------- アップセル（2点以上で自動5%OFF） ----------------
+     提案は必ず「いま在庫のあるバリエーション」がある商品だけ。
+     取得順序: /recommendations/products.json（関連商品・実ストア）
+             → 失敗時は Liquid が出力した即納商品のフォールバック。 */
+
+  function yenText(n) {
+    return '¥' + Number(n || 0).toLocaleString('ja-JP');
+  }
+
+  function pctOff(price) {
+    return Math.round(Number(price || 0) * 0.95);
+  }
+
+  function normalizeImg(src) {
+    var s = String(src || '');
+    if (s.indexOf('//') === 0) return 'https:' + s;
+    return s;
+  }
+
+  function normalizeFallback(list) {
+    var out = [];
+    list = list || [];
+    for (var i = 0; i < list.length; i++) {
+      var it = list[i];
+      if (!it || !it.variantId) continue;
+      if (it.available === false) continue;
+      if (!it.image) continue;
+      if (['CHAIR', 'TABLE', 'SOFA', 'STORAGE'].indexOf(it.type) === -1) continue;
+      out.push({
+        id: it.id,
+        handle: it.handle,
+        title: it.title,
+        type: it.type || '',
+        url: it.url || '/products/' + it.handle,
+        image: normalizeImg(it.image),
+        price: Number(it.price) || 0,
+        variantId: it.variantId,
+        variantTitle: it.variantTitle || '',
+        tags: it.tags || []
+      });
+    }
+    return out;
+  }
+
+  /* 関連商品API（価格はセント）を、在庫ありの1バリエーションにそろえる */
+  function fromRecommendation(p, colorTitle, priceIsYen) {
+    if (!p || !p.handle) return null;
+    var vs = p.variants || [];
+    var avail = [];
+    for (var i = 0; i < vs.length; i++) {
+      if (vs[i] && vs[i].available !== false) avail.push(vs[i]);
+    }
+    if (!avail.length) return null;
+    var chosen = avail[0];
+    if (colorTitle) {
+      for (var j = 0; j < avail.length; j++) {
+        if (avail[j].title === colorTitle) {
+          chosen = avail[j];
+          break;
+        }
+      }
+    }
+    var img =
+      p.featured_image ||
+      (p.images && p.images[0]) ||
+      (p.image && p.image.src) ||
+      (chosen.featured_image && chosen.featured_image.src) ||
+      '';
+    var raw = chosen.price != null ? chosen.price : p.price;
+    var price = Number(raw) || 0;
+    if (!priceIsYen) price = Math.round(price / 100);
+    return {
+      id: p.id,
+      handle: p.handle,
+      title: p.title,
+      type: p.type || '',
+      url: '/products/' + p.handle,
+      image: normalizeImg(img),
+      price: price,
+      variantId: chosen.id,
+      variantTitle: chosen.title || ''
+    };
+  }
+
+  function tagScore(tags, currentTags) {
+    var n = 0;
+    tags = tags || [];
+    currentTags = currentTags || [];
+    for (var i = 0; i < tags.length; i++) {
+      for (var j = 0; j < currentTags.length; j++) {
+        if (tags[i] === currentTags[j]) {
+          n++;
+          break;
+        }
+      }
+    }
+    return n;
+  }
+
+  /* 商品タイプを散らす（同タイプばかりの3点にならないように） */
+  function diversify(items, max) {
+    var first = [];
+    var rest = [];
+    var seen = {};
+    for (var i = 0; i < items.length; i++) {
+      var t = items[i].type || 'other';
+      if (!seen[t]) {
+        seen[t] = 1;
+        first.push(items[i]);
+      } else {
+        rest.push(items[i]);
+      }
+    }
+    return first.concat(rest).slice(0, max || 3);
+  }
+
+  function loadUpsellItems(ui) {
+    if (ui.upsellLoading) return ui.upsellLoading;
+    var d = ui.data;
+    var fallbackList = normalizeFallback(d.upsellFallback);
+    for (var fi = 0; fi < fallbackList.length; fi++) {
+      fallbackList[fi].score = tagScore(fallbackList[fi].tags, d.tags);
+    }
+    fallbackList.sort(function (a, b) {
+      return (b.score || 0) - (a.score || 0);
+    });
+    var fallback = diversify(fallbackList, 3);
+    ui.upsellLoading = new Promise(function (resolve) {
+      var done = false;
+      var timer = window.setTimeout(function () {
+        if (done) return;
+        if (fallback.length) {
+          done = true;
+          resolve(fallback);
+          return;
+        }
+        finishFromCollection();
+      }, 2500);
+
+      function finish(items) {
+        if (done) return;
+        done = true;
+        window.clearTimeout(timer);
+        resolve(items && items.length ? items : fallback);
+      }
+
+      /* 関連商品APIもLiquidのリストも空のときの最終手段：即納コレクションのJSON */
+      function finishFromCollection() {
+        if (fallback.length) return finish(fallback);
+        var color = (currentVariant(d) || {}).title;
+        fetch('/collections/express-deliver/products.json?limit=12', {
+          headers: { Accept: 'application/json' }
+        })
+          .then(function (r) {
+            if (!r.ok) throw new Error('collection ' + r.status);
+            return r.json();
+          })
+          .then(function (j) {
+            var list = (j && j.products) || [];
+            var items = [];
+            for (var i = 0; i < list.length; i++) {
+              if (list[i].handle === d.handle) continue;
+              var it = fromRecommendation(list[i], color, true);
+              if (!it) continue;
+              it.score = tagScore(list[i].tags, d.tags);
+              items.push(it);
+            }
+            items.sort(function (a, b) {
+              return (b.score || 0) - (a.score || 0);
+            });
+            finish(diversify(items, 3));
+          })
+          .catch(function () {
+            finish(fallback);
+          });
+      }
+
+      try {
+        var color = (currentVariant(d) || {}).title;
+        var url =
+          '/recommendations/products.json?product_id=' +
+          encodeURIComponent(d.productId) +
+          '&limit=6&intent=related';
+
+        function tryFetch(attempt) {
+          fetch(url, { headers: { Accept: 'application/json' } })
+            .then(function (r) {
+              if (r.status === 429 && attempt < 1) {
+                window.setTimeout(function () {
+                  tryFetch(attempt + 1);
+                }, 900);
+                return null;
+              }
+              if (!r.ok) throw new Error('recommendations ' + r.status);
+              return r.json();
+            })
+            .then(function (j) {
+              if (!j) return;
+              var list = (j.products) || [];
+              var items = [];
+              for (var i = 0; i < list.length; i++) {
+                if (list[i].handle === d.handle) continue;
+                var it = fromRecommendation(list[i], color);
+                if (!it) continue;
+                it.score = tagScore(list[i].tags, d.tags);
+                items.push(it);
+              }
+              items.sort(function (a, b) {
+                return (b.score || 0) - (a.score || 0);
+              });
+              var picked = diversify(items, 3);
+              if (!picked.length) return finishFromCollection();
+              finish(picked);
+            })
+            .catch(function () {
+              finishFromCollection();
+            });
+        }
+        tryFetch(0);
+      } catch (e) {
+        finishFromCollection();
+      }
+    });
+    return ui.upsellLoading;
+  }
+
+  function upsellNoteText(ui) {
+    var n = ui.cartCount || 0;
+    if (n > 0) {
+      return (
+        'いまカートに' +
+        n +
+        '点。追加すると2点以上で自動5%OFF（セット・コーディネート）が適用されます。'
+      );
+    }
+    return ui.data.upsellNote || '2点以上で自動5%OFF（セット・コーディネート）が適用されます。';
+  }
+
+  function scrollToUpsell(ui, el) {
+    if (!ui.thread || !el) return;
+    var top = el.offsetTop - 24;
+    ui.thread.scrollTop = top < 0 ? 0 : top;
+  }
+
+  function createUpsellItem(ui, it) {
+    var row = document.createElement('div');
+    row.className = 'j6ac-upsell__item';
+    row.setAttribute('data-j6ac-upsell-item', '');
+    row.setAttribute('data-variant-id', String(it.variantId));
+    row.setAttribute('data-handle', String(it.handle || ''));
+    row.setAttribute('data-product-id', String(it.id || ''));
+    row.setAttribute('data-price', String(it.price));
+
+    var url = it.url || '/products/' + it.handle;
+
+    var thumb = document.createElement('a');
+    thumb.className = 'j6ac-upsell__thumb';
+    thumb.href = url;
+    thumb.setAttribute('data-j6ac-upsell-link', '');
+    thumb.setAttribute('aria-label', it.title + 'の商品ページを見る');
+    thumb.innerHTML =
+      '<img src="' +
+      esc(it.image) +
+      '" alt="' +
+      esc(it.title) +
+      '" width="48" height="48" loading="lazy">';
+
+    var body = document.createElement('div');
+    body.className = 'j6ac-upsell__body';
+    body.innerHTML =
+      '<a class="j6ac-upsell__name" href="' +
+      esc(url) +
+      '" data-j6ac-upsell-link>' +
+      esc(it.title) +
+      '</a>' +
+      '<span class="j6ac-upsell__price"><s>' +
+      yenText(it.price) +
+      '</s><b>' +
+      yenText(pctOff(it.price)) +
+      '</b><i>5%OFF目安</i></span>';
+
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'j6ac-upsell__add';
+    btn.setAttribute('data-j6ac-upsell-add', '');
+    btn.innerHTML = '<span>＋ カートに追加</span>';
+
+    row.appendChild(thumb);
+    row.appendChild(body);
+    row.appendChild(btn);
+    return row;
+  }
+
+  function createUpsellCard(ui, items) {
+    var wrap = document.createElement('div');
+    wrap.className = 'j6ac-upsell';
+    wrap.setAttribute('data-j6ac-upsell', '');
+
+    var head = document.createElement('div');
+    head.className = 'j6ac-upsell__head';
+    head.innerHTML =
+      '<span class="j6ac-upsell__lead">✨ ' +
+      esc(ui.data.upsellTitle || '一緒に買うとお得') +
+      '</span><span class="j6ac-upsell__badge">' +
+      esc(ui.data.upsellBadge || '2点以上で5%OFF') +
+      '</span>';
+
+    var list = document.createElement('div');
+    list.className = 'j6ac-upsell__list';
+    for (var i = 0; i < items.length; i++) {
+      list.appendChild(createUpsellItem(ui, items[i]));
+    }
+
+    var note = document.createElement('p');
+    note.className = 'j6ac-upsell__note';
+    note.setAttribute('data-j6ac-upsell-note', '');
+    note.textContent = upsellNoteText(ui);
+
+    wrap.appendChild(head);
+    wrap.appendChild(list);
+    wrap.appendChild(note);
+    return wrap;
+  }
+
+  function showUpsell(ui, source) {
+    if (!ui.thread) return;
+    if (ui.upsellEl && ui.upsellEl.parentNode) {
+      if (source === 'chip') scrollToUpsell(ui, ui.upsellEl);
+      return;
+    }
+    loadUpsellItems(ui).then(function (items) {
+      if (!items || !items.length || ui.upsellEl) return;
+      var card = createUpsellCard(ui, items);
+      ui.thread.appendChild(card);
+      ui.upsellEl = card;
+      scrollBottom(ui.thread);
+      var ids = [];
+      var names = [];
+      for (var i = 0; i < items.length; i++) {
+        ids.push(items[i].id);
+        names.push(items[i].title);
+      }
+      trackUpsell('ai_upsell_impression', {
+        product_id: ui.data.productId,
+        product_handle: ui.data.handle,
+        source: source || 'auto',
+        item_ids: ids.join(','),
+        item_names: names.join(' / '),
+        item_count: items.length,
+        cart_item_count: ui.cartCount || 0
+      });
+    });
+  }
+
+  function refreshCartCount(ui) {
+    if (typeof fetch !== 'function') return;
+    fetch('/cart.js', {headers: {Accept: 'application/json'}})
+      .then(function (r) {
+        return r.json();
+      })
+      .then(function (cart) {
+        ui.cartCount = cart.item_count || 0;
+        if (ui.upsellEl) {
+          var note = ui.upsellEl.querySelector('[data-j6ac-upsell-note]');
+          if (note) note.textContent = upsellNoteText(ui);
+        }
+      })
+      .catch(function () {
+        /* カート件数が取れなくてもカードは出す */
+      });
+  }
+
+  function cartDiscount(cart) {
+    var apps = (cart && cart.cart_level_discount_applications) || [];
+    for (var i = 0; i < apps.length; i++) {
+      var a = apps[i];
+      if (!a) continue;
+      if (Number(a.total_allocated_amount) > 0 || /5%|５％|2点|２点/.test(a.title || '')) {
+        return {
+          title: a.title || '',
+          amount: Math.round((Number(a.total_allocated_amount) || 0) / 100)
+        };
+      }
+    }
+    if (cart && Number(cart.total_discount) > 0) {
+      return { title: '', amount: Math.round(Number(cart.total_discount) / 100) };
+    }
+    return null;
+  }
+
+  function showUpsellDone(ui, row, disc, cart) {
+    var card = row ? row.parentNode : null;
+    while (card && !card.hasAttribute('data-j6ac-upsell')) card = card.parentNode;
+    if (!card) return;
+    var done = card.querySelector('[data-j6ac-upsell-done]');
+    if (!done) {
+      done = document.createElement('div');
+      done.className = 'j6ac-upsell__done';
+      done.setAttribute('data-j6ac-upsell-done', '');
+      done.innerHTML =
+        '<span data-j6ac-upsell-done-text></span><a href="/cart">カートを見る ›</a>';
+      card.appendChild(done);
+    }
+    var text = done.querySelector('[data-j6ac-upsell-done-text]');
+    var count = (cart && cart.item_count) || 0;
+    if (disc) {
+      text.textContent =
+        '✓ カートに追加しました（2点以上で5%OFF適用中' +
+        (disc.amount ? '：-' + yenText(disc.amount) : '') +
+        '）';
+    } else if (count <= 1) {
+      text.textContent = '✓ カートに追加しました（あと1点で5%OFF適用）';
+    } else {
+      text.textContent = '✓ カートに追加しました';
+    }
+    done.hidden = false;
+    var note = card.querySelector('[data-j6ac-upsell-note]');
+    if (note) note.textContent = upsellNoteText(ui);
+    scrollBottom(ui.thread);
+  }
+
+  function upsellAdd(ui, btn, row) {
+    if (!btn || btn.disabled || !row) return;
+    var label = btn.querySelector('span') || btn;
+    var nameEl = row.querySelector('.j6ac-upsell__name');
+    var item = {
+      variantId: row.getAttribute('data-variant-id'),
+      productId: row.getAttribute('data-product-id'),
+      handle: row.getAttribute('data-handle'),
+      price: Number(row.getAttribute('data-price') || 0),
+      name: nameEl ? nameEl.textContent : ''
+    };
+    btn.disabled = true;
+    btn.classList.add('is-busy');
+    label.textContent = '追加中…';
+
+    trackUpsell('ai_upsell_click', {
+      product_id: ui.data.productId,
+      product_handle: ui.data.handle,
+      item_id: item.variantId,
+      item_name: item.name,
+      price: item.price,
+      currency: 'JPY',
+      source: 'upsell_add'
+    });
+
+    fetch('/cart/add.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify({ id: Number(item.variantId), quantity: 1 })
+    })
+      .then(function (r) {
+        return r.json().then(function (j) {
+          if (!r.ok) throw new Error((j && (j.description || j.message)) || 'cart error');
+          return j;
+        });
+      })
+      .then(function () {
+        return fetch('/cart.js', { headers: { Accept: 'application/json' } }).then(function (r) {
+          return r.json();
+        });
+      })
+      .then(function (cart) {
+        ui.cartCount = cart.item_count || 0;
+        var disc = cartDiscount(cart);
+        btn.classList.remove('is-busy');
+        btn.classList.add('is-done');
+        label.textContent = '✓ 追加済み';
+        showUpsellDone(ui, row, disc, cart);
+        trackUpsell('ai_upsell_add_to_cart', {
+          product_id: ui.data.productId,
+          product_handle: ui.data.handle,
+          item_id: item.variantId,
+          item_name: item.name,
+          price: item.price,
+          currency: 'JPY',
+          quantity: 1,
+          cart_item_count: ui.cartCount,
+          discount_title: disc ? disc.title : '',
+          discount_amount: disc ? disc.amount : 0
+        });
+        document.dispatchEvent(new CustomEvent('cart:refresh'));
+        window.setTimeout(function () {
+          btn.disabled = false;
+          btn.classList.remove('is-done');
+          label.textContent = '＋ カートに追加';
+        }, 4000);
+      })
+      .catch(function () {
+        btn.classList.remove('is-busy');
+        btn.disabled = false;
+        label.textContent = '追加できませんでした';
+        window.setTimeout(function () {
+          label.textContent = '＋ カートに追加';
+        }, 2600);
+      });
   }
 
   /* ---- LINE風の吹き出し ---- */
@@ -441,6 +996,9 @@
     }
     scrollBottom(ui.thread);
     track('ai_sheet_open', { product_id: ui.data.productId, product_handle: ui.data.handle });
+    /* すでにカートに1点あるかを取り、提案文と5%OFFの案内を合わせる */
+    refreshCartCount(ui);
+    loadUpsellItems(ui);
   }
 
   function closeSheet(ui) {
@@ -491,6 +1049,12 @@
         product_id: ui.data.productId,
         product_handle: ui.data.handle
       });
+      /* 回答のあとにアップセルカード（初回のみ）。チップからは何度でも先頭に戻す */
+      if (answer && answer.upsell) {
+        showUpsell(ui, 'chip');
+      } else if (!ui.upsellEl) {
+        showUpsell(ui, 'auto');
+      }
     }, 420);
   }
 
@@ -581,6 +1145,7 @@
   function chipAnswer(type, d) {
     if (type === 'delivery') return answerDelivery(d);
     if (type === 'size') return answerSize(d);
+    if (type === 'upsell') return answerUpsell();
     return answerReturn();
   }
 
@@ -609,7 +1174,10 @@
       open: false,
       greeted: false,
       lastTrigger: null,
-      lastKey: null
+      lastKey: null,
+      cartCount: 0,
+      upsellEl: null,
+      upsellLoading: null
     };
     if (!sheet) return;
 
@@ -734,6 +1302,31 @@
       }
     });
 
+    /* アップセルカード：ワンタップ追加・商品リンクの計測 */
+    if (ui.thread) {
+      ui.thread.addEventListener('click', function (e) {
+        var addBtn = e.target.closest('[data-j6ac-upsell-add]');
+        if (addBtn) {
+          e.preventDefault();
+          upsellAdd(ui, addBtn, addBtn.closest('[data-j6ac-upsell-item]'));
+          return;
+        }
+        var link = e.target.closest('[data-j6ac-upsell-link]');
+        if (link) {
+          var row = link.closest('[data-j6ac-upsell-item]');
+          trackUpsell('ai_upsell_click', {
+            product_id: d.productId,
+            product_handle: d.handle,
+            item_id: row ? row.getAttribute('data-variant-id') : '',
+            item_name: row && row.querySelector('.j6ac-upsell__name') ? row.querySelector('.j6ac-upsell__name').textContent : '',
+            price: row ? Number(row.getAttribute('data-price') || 0) : 0,
+            currency: 'JPY',
+            source: 'product_link'
+          });
+        }
+      });
+    }
+
     /* 画面サイズ・ソフトキーボードの変化に追随 */
     window.addEventListener('resize', function () {
       if (ui.open) applyOffset(ui);
@@ -823,6 +1416,8 @@
   function boot() {
     if (booted) return;
     booted = true;
+    /* 検証・外販アプリの実績確認用：localStorage のアップセル集計を読めるようにする */
+    window.getJ6acUpsellStats = readStats;
     document.querySelectorAll('[data-j6ac]').forEach(init);
   }
 

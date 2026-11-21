@@ -803,6 +803,194 @@ body.j6ac-lock {
   touch-action: none;
 }
 
+/* ---------- アップセルカード（2点以上で自動5%OFF） ---------- */
+.j6ac-upsell {
+  margin: 2px 0 12px;
+  padding: 10px 10px 9px;
+  border: 1px solid var(--j6ac-line);
+  border-radius: 12px;
+  background: #fffdfb;
+  animation: j6ac-pop 0.2s ease both;
+}
+.j6ac-upsell__head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 8px;
+}
+.j6ac-upsell__lead {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--j6ac-ink);
+  line-height: 1.4;
+}
+.j6ac-upsell__badge {
+  flex: 0 0 auto;
+  margin-left: auto;
+  padding: 2px 7px;
+  border-radius: 2px;
+  background: var(--j6ac-accent);
+  color: #ffffff;
+  font-size: 8.5px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  line-height: 1.6;
+  white-space: nowrap;
+}
+.j6ac-upsell__list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.j6ac-upsell__item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.j6ac-upsell__thumb {
+  flex: 0 0 auto;
+  display: block;
+  width: 48px;
+  height: 48px;
+  overflow: hidden;
+  border: 1px solid var(--j6ac-line);
+  background: #f6f4f0;
+}
+.j6ac-upsell__thumb img {
+  display: block;
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+}
+.j6ac-upsell__body {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.j6ac-upsell__name {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  color: var(--j6ac-ink);
+  font-size: 11.5px;
+  line-height: 1.4;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+}
+.j6ac-upsell__name:hover {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.j6ac-upsell__price {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  white-space: nowrap;
+  font-family: var(--j6ac-font-latin);
+}
+.j6ac-upsell__price s {
+  color: #a8a49e;
+  font-size: 9px;
+  text-decoration: line-through;
+  line-height: 1.4;
+}
+.j6ac-upsell__price b {
+  color: var(--j6ac-ink);
+  font-size: 12.5px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+.j6ac-upsell__price i {
+  font-style: normal;
+  color: var(--j6ac-brown);
+  font-size: 8.5px;
+  letter-spacing: 0.02em;
+  line-height: 1.4;
+}
+.j6ac-upsell__add {
+  flex: 0 0 auto;
+  min-width: 86px;
+  height: 36px;
+  margin: 0;
+  padding: 0 8px;
+  border: 1px solid var(--j6ac-ink);
+  border-radius: 0;
+  background: #ffffff;
+  color: var(--j6ac-ink);
+  font-family: inherit;
+  font-size: 9.5px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  box-shadow: none;
+  appearance: none;
+  -webkit-appearance: none;
+  transition: background-color 0.15s ease, color 0.15s ease, opacity 0.15s ease;
+}
+.j6ac-upsell__add:hover,
+.j6ac-upsell__add:focus-visible {
+  background: #fbf9f6;
+  border-color: var(--j6ac-accent);
+}
+.j6ac-upsell__add.is-busy {
+  opacity: 0.6;
+  cursor: default;
+}
+.j6ac-upsell__add.is-done {
+  border-color: var(--j6ac-brown);
+  background: var(--j6ac-brown);
+  color: #ffffff;
+  opacity: 1;
+}
+.j6ac-upsell__note {
+  margin: 8px 0 0;
+  color: var(--j6ac-muted);
+  font-size: 8.5px;
+  line-height: 1.6;
+  letter-spacing: 0.02em;
+}
+.j6ac-upsell__done {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 8px;
+  padding: 7px 9px;
+  border-radius: 6px;
+  background: #f1eee8;
+}
+.j6ac-upsell__done[hidden] {
+  display: none;
+}
+.j6ac-upsell__done span {
+  color: #33302c;
+  font-size: 9.5px;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+}
+.j6ac-upsell__done a {
+  flex: 0 0 auto;
+  color: var(--j6ac-brown);
+  font-size: 9.5px;
+  line-height: 1.5;
+  white-space: nowrap;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* シート内の「一緒に買うおすすめ」チップ */
+.j6ac__chip--upsell {
+  border-color: #e3d7c8;
+  background: #fbf7f1;
+  color: var(--j6ac-brown);
+}
+
 /* ============================================================
    デスクトップ: 右下のフローティングモーダル
    ============================================================ */
@@ -882,6 +1070,13 @@ body.j6ac-lock {
   }
   .j6ac-line__bubble {
     font-size: 13px;
+  }
+  .j6ac-upsell__name {
+    font-size: 12px;
+  }
+  .j6ac-upsell__add {
+    height: 38px;
+    font-size: 10px;
   }
   .j6ac-cta__buy {
     font-size: 13.5px;
