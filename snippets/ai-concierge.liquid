@@ -86,6 +86,22 @@
   assign ac_accent = block.settings.accent | default: '#6B5B4F'
   assign ac_sheet_id = 'j6ac-sheet-' | append: block.id
   assign ac_human_base = block.settings.human_url | default: 'https://line.me/R/oaMessage/@505xknxn/'
+
+  # アップセル: 2点以上で自動5%OFF（ストアの自動割引「2点以上で5%OFF（セット・コーディネート）」）
+  # 提案は「いま在庫あり」のバリエーションがある商品だけ。JSは /recommendations/products.json を
+  # 優先し、取得できないときは下のサーバー側リスト（即納商品から商品タイプを散らして最大4点）を使う。
+  assign ac_up_fallback_count = 0
+  assign ac_up_same_type = 0
+  assign ac_up_source = blank
+  for c in product.collections
+    if c.handle == 'express-deliver'
+      assign ac_up_source = c
+      break
+    endif
+  endfor
+  if ac_up_source == blank and product.collections.size > 0
+    assign ac_up_source = product.collections.first
+  endif
 -%}
 
 {%- if ac_enabled and product != blank -%}
@@ -198,6 +214,7 @@
           </div>
 
           <div class="j6ac-sheet__quick" role="group" aria-label="追加の質問">
+            <button type="button" class="j6ac__chip j6ac__chip--mini j6ac__chip--upsell" data-j6ac-chip="upsell"><span>{{ block.settings.chip_upsell | default: '✨ 一緒に買うおすすめは？' }}</span></button>
             <button type="button" class="j6ac__chip j6ac__chip--mini" data-j6ac-chip="delivery"><span>{{ block.settings.chip_delivery | default: 'いつ届く？' }}</span></button>
             <button type="button" class="j6ac__chip j6ac__chip--mini" data-j6ac-chip="size"><span>{{ block.settings.chip_size | default: 'サイズ感' }}</span></button>
             <button type="button" class="j6ac__chip j6ac__chip--mini" data-j6ac-chip="return"><span>{{ block.settings.chip_return | default: '返品' }}</span></button>
@@ -249,6 +266,42 @@
             {%- capture _vds -%}{%- render '6johan-delivery-state', variant: v, product: product -%}{%- endcapture -%}
             {%- assign _vds = _vds | split: '|' -%}
             {"id": {{ v.id | json }}, "price": {{ v.price | divided_by: 100 | json }}, "available": {{ v.available | json }}, "title": {{ v.title | json }}, "state": {{ _vds[0] | strip | json }}, "lead": {{ _vds[1] | strip | json }}}{%- unless forloop.last -%},{%- endunless -%}
+          {%- endfor -%}
+        ],
+        "tags": {{ product.tags | json }},
+        {%- comment -%}
+          バリエーション別の在庫/納期マップ（アップセルカードのバッジ用）。
+          判定は 6johan-delivery-state に集約し、JSはこの値を引くだけ。
+        {%- endcomment -%}
+        {% render 'ai-concierge-variant-map' %}
+        "discountTitle": "2点以上で5%OFF（セット・コーディネート）",
+        "cartItemCount": {{ cart.item_count | json }},
+        "upsellTitle": "一緒に買うとお得",
+        "upsellBadge": "2点以上で5%OFF",
+        "upsellNote": "2点以上で自動5%OFF（セット・コーディネート）が適用されます。",
+        {%- comment -%}
+          サーバー側のアップセル候補（最大20点）。関連商品APIが使えないときのフォールバック用。
+          在庫・商品タイプ・自商品の除外と絞り込みは JS 側で行う。
+        {%- endcomment -%}
+        "upsellFallback": [
+          {%- assign ac_up_out = 0 -%}
+          {%- for p in ac_up_source.products limit: 12 -%}
+            {%- if p.id == product.id -%}{%- continue -%}{%- endif -%}
+            {%- assign pv = p.selected_or_first_available_variant -%}
+            {%- assign pimg = p.featured_image -%}
+            {%- if ac_up_out > 0 -%},{%- endif -%}
+            {%- assign ac_up_out = ac_up_out | plus: 1 -%}
+            {"id": {{ p.id | json }}, "handle": {{ p.handle | json }}, "title": {{ p.title | json }}, "type": {{ p.type | json }}, "url": {{ p.url | json }}, "image": {% if pimg %}{{ pimg | image_url: width: 240 | json }}{% else %}null{% endif %}, "price": {{ pv.price | divided_by: 100 | json }}, "variantId": {{ pv.id | json }}, "variantTitle": {{ pv.title | json }}, "available": {{ pv.available | json }}, "tags": {{ p.tags | json }}, "variants": [
+              {%- assign ac_up_vn = 0 -%}
+              {%- for pvv in p.variants -%}
+                {%- if pvv.available -%}
+                  {%- assign pvvimg = pvv.featured_image -%}
+                  {%- if ac_up_vn > 0 -%},{%- endif -%}
+                  {%- assign ac_up_vn = ac_up_vn | plus: 1 -%}
+                  {"id": {{ pvv.id | json }}, "title": {{ pvv.title | json }}, "price": {{ pvv.price | divided_by: 100 | json }}, "image": {% if pvvimg %}{{ pvvimg | image_url: width: 240 | json }}{% else %}null{% endif %}}
+                {%- endif -%}
+              {%- endfor -%}
+            ]}
           {%- endfor -%}
         ],
         "humanLabel": {{ block.settings.human_label | default: '担当者に相談' | json }},
