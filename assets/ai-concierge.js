@@ -1,11 +1,13 @@
 /* ============================================================
    6JOHAN AI CONCIERGE
    ① ページ内はチップ＋1行入力だけ（回答は展開しない）
-   ② タップで画面下から会話シート（オーバーレイ）が立ち上がる
+   ② タップで画面下からLINE風チャットシートが立ち上がる
+      AI＝左の吹き出し／自分＝右の吹き出し（チップ→右→左とポンポン並ぶ）
+   ③ 価格・カートに追加・担当者に相談は下部の固定バー1か所だけ
    方針:
      - 事実（寸法・在庫/納期・送料・返品条件）は Liquid が商品データから確定し、
        ここでは文章にするだけ。数値を推測しない。
-     - 根拠がない質問・人でないと危ない相談は「担当者に相談」へ寄せる。
+     - 根拠がない質問・人でないと危ない相談は固定バーの「担当者に相談」へ寄せる。
      - 計測は GA4（gtag / dataLayer）に ai_* イベントで送る。
    ============================================================ */
 (function () {
@@ -55,6 +57,20 @@
     return d.getMonth() + 1 + '月' + d.getDate() + '日';
   }
 
+  /* LINE風の時刻（HH:MM）と日付ピル */
+  function timeLabel() {
+    var d = new Date();
+    var h = d.getHours();
+    var m = d.getMinutes();
+    return (h < 10 ? '0' : '') + h + ':' + (m < 10 ? '0' : '') + m;
+  }
+
+  function dateLabel() {
+    var d = new Date();
+    var w = ['日', '月', '火', '水', '木', '金', '土'][d.getDay()];
+    return d.getMonth() + 1 + '月' + d.getDate() + '日(' + w + ')';
+  }
+
   /* ---------------- 回答の組み立て ---------------- */
 
   function answerDelivery(d) {
@@ -62,7 +78,6 @@
       return {
         id: 'delivery_unavailable',
         html: '現在この商品はお取り扱いがありません。再入荷のご予定は担当者にご確認ください。',
-        refs: ['在庫・納期'],
         human: true
       };
     }
@@ -73,7 +88,6 @@
           '<b>受注生産</b>のため、ご注文後にお作りします。お届けまで' +
           esc(d.lead || '約2〜3ヶ月') +
           'です。',
-        refs: ['在庫・納期'],
         human: false
       };
     }
@@ -83,7 +97,6 @@
         '<b>在庫あり</b>です。最短7日以内に発送し、' +
         esc(deliveryDate(7)) +
         '頃までにお届けします。',
-      refs: ['在庫・納期'],
       human: false
     };
   }
@@ -96,7 +109,6 @@
       return {
         id: 'size_missing',
         html: 'この商品の寸法データが登録されていません。正確な寸法は担当者にご確認ください。',
-        refs: ['商品寸法'],
         human: true
       };
     }
@@ -106,7 +118,7 @@
       parts.push('完成品でお届けします。');
     }
     parts.push('設置場所の間口・エレベーターの奥行とあわせてご確認ください。');
-    return { id: 'size', html: parts.join(''), refs: ['商品寸法'], human: false };
+    return { id: 'size', html: parts.join(''), human: false };
   }
 
   function answerReturn() {
@@ -116,7 +128,6 @@
         '商品到着後<b>30日以内</b>であれば、理由を問わず返品・返金を承ります。' +
         'お客様都合の返送料はお客様負担、不良品・誤配送は当社負担です。' +
         'お問い合わせフォームから事前にご連絡ください。',
-      refs: ['配送ポリシー'],
       human: false
     };
   }
@@ -126,7 +137,7 @@
       (d.size ? '<b>' + esc(d.size) + '</b>の商品です。' : '') +
       '搬入は梱包したまま行うため、玄関の間口・エレベーターの奥行・階段の曲がりに余裕が必要です。' +
       '設置場所の寸法が分かれば、担当者が搬入可否を確認します。';
-    return { id: 'carry', html: html, refs: ['商品寸法'], human: true };
+    return { id: 'carry', html: html, human: true };
   }
 
   function answerShipping(d) {
@@ -134,7 +145,6 @@
       return {
         id: 'shipping_unknown',
         html: '送料は梱包サイズとお届け先で変わります。この商品の送料は担当者がご案内します。',
-        refs: ['配送ポリシー'],
         human: true
       };
     }
@@ -144,7 +154,6 @@
         '送料は梱包サイズとお届け先で変わります。関東へのお届けで<b>' +
         yen(d.shipKanto) +
         '〜</b>です。沖縄・離島は別途お見積りとなります。',
-      refs: ['配送ポリシー'],
       human: false,
       link: { href: '/pages/022', label: '送料について' }
     };
@@ -155,14 +164,12 @@
       return {
         id: 'material_missing',
         html: '素材の詳細は担当者にご確認ください。',
-        refs: ['商品情報'],
         human: true
       };
     }
     return {
       id: 'material',
       html: '素材は<b>' + esc(d.material) + '</b>です。',
-      refs: ['商品情報'],
       human: false
     };
   }
@@ -172,17 +179,15 @@
       return {
         id: 'assembly_yes',
         html: '組み立てが必要な商品です。組み立てサービス・設置のご相談は担当者が承ります。',
-        refs: ['商品情報'],
         human: true
       };
     }
     if (d.assembly === false) {
-      return { id: 'assembly_no', html: '完成品でお届けします。開梱後すぐにお使いいただけます。', refs: ['商品情報'], human: false };
+      return { id: 'assembly_no', html: '完成品でお届けします。開梱後すぐにお使いいただけます。', human: false };
     }
     return {
       id: 'assembly_missing',
       html: '組み立ての要否は商品により異なります。この商品の詳細は担当者にご確認ください。',
-      refs: ['商品情報'],
       human: true
     };
   }
@@ -192,8 +197,7 @@
       id: 'human_fallback',
       html:
         'この内容は担当者が確認してご案内します。平日10–18時にお返事します。' +
-        '下の「担当者に相談」からそのままご連絡いただけます。',
-      refs: [],
+        '画面下の「担当者に相談」からそのままご連絡いただけます。',
       human: true
     };
   }
@@ -230,46 +234,60 @@
 
   function humanHref(d, question) {
     if (d.humanUrl) return d.humanUrl;
-    var base = d.lineUrl || 'https://line.me/R/ti/p/@505xknxn';
+    var base = d.lineUrl || 'https://line.me/R/ti/open?@505xknxn';
     var sep = base.indexOf('?') > -1 ? '&' : '?';
     var text = d.title + 'について相談' + (question ? '：' + question : '');
     return base + sep + 'text=' + encodeURIComponent(text);
   }
 
-  function buildCard(d, answer, question) {
-    var variant = currentVariant(d);
-    var card = document.createElement('div');
-    card.className = 'j6ac__a';
+  /* ---- LINE風の吹き出し ---- */
 
-    var refs = '';
-    if (answer.refs && answer.refs.length) {
-      refs = answer.refs
-        .map(function (r) {
-          return '<i>' + esc(r) + '</i>';
-        })
-        .join('');
-      if (answer.link) {
-        refs += '<a href="' + esc(answer.link.href) + '">' + esc(answer.link.label) + '</a>';
-      }
-      refs = '<div class="j6ac__src">参照 ' + refs + '</div>';
+  function buildRow(kind) {
+    var row = document.createElement('div');
+    row.className = 'j6ac-line j6ac-line--' + kind;
+    return row;
+  }
+
+  function appendAi(thread, html) {
+    var row = buildRow('ai');
+    row.innerHTML =
+      '<span class="j6ac-line__avatar" aria-hidden="true">AI</span>' +
+      '<div class="j6ac-line__bubble">' + html + '</div>' +
+      '<span class="j6ac-line__time">' + timeLabel() + '</span>';
+    thread.appendChild(row);
+    return row;
+  }
+
+  function appendUser(thread, text) {
+    var row = buildRow('user');
+    row.innerHTML =
+      '<span class="j6ac-line__time">' + timeLabel() + '</span>' +
+      '<div class="j6ac-line__bubble"><p>' + esc(text) + '</p></div>';
+    thread.appendChild(row);
+    return row;
+  }
+
+  function appendTyping(thread) {
+    var row = buildRow('typing');
+    row.setAttribute('aria-hidden', 'true');
+    row.innerHTML =
+      '<span class="j6ac-line__avatar" aria-hidden="true">AI</span>' +
+      '<div class="j6ac-line__bubble j6ac-line__bubble--typing"><i></i><i></i><i></i></div>';
+    thread.appendChild(row);
+    return row;
+  }
+
+  function answerHtml(answer) {
+    var html = '<p>' + answer.html + '</p>';
+    if (answer.link) {
+      html +=
+        '<span class="j6ac-line__link"><a href="' +
+        esc(answer.link.href) +
+        '">' +
+        esc(answer.link.label) +
+        ' ›</a></span>';
     }
-
-    card.innerHTML =
-      '<div class="j6ac__who"><span class="j6ac__dot">AI</span><b>6JOHAN AI</b><span>商品ページを参照して回答</span></div>' +
-      '<p class="j6ac__txt">' + answer.html + '</p>' +
-      refs +
-      '<div class="j6ac__acts">' +
-      '<button type="button" class="j6ac__buy" data-j6ac-add>' +
-      '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8h12l-1 12H7L6 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>' +
-      '<span>カートに追加 ' + yen(variant.price) + '</span>' +
-      '</button>' +
-      '<a class="j6ac__human" href="' + esc(humanHref(d, question)) + '" target="_blank" rel="noopener" data-j6ac-human="' + esc(answer.id) + '">' +
-      '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.4"/><path d="M5.2 20c.6-3.4 3.4-5.6 6.8-5.6s6.2 2.2 6.8 5.6"/></svg>' +
-      '<span>' + esc(d.humanLabel || '担当者に相談') + '</span>' +
-      '</a>' +
-      '</div>';
-
-    return card;
+    return html;
   }
 
   /* ---------------- シート ---------------- */
@@ -291,15 +309,22 @@
     }
   }
 
+  function setHumanHref(ui, question) {
+    if (!ui.human) return;
+    ui.human.setAttribute('href', humanHref(ui.data, question));
+  }
+
   function renderGreeting(ui, d) {
     if (ui.greeted || !ui.thread) return;
     ui.greeted = true;
-    var hello = document.createElement('div');
-    hello.className = 'j6ac__hello';
-    hello.innerHTML =
-      '<b>6JOHAN AI CONCIERGE</b>' +
-      esc(d.greeting || 'この商品の寸法・在庫・送料を確認して、その場でお答えします。');
-    ui.thread.appendChild(hello);
+    var dateRow = document.createElement('div');
+    dateRow.className = 'j6ac-line__date';
+    dateRow.innerHTML = '<span>' + dateLabel() + '</span>';
+    ui.thread.appendChild(dateRow);
+    appendAi(ui.thread, '<p>' + esc(d.greeting || 'この商品の寸法・在庫・送料を確認して、その場でお答えします。') + '</p>');
+    if (d.greetingSub) {
+      appendAi(ui.thread, '<p>' + esc(d.greetingSub) + '</p>');
+    }
   }
 
   function applyOffset(ui) {
@@ -367,47 +392,50 @@
     track('ai_sheet_close', { product_id: ui.data.productId, product_handle: ui.data.handle });
   }
 
-  /* 1往復（質問→回答）をシートに積む */
+  /* 1往復（質問→回答）をLINE風に積む */
   function appendTurn(ui, question, answer) {
     var thread = ui.thread;
     if (!thread) return;
 
     if (question) {
-      var q = document.createElement('div');
-      q.className = 'j6ac__q';
-      q.innerHTML = '<p>' + esc(question) + '</p>';
-      thread.appendChild(q);
+      appendUser(thread, question);
+      setHumanHref(ui, question);
     }
 
-    var typing = document.createElement('div');
-    typing.className = 'j6ac__typing';
-    typing.innerHTML = '<i></i><i></i><i></i>';
-    thread.appendChild(typing);
+    var typing = appendTyping(thread);
     scrollBottom(thread);
 
     window.setTimeout(function () {
       if (typing.parentNode) typing.parentNode.removeChild(typing);
-      thread.appendChild(buildCard(ui.data, answer, question));
+      appendAi(thread, answerHtml(answer));
       scrollBottom(thread);
       track('ai_answer_show', {
         answer_id: answer.id,
         product_id: ui.data.productId,
         product_handle: ui.data.handle
       });
-    }, 320);
+    }, 420);
   }
 
-  /* ---------------- カートに追加 ---------------- */
+  /* ---------------- カートに追加（固定バーの1ボタン） ---------------- */
+
+  function addLabel(button) {
+    return button.querySelector('[data-j6ac-add-label]') || button.querySelector('span');
+  }
 
   function addToCart(button, d) {
     var form = document.querySelector('form[data-type="add-to-cart-form"]');
     var variant = currentVariant(d);
+    var label = addLabel(button);
+    if (button.classList.contains('is-done') || button.classList.contains('is-busy')) return;
+
     track('ai_cart_add_click', {
       product_id: d.productId,
       product_handle: d.handle,
       variant_id: variant.id,
       value: variant.price,
-      currency: 'JPY'
+      currency: 'JPY',
+      source: 'fixed_bar'
     });
 
     if (form) {
@@ -417,17 +445,32 @@
         idInput.dispatchEvent(new Event('change', { bubbles: true }));
       }
       var addBtn = form.querySelector('button[name="add"]');
-      if (addBtn && !addBtn.disabled) {
-        addBtn.click();
+      if (!addBtn || addBtn.disabled || !variant.available) {
+        if (label) label.textContent = '現在在庫切れです';
+        window.setTimeout(function () {
+          if (label) label.textContent = 'カートに追加する';
+        }, 2500);
         return;
       }
-    }
-
-    /* フォームが見つからない/売り切れのときは直接カートAPIへ */
-    if (!variant.available) {
-      button.querySelector('span').textContent = '現在在庫切れです';
+      button.classList.add('is-done');
+      if (label) label.textContent = 'カートに追加しました';
+      addBtn.click();
+      window.setTimeout(function () {
+        button.classList.remove('is-done');
+        if (label) label.textContent = 'カートに追加する';
+      }, 2600);
       return;
     }
+
+    /* フォームが見つからないときは直接カートAPIへ */
+    if (!variant.available) {
+      if (label) label.textContent = '現在在庫切れです';
+      window.setTimeout(function () {
+        if (label) label.textContent = 'カートに追加する';
+      }, 2500);
+      return;
+    }
+    button.classList.add('is-busy');
     fetch('/cart/add.js', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
@@ -438,14 +481,21 @@
         return r.json();
       })
       .then(function () {
-        button.querySelector('span').textContent = 'カートに追加しました';
+        button.classList.remove('is-busy');
+        button.classList.add('is-done');
+        if (label) label.textContent = 'カートに追加しました';
         document.dispatchEvent(new CustomEvent('cart:refresh'));
         window.setTimeout(function () {
-          button.querySelector('span').textContent = 'カートに追加 ' + yen(variant.price);
-        }, 2500);
+          button.classList.remove('is-done');
+          if (label) label.textContent = 'カートに追加する';
+        }, 2600);
       })
       .catch(function () {
-        button.querySelector('span').textContent = 'カートに追加できませんでした';
+        button.classList.remove('is-busy');
+        if (label) label.textContent = 'カートに追加できませんでした';
+        window.setTimeout(function () {
+          if (label) label.textContent = 'カートに追加する';
+        }, 2600);
       });
   }
 
@@ -477,6 +527,8 @@
       price: sheet ? sheet.querySelector('[data-j6ac-price]') : null,
       variant: sheet ? sheet.querySelector('[data-j6ac-variant]') : null,
       stock: sheet ? sheet.querySelector('[data-j6ac-stock]') : null,
+      human: sheet ? sheet.querySelector('[data-j6ac-human="fixed"]') : null,
+      buy: sheet ? sheet.querySelector('[data-j6ac-add]') : null,
       open: false,
       greeted: false,
       lastTrigger: null
@@ -496,6 +548,9 @@
       document.body.appendChild(sheet);
     }
 
+    /* 固定バーの相談リンクは、最初は商品名だけを入れておく */
+    setHumanHref(ui, null);
+
     var inlineInput = root.querySelector('[data-j6ac-input="inline"]');
     var inlineForm = root.querySelector('[data-j6ac-form="inline"]');
     var sheetForm = sheet.querySelector('[data-j6ac-form="sheet"]');
@@ -505,8 +560,8 @@
       var answer = chipAnswer(type, d);
       track('ai_chip_click', { chip: type, product_id: d.productId, product_handle: d.handle });
       openSheet(ui, trigger);
-      root.querySelectorAll('.j6ac__chip').forEach(function (c) {
-        c.classList.toggle('is-active', c.getAttribute('data-j6ac-chip') === type && c.closest('.j6ac__bar') !== null);
+      root.querySelectorAll('.j6ac__bar .j6ac__chip').forEach(function (c) {
+        c.classList.toggle('is-active', c.getAttribute('data-j6ac-chip') === type);
       });
       appendTurn(ui, label, answer);
     }
@@ -583,7 +638,7 @@
       });
     });
 
-    /* カート追加 / 担当者に相談 */
+    /* 固定バー：カート追加 / 担当者に相談 */
     sheet.addEventListener('click', function (e) {
       var add = e.target.closest('[data-j6ac-add]');
       if (add) {
@@ -595,7 +650,8 @@
         track('ai_human_click', {
           product_id: d.productId,
           product_handle: d.handle,
-          answer_id: human.getAttribute('data-j6ac-human')
+          answer_id: human.getAttribute('data-j6ac-human'),
+          source: 'fixed_bar'
         });
       }
     });
@@ -611,7 +667,8 @@
       });
     }
 
-    /* Esc で閉じる / Tab をシート内に閉じ込める */    document.addEventListener('keydown', function (e) {
+    /* Esc で閉じる / Tab をシート内に閉じ込める */
+    document.addEventListener('keydown', function (e) {
       if (!ui.open) return;
       if (e.key === 'Escape' || e.key === 'Esc') {
         e.preventDefault();
