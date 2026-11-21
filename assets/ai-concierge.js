@@ -254,7 +254,7 @@
       html:
         '合わせて使うなら、こちらの商品がおすすめです。' +
         '<b>2点以上で自動5%OFF</b>（セット・コーディネート）が適用されます。' +
-        'いま在庫のある商品だけを出しています。',
+        '在庫品は最短7日、受注生産品は約2〜3ヶ月でお届けします（各商品のバッジ参照）。',
       human: false
     };
   }
@@ -351,6 +351,126 @@
     return s;
   }
 
+  /* ---- 在庫/納期（商品ページと共通の判定ソース） ----
+     /recommendations/products.json も /products/{handle}.js も inventory_quantity を返さず、
+     available は受注生産（在庫0・販売継続）でも true。
+     そのため Liquid（snippets/ai-concierge-variant-map.liquid）が
+     snippets/6johan-delivery-state で全商品のバリエーションを判定し、
+     data-j6ac-data の variantStates に埋め込む。ここでは引くだけで判定はしない。
+       "i"  = 在庫あり（最短7日）
+       "b"  = 受注生産（約2〜3ヶ月）
+       "b4" = 受注生産（約4ヶ月・例外3商品） */
+
+  var STATE_CODE = {
+    i: { state: 'instock', lead: '最短7日' },
+    b: { state: 'backorder', lead: '約2〜3ヶ月' },
+    b4: { state: 'backorder', lead: '約4ヶ月' }
+  };
+
+  function stateOf(ui, variantId) {
+    var map = (ui.data && ui.data.variantStates) || {};
+    return map[String(variantId)] || '';
+  }
+
+  /* 商品の販売中バリエーションを、確定した在庫区分つきで組み立てる */
+  function itemVariants(it, ui) {
+    var raw = it.rawVariants || [];
+    var out = [];
+    for (var i = 0; i < raw.length; i++) {
+      var v = raw[i];
+      if (!v || v.available === false) continue;
+      var code = stateOf(ui, v.id);
+      if (!code || !STATE_CODE[code]) continue;
+      var price = Number(v.price);
+      if (!it.priceIsYen) price = Math.round(price / 100);
+      var img = v.featured_image || v.image || '';
+      if (img && typeof img === 'object') img = img.src || '';
+      out.push({
+        id: v.id,
+        title: v.title || '',
+        price: price,
+        image: normalizeImg(img),
+        state: STATE_CODE[code].state,
+        lead: STATE_CODE[code].lead
+      });
+    }
+    return out;
+  }
+
+  function setItemVariant(it, v) {
+    if (!v) return;
+    it.variantId = v.id;
+    it.variantTitle = v.title || '';
+    if (typeof v.price === 'number') it.price = v.price;
+    if (v.image) it.image = normalizeImg(v.image);
+    it.state = v.state || '';
+    it.lead = v.lead || '';
+  }
+
+  function variantText(t) {
+    t = t == null ? '' : String(t);
+    return t === 'Default Title' ? '' : t;
+  }
+
+  /* 「アームなし / ナチュラル」→「ナチュラル（アームなし）」
+     セレクトが狭くても色名が先に見えるようにする */
+  function variantDisplay(t) {
+    var s = variantText(t);
+    if (!s) return '';
+    var parts = s.split(' / ');
+    if (parts.length < 2) return s;
+    var color = parts[parts.length - 1];
+    return color + '（' + parts.slice(0, -1).join(' / ') + '）';
+  }
+
+  function stateLabel(v) {
+    if (!v) return '';
+    if (v.state === 'instock') return '在庫あり（最短7日）';
+    if (v.state === 'backorder') return '受注生産（' + (v.lead || '約2〜3ヶ月') + '）';
+    return '';
+  }
+
+  /* 候補3点に、確定した在庫区分とカラー選択肢を付ける
+     初期表示 = ① いま見ている商品と同じ色名 → ② 在庫あり → ③ 既存の選択 → ④ 先頭 */
+  function applyStates(items, ui) {
+    var color = variantText((currentVariant(ui.data) || {}).title);
+    for (var i = 0; i < items.length; i++) {
+      var it = items[i];
+      var list = itemVariants(it, ui);
+      if (!list.length) continue;
+      it.variants = list;
+      var chosen = null;
+      var j;
+      if (color) {
+        for (j = 0; j < list.length; j++) {
+          if (list[j].title === color) {
+            chosen = list[j];
+            break;
+          }
+        }
+      }
+      if (!chosen) {
+        for (j = 0; j < list.length; j++) {
+          if (list[j].state === 'instock') {
+            chosen = list[j];
+            break;
+          }
+        }
+      }
+      if (!chosen) {
+        for (j = 0; j < list.length; j++) {
+          if (String(list[j].id) === String(it.variantId)) {
+            chosen = list[j];
+            break;
+          }
+        }
+      }
+      if (!chosen) chosen = list[0];
+      setItemVariant(it, chosen);
+    }
+    return items;
+  }
+
   function normalizeFallback(list) {
     var out = [];
     list = list || [];
@@ -370,7 +490,9 @@
         price: Number(it.price) || 0,
         variantId: it.variantId,
         variantTitle: it.variantTitle || '',
-        tags: it.tags || []
+        tags: it.tags || [],
+        rawVariants: it.variants || [],
+        priceIsYen: true
       });
     }
     return out;
@@ -412,7 +534,9 @@
       image: normalizeImg(img),
       price: price,
       variantId: chosen.id,
-      variantTitle: chosen.title || ''
+      variantTitle: chosen.title || '',
+      rawVariants: vs,
+      priceIsYen: !!priceIsYen
     };
   }
 
@@ -560,12 +684,11 @@
 
   function upsellNoteText(ui) {
     var n = ui.cartCount || 0;
-    if (n > 0) {
-      return (
-        'いまカートに' +
-        n +
-        '点。追加すると2点以上で自動5%OFF（セット・コーディネート）が適用されます。'
-      );
+    if (n >= 2) {
+      return 'いまカートに' + n + '点入っています（5%OFF適用中）。追加分も5%OFFになります。';
+    }
+    if (n === 1) {
+      return 'いまカートに1点。あと1点で2点以上5%OFF（セット・コーディネート）が適用されます。';
     }
     return ui.data.upsellNote || '2点以上で自動5%OFF（セット・コーディネート）が適用されます。';
   }
@@ -574,6 +697,45 @@
     if (!ui.thread || !el) return;
     var top = el.offsetTop - 24;
     ui.thread.scrollTop = top < 0 ? 0 : top;
+  }
+
+  /* 行の表示（サムネ・価格・在庫バッジ・色名）を選択中バリエーションに合わせる */
+  function paintItem(row, it) {
+    if (!row) return;
+    row.setAttribute('data-variant-id', String(it.variantId));
+    row.setAttribute('data-variant-title', it.variantTitle || '');
+    row.setAttribute('data-price', String(it.price));
+    row.setAttribute('data-state', it.state || '');
+
+    var img = row.querySelector('[data-j6ac-upsell-img]');
+    if (img && it.image) img.src = it.image;
+
+    var price = row.querySelector('[data-j6ac-upsell-price]');
+    if (price) {
+      price.innerHTML =
+        '<s>' +
+        yenText(it.price) +
+        '</s><b>' +
+        yenText(pctOff(it.price)) +
+        '</b><i>5%OFF目安</i>';
+    }
+
+    var colorName = row.querySelector('[data-j6ac-upsell-color]');
+    if (colorName) colorName.textContent = variantDisplay(it.variantTitle);
+
+    var badge = row.querySelector('[data-j6ac-upsell-state]');
+    if (badge) {
+      var label = stateLabel(it);
+      badge.textContent = label;
+      badge.className =
+        'j6ac-upsell__state' +
+        (label ? (it.state === 'backorder' ? ' is-backorder' : ' is-instock') : '');
+      if (label) badge.removeAttribute('hidden');
+      else badge.setAttribute('hidden', '');
+    }
+
+    var select = row.querySelector('[data-j6ac-upsell-select]');
+    if (select && select.value !== String(it.variantId)) select.value = String(it.variantId);
   }
 
   function createUpsellItem(ui, it) {
@@ -593,7 +755,7 @@
     thumb.setAttribute('data-j6ac-upsell-link', '');
     thumb.setAttribute('aria-label', it.title + 'の商品ページを見る');
     thumb.innerHTML =
-      '<img src="' +
+      '<img data-j6ac-upsell-img src="' +
       esc(it.image) +
       '" alt="' +
       esc(it.title) +
@@ -601,17 +763,72 @@
 
     var body = document.createElement('div');
     body.className = 'j6ac-upsell__body';
-    body.innerHTML =
-      '<a class="j6ac-upsell__name" href="' +
-      esc(url) +
-      '" data-j6ac-upsell-link>' +
-      esc(it.title) +
-      '</a>' +
-      '<span class="j6ac-upsell__price"><s>' +
-      yenText(it.price) +
-      '</s><b>' +
-      yenText(pctOff(it.price)) +
-      '</b><i>5%OFF目安</i></span>';
+
+    var name = document.createElement('a');
+    name.className = 'j6ac-upsell__name';
+    name.href = url;
+    name.setAttribute('data-j6ac-upsell-link', '');
+    name.textContent = it.title;
+
+    /* 色名 / 在庫バッジの行。販売可能な色が2つ以上ならセレクトで切替。 */
+    var meta = document.createElement('div');
+    meta.className = 'j6ac-upsell__meta';
+
+    var options = it.variants || [];
+    if (options.length > 1) {
+      var sel = document.createElement('select');
+      sel.className = 'j6ac-upsell__select';
+      sel.setAttribute('data-j6ac-upsell-select', '');
+      sel.setAttribute('aria-label', it.title + 'のカラーを選ぶ');
+      for (var i = 0; i < options.length; i++) {
+        var opt = document.createElement('option');
+        opt.value = String(options[i].id);
+        opt.textContent = variantDisplay(options[i].title) || options[i].title || '';
+        if (String(options[i].id) === String(it.variantId)) opt.selected = true;
+        sel.appendChild(opt);
+      }
+      sel.addEventListener('change', function () {
+        var picked = null;
+        for (var j = 0; j < options.length; j++) {
+          if (String(options[j].id) === String(sel.value)) {
+            picked = options[j];
+            break;
+          }
+        }
+        if (!picked) return;
+        setItemVariant(it, picked);
+        paintItem(row, it);
+        trackUpsell('ai_upsell_variant_select', {
+          product_id: ui.data.productId,
+          product_handle: ui.data.handle,
+          item_id: it.id,
+          item_name: it.title,
+          item_variant: it.variantTitle,
+          item_state: it.state
+        });
+      });
+      meta.appendChild(sel);
+    } else {
+      var colorName = document.createElement('span');
+      colorName.className = 'j6ac-upsell__color';
+      colorName.setAttribute('data-j6ac-upsell-color', '');
+      colorName.textContent = variantDisplay(it.variantTitle);
+      if (!colorName.textContent) colorName.setAttribute('hidden', '');
+      meta.appendChild(colorName);
+    }
+
+    var badge = document.createElement('span');
+    badge.className = 'j6ac-upsell__state';
+    badge.setAttribute('data-j6ac-upsell-state', '');
+    meta.appendChild(badge);
+
+    var price = document.createElement('span');
+    price.className = 'j6ac-upsell__price';
+    price.setAttribute('data-j6ac-upsell-price', '');
+
+    body.appendChild(name);
+    body.appendChild(meta);
+    body.appendChild(price);
 
     var btn = document.createElement('button');
     btn.type = 'button';
@@ -622,6 +839,8 @@
     row.appendChild(thumb);
     row.appendChild(body);
     row.appendChild(btn);
+
+    paintItem(row, it);
     return row;
   }
 
@@ -662,28 +881,38 @@
       if (source === 'chip') scrollToUpsell(ui, ui.upsellEl);
       return;
     }
-    loadUpsellItems(ui).then(function (items) {
-      if (!items || !items.length || ui.upsellEl) return;
-      var card = createUpsellCard(ui, items);
-      ui.thread.appendChild(card);
-      ui.upsellEl = card;
-      scrollBottom(ui.thread);
-      var ids = [];
-      var names = [];
-      for (var i = 0; i < items.length; i++) {
-        ids.push(items[i].id);
-        names.push(items[i].title);
-      }
-      trackUpsell('ai_upsell_impression', {
-        product_id: ui.data.productId,
-        product_handle: ui.data.handle,
-        source: source || 'auto',
-        item_ids: ids.join(','),
-        item_names: names.join(' / '),
-        item_count: items.length,
-        cart_item_count: ui.cartCount || 0
+    loadUpsellItems(ui)
+      .then(function (items) {
+        return applyStates(items || [], ui);
+      })
+      .then(function (items) {
+        if (!items || !items.length || ui.upsellEl) return;
+        var card = createUpsellCard(ui, items);
+        ui.thread.appendChild(card);
+        ui.upsellEl = card;
+        scrollBottom(ui.thread);
+        var ids = [];
+        var names = [];
+        var variants = [];
+        var states = [];
+        for (var i = 0; i < items.length; i++) {
+          ids.push(items[i].id);
+          names.push(items[i].title);
+          variants.push(variantDisplay(items[i].variantTitle) || '-');
+          states.push(items[i].state || '-');
+        }
+        trackUpsell('ai_upsell_impression', {
+          product_id: ui.data.productId,
+          product_handle: ui.data.handle,
+          source: source || 'auto',
+          item_ids: ids.join(','),
+          item_names: names.join(' / '),
+          item_variants: variants.join(' / '),
+          item_states: states.join(','),
+          item_count: items.length,
+          cart_item_count: ui.cartCount || 0
+        });
       });
-    });
   }
 
   function refreshCartCount(ui) {
@@ -759,6 +988,8 @@
     var nameEl = row.querySelector('.j6ac-upsell__name');
     var item = {
       variantId: row.getAttribute('data-variant-id'),
+      variantTitle: row.getAttribute('data-variant-title') || '',
+      state: row.getAttribute('data-state') || '',
       productId: row.getAttribute('data-product-id'),
       handle: row.getAttribute('data-handle'),
       price: Number(row.getAttribute('data-price') || 0),
@@ -772,6 +1003,8 @@
       product_id: ui.data.productId,
       product_handle: ui.data.handle,
       item_id: item.variantId,
+      item_variant: item.variantTitle,
+      item_state: item.state,
       item_name: item.name,
       price: item.price,
       currency: 'JPY',
@@ -805,6 +1038,8 @@
           product_id: ui.data.productId,
           product_handle: ui.data.handle,
           item_id: item.variantId,
+          item_variant: item.variantTitle,
+          item_state: item.state,
           item_name: item.name,
           price: item.price,
           currency: 'JPY',

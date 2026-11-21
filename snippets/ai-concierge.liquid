@@ -269,6 +269,11 @@
           {%- endfor -%}
         ],
         "tags": {{ product.tags | json }},
+        {%- comment -%}
+          バリエーション別の在庫/納期マップ（アップセルカードのバッジ用）。
+          判定は 6johan-delivery-state に集約し、JSはこの値を引くだけ。
+        {%- endcomment -%}
+        {% render 'ai-concierge-variant-map' %}
         "discountTitle": "2点以上で5%OFF（セット・コーディネート）",
         "upsellTitle": "一緒に買うとお得",
         "upsellBadge": "2点以上で5%OFF",
@@ -285,7 +290,17 @@
             {%- assign pimg = p.featured_image -%}
             {%- if ac_up_out > 0 -%},{%- endif -%}
             {%- assign ac_up_out = ac_up_out | plus: 1 -%}
-            {"id": {{ p.id | json }}, "handle": {{ p.handle | json }}, "title": {{ p.title | json }}, "type": {{ p.type | json }}, "url": {{ p.url | json }}, "image": {% if pimg %}{{ pimg | image_url: width: 240 | json }}{% else %}null{% endif %}, "price": {{ pv.price | divided_by: 100 | json }}, "variantId": {{ pv.id | json }}, "variantTitle": {{ pv.title | json }}, "available": {{ pv.available | json }}, "tags": {{ p.tags | json }}}
+            {"id": {{ p.id | json }}, "handle": {{ p.handle | json }}, "title": {{ p.title | json }}, "type": {{ p.type | json }}, "url": {{ p.url | json }}, "image": {% if pimg %}{{ pimg | image_url: width: 240 | json }}{% else %}null{% endif %}, "price": {{ pv.price | divided_by: 100 | json }}, "variantId": {{ pv.id | json }}, "variantTitle": {{ pv.title | json }}, "available": {{ pv.available | json }}, "tags": {{ p.tags | json }}, "variants": [
+              {%- assign ac_up_vn = 0 -%}
+              {%- for pvv in p.variants -%}
+                {%- if pvv.available -%}
+                  {%- assign pvvimg = pvv.featured_image -%}
+                  {%- if ac_up_vn > 0 -%},{%- endif -%}
+                  {%- assign ac_up_vn = ac_up_vn | plus: 1 -%}
+                  {"id": {{ pvv.id | json }}, "title": {{ pvv.title | json }}, "price": {{ pvv.price | divided_by: 100 | json }}, "image": {% if pvvimg %}{{ pvvimg | image_url: width: 240 | json }}{% else %}null{% endif %}}
+                {%- endif -%}
+              {%- endfor -%}
+            ]}
           {%- endfor -%}
         ],
         "humanLabel": {{ block.settings.human_label | default: '担当者に相談' | json }},

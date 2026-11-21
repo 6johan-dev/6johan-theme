@@ -1,0 +1,47 @@
+{%- comment -%}
+  AI CONCIERGE — バリエーション別「在庫/受注生産」マップ（アップセルカード用）
+
+  なぜ必要か:
+    /recommendations/products.json も /products/{handle}.js も inventory_quantity を返さず、
+    available は受注生産（在庫0・販売継続）でも true。
+    そのため JS 側で available だけを見ると「在庫あり」と「受注生産」を取り違える。
+
+  ここでは商品ページ共通の唯一の判定ソース snippets/6johan-delivery-state を
+    すべての商品 × 販売中のバリエーション
+  について通し、結果だけを data-j6ac-data に埋め込む（JSは判定しない）。
+
+  出力（呼び出し側のJSONに差し込む断片。末尾カンマ込み）
+    "variantStates": { "<variantId>": "i" | "b" | "b4", ... }
+      i  = 在庫あり（最短7日）
+      b  = 受注生産（約2〜3ヶ月）
+      b4 = 受注生産（約4ヶ月・例外3商品）
+
+  対象: コレクション「全ての商品」（全公開商品）。アップセル候補はこの中のどれでもあり得る。
+  コスト: 商品数×販売中バリエーション数ぶんの render。6JOHANは約120商品/約250バリエーション。
+{%- endcomment -%}
+"variantStates": {
+  {%- assign _map_out = 0 -%}
+  {%- comment -%} collection.products は既定で50件までなので、paginateで全件（最大250）を回す {%- endcomment -%}
+  {%- paginate collections['全ての商品'].products by 250 -%}
+  {%- for _vp in collections['全ての商品'].products -%}
+    {%- for _vv in _vp.variants -%}
+      {%- if _vv.available -%}
+        {%- capture _vds -%}{%- render '6johan-delivery-state', variant: _vv, product: _vp -%}{%- endcapture -%}
+        {%- assign _vds = _vds | split: '|' -%}
+        {%- assign _vstate = _vds[0] | strip -%}
+        {%- if _vstate == 'instock' -%}
+          {%- assign _vcode = 'i' -%}
+        {%- else -%}
+          {%- assign _vcode = 'b' -%}
+          {%- if _vp.id == 7212370067654 or _vp.id == 10986623435063 or _vp.id == 7089798054086 -%}
+            {%- assign _vcode = 'b4' -%}
+          {%- endif -%}
+        {%- endif -%}
+        {%- if _map_out > 0 -%},{%- endif -%}
+        {%- assign _map_out = _map_out | plus: 1 -%}
+        "{{ _vv.id }}":"{{ _vcode }}"
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endfor -%}
+  {%- endpaginate -%}
+},

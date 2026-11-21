@@ -846,21 +846,21 @@ body.j6ac-lock {
 .j6ac-upsell__item {
   display: flex;
   align-items: center;
-  gap: 9px;
+  gap: 8px;
 }
 .j6ac-upsell__thumb {
   flex: 0 0 auto;
   display: block;
-  width: 48px;
-  height: 48px;
+  width: 44px;
+  height: 44px;
   overflow: hidden;
   border: 1px solid var(--j6ac-line);
   background: #f6f4f0;
 }
 .j6ac-upsell__thumb img {
   display: block;
-  width: 48px;
-  height: 48px;
+  width: 44px;
+  height: 44px;
   object-fit: cover;
 }
 .j6ac-upsell__body {
@@ -869,6 +869,78 @@ body.j6ac-lock {
   display: flex;
   flex-direction: column;
   gap: 3px;
+}
+/* 色名 + 在庫/受注生産バッジの行 */
+.j6ac-upsell__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 3px 4px;
+  min-width: 0;
+  line-height: 1.2;
+}
+.j6ac-upsell__select {
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: 112px;
+  height: 20px;
+  margin: 0;
+  padding: 0 14px 0 5px;
+  border: 1px solid var(--j6ac-line);
+  border-radius: 3px;
+  background-color: #ffffff;
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%236B5B4F' stroke-width='1.4' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 4px center;
+  background-size: 8px 5px;
+  color: #33302c;
+  font-family: inherit;
+  font-size: 8.5px;
+  line-height: 18px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+}
+.j6ac-upsell__select:focus-visible {
+  outline: 1px solid var(--j6ac-accent);
+  outline-offset: 1px;
+}
+.j6ac-upsell__color {
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--j6ac-muted);
+  font-size: 9px;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.j6ac-upsell__state {
+  flex: 0 0 auto;
+  padding: 1px 5px;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  font-size: 7.5px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+.j6ac-upsell__state.is-instock {
+  border-color: #cbdac7;
+  background: #eef4ec;
+  color: #3c5a3a;
+}
+.j6ac-upsell__state.is-backorder {
+  border-color: #e5d5c0;
+  background: #f8f1e7;
+  color: #7a5a34;
+}
+.j6ac-upsell__state[hidden],
+.j6ac-upsell__color[hidden] {
+  display: none;
 }
 .j6ac-upsell__name {
   display: -webkit-box;
@@ -913,7 +985,7 @@ body.j6ac-lock {
 }
 .j6ac-upsell__add {
   flex: 0 0 auto;
-  min-width: 86px;
+  min-width: 76px;
   height: 36px;
   margin: 0;
   padding: 0 8px;
