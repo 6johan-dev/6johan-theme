@@ -1,8 +1,15 @@
 {%- comment -%}
-  6JOHAN AI CONCIERGE — 商品ページ即答チップ（MVP / 2026-11-21）
+  6JOHAN AI CONCIERGE — 商品ページ即答チップ ＋ オーバーレイ会話シート（MVP / 2026-11-21）
 
   使い方: main-product の block「ai_concierge」から render される
     {% render 'ai-concierge', product: product, block: block %}
+
+  構成
+    ① ページ内（インライン）は「AI CONCIERGE／1秒で即答」＋チップ3つ＋1行入力のみ。
+       ここには回答を展開しない（カートボタンを押し下げない）。
+    ② チップ or 送信で、画面下から会話シート（オーバーレイ）が立ち上がる。
+       会話ログ・即答カード・カート追加・担当者相談・追加質問はシート内で完結。
+    ③ 背景タップ / × / Esc で閉じ、再度チップ or 入力で続きから開ける。
 
   事実（寸法・在庫/納期・送料・返品）はLiquidで商品データから確定させ、
   JS（assets/ai-concierge.js）はそれを文章にするだけ。数値を作らせない。
@@ -76,6 +83,7 @@
 
   assign ac_price = ac_variant.price | divided_by: 100
   assign ac_accent = block.settings.accent | default: '#6B5B4F'
+  assign ac_sheet_id = 'j6ac-sheet-' | append: block.id
 -%}
 
 {%- if ac_enabled and product != blank -%}
@@ -87,45 +95,104 @@
     data-j6ac-product="{{ product.id }}"
     data-j6ac-handle="{{ product.handle | escape }}"
   >
-    <div class="j6ac__label">
-      <b>{{ block.settings.label | default: 'AI CONCIERGE' }}</b>
-      <i aria-hidden="true"></i>
-      <em>{{ block.settings.badge | default: '1秒で即答' }}</em>
-    </div>
-    <p class="j6ac__hint">この商品の<b>寸法・在庫・送料</b>を見て、その場でお答えします。</p>
+    <div class="j6ac__bar">
+      <div class="j6ac__label">
+        <b>{{ block.settings.label | default: 'AI CONCIERGE' }}</b>
+        <i aria-hidden="true"></i>
+        <em>{{ block.settings.badge | default: '1秒で即答' }}</em>
+      </div>
 
-    <div class="j6ac__chips" role="group" aria-label="よくある質問">
-      <button type="button" class="j6ac__chip" data-j6ac-chip="delivery">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7.6 12 3l9 4.6v8.8L12 21l-9-4.6z"/><path d="M3 7.6 12 12.2l9-4.6"/><path d="M12 12.2V21"/></svg>
-        <span>{{ block.settings.chip_delivery | default: 'いつ届く？' }}</span>
-      </button>
-      <button type="button" class="j6ac__chip" data-j6ac-chip="size">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 15.5 15.5 4.5l4 4L8.5 19.5z"/><path d="M8 12l1.8 1.8M11 9l1.8 1.8M14 6l1.8 1.8"/></svg>
-        <span>{{ block.settings.chip_size | default: 'サイズ感' }}</span>
-      </button>
-      <button type="button" class="j6ac__chip" data-j6ac-chip="return">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h9.5a6 6 0 0 1 0 12H10"/></svg>
-        <span>{{ block.settings.chip_return | default: '返品' }}</span>
-      </button>
+      <div class="j6ac__chips" role="group" aria-label="よくある質問">
+        <button type="button" class="j6ac__chip" data-j6ac-chip="delivery" aria-controls="{{ ac_sheet_id }}" aria-expanded="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7.6 12 3l9 4.6v8.8L12 21l-9-4.6z"/><path d="M3 7.6 12 12.2l9-4.6"/><path d="M12 12.2V21"/></svg>
+          <span>{{ block.settings.chip_delivery | default: 'いつ届く？' }}</span>
+        </button>
+        <button type="button" class="j6ac__chip" data-j6ac-chip="size" aria-controls="{{ ac_sheet_id }}" aria-expanded="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 15.5 15.5 4.5l4 4L8.5 19.5z"/><path d="M8 12l1.8 1.8M11 9l1.8 1.8M14 6l1.8 1.8"/></svg>
+          <span>{{ block.settings.chip_size | default: 'サイズ感' }}</span>
+        </button>
+        <button type="button" class="j6ac__chip" data-j6ac-chip="return" aria-controls="{{ ac_sheet_id }}" aria-expanded="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h9.5a6 6 0 0 1 0 12H10"/></svg>
+          <span>{{ block.settings.chip_return | default: '返品' }}</span>
+        </button>
+      </div>
+
+      <form class="j6ac__ask" data-j6ac-form="inline">
+        <label class="j6ac__sr" for="j6ac-input-{{ block.id }}">この商品について質問する</label>
+        <input
+          type="text"
+          id="j6ac-input-{{ block.id }}"
+          class="j6ac__input"
+          data-j6ac-input="inline"
+          placeholder="{{ block.settings.placeholder | default: '搬入・納期・素材…ひとことどうぞ' }}"
+          autocomplete="off"
+          enterkeyhint="send"
+        >
+        <button type="submit" class="j6ac__send" aria-label="質問を送って会話を開く">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+      </form>
     </div>
 
-    <form class="j6ac__ask" data-j6ac-form>
-      <label class="j6ac__sr" for="j6ac-input-{{ block.id }}">この商品について質問する</label>
-      <input
-        type="text"
-        id="j6ac-input-{{ block.id }}"
-        class="j6ac__input"
-        placeholder="{{ block.settings.placeholder | default: '搬入・納期・素材…ひとことどうぞ' }}"
-        autocomplete="off"
-        enterkeyhint="send"
+    {%- comment -%} ===== オーバーレイ（会話シート） ===== {%- endcomment -%}
+    <div class="j6ac-sheet" id="{{ ac_sheet_id }}" data-j6ac-sheet hidden aria-hidden="true">
+      <div class="j6ac-sheet__scrim" data-j6ac-close></div>
+
+      <div
+        class="j6ac-sheet__panel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="{{ ac_sheet_id }}-title"
+        tabindex="-1"
+        data-j6ac-panel
       >
-      <button type="submit" class="j6ac__send" aria-label="送信">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h14M13 6l6 6-6 6"/></svg>
-      </button>
-    </form>
+        <header class="j6ac-sheet__head">
+          <div class="j6ac-sheet__ident">
+            <span class="j6ac-sheet__kick">
+              <b>{{ block.settings.label | default: 'AI CONCIERGE' }}</b>
+              <em>{{ block.settings.badge | default: '1秒で即答' }}</em>
+            </span>
+            <b class="j6ac-sheet__title" id="{{ ac_sheet_id }}-title">{{ product.title }}</b>
+            <span class="j6ac-sheet__meta">
+              <span class="j6ac-sheet__price" data-j6ac-price>{{ ac_variant.price | money }}</span>
+              {%- if product.variants.size > 1 -%}
+                <span class="j6ac-sheet__variant" data-j6ac-variant>{{ ac_variant.title }}</span>
+              {%- endif -%}
+              <span class="j6ac-sheet__stock" data-j6ac-stock></span>
+            </span>
+          </div>
+          <button type="button" class="j6ac-sheet__close" data-j6ac-close aria-label="閉じる">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+          </button>
+        </header>
 
-    <div class="j6ac__thread" data-j6ac-thread hidden aria-live="polite"></div>
-    <p class="j6ac__disclaimer" data-j6ac-disclaimer hidden>AIによる自動回答です</p>
+        <div class="j6ac-sheet__thread" data-j6ac-thread aria-live="polite" aria-relevant="additions"></div>
+
+        <div class="j6ac-sheet__foot">
+          <div class="j6ac-sheet__quick" role="group" aria-label="追加の質問">
+            <button type="button" class="j6ac__chip j6ac__chip--mini" data-j6ac-chip="delivery"><span>{{ block.settings.chip_delivery | default: 'いつ届く？' }}</span></button>
+            <button type="button" class="j6ac__chip j6ac__chip--mini" data-j6ac-chip="size"><span>{{ block.settings.chip_size | default: 'サイズ感' }}</span></button>
+            <button type="button" class="j6ac__chip j6ac__chip--mini" data-j6ac-chip="return"><span>{{ block.settings.chip_return | default: '返品' }}</span></button>
+          </div>
+          <form class="j6ac__ask j6ac__ask--sheet" data-j6ac-form="sheet">
+            <label class="j6ac__sr" for="j6ac-input-sheet-{{ block.id }}">追加の質問を入力</label>
+            <input
+              type="text"
+              id="j6ac-input-sheet-{{ block.id }}"
+              class="j6ac__input"
+              data-j6ac-input="sheet"
+              placeholder="{{ block.settings.sheet_placeholder | default: 'ほかに気になることは？' }}"
+              autocomplete="off"
+              enterkeyhint="send"
+            >
+            <button type="submit" class="j6ac__send" aria-label="送信">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h14M13 6l6 6-6 6"/></svg>
+            </button>
+          </form>
+          <p class="j6ac__disclaimer">AIによる自動回答です。確実なことは担当者にご確認ください。</p>
+        </div>
+      </div>
+    </div>
 
     <script type="application/json" data-j6ac-data>
       {
@@ -149,7 +216,8 @@
         ],
         "humanLabel": {{ block.settings.human_label | default: '担当者に相談' | json }},
         "humanUrl": {{ block.settings.human_url | default: '' | json }},
-        "lineUrl": "https://line.me/R/oaMessage/@505xknxn/"
+        "lineUrl": "https://line.me/R/oaMessage/@505xknxn/",
+        "greeting": {{ block.settings.greeting | default: 'こんにちは。この商品の寸法・在庫・送料を確認して、その場でお答えします。気になることをどうぞ。' | json }}
       }
     </script>
   </div>

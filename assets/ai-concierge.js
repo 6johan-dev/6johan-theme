@@ -1,5 +1,7 @@
 /* ============================================================
-   6JOHAN AI CONCIERGE — 商品ページ即答チップ
+   6JOHAN AI CONCIERGE
+   ① ページ内はチップ＋1行入力だけ（回答は展開しない）
+   ② タップで画面下から会話シート（オーバーレイ）が立ち上がる
    方針:
      - 事実（寸法・在庫/納期・送料・返品条件）は Liquid が商品データから確定し、
        ここでは文章にするだけ。数値を推測しない。
@@ -9,7 +11,7 @@
 (function () {
   'use strict';
 
-  var initialized = false;
+  var booted = false;
 
   function yen(n) {
     return '¥' + Number(n || 0).toLocaleString('ja-JP');
@@ -33,6 +35,18 @@
     } catch (e) {
       /* 計測失敗はUIを止めない */
     }
+  }
+
+  function isMobile() {
+    return window.matchMedia && window.matchMedia('(max-width: 749px)').matches;
+  }
+
+  /* Shopifyのプレビューバー（画面下に固定）の高さぶん、シートを上へずらす */
+  function barOffset() {
+    var el = document.getElementById('PBarNextFrameWrapper') || document.getElementById('preview-bar-iframe');
+    if (!el) return 0;
+    var r = el.getBoundingClientRect();
+    return r.height > 4 ? Math.round(r.height) : 0;
   }
 
   function deliveryDate(days) {
@@ -68,7 +82,7 @@
       html:
         '<b>在庫あり</b>です。最短7日以内に発送し、' +
         esc(deliveryDate(7)) +
-        "頃までにお届けします。",
+        '頃までにお届けします。',
       refs: ['在庫・納期'],
       human: false
     };
@@ -202,16 +216,16 @@
     return answerUnknown();
   }
 
-  /* ---------------- 描画 ---------------- */
+  /* ---------------- 部品 ---------------- */
 
-  function currentVariant(root, d) {
+  function currentVariant(d) {
     var idInput = document.querySelector('form[data-type="add-to-cart-form"] input[name="id"]');
     var id = idInput && idInput.value ? String(idInput.value) : String(d.variantId);
     var list = d.variants || [];
     for (var i = 0; i < list.length; i++) {
       if (String(list[i].id) === id) return list[i];
     }
-    return { id: d.variantId, price: d.price, available: d.state !== 'unavailable' };
+    return { id: d.variantId, price: d.price, available: d.state !== 'unavailable', title: d.variantTitle };
   }
 
   function humanHref(d, question) {
@@ -222,8 +236,8 @@
     return base + sep + 'text=' + encodeURIComponent(text);
   }
 
-  function buildCard(root, d, answer, question) {
-    var variant = currentVariant(root, d);
+  function buildCard(d, answer, question) {
+    var variant = currentVariant(d);
     var card = document.createElement('div');
     card.className = 'j6ac__a';
 
@@ -258,33 +272,136 @@
     return card;
   }
 
-  function addQuestion(thread, text, answer) {
-    var q = document.createElement('div');
-    q.className = 'j6ac__q';
-    q.innerHTML = '<p>' + esc(text) + '</p>';
-    thread.appendChild(q);
+  /* ---------------- シート ---------------- */
+
+  function scrollBottom(thread) {
+    if (!thread) return;
+    window.requestAnimationFrame(function () {
+      thread.scrollTop = thread.scrollHeight;
+    });
   }
 
-  function appendTurn(root, d, question, answer) {
-    var thread = root.querySelector('[data-j6ac-thread]');
-    var disclaimer = root.querySelector('[data-j6ac-disclaimer]');
-    addQuestion(thread, question);
-    thread.appendChild(buildCard(root, d, answer, question));
-    thread.hidden = false;
-    if (disclaimer) disclaimer.hidden = false;
+  function syncHead(ui, d) {
+    var variant = currentVariant(d);
+    if (ui.price) ui.price.textContent = yen(variant.price);
+    if (ui.variant) ui.variant.textContent = variant.title && variant.title !== 'Default Title' ? variant.title : '';
+    if (ui.stock) {
+      ui.stock.textContent =
+        d.state === 'backorder' ? '受注生産' : d.state === 'unavailable' ? '在庫切れ' : '在庫あり';
+    }
+  }
 
-    track('ai_answer_show', {
-      answer_id: answer.id,
-      product_id: d.productId,
-      product_handle: d.handle
+  function renderGreeting(ui, d) {
+    if (ui.greeted || !ui.thread) return;
+    ui.greeted = true;
+    var hello = document.createElement('div');
+    hello.className = 'j6ac__hello';
+    hello.innerHTML =
+      '<b>6JOHAN AI CONCIERGE</b>' +
+      esc(d.greeting || 'この商品の寸法・在庫・送料を確認して、その場でお答えします。');
+    ui.thread.appendChild(hello);
+  }
+
+  function applyOffset(ui) {
+    if (!ui.sheet) return;
+    var off = barOffset();
+    var vv = window.visualViewport;
+    if (vv && window.innerHeight - vv.height > 120) {
+      /* ソフトキーボードが開いた分だけ持ち上げる（iOS） */
+      off += Math.round(window.innerHeight - vv.height);
+    }
+    ui.sheet.style.setProperty('--j6ac-bar-offset', off + 'px');
+  }
+
+  function openSheet(ui, trigger) {
+    if (!ui.sheet) return;
+    ui.lastTrigger = trigger || ui.lastTrigger;
+    renderGreeting(ui, ui.data);
+    syncHead(ui, ui.data);
+    applyOffset(ui);
+
+    ui.sheet.hidden = false;
+    ui.sheet.setAttribute('aria-hidden', 'false');
+    /* 表示直後にトランジションを効かせる */
+    window.requestAnimationFrame(function () {
+      ui.sheet.classList.add('is-open');
     });
+    ui.open = true;
+    ui.root.querySelectorAll('.j6ac__chip').forEach(function (c) {
+      c.setAttribute('aria-expanded', 'true');
+    });
+    if (isMobile()) document.body.classList.add('j6ac-lock');
+    if (ui.panel && ui.panel.focus) {
+      try {
+        ui.panel.focus({ preventScroll: true });
+      } catch (e) {
+        ui.panel.focus();
+      }
+    }
+    scrollBottom(ui.thread);
+    track('ai_sheet_open', { product_id: ui.data.productId, product_handle: ui.data.handle });
+  }
+
+  function closeSheet(ui) {
+    if (!ui.sheet || !ui.open) return;
+    ui.open = false;
+    ui.sheet.classList.remove('is-open');
+    ui.sheet.classList.add('is-closing');
+    ui.sheet.setAttribute('aria-hidden', 'true');
+    ui.root.querySelectorAll('.j6ac__chip').forEach(function (c) {
+      c.setAttribute('aria-expanded', 'false');
+    });
+    document.body.classList.remove('j6ac-lock');
+    window.setTimeout(function () {
+      if (ui.open) return;
+      ui.sheet.classList.remove('is-closing');
+      ui.sheet.hidden = true;
+    }, 300);
+    if (ui.lastTrigger && ui.lastTrigger.focus) {
+      try {
+        ui.lastTrigger.focus({ preventScroll: true });
+      } catch (e) {
+        /* noop */
+      }
+    }
+    track('ai_sheet_close', { product_id: ui.data.productId, product_handle: ui.data.handle });
+  }
+
+  /* 1往復（質問→回答）をシートに積む */
+  function appendTurn(ui, question, answer) {
+    var thread = ui.thread;
+    if (!thread) return;
+
+    if (question) {
+      var q = document.createElement('div');
+      q.className = 'j6ac__q';
+      q.innerHTML = '<p>' + esc(question) + '</p>';
+      thread.appendChild(q);
+    }
+
+    var typing = document.createElement('div');
+    typing.className = 'j6ac__typing';
+    typing.innerHTML = '<i></i><i></i><i></i>';
+    thread.appendChild(typing);
+    scrollBottom(thread);
+
+    window.setTimeout(function () {
+      if (typing.parentNode) typing.parentNode.removeChild(typing);
+      thread.appendChild(buildCard(ui.data, answer, question));
+      scrollBottom(thread);
+      track('ai_answer_show', {
+        answer_id: answer.id,
+        product_id: ui.data.productId,
+        product_handle: ui.data.handle
+      });
+    }, 320);
   }
 
   /* ---------------- カートに追加 ---------------- */
 
-  function addToCart(button, root, d) {
+  function addToCart(button, d) {
     var form = document.querySelector('form[data-type="add-to-cart-form"]');
-    var variant = currentVariant(root, d);
+    var variant = currentVariant(d);
     track('ai_cart_add_click', {
       product_id: d.productId,
       product_handle: d.handle,
@@ -323,7 +440,7 @@
       .then(function () {
         button.querySelector('span').textContent = 'カートに追加しました';
         document.dispatchEvent(new CustomEvent('cart:refresh'));
-        setTimeout(function () {
+        window.setTimeout(function () {
           button.querySelector('span').textContent = 'カートに追加 ' + yen(variant.price);
         }, 2500);
       })
@@ -333,6 +450,12 @@
   }
 
   /* ---------------- 初期化 ---------------- */
+
+  function chipAnswer(type, d) {
+    if (type === 'delivery') return answerDelivery(d);
+    if (type === 'size') return answerSize(d);
+    return answerReturn();
+  }
 
   function init(root) {
     var dataNode = root.querySelector('[data-j6ac-data]');
@@ -344,43 +467,68 @@
       return;
     }
 
-    var input = root.querySelector('.j6ac__input');
-    var form = root.querySelector('[data-j6ac-form]');
-    var thread = root.querySelector('[data-j6ac-thread]');
+    var sheet = root.querySelector('[data-j6ac-sheet]');
+    var ui = {
+      root: root,
+      data: d,
+      sheet: sheet,
+      panel: sheet ? sheet.querySelector('[data-j6ac-panel]') : null,
+      thread: sheet ? sheet.querySelector('[data-j6ac-thread]') : null,
+      price: sheet ? sheet.querySelector('[data-j6ac-price]') : null,
+      variant: sheet ? sheet.querySelector('[data-j6ac-variant]') : null,
+      stock: sheet ? sheet.querySelector('[data-j6ac-stock]') : null,
+      open: false,
+      greeted: false,
+      lastTrigger: null
+    };
+    if (!sheet) return;
 
-    root.querySelectorAll('[data-j6ac-chip]').forEach(function (chip) {
+    /* 親の overflow / transform に邪魔されないよう body 直下へ移す */
+    if (sheet.parentNode !== document.body) {
+      var accent = root.style.getPropertyValue('--j6ac-accent');
+      if (accent) sheet.style.setProperty('--j6ac-accent', accent);
+      document.body.appendChild(sheet);
+    }
+
+    var inlineInput = root.querySelector('[data-j6ac-input="inline"]');
+    var inlineForm = root.querySelector('[data-j6ac-form="inline"]');
+    var sheetForm = sheet.querySelector('[data-j6ac-form="sheet"]');
+    var sheetInput = sheet.querySelector('[data-j6ac-input="sheet"]');
+
+    function ask(type, label, trigger) {
+      var answer = chipAnswer(type, d);
+      track('ai_chip_click', { chip: type, product_id: d.productId, product_handle: d.handle });
+      openSheet(ui, trigger);
+      root.querySelectorAll('.j6ac__chip').forEach(function (c) {
+        c.classList.toggle('is-active', c.getAttribute('data-j6ac-chip') === type && c.closest('.j6ac__bar') !== null);
+      });
+      appendTurn(ui, label, answer);
+    }
+
+    /* ページ内チップ */
+    root.querySelectorAll('.j6ac__bar [data-j6ac-chip]').forEach(function (chip) {
       chip.addEventListener('click', function () {
-        var type = chip.getAttribute('data-j6ac-chip');
-        var label = chip.textContent.trim();
-        var answer;
-        if (type === 'delivery') answer = answerDelivery(d);
-        else if (type === 'size') answer = answerSize(d);
-        else answer = answerReturn();
-
-        root.querySelectorAll('[data-j6ac-chip]').forEach(function (c) {
-          c.classList.remove('is-active');
-        });
-        chip.classList.add('is-active');
-
-        track('ai_chip_click', {
-          chip: type,
-          product_id: d.productId,
-          product_handle: d.handle
-        });
-
-        appendTurn(root, d, label, answer);
-        if (window.matchMedia && window.matchMedia('(max-width: 749px)').matches) {
-          thread.scrollIntoView({ block: 'nearest' });
-        }
+        ask(chip.getAttribute('data-j6ac-chip'), chip.textContent.trim(), chip);
       });
     });
 
-    if (form) {
-      form.addEventListener('submit', function (e) {
+    /* シート内の追加質問チップ */
+    sheet.querySelectorAll('.j6ac-sheet__quick [data-j6ac-chip]').forEach(function (chip) {
+      chip.addEventListener('click', function () {
+        var type = chip.getAttribute('data-j6ac-chip');
+        var answer = chipAnswer(type, d);
+        track('ai_chip_click', { chip: type, product_id: d.productId, product_handle: d.handle, source: 'sheet' });
+        appendTurn(ui, chip.textContent.trim(), answer);
+      });
+    });
+
+    /* ページ内の1行入力 → 送信でシートを開く */
+    if (inlineForm) {
+      inlineForm.addEventListener('submit', function (e) {
         e.preventDefault();
-        var text = (input && input.value ? input.value : '').trim();
+        var text = (inlineInput && inlineInput.value ? inlineInput.value : '').trim();
         if (!text) {
-          if (input) input.focus();
+          if (inlineInput) inlineInput.focus();
           return;
         }
         var answer = answerFor(text, d);
@@ -389,20 +537,51 @@
           product_handle: d.handle,
           answer_id: answer.id,
           question_length: text.length,
-          question: text.slice(0, 120)
+          question: text.slice(0, 120),
+          source: 'inline'
         });
-        appendTurn(root, d, text, answer);
-        if (input) input.value = '';
-        if (window.matchMedia && window.matchMedia('(max-width: 749px)').matches) {
-          thread.scrollIntoView({ block: 'nearest' });
-        }
+        if (inlineInput) inlineInput.value = '';
+        openSheet(ui, inlineInput);
+        appendTurn(ui, text, answer);
       });
     }
 
-    root.addEventListener('click', function (e) {
+    /* シート内の追加質問 */
+    if (sheetForm) {
+      sheetForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var text = (sheetInput && sheetInput.value ? sheetInput.value : '').trim();
+        if (!text) {
+          if (sheetInput) sheetInput.focus();
+          return;
+        }
+        var answer = answerFor(text, d);
+        track('ai_question_submit', {
+          product_id: d.productId,
+          product_handle: d.handle,
+          answer_id: answer.id,
+          question_length: text.length,
+          question: text.slice(0, 120),
+          source: 'sheet'
+        });
+        if (sheetInput) sheetInput.value = '';
+        appendTurn(ui, text, answer);
+        if (sheetInput) sheetInput.focus();
+      });
+    }
+
+    /* 閉じる（暗幕・×） */
+    sheet.querySelectorAll('[data-j6ac-close]').forEach(function (el) {
+      el.addEventListener('click', function () {
+        closeSheet(ui);
+      });
+    });
+
+    /* カート追加 / 担当者に相談 */
+    sheet.addEventListener('click', function (e) {
       var add = e.target.closest('[data-j6ac-add]');
       if (add) {
-        addToCart(add, root, d);
+        addToCart(add, d);
         return;
       }
       var human = e.target.closest('[data-j6ac-human]');
@@ -415,6 +594,42 @@
       }
     });
 
+    /* 画面サイズ・ソフトキーボードの変化に追随 */
+    window.addEventListener('resize', function () {
+      if (ui.open) applyOffset(ui);
+    });
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', function () {
+        if (ui.open) applyOffset(ui);
+        scrollBottom(ui.thread);
+      });
+    }
+
+    /* Esc で閉じる / Tab をシート内に閉じ込める */    document.addEventListener('keydown', function (e) {
+      if (!ui.open) return;
+      if (e.key === 'Escape' || e.key === 'Esc') {
+        e.preventDefault();
+        closeSheet(ui);
+        return;
+      }
+      if (e.key === 'Tab' && ui.panel) {
+        var items = ui.panel.querySelectorAll(
+          'a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        );
+        if (!items.length) return;
+        var first = items[0];
+        var last = items[items.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    });
+
+    /* 表示計測 */
     if ('IntersectionObserver' in window) {
       var seen = false;
       var io = new IntersectionObserver(
@@ -429,13 +644,13 @@
         },
         { threshold: 0.5 }
       );
-      io.observe(form || root);
+      io.observe(inlineForm || root);
     }
   }
 
   function boot() {
-    if (initialized) return;
-    initialized = true;
+    if (booted) return;
+    booted = true;
     document.querySelectorAll('[data-j6ac]').forEach(init);
   }
 
