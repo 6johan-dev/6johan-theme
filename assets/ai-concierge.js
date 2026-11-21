@@ -399,6 +399,20 @@
     ui.sheet.style.setProperty('--j6ac-bar-offset', off + 'px');
   }
 
+  /* Channel Talk（#ch-plugin / z-index 10,000,000）のランチャーが右下にあり、
+     シートを開いている間は吹き出しが二重に見え、送信ボタンのタップも奪われる。
+     対応① CSS でシートを最前面へ（assets/ai-concierge.css の z-index）。
+     対応② ここでシート開閉に合わせてランチャーを隠す／戻す（APIが無ければ何もしない）。 */
+  function channelTalk(command) {
+    try {
+      if (typeof window.ChannelIO === 'function') {
+        window.ChannelIO(command);
+      }
+    } catch (e) {
+      /* Channel Talk 未導入・API変化でもAI接客は止めない */
+    }
+  }
+
   function openSheet(ui, trigger) {
     if (!ui.sheet) return;
     ui.lastTrigger = trigger || ui.lastTrigger;
@@ -417,6 +431,7 @@
       c.setAttribute('aria-expanded', 'true');
     });
     if (isMobile()) document.body.classList.add('j6ac-lock');
+    channelTalk('hideChannelButton');
     if (ui.panel && ui.panel.focus) {
       try {
         ui.panel.focus({ preventScroll: true });
@@ -438,6 +453,7 @@
       c.setAttribute('aria-expanded', 'false');
     });
     document.body.classList.remove('j6ac-lock');
+    channelTalk('showChannelButton');
     window.setTimeout(function () {
       if (ui.open) return;
       ui.sheet.classList.remove('is-closing');

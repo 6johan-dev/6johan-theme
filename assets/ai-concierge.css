@@ -212,7 +212,10 @@
 .j6ac-sheet {
   position: fixed;
   inset: 0 0 var(--j6ac-bar-offset, 0px) 0;
-  z-index: 99990;
+  /* Channel Talk のランチャー（#ch-plugin）が z-index 10,000,000 で右下に常駐し、
+     シートの送信ボタンのタップを奪っていた（本番のみ・2026-11-21）。
+     シートと暗幕はその上に置き、開いている間は確実に最前面で操作できるようにする。 */
+  z-index: 10000100;
   display: flex;
   align-items: flex-end;
   justify-content: center;
