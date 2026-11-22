@@ -27,16 +27,57 @@
       <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
     {%- endunless -%}
 
+    {%- liquid
+      comment
+        Phase 2: 上位5コレクションのタイトルとメタディスクリプション。
+        順位は取れているのにCTRが低いページのため、検索語（ラタンチェア・ローキャビネット・
+        丸テーブル等）と点数・納期を前方に出す。点数はLiquidで実数から入れる。
+      endcomment
+      assign j6_seo_title = ''
+      assign j6_seo_desc = ''
+      if template.name == 'collection'
+        assign j6_n = collection.all_products_count
+        case collection.handle
+          when 'collections-chairs'
+            assign j6_seo_title = 'ラタンチェア・ラタン椅子 ' | append: j6_n | append: '点｜最短7日発送・30日返品｜6JOHAN'
+            assign j6_seo_desc = 'ラタンチェア、ラタン椅子、ベンチ、スツールを' | append: j6_n | append: '点。座面高40〜45cmのダイニング用から座面の低いラウンジ型まで、サイズと素材で選べます。在庫品は最短7日で発送、受注生産は約2〜3ヶ月、30日返品OK。'
+          when 'collections-cabinets-sideboards'
+            assign j6_seo_title = 'ローキャビネット・サイドボード ' | append: j6_n | append: '点｜高さ45〜80cm｜6JOHAN'
+            assign j6_seo_desc = 'ローキャビネット、サイドボード、TVボードを' | append: j6_n | append: '点。高さ45〜80cm、奥行35〜45cmから設置場所に合わせて選べます。ラタン扉や格子扉、背面の配線穴の有無も比較できます。在庫品は最短7日発送、受注生産は約2〜3ヶ月。'
+          when 'collections-desks-tables'
+            assign j6_seo_title = 'ダイニングテーブル・デスク ' | append: j6_n | append: '点｜丸テーブル・ロングテーブル｜6JOHAN'
+            assign j6_seo_desc = '丸テーブル、ロングテーブル、ダイニングテーブル、ワークデスクを' | append: j6_n | append: '点。2人なら直径60〜80cm、4人なら幅120〜160cmが目安。天板の形と高さで選べます。在庫品は最短7日発送、30日返品OK。'
+          when 'collections-side-tables-low-tables'
+            assign j6_seo_title = 'サイドテーブル・ローテーブル ' | append: j6_n | append: '点｜高さ45〜60cm｜6JOHAN'
+            assign j6_seo_desc = 'ソファ横は高さ45〜55cm、ベッド横は50〜60cm。ガラス天板・ラタン・無垢材から選べるサイドテーブルとローテーブルを' | append: j6_n | append: '点。在庫品は最短7日発送、30日返品OK。'
+          when 'all'
+            assign j6_seo_title = 'すべての商品｜家具' | append: j6_n | append: '点・価格帯で選ぶ｜6JOHAN'
+            assign j6_seo_desc = '6JOHANの全' | append: j6_n | append: '点。チェア、テーブル、収納、ソファ、雑貨をカテゴリと予算から選べます。在庫品は最短7日で発送、受注生産は約2〜3ヶ月、30日返品OK。'
+        endcase
+      endif
+      if template.name == 'page' and page.handle == 'guide'
+        assign j6_seo_title = '家具の買い方ガイド｜サイズ・納期・送料・返品｜6JOHAN'
+        assign j6_seo_desc = 'はじめての家具選びで迷いやすいサイズの決め方、最短7日〜約2〜3ヶ月の納期、サイズ別の送料表、30日返品と法人の1年保証までを1ページに。6JOHANの家具を安心して選ぶための案内です。'
+      endif
+    -%}
+    {%- if j6_seo_title != blank -%}
+      <title>
+        {{ j6_seo_title }}{% if current_page != 1 %} &ndash; {{ current_page }}ページ{% endif %}
+      </title>
+    {%- else -%}
     <title>
       {{ page_title }}
       {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
       {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
       {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
     </title>
+    {%- endif -%}
 
-    {% if page_description %}
+    {% if j6_seo_desc != blank %}
+      <meta name="description" content="{{ j6_seo_desc | escape }}">
+    {%- elsif page_description %}
       <meta name="description" content="{{ page_description | escape }}">
-    {% endif %}
+    {%- endif %}
 
     {% render 'meta-tags' %}
 

@@ -130,7 +130,7 @@
 
     {%- comment -%} 2. 価格帯 {%- endcomment -%}
     <div class="j6cg__block" id="price">
-      <h3 class="j6cg__blocktitle">価格帯から選ぶ <small>税込・商品価格</small></h3>
+      <h3 class="j6cg__blocktitle">価格帯から選ぶ <small>税込・全{{ collection.all_products_count }}点</small></h3>
       {%- liquid
         assign band1 = 0
         assign band2 = 0
@@ -153,22 +153,22 @@
         {%- if collection.handle == 'all' -%}{%- assign cg_base = '/collections/all' -%}{%- endif -%}
         <a class="j6cg-band" href="{{ cg_base }}?filter.v.price.gte=0&amp;filter.v.price.lte=30000">
           <span class="j6cg-band__price">〜¥30,000</span>
-          <span class="j6cg-band__count">{% if cg_scan_all %}{{ band1 }}点{% else %}絞り込む{% endif %}</span>
+          {% if cg_scan_all %}<span class="j6cg-band__count">{{ band1 }}点</span>{% endif %}
           <span class="j6cg-band__arrow">見る →</span>
         </a>
         <a class="j6cg-band" href="{{ cg_base }}?filter.v.price.gte=30000&amp;filter.v.price.lte=50000">
           <span class="j6cg-band__price">¥30,000〜¥50,000</span>
-          <span class="j6cg-band__count">{% if cg_scan_all %}{{ band2 }}点{% else %}絞り込む{% endif %}</span>
+          {% if cg_scan_all %}<span class="j6cg-band__count">{{ band2 }}点</span>{% endif %}
           <span class="j6cg-band__arrow">見る →</span>
         </a>
         <a class="j6cg-band" href="{{ cg_base }}?filter.v.price.gte=50000&amp;filter.v.price.lte=100000">
           <span class="j6cg-band__price">¥50,000〜¥100,000</span>
-          <span class="j6cg-band__count">{% if cg_scan_all %}{{ band3 }}点{% else %}絞り込む{% endif %}</span>
+          {% if cg_scan_all %}<span class="j6cg-band__count">{{ band3 }}点</span>{% endif %}
           <span class="j6cg-band__arrow">見る →</span>
         </a>
         <a class="j6cg-band" href="{{ cg_base }}?filter.v.price.gte=100000">
           <span class="j6cg-band__price">¥100,000〜</span>
-          <span class="j6cg-band__count">{% if cg_scan_all %}{{ band4 }}点{% else %}絞り込む{% endif %}</span>
+          {% if cg_scan_all %}<span class="j6cg-band__count">{{ band4 }}点</span>{% endif %}
           <span class="j6cg-band__arrow">見る →</span>
         </a>
       </div>
