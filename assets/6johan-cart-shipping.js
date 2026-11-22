@@ -82,21 +82,23 @@
     var fee = 0;
     var sizes = [];
     var capped = false;
-    var ok = true;
+    var unknown = 0;
     for (var i = 0; i < items.length; i++) {
       var size = parseInt(items[i].getAttribute('data-size'), 10);
       var qty = parseInt(items[i].getAttribute('data-qty'), 10) || 1;
-      var hit = SHIP.lookupFee(size, pref);
-      if (!hit) { ok = false; break; }
+      var hit = size > 0 ? SHIP.lookupFee(size, pref) : null;
+      if (!hit) { unknown++; continue; } // サイズ未登録の商品は加算せず、注記で補う
       var mult = Math.min(qty, SHIP.MAX_MULTIPLIER || 4);
       if (qty > mult) capped = true;
       fee += hit.fee * mult;
       if (sizes.indexOf(size) === -1) sizes.push(size);
     }
-    if (!ok) { renderContact(el, pref); return; }
-    var title = sizes.length
-      ? sizes.sort(function (a, b) { return a - b; }).join('・') + 'サイズ送料' + (capped ? '（4点分まで）' : '')
-      : '';
+    if (!sizes.length) { renderContact(el, pref); return; }
+    var title =
+      sizes.sort(function (a, b) { return a - b; }).join('・') +
+      'サイズ送料' +
+      (capped ? '（4点分まで）' : '') +
+      (unknown ? '・一部商品は購入手続きで確定' : '');
     render(el, fee, title, pref);
   }
 
