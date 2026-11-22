@@ -92,8 +92,8 @@
         "banner_lN3wS5": {
           "type": "banner",
           "settings": {
-            "image": "shopify://shop_images/banner_top_pc_1600x800.png",
-            "image_mobile": "shopify://shop_images/banner_top_sp_1080x1080.png",
+            "image": "shopify://shop_images/banner_top_pc_1600x800_26860f68-17de-4fcc-9090-c61f6424916b.png",
+            "image_mobile": "shopify://shop_images/banner_top_sp_1080x1080_b2129e84-ec3f-47d3-9516-9e0ee9a7ce4f.png",
             "hide_overlay": true,
             "label": "",
             "title": "",
