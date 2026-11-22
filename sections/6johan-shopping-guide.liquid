@@ -301,6 +301,7 @@
           <tbody></tbody>
         </table>
       </div>
+      <p class="j6g-fine j6g-scrollhint">表は横にスクロールできます。</p>
       <p class="j6g-fine">
         表示は1点あたりの税込送料です。実際の送料はカートと購入手続き画面で確定します。商品の梱包サイズは各商品ページに記載しています。
       </p>
@@ -493,6 +494,11 @@
         if (!area) {
           summary.textContent = pref + 'は個別にご案内します（チャットへ）';
           return;
+        }
+        var activeHeader = table.querySelector('th[data-area].is-active');
+        var wrap = table.parentElement;
+        if (activeHeader && window.innerWidth < 750 && wrap) {
+          wrap.scrollLeft = Math.max(0, activeHeader.offsetLeft - 110);
         }
         var sample = [120, 160, 240].map(function (size) {
           var fee = S.lookupFee(size, pref);

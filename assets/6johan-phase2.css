@@ -968,6 +968,17 @@ html {
   background: #f3efe8;
 }
 
+.j6g-scrollhint {
+  display: none;
+}
+
+@media screen and (max-width: 749px) {
+  .j6g-scrollhint {
+    display: block;
+    margin: 0 0 -0.6rem;
+  }
+}
+
 .j6g-pref {
   display: flex;
   flex-wrap: wrap;
