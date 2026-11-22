@@ -19,7 +19,8 @@
             "label": "Our Story",
             "title": "6畳から始まった",
             "text": "<p>6JOHANが最初に考えたのは、6畳のワンルームでした。家具売り場のソファは大きく、テーブルは奥行きがあり、置いた瞬間に部屋が埋まってしまう。そんな経験から、私たちは「日本の部屋に、ほんとうに収まるサイズ」から家具を選ぶことにしました。</p><p>幅・奥行き・高さをひとつずつ決め直し、畳数や間取りに合わせて選べるラインナップを揃えています。狭いから諦めるのではなく、狭いからこそ整う。それが6JOHANの家具です。</p>",
-            "reverse": false
+            "reverse": false,
+            "image": "shopify://shop_images/dining-hero.jpg"
           }
         },
         "story_2": {
@@ -28,7 +29,8 @@
             "label": "Materials",
             "title": "木とラタンを、職人の手で",
             "text": "<p>主役になるのは、タモ・オーク・ウォールナットなどの無垢材と、天然のラタンです。木目は一本ずつ違い、ラタンの編み目も機械では出せない表情をつくります。</p><p>使うほどに色が深まり、手に馴染んでいく。量産品では得られない経年変化を、長く楽しめる家具として仕上げています。</p>",
-            "reverse": true
+            "reverse": true,
+            "image": "shopify://shop_images/cabinet-hero.jpg"
           }
         },
         "values": {
@@ -60,8 +62,15 @@
           }
         }
       },
-      "block_order": ["story_1", "story_2", "values", "commitment"]
+      "block_order": [
+        "story_1",
+        "story_2",
+        "values",
+        "commitment"
+      ]
     }
   },
-  "order": ["main"]
+  "order": [
+    "main"
+  ]
 }
