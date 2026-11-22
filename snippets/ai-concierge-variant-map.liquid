@@ -16,14 +16,14 @@
       b  = 受注生産（約2〜3ヶ月）
       b4 = 受注生産（約4ヶ月・例外3商品）
 
-  対象: コレクション「全ての商品」（全公開商品）。アップセル候補はこの中のどれでもあり得る。
+  対象: コレクション「全ての商品」= handle `all`（全公開商品）。アップセル候補はこの中のどれでもあり得る。
   コスト: 商品数×販売中バリエーション数ぶんの render。6JOHANは約120商品/約250バリエーション。
 {%- endcomment -%}
 "variantStates": {
   {%- assign _map_out = 0 -%}
   {%- comment -%} collection.products は既定で50件までなので、paginateで全件（最大250）を回す {%- endcomment -%}
-  {%- paginate collections['全ての商品'].products by 250 -%}
-  {%- for _vp in collections['全ての商品'].products -%}
+  {%- paginate collections['all'].products by 250 -%}
+  {%- for _vp in collections['all'].products -%}
     {%- for _vv in _vp.variants -%}
       {%- if _vv.available -%}
         {%- capture _vds -%}{%- render '6johan-delivery-state', variant: _vv, product: _vp -%}{%- endcapture -%}
