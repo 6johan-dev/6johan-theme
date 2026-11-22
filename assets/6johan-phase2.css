@@ -11,20 +11,20 @@
 /* --------------------------------------------------------------------------
    1. コレクション上部（リード）
    -------------------------------------------------------------------------- */
-.collection-hero__inner {
-  padding-top: 1.2rem;
-  padding-bottom: 0.4rem;
+body .collection-hero__inner {
+  padding-top: 0.4rem;
+  padding-bottom: 0.2rem;
 }
 
 @media screen and (min-width: 750px) {
-  .collection-hero__inner {
-    padding-top: 1.6rem;
-    padding-bottom: 0.6rem;
+  body .collection-hero__inner {
+    padding-top: 1rem;
+    padding-bottom: 0.4rem;
   }
 }
 
-.collection-hero__title {
-  margin: 0 0 0.4rem;
+body .collection-hero__title {
+  margin: 0 0 0.2rem;
 }
 
 .j6lead {
@@ -85,19 +85,41 @@
 }
 
 /* ファセット（絞り込み）を1行に保ち、モバイルでは画面上部に追従させる */
+body .facets-wrapper .facets-container {
+  padding: 10px 0;
+  margin-bottom: 12px;
+}
 @media screen and (max-width: 749px) {
-  .facets-wrapper .facets-container {
+  .j6lead__text {
+    font-size: 1.2rem;
+    line-height: 1.65;
+  }
+
+  .j6lead__meta {
+    margin-top: 7px;
+  }
+
+  .j6lead__meta .j6lead__ship {
+    display: none;
+  }
+
+  .j6lead__anchor {
+    margin-top: 5px;
+  }
+
+  body .facets-wrapper .facets-container {
     position: sticky;
     top: 0;
     z-index: 3;
     background: #fff;
-    padding: 6px 0;
-    margin-bottom: 10px;
+    padding: 4px 0;
+    margin-bottom: 6px;
   }
 
   .facets__form,
   .facets__wrapper {
     flex-wrap: nowrap;
+    gap: 8px;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
