@@ -87,6 +87,8 @@
   endif
 -%}
 
+{%- comment -%} 商品0件のコレクション（照明・ラグ等）はガイドを出さない {%- endcomment -%}
+{%- if collection.all_products_count > 0 -%}
 <section id="collection-guide" class="j6cg">
   <div class="j6cg__inner">
     <header class="j6cg__head">
@@ -348,6 +350,8 @@
   </div>
 </section>
 
+{%- endif -%}
+
 {%- comment -%} 構造化データ（BreadcrumbList / ItemList / FAQPage） {%- endcomment -%}
 {%- liquid
   assign cg_min_price = 0
@@ -375,7 +379,7 @@
     ]
   }
 </script>
-{%- if collection.products.size > 0 -%}
+{%- if collection.all_products_count > 0 and collection.products.size > 0 -%}
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
