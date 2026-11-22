@@ -66,6 +66,12 @@
     body.template-cart .cart__ctas button {
       width: 100%;
     }
+    .sixj-cart-payments {
+      margin: 10px 0 0;
+      color: #6B6B5E;
+      font-size: 11.5px;
+      line-height: 1.6;
+    }
     body.template-cart .tax-note {
       text-align: left;
       margin: 10px 0 14px;
@@ -100,11 +106,6 @@
               {% render block %}
             {%- when 'subtotal' -%}
               <div class="js-contents" {{ block.shopify_attributes }}>
-                {%- comment -%} 6JOHAN セット割: 点数に応じた動的案内＋買い足し候補 {%- endcomment -%}
-                {%- if cart != empty -%}
-                  {%- render '6johan-set-cart-offer', context: 'page', limit: 3 -%}
-                {%- endif -%}
-
                 <div>
                   {%- if cart.cart_level_discount_applications.size > 0 -%}
                     <ul class="discounts list-unstyled" role="list" aria-label="{{ 'customer.order.discount' | t }}">
@@ -230,6 +231,20 @@
               {%- if additional_checkout_buttons -%}
                 <div class="cart__dynamic-checkout-buttons additional-checkout-buttons" style="opacity: 0.4; pointer-events: none;">
                   {{ content_for_additional_checkout_buttons }}
+                </div>
+              {%- endif -%}
+
+              <p class="sixj-cart-payments">
+                お支払い：クレジットカード／Shop Pay／Apple Pay／Google Pay／コンビニ（前払い）／ペイディ／PayPay／メルペイ
+              </p>
+
+              {%- comment -%}
+                6JOHAN セット割: 点数に応じた案内＋買い足し候補
+                PCでは合計と購入ボタンを先に見せたいので、CTAの下に置く（Phase 1 / 2026-11-22）
+              {%- endcomment -%}
+              {%- if cart != empty -%}
+                <div class="sixj-cart-upsell">
+                  {%- render '6johan-set-cart-offer', context: 'page', limit: 3 -%}
                 </div>
               {%- endif -%}
           {%- endcase -%}

@@ -19,7 +19,7 @@
 -%}
 
 {%- if cmeta_color_option and cmeta_color_option.values.size > 1 -%}
-  <div class="sixj-cmeta-colors" aria-label="カラー {{ cmeta_color_option.values.size }}色">
+  <div class="j6cm-colors" aria-label="カラー {{ cmeta_color_option.values.size }}色">
     {%- for value in cmeta_color_option.values limit: 4 -%}
       {%- liquid
         case value
@@ -59,23 +59,23 @@
             assign cmeta_hex = '#D9D5CE'
         endcase
       -%}
-      <span class="sixj-cmeta-colors__dot" style="background-color: {{ cmeta_hex }};" title="{{ value | escape }}"></span>
+      <span class="j6cm-colors__dot" style="background-color: {{ cmeta_hex }};" title="{{ value | escape }}"></span>
     {%- endfor -%}
-    <span class="sixj-cmeta-colors__count">{{ cmeta_color_option.values.size }}色</span>
+    <span class="j6cm-colors__count">{{ cmeta_color_option.values.size }}色</span>
   </div>
 {%- endif -%}
 
-<div class="jdgm-widget jdgm-preview-badge sixj-cmeta-reviews" data-id="{{ product.id }}" data-template="manual-installation"></div>
+<div class="jdgm-widget jdgm-preview-badge j6cm-reviews" data-id="{{ product.id }}" data-template="manual-installation"></div>
 
 <style>
-  .sixj-cmeta-colors {
+  .j6cm-colors {
     display: flex;
     align-items: center;
     gap: 4px;
     margin: 2px 0 4px;
     min-height: 12px;
   }
-  .sixj-cmeta-colors__dot {
+  .j6cm-colors__dot {
     width: 10px;
     height: 10px;
     border-radius: 50%;
@@ -83,12 +83,12 @@
     display: inline-block;
     flex: 0 0 auto;
   }
-  .sixj-cmeta-colors__count {
+  .j6cm-colors__count {
     margin-left: 3px;
     font-size: 10.5px;
     color: #6B6B5E;
     letter-spacing: 0.02em;
   }
-  .sixj-cmeta-reviews { margin: 0 0 2px; }
-  .sixj-cmeta-reviews:empty { display: none; }
+  .j6cm-reviews { margin: 0 0 2px; }
+  .j6cm-reviews:empty { display: none; }
 </style>

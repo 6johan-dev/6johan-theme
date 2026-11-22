@@ -39,6 +39,13 @@
     color: #fff;
     padding: 20px;
   }
+  /* ヒーロー画像が未設定でも文字が読めるようにする（画像なし＝濃色背景＋白文字） */
+  .about-page__hero--text {
+    background: #2F2C28;
+  }
+  .about-page__hero--text .about-page__hero-overlay {
+    display: none;
+  }
   .about-page__hero-label {
     font-size: var(--6j-font-size-xs);
     letter-spacing: var(--6j-letter-spacing-label);
@@ -265,7 +272,7 @@
 
 <section class="about-page">
   <!-- Hero -->
-  <div class="about-page__hero">
+  <div class="about-page__hero{% if section.settings.hero_image == blank %} about-page__hero--text{% endif %}">
     {% if section.settings.hero_image != blank %}
       <img src="{{ section.settings.hero_image | image_url: width: 1920 }}" 
            alt="{{ section.settings.title }}"
@@ -601,13 +608,13 @@
           "type": "text",
           "id": "item3_title",
           "label": "項目3 タイトル",
-          "default": "1年間品質保証"
+          "default": "法人・商業施設は1年保証"
         },
         {
           "type": "text",
           "id": "item3_text",
           "label": "項目3 説明",
-          "default": "製造上の欠陥は1年間無償で修理・交換いたします。"
+          "default": "法人・商業施設でのご購入は、製造上の不具合を1年間無償で修理・交換します。"
         },
         {
           "type": "text",
@@ -659,8 +666,8 @@
             "item1_text": "在庫商品は7日以内に発送いたします。",
             "item2_title": "30日間返品保証",
             "item2_text": "届いてから30日以内なら返品・交換を承ります。",
-            "item3_title": "1年間品質保証",
-            "item3_text": "製造上の欠陥は1年間無償で修理・交換いたします。",
+            "item3_title": "法人・商業施設は1年保証",
+            "item3_text": "法人・商業施設でのご購入は、製造上の不具合を1年間無償で修理・交換します。",
             "item4_title": "購入前相談OK",
             "item4_text": "サイズや素材など、お気軽にご相談ください。"
           }
