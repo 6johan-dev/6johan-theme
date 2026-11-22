@@ -20,6 +20,8 @@
 -%}
 
 {%- if size_num > 0 and product.available -%}
+{%- comment -%} 送料テーブルは assets/6johan-shipping.js（カートの送料目安と共用） {%- endcomment -%}
+<script src="{{ '6johan-shipping.js' | asset_url }}"></script>
 <div class="sixj-ship" data-sixj-ship data-size="{{ size_num }}" data-price="{{ current_variant.price }}" data-product-id="{{ product.id }}">
   <div class="sixj-ship__head">
     <span class="sixj-ship__label">送料</span>
@@ -120,41 +122,21 @@
   if (window.__sixjShipInit) return;
   window.__sixjShipInit = true;
 
-  var STORAGE_KEY = '6johan_pref';
-  var MAX_MULTIPLIER = 4;
+  // 送料テーブル・ヘルパーは assets/6johan-shipping.js（カートと共用）から取得
+  var SHIP = window.SixjShipping || {};
+  var STORAGE_KEY = SHIP.STORAGE_KEY || '6johan_pref';
+  var MAX_MULTIPLIER = SHIP.MAX_MULTIPLIER || 4;
+  var SHIPPING_TABLE = SHIP.TABLE || {};
+  var AREA_LABEL = SHIP.AREA_LABEL || {};
+  var PREF_AREA = SHIP.PREF_AREA || {};
 
-  // 配送プロファイル（2026-10）: サイズ → エリア別送料（円）
-  var SHIPPING_TABLE = {
-    120: { flat: 2250 },
-    140: { flat: 2500 },
-    160: { flat: 2750 },
-    180: { hokkaido: 3750, tohoku: 3440, kanto: 3130, chubu: 3500, kansai: 3750, chushikoku: 4000, kyushu: 4380 },
-    200: { hokkaido: 4750, tohoku: 4000, kanto: 3630, chubu: 4130, kansai: 4380, chushikoku: 4750, kyushu: 5130 },
-    220: { hokkaido: 5750, tohoku: 4880, kanto: 4380, chubu: 5000, kansai: 5250, chushikoku: 5750, kyushu: 6250 },
-    240: { hokkaido: 7750, tohoku: 6500, kanto: 5500, chubu: 6250, kansai: 6500, chushikoku: 7000, kyushu: 7750 },
-    260: { hokkaido: 10000, tohoku: 8380, kanto: 6750, chubu: 7500, kansai: 7940, chushikoku: 8500, kyushu: 10000 }
-  };
-
-  var AREA_LABEL = {
-    hokkaido: '北海道', tohoku: '東北', kanto: '関東', chubu: '信越・東海・北陸',
-    kansai: '関西', chushikoku: '四国・中国', kyushu: '九州'
-  };
-
-  var PREF_AREA = {
-    '北海道': 'hokkaido',
-    '青森県': 'tohoku', '秋田県': 'tohoku', '岩手県': 'tohoku', '宮城県': 'tohoku', '山形県': 'tohoku', '福島県': 'tohoku',
-    '茨城県': 'kanto', '栃木県': 'kanto', '群馬県': 'kanto', '埼玉県': 'kanto', '千葉県': 'kanto', '東京都': 'kanto', '神奈川県': 'kanto',
-    '山梨県': 'chubu', '新潟県': 'chubu', '長野県': 'chubu', '富山県': 'chubu', '岐阜県': 'chubu', '福井県': 'chubu', '石川県': 'chubu', '静岡県': 'chubu', '愛知県': 'chubu',
-    '大阪府': 'kansai', '京都府': 'kansai', '兵庫県': 'kansai', '滋賀県': 'kansai', '三重県': 'kansai', '奈良県': 'kansai', '和歌山県': 'kansai',
-    '岡山県': 'chushikoku', '広島県': 'chushikoku', '鳥取県': 'chushikoku', '島根県': 'chushikoku', '山口県': 'chushikoku',
-    '香川県': 'chushikoku', '徳島県': 'chushikoku', '愛媛県': 'chushikoku', '高知県': 'chushikoku',
-    '福岡県': 'kyushu', '佐賀県': 'kyushu', '長崎県': 'kyushu', '大分県': 'kyushu', '熊本県': 'kyushu', '宮崎県': 'kyushu', '鹿児島県': 'kyushu'
-    // 沖縄県は配送プロファイルに料金なし → お問い合わせ
-  };
-
-  function yen(n) { return '¥' + Math.round(n).toLocaleString('ja-JP'); }
+  function yen(n) {
+    if (SHIP.yen) return SHIP.yen(n);
+    return '¥' + Math.round(n).toLocaleString('ja-JP');
+  }
 
   function lookupFee(size, pref) {
+    if (SHIP.lookupFee) return SHIP.lookupFee(size, pref);
     var row = SHIPPING_TABLE[size];
     if (!row) return null;
     if (row.flat != null) return { fee: row.flat, area: '全国一律' };

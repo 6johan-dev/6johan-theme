@@ -15,6 +15,62 @@
       padding-bottom: {{ section.settings.padding_bottom }}px;
     }
   }
+
+  /*
+    6JOHAN カート（PC）: 明細を左・合計と購入ボタンを右の追従カラムに置き、
+    1440×900 のファーストビュー内で「購入手続きに進む」が見えるようにする。
+    スマホ（〜989px）は従来どおり1カラム。
+  */
+  @media screen and (min-width: 990px) {
+    body.template-cart #MainContent {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 400px;
+      column-gap: 40px;
+      align-items: start;
+    }
+    body.template-cart #MainContent > .shopify-section {
+      grid-column: 1 / -1;
+      min-width: 0;
+    }
+    body.template-cart #MainContent > .shopify-section:has(#main-cart-items) {
+      grid-column: 1;
+    }
+    body.template-cart #MainContent > .shopify-section:has(#main-cart-footer) {
+      grid-column: 2;
+      position: sticky;
+      top: 16px;
+    }
+    body.template-cart #main-cart-footer .page-width {
+      padding: 0;
+      max-width: none;
+    }
+    body.template-cart .cart__footer {
+      display: block;
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+    body.template-cart .cart__footer > * {
+      width: auto;
+    }
+    body.template-cart .cart__footer > * + * {
+      margin-left: 0;
+    }
+    body.template-cart .cart__blocks {
+      border: 1px solid #E8E5E0;
+      background: #FFFFFF;
+      padding: 20px;
+    }
+    body.template-cart .cart__ctas {
+      display: block;
+    }
+    body.template-cart .cart__ctas button {
+      width: 100%;
+    }
+    body.template-cart .tax-note {
+      text-align: left;
+      margin: 10px 0 14px;
+    }
+  }
 {%- endstyle -%}
 
 <div
@@ -64,7 +120,7 @@
                 </div>
 
                 <div class="totals">
-                  <h2 class="totals__total">{{ 'sections.cart.estimated_total' | t }}</h2>
+                  <h2 class="totals__total">商品合計</h2>
                   <p class="totals__total-value">{{ cart.total_price | money_with_currency }}</p>
                 </div>
 
@@ -107,6 +163,14 @@
                     {%- endif -%}
                   {%- endif -%}
                 </small>
+
+                {%- comment -%}
+                  6JOHAN 送料・お届け目安・税込合計（Phase 1 / 2026-11-22）
+                  送料は Shopify の配送プロファイルから取得。取得できないときはテーブルで目安。
+                {%- endcomment -%}
+                {%- if cart != empty -%}
+                  {%- render '6johan-cart-summary', context: 'page' -%}
+                {%- endif -%}
               </div>
             {%- else -%}
               {%- comment -%} 6JOHAN 注文同意チェックボックス（お届け時期＋ショッピングガイドの同意を1本化） {%- endcomment -%}

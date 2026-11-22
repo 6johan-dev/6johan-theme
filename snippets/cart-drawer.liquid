@@ -519,7 +519,7 @@
           </div>
 
           <div class="totals" role="status">
-            <h2 class="totals__total">{{ 'sections.cart.estimated_total' | t }}</h2>
+            <h2 class="totals__total">商品合計</h2>
             <p class="totals__total-value">{{ cart.total_price | money_with_currency }}</p>
           </div>
 
@@ -562,6 +562,11 @@
               {%- endif -%}
             {%- endif -%}
           </small>
+
+          {%- comment -%} 6JOHAN 送料・お届け目安・税込合計（Phase 1 / 2026-11-22） {%- endcomment -%}
+          {%- if cart != empty -%}
+            {%- render '6johan-cart-summary', context: 'drawer' -%}
+          {%- endif -%}
         </div>
 
         <!-- CTAs -->

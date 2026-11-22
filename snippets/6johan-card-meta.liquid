@@ -1,0 +1,94 @@
+{% comment %}
+  6JOHAN Card Meta — 商品カードの「選ぶ材料」（カラー数・レビュー星）
+  snippets/card-product.liquid の card-information 内（価格の直後）で使う。
+
+  - カラーバリエーション: 色の選択肢を最大4色のドット＋「◯色」で表示（在庫に関係なく全色）
+  - レビュー: Judge.me のプレビューバッジ枠。レビューが付くと星と件数が自動表示され、
+    0件のときは何も描画されない（枠だけ用意しておく）
+{% endcomment %}
+
+{%- liquid
+  assign cmeta_color_option = null
+  for option in product.options_with_values
+    assign cmeta_oname = option.name | downcase
+    if option.name contains '色' or option.name contains 'カラー' or cmeta_oname contains 'color'
+      assign cmeta_color_option = option
+      break
+    endif
+  endfor
+-%}
+
+{%- if cmeta_color_option and cmeta_color_option.values.size > 1 -%}
+  <div class="sixj-cmeta-colors" aria-label="カラー {{ cmeta_color_option.values.size }}色">
+    {%- for value in cmeta_color_option.values limit: 4 -%}
+      {%- liquid
+        case value
+          when 'ブラック'
+            assign cmeta_hex = '#2B2B2B'
+          when 'ウォールナット'
+            assign cmeta_hex = '#6B4A32'
+          when 'ナチュラル'
+            assign cmeta_hex = '#D8C3A5'
+          when 'ホワイト'
+            assign cmeta_hex = '#F4F1EC'
+          when 'チェリー'
+            assign cmeta_hex = '#8C4B3A'
+          when 'ブラウン'
+            assign cmeta_hex = '#7A5A44'
+          when 'クリア'
+            assign cmeta_hex = '#E8EEF0'
+          when 'ブルーグリーン'
+            assign cmeta_hex = '#3E6F6B'
+          when 'チャコール'
+            assign cmeta_hex = '#3A3A38'
+          when 'アイボリー'
+            assign cmeta_hex = '#EFE8D8'
+          when 'クリアブラウン'
+            assign cmeta_hex = '#C9A98B'
+          when 'クリアブラック'
+            assign cmeta_hex = '#4A4A48'
+          when 'シルバー'
+            assign cmeta_hex = '#C8CBD0'
+          when 'ゴールド'
+            assign cmeta_hex = '#C9A24B'
+          when 'ブルー'
+            assign cmeta_hex = '#4A6D8C'
+          when 'グレー'
+            assign cmeta_hex = '#9A9A94'
+          else
+            assign cmeta_hex = '#D9D5CE'
+        endcase
+      -%}
+      <span class="sixj-cmeta-colors__dot" style="background-color: {{ cmeta_hex }};" title="{{ value | escape }}"></span>
+    {%- endfor -%}
+    <span class="sixj-cmeta-colors__count">{{ cmeta_color_option.values.size }}色</span>
+  </div>
+{%- endif -%}
+
+<div class="jdgm-widget jdgm-preview-badge sixj-cmeta-reviews" data-id="{{ product.id }}" data-template="manual-installation"></div>
+
+<style>
+  .sixj-cmeta-colors {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin: 2px 0 4px;
+    min-height: 12px;
+  }
+  .sixj-cmeta-colors__dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 1px solid rgba(41, 39, 36, 0.18);
+    display: inline-block;
+    flex: 0 0 auto;
+  }
+  .sixj-cmeta-colors__count {
+    margin-left: 3px;
+    font-size: 10.5px;
+    color: #6B6B5E;
+    letter-spacing: 0.02em;
+  }
+  .sixj-cmeta-reviews { margin: 0 0 2px; }
+  .sixj-cmeta-reviews:empty { display: none; }
+</style>

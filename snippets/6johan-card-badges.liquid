@@ -1,7 +1,12 @@
 {% comment %}
   6JOHAN Card Badges
   商品カード用バッジ（一覧ページ用）
-  
+
+  表示ルール（2026-11-22 Phase 1）
+    - 販売終了（available=false）: SOLD OUT のみ
+    - それ以外: 「セール / 残りわずか / NEW」のうち1つ ＋ 納期バッジ（最短7日・約2〜3ヶ月・約4ヶ月）
+      ＝ 最大2つまで。重ねて商品写真を隠さない。
+
   使用方法: {% render '6johan-card-badges', product: card_product %}
 {% endcomment %}
 
@@ -54,6 +59,11 @@
   color: #fff;
 }
 
+.card-badge--sale {
+  background-color: #A9503A;
+  color: #fff;
+}
+
 .card-badge--sold-out {
   background-color: #6B6B5E;
   color: #fff;
@@ -77,7 +87,7 @@
   assign is_popular = false
   assign is_new = false
   assign is_low_stock = false
-  
+
   # 新着判定（30日以内）
   assign now = 'now' | date: '%s'
   assign product_date = product.created_at | date: '%s'
@@ -86,7 +96,7 @@
   if diff_seconds < thirty_days
     assign is_new = true
   endif
-  
+
   # タグから判定
   for tag in product.tags
     assign tag_lower = tag | downcase
@@ -103,7 +113,7 @@
       assign is_low_stock = true
     endif
   endfor
-  
+
   # コレクションから判定
   for collection in product.collections
     if collection.handle == '即納商品' or collection.handle == 'in-stock'
@@ -113,7 +123,7 @@
       assign is_popular = true
     endif
   endfor
-  
+
   # 在庫数から判定（タグがない場合）
   if is_in_stock == false and is_made_to_order == false
     if product.available
@@ -133,9 +143,15 @@
       endif
     endif
   endif
-  
-  # バッジ表示数をカウント（最大2つまで）
-  assign badge_count = 0
+
+  # セール判定（いずれかのバリエーションに比較価格がある）
+  assign is_on_sale = false
+  for variant in product.variants
+    if variant.compare_at_price > variant.price
+      assign is_on_sale = true
+      break
+    endif
+  endfor
 -%}
 
 {% if product.available == false %}
@@ -144,40 +160,19 @@
   </div>
 {% else %}
   <div class="card-badges">
-    
-    {%- comment -%} セールバッジ {%- endcomment -%}
-    {%- assign is_on_sale = false -%}
-    {%- for variant in product.variants -%}
-      {%- if variant.compare_at_price > variant.price -%}
-        {%- assign is_on_sale = true -%}
-        {%- break -%}
-      {%- endif -%}
-    {%- endfor -%}
-    {% if is_on_sale and badge_count < 2 %}
+    {%- comment -%} 1つ目のバッジ: セール → 残りわずか → NEW の優先順 {%- endcomment -%}
+    {% if is_on_sale %}
       <span class="card-badge card-badge--sale">セール</span>
-      {% assign badge_count = badge_count | plus: 1 %}
-    {% endif %}
-
-
-    
-    {%- comment -%} NEWバッジ {%- endcomment -%}
-    {% if is_new and is_popular == false and badge_count < 2 %}
-      <span class="card-badge card-badge--new">NEW</span>
-      {% assign badge_count = badge_count | plus: 1 %}
-    {% endif %}
-    
-    {%- comment -%} 残りわずか {%- endcomment -%}
-    {% if is_low_stock and badge_count < 2 %}
+    {% elsif is_low_stock %}
       <span class="card-badge card-badge--low-stock">残りわずか</span>
-      {% assign badge_count = badge_count | plus: 1 %}
+    {% elsif is_new and is_popular == false %}
+      <span class="card-badge card-badge--new">NEW</span>
     {% endif %}
 
     {%- comment -%}
-      納期バッジ（最短7日で発送 ／ 約2〜3ヶ月 ／ 約4ヶ月）
+      2つ目のバッジ: 納期（最短7日で発送 ／ 約2〜3ヶ月 ／ 約4ヶ月）
       判定は商品詳細ページの配送BOXと同一ロジック（snippets/6johan-delivery-badge.liquid）
-      SOLD OUT の場合は上の分岐で SOLD OUT のみを表示し、このバッジは出さない
     {%- endcomment -%}
     {% render '6johan-delivery-badge', product: product %}
-    
   </div>
 {% endif %}

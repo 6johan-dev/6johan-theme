@@ -4,7 +4,8 @@
   設計: work/6johan/line_crm/line_shopify_crm_design_2026-11-21.md §8
   注意:
     - テーマCSSの [class*="sixj-"] / [class*="6johan"] { background:#fff !important } を避けるため接頭辞は j6line-is-。
-    - 表示は商品ページのみ・1ブラウザ1回（localStorage: j6line_is_seen_v1）・12秒 or 60%スクロール。
+    - 表示は商品ページのみ・1ブラウザ1回（localStorage: j6line_is_seen_v1）・60%スクロール到達時のみ。
+      （2026-11-22 Phase 1: 12秒の時間トリガーを廃止。読んでいる途中にギャラリーを覆わないため）
     - AIコンシェルジュのシート（.j6ac-sheet.is-open / z-index 10000100）が開いていたら待機し、
       当バナーはその下（z-index 10000050）に置く。Channel Talk のランチャー（10,000,000）より上。
 {%- endcomment -%}
@@ -213,7 +214,6 @@
 <script>
   (function () {
     var KEY_SEEN = 'j6line_is_seen_v1';
-    var DELAY_MS = 12000;
     var SCROLL_RATIO = 0.6;
 
     function readSeen() {
@@ -234,7 +234,6 @@
     var settled = false;
     var aiPending = false;
     var lastFocus = null;
-    var timer = null;
 
     function aiSheetOpen() {
       var sheet = document.querySelector('.j6ac-sheet');
@@ -259,7 +258,6 @@
     }
 
     function clearTriggers() {
-      if (timer) { clearTimeout(timer); timer = null; }
       window.removeEventListener('scroll', onScroll);
     }
 
@@ -346,7 +344,7 @@
 
     var mount = function () {
       if (opened || settled) return;
-      timer = setTimeout(show, DELAY_MS);
+      // 時間トリガーは使わない（スクロール60%到達時のみ）
       window.addEventListener('scroll', onScroll, { passive: true });
       // 開いた直後にすでに60%以上スクロールしている場合（戻る/リロード）も判定
       onScroll();

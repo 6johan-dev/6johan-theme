@@ -1,0 +1,205 @@
+{%- comment -%}
+  6JOHAN カートの送料・お届け目安・税込合計
+  使い方:
+    {% render '6johan-cart-summary', context: 'page' %}   カートページ（右カラム）
+    {% render '6johan-cart-summary', context: 'drawer' %} カートドロワー（フッター）
+
+  送料は Shopify の配送プロファイルから取得する（/cart/shipping_rates.json）。
+  取得できなかったときは assets/6johan-shipping.js の送料テーブルで目安を出す。
+  どちらも「目安」であることを明記し、確定はチェックアウトであると伝える。
+{%- endcomment -%}
+
+{%- liquid
+  assign csum_ctx = context | default: 'page'
+  assign csum_has_backorder = false
+  assign csum_has_instock = false
+  assign csum_has_four_month = false
+
+  for item in cart.items
+    capture csum_ds
+      render '6johan-delivery-state', variant: item.variant, product: item.product
+    endcapture
+    assign csum_ds_parts = csum_ds | split: '|'
+    assign csum_state = csum_ds_parts[0] | strip
+    if csum_state == 'backorder'
+      assign csum_has_backorder = true
+      assign csum_lead_item = csum_ds_parts[1] | strip
+      if csum_lead_item == '約4ヶ月'
+        assign csum_has_four_month = true
+      endif
+    elsif csum_state == 'instock'
+      assign csum_has_instock = true
+    endif
+  endfor
+
+  if csum_has_backorder and csum_has_instock
+    assign csum_lead = '最短7日〜約2〜3ヶ月（商品ごとに異なります）'
+  elsif csum_has_backorder
+    if csum_has_four_month
+      assign csum_lead = '約2〜3ヶ月〜約4ヶ月（受注生産）'
+    else
+      assign csum_lead = '約2〜3ヶ月（受注生産）'
+    endif
+  else
+    assign csum_lead = '最短7日で発送（在庫品）'
+  endif
+
+  if cart.taxes_included
+    assign csum_tax = '税込'
+  else
+    assign csum_tax = '税別'
+  endif
+-%}
+
+{%- if cart != empty -%}
+<script src="{{ '6johan-shipping.js' | asset_url }}"></script>
+<script src="{{ '6johan-cart-shipping.js' | asset_url }}"></script>
+
+<div
+  class="sixj-csum sixj-csum--{{ csum_ctx }}"
+  data-sixj-csum
+  data-subtotal="{{ cart.total_price }}"
+  data-tax="{{ csum_tax }}"
+>
+  {%- for item in cart.items -%}
+    {%- liquid
+      assign csum_size = item.product.metafields.custom['_new'] | strip | replace: 'サイズ', '' | replace: ' ', '' | plus: 0
+    -%}
+    <span hidden data-sixj-csum-item data-size="{{ csum_size }}" data-qty="{{ item.quantity }}"></span>
+  {%- endfor -%}
+
+  {%- if csum_ctx == 'page' -%}
+    <div class="sixj-csum__head">
+      <span class="sixj-csum__label">送料・お届け</span>
+      <span class="sixj-csum__kicker">目安・{{ csum_tax }}</span>
+    </div>
+  {%- endif -%}
+
+  <label class="sixj-csum__row" for="sixj-csum-pref-{{ csum_ctx }}">
+    <span class="sixj-csum__row-label">お届け先</span>
+    <select id="sixj-csum-pref-{{ csum_ctx }}" class="sixj-csum__select" data-sixj-csum-pref>
+      <option value="">選択してください</option>
+      <optgroup label="北海道・東北">
+        <option value="北海道">北海道</option>
+        <option value="青森県">青森県</option><option value="秋田県">秋田県</option><option value="岩手県">岩手県</option>
+        <option value="宮城県">宮城県</option><option value="山形県">山形県</option><option value="福島県">福島県</option>
+      </optgroup>
+      <optgroup label="関東">
+        <option value="茨城県">茨城県</option><option value="栃木県">栃木県</option><option value="群馬県">群馬県</option>
+        <option value="埼玉県">埼玉県</option><option value="千葉県">千葉県</option><option value="東京都">東京都</option>
+        <option value="神奈川県">神奈川県</option>
+      </optgroup>
+      <optgroup label="信越・東海・北陸">
+        <option value="山梨県">山梨県</option><option value="新潟県">新潟県</option><option value="長野県">長野県</option>
+        <option value="富山県">富山県</option><option value="岐阜県">岐阜県</option><option value="福井県">福井県</option>
+        <option value="石川県">石川県</option><option value="静岡県">静岡県</option><option value="愛知県">愛知県</option>
+      </optgroup>
+      <optgroup label="関西">
+        <option value="大阪府">大阪府</option><option value="京都府">京都府</option><option value="兵庫県">兵庫県</option>
+        <option value="滋賀県">滋賀県</option><option value="三重県">三重県</option><option value="奈良県">奈良県</option>
+        <option value="和歌山県">和歌山県</option>
+      </optgroup>
+      <optgroup label="中国・四国">
+        <option value="岡山県">岡山県</option><option value="広島県">広島県</option><option value="鳥取県">鳥取県</option>
+        <option value="島根県">島根県</option><option value="山口県">山口県</option><option value="香川県">香川県</option>
+        <option value="徳島県">徳島県</option><option value="愛媛県">愛媛県</option><option value="高知県">高知県</option>
+      </optgroup>
+      <optgroup label="九州・沖縄">
+        <option value="福岡県">福岡県</option><option value="佐賀県">佐賀県</option><option value="長崎県">長崎県</option>
+        <option value="大分県">大分県</option><option value="熊本県">熊本県</option><option value="宮崎県">宮崎県</option>
+        <option value="鹿児島県">鹿児島県</option><option value="沖縄県">沖縄県</option>
+      </optgroup>
+    </select>
+  </label>
+
+  <div class="sixj-csum__result" data-sixj-csum-result aria-live="polite">
+    <dl class="sixj-csum__lines">
+      <div>
+        <dt>送料（目安）</dt>
+        <dd data-sixj-csum-fee>計算中…</dd>
+      </div>
+      <div class="sixj-csum__total">
+        <dt>合計（目安・{{ csum_tax }}）</dt>
+        <dd data-sixj-csum-total>—</dd>
+      </div>
+    </dl>
+  </div>
+
+  <p class="sixj-csum__lead">お届け目安：{{ csum_lead }}</p>
+  <p class="sixj-csum__note">
+    送料はお届け先と商品サイズで決まります。最終的な金額・お届け日は
+    <strong>購入手続き画面で確定</strong>します。
+  </p>
+  <a class="sixj-csum__link" href="/pages/022">送料・配送について詳しく見る</a>
+</div>
+
+<style>
+  .sixj-csum {
+    font-family: var(--6j-font-body, -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic Medium", "Yu Gothic", "Meiryo", sans-serif);
+    color: #292724;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .sixj-csum--page {
+    border: 1px solid #E8E5E0;
+    background: #FFFFFF;
+    padding: 16px 18px 14px;
+  }
+  .sixj-csum--drawer {
+    border-top: 1px solid #E8E5E0;
+    border-bottom: 1px solid #E8E5E0;
+    padding: 12px 0;
+    margin-bottom: 4px;
+  }
+  .sixj-csum__head { display: flex; align-items: baseline; gap: 8px; margin-bottom: 10px; }
+  .sixj-csum__label { font-weight: 600; font-size: 14px; letter-spacing: 0.02em; }
+  .sixj-csum__kicker { color: #8A8A7A; font-size: 11px; }
+  .sixj-csum__row { display: flex; align-items: center; gap: 10px; margin: 0 0 10px; }
+  .sixj-csum__row-label { flex: 0 0 auto; color: #6B6B5E; font-size: 12px; }
+  .sixj-csum__select {
+    flex: 1 1 auto;
+    min-height: 38px;
+    padding: 4px 8px;
+    border: 1px solid #C9C5BE;
+    border-radius: 0;
+    background: #FFFFFF;
+    color: #292724;
+    font-size: 13px;
+    font-family: inherit;
+  }
+  .sixj-csum__lines { margin: 0; }
+  .sixj-csum__lines > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    padding: 3px 0;
+  }
+  .sixj-csum__lines dt { color: #4A4A40; font-weight: 400; margin: 0; }
+  .sixj-csum__lines dd { margin: 0; text-align: right; font-variant-numeric: tabular-nums; }
+  .sixj-csum__total {
+    border-top: 1px solid #E8E5E0;
+    margin-top: 6px;
+    padding-top: 8px !important;
+  }
+  .sixj-csum__total dt { font-weight: 600; color: #292724; }
+  .sixj-csum__total dd { font-size: 16px; font-weight: 600; }
+  .sixj-csum__lead { margin: 10px 0 0; color: #4A4A40; font-size: 12px; }
+  .sixj-csum__note { margin: 4px 0 0; color: #6B6B5E; font-size: 11.5px; line-height: 1.55; }
+  .sixj-csum__note strong { font-weight: 600; color: #4A4A40; }
+  .sixj-csum__link {
+    display: inline-block;
+    margin-top: 6px;
+    color: #6B5B4F;
+    font-size: 11.5px;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .sixj-csum__contact { color: #8A5A3B; font-size: 12px; }
+  .sixj-csum__fee-note { display: block; color: #8A8A7A; font-size: 10.5px; }
+  .sixj-csum--drawer .sixj-csum__label,
+  .sixj-csum--drawer .sixj-csum__head { display: none; }
+  .sixj-csum--drawer .sixj-csum__note { font-size: 10.5px; }
+  .sixj-csum--drawer .sixj-csum__total dd { font-size: 15px; }
+</style>
+{%- endif -%}
