@@ -268,7 +268,7 @@
                             {{ block.settings.image | image_url: width: 1200 }} 1200w,
                             {{ block.settings.image | image_url: width: 1600 }} 1600w"
                     sizes="100vw"
-                    alt="{{ block.settings.title | escape }}"
+                    alt="{{ block.settings.alt | default: block.settings.title | escape }}"
                     class="feature-banners__image"
                     loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
                   >
@@ -559,6 +559,12 @@ document.addEventListener('DOMContentLoaded', function() {
           "id": "label",
           "label": "ラベル",
           "placeholder": "FEATURE"
+        },
+        {
+          "type": "text",
+          "id": "alt",
+          "label": "代替テキスト（alt）",
+          "info": "画像の内容＋遷移先が分かる文言（例: AUTUMN TO WINTER SALE 最大40%OFF）"
         },
         {
           "type": "text",

@@ -30,7 +30,8 @@
             "subtitle": "",
             "cta_text": "詳しく見る",
             "url": "shopify://collections/autumn-to-winter-sale",
-            "overlay_light": false
+            "overlay_light": false,
+            "alt": "AUTUMN TO WINTER SALE 最大40%OFF｜秋冬セール特集"
           }
         },
         "banner_eeFgaB": {
@@ -44,7 +45,8 @@
             "subtitle": "",
             "cta_text": "詳しく見る",
             "url": "shopify://products/wood-circle-table",
-            "overlay_light": false
+            "overlay_light": false,
+            "alt": "ウッドサークルテーブル｜北欧×和のリビングテーブル"
           }
         },
         "banner_R6XptY": {
@@ -58,7 +60,8 @@
             "subtitle": "",
             "cta_text": "詳しく見る",
             "url": "shopify://collections/collections-chairs",
-            "overlay_light": false
+            "overlay_light": false,
+            "alt": "チェア・スツール コレクション"
           }
         },
         "banner_lN3wS5": {
@@ -72,7 +75,8 @@
             "subtitle": "",
             "cta_text": "詳しく見る",
             "url": "shopify://blogs/information/035",
-            "overlay_light": false
+            "overlay_light": false,
+            "alt": "公式LINE友だち登録で2,000円OFFクーポン（3万円以上のご購入で利用可）"
           }
         }
       },
