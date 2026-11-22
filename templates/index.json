@@ -120,7 +120,7 @@
           "settings": {
             "icon": "ranking",
             "label": "ランキング",
-            "link": "shopify://collections/全ての商品",
+            "link": "shopify://collections/all",
             "badge": "hot"
           }
         },
@@ -286,7 +286,7 @@
           "type": "tab",
           "settings": {
             "tab_label": "すべて",
-            "collection": "全ての商品",
+            "collection": "all",
             "products_to_show": 9
           }
         },
