@@ -148,7 +148,7 @@
           endif
         endfor
       -%}
-      <div class="j6cg__bands">
+      <div class="j6cg__bands" data-dbg="size:{{ collection.products.size }} first:{{ collection.products.first.price_min }} b1:{{ band1 }} b2:{{ band2 }} b3:{{ band3 }} b4:{{ band4 }}">
         {%- assign cg_base = collection.url -%}
         {%- if collection.handle == 'all' -%}{%- assign cg_base = '/collections/all' -%}{%- endif -%}
         <a class="j6cg-band" href="{{ cg_base }}?filter.v.price.gte=0&amp;filter.v.price.lte=30000">
