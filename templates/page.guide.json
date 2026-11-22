@@ -32,8 +32,8 @@
         "n2": { "type": "nav_card", "settings": { "icon": "💰", "title": "予算で探す", "subtitle": "〜5万 / 〜10万 / 10万円〜", "url": "/collections/5万円以下" } },
         "n3": { "type": "nav_card", "settings": { "icon": "🏠", "title": "用途で探す", "subtitle": "リビング / ワークスペース / ダイニング", "url": "/collections" } },
         "t1": { "type": "trust_item", "settings": { "icon": "🚚", "text": "在庫品は7日以内に発送" } },
-        "t2": { "type": "trust_item", "settings": { "icon": "↩️", "text": "30日間返品OK" } },
-        "t3": { "type": "trust_item", "settings": { "icon": "🛡️", "text": "1年間品質保証" } },
+        "t2": { "type": "trust_item", "settings": { "icon": "↩️", "text": "30日間返品・返金保証" } },
+        "t3": { "type": "trust_item", "settings": { "icon": "🛡️", "text": "法人・商業施設は1年保証" } },
         "t4": { "type": "trust_item", "settings": { "icon": "💬", "text": "チャットで相談" } }
       },
       "block_order": ["n1", "n2", "n3", "t1", "t2", "t3", "t4"]
