@@ -22,48 +22,48 @@
     スマホ（〜989px）は従来どおり1カラム。
   */
   @media screen and (min-width: 990px) {
-    body.template-cart #MainContent {
+    body:has(#main-cart-footer) #MainContent {
       display: grid;
       grid-template-columns: minmax(0, 1fr) 400px;
       column-gap: 40px;
       align-items: start;
     }
-    body.template-cart #MainContent > .shopify-section {
+    body:has(#main-cart-footer) #MainContent > .shopify-section {
       grid-column: 1 / -1;
       min-width: 0;
     }
-    body.template-cart #MainContent > .shopify-section:has(#main-cart-items) {
+    body:has(#main-cart-footer) #MainContent > .shopify-section:has(#main-cart-items) {
       grid-column: 1;
     }
-    body.template-cart #MainContent > .shopify-section:has(#main-cart-footer) {
+    body:has(#main-cart-footer) #MainContent > .shopify-section:has(#main-cart-footer) {
       grid-column: 2;
       position: sticky;
       top: 16px;
     }
-    body.template-cart #main-cart-footer .page-width {
+    body:has(#main-cart-footer) #main-cart-footer .page-width {
       padding: 0;
       max-width: none;
     }
-    body.template-cart .cart__footer {
+    body:has(#main-cart-footer) .cart__footer {
       display: block;
       padding-top: 0;
       padding-bottom: 0;
     }
-    body.template-cart .cart__footer > * {
+    body:has(#main-cart-footer) .cart__footer > * {
       width: auto;
     }
-    body.template-cart .cart__footer > * + * {
+    body:has(#main-cart-footer) .cart__footer > * + * {
       margin-left: 0;
     }
-    body.template-cart .cart__blocks {
+    body:has(#main-cart-footer) .cart__blocks {
       border: 1px solid #E8E5E0;
       background: #FFFFFF;
       padding: 20px;
     }
-    body.template-cart .cart__ctas {
+    body:has(#main-cart-footer) .cart__ctas {
       display: block;
     }
-    body.template-cart .cart__ctas button {
+    body:has(#main-cart-footer) .cart__ctas button {
       width: 100%;
     }
     .sixj-cart-payments {
@@ -72,9 +72,14 @@
       font-size: 11.5px;
       line-height: 1.6;
     }
-    body.template-cart .tax-note {
-      text-align: left;
-      margin: 10px 0 14px;
+    body:has(#main-cart-footer) .cart__blocks .sixj-csum--page {
+      border: 0;
+      padding: 0;
+      margin-top: 12px;
+    }
+    /* 送料・税の説明は 6johan-cart-summary に集約したので、Dawnの定型注記は出さない */
+    body:has(#main-cart-footer) .tax-note {
+      display: none;
     }
   }
 {%- endstyle -%}
