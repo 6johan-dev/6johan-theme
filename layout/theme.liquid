@@ -8,6 +8,17 @@
     <meta name="theme-color" content="">
     <link rel="canonical" href="{{ canonical_url }}">
 
+    {%- comment -%}
+      Phase 2: 商品0件のコレクション（照明・ラグ）は在庫が入るまで検索結果に出さない。
+      URLは生かしたまま（ナビからは外し、noindexでインデックスだけ止める）。
+    {%- endcomment -%}
+    {%- if template.name == 'collection' -%}
+      {%- assign j6_noindex_handles = 'collections-lighting,collections-rugs-carpets' | split: ',' -%}
+      {%- if j6_noindex_handles contains collection.handle or collection.all_products_count == 0 -%}
+        <meta name="robots" content="noindex, follow">
+      {%- endif -%}
+    {%- endif -%}
+
     {%- if settings.favicon != blank -%}
       <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
     {%- endif -%}
@@ -310,6 +321,7 @@
     <!-- 6JOHAN: Google Fonts -->
     <!-- 6JOHAN: Custom Styles -->
     <link rel="stylesheet" href="{{ '6johan-custom.css' | asset_url }}?v=20261119e">
+    <link rel="stylesheet" href="{{ '6johan-phase2.css' | asset_url }}?v=20261123a">
   {{ '6johan-product.css' | asset_url | stylesheet_tag }}
   {{ '6johan-collection.css' | asset_url | stylesheet_tag }}
   </head>

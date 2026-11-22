@@ -1,0 +1,26 @@
+{%- comment -%}
+  6JOHAN Card Size Line（Phase 2 / 2026-11-23）
+
+  一覧カードで「この椅子は大きすぎる／小さすぎる」をクリック前に判断できるよう、
+  寸法（メタフィールド custom.measurements の1行目）を1行だけ表示する。
+  値が無い商品は何も出さない（空枠を作らない）。
+
+  使い方: {% render '6johan-card-size', product: card_product %}
+{%- endcomment -%}
+
+{%- liquid
+  assign _cs_raw = product.metafields.custom.measurements.value | default: product.metafields.custom.measurements
+  assign _cs_line = ''
+  if _cs_raw != blank
+    assign _cs_line = _cs_raw | strip | newline_to_br | split: '<br />' | first | strip
+    assign _cs_first = _cs_line | slice: 0
+    if _cs_first == '・' or _cs_first == '·' or _cs_first == '、' or _cs_first == '-' or _cs_first == '*'
+      assign _cs_line = _cs_line | slice: 1, 200 | strip
+    endif
+    assign _cs_line = _cs_line | truncate: 34
+  endif
+-%}
+
+{%- if _cs_line != blank -%}
+  <span class="j6csize"><span class="j6csize__label">SIZE</span>{{ _cs_line | escape }}</span>
+{%- endif -%}

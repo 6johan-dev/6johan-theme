@@ -202,14 +202,6 @@
             "url": "shopify://collections/collections-mirrors"
           }
         },
-        "category_Qp4wRf": {
-          "type": "category",
-          "settings": {
-            "label": "ラグ",
-            "icon_type": "rug",
-            "url": "shopify://collections/collections-rugs-carpets"
-          }
-        },
         "category_qjqnyk": {
           "type": "category",
           "settings": {
@@ -258,7 +250,6 @@
         "category_Ri7PpX",
         "category_QLM6TY",
         "category_Vk83dm",
-        "category_Qp4wRf",
         "category_qjqnyk",
         "category_eHz46m",
         "category_giHhDq",

@@ -1,0 +1,431 @@
+{% comment %}
+  6JOHAN Collection Guide（Phase 2 / 2026-11-23）
+
+  商品グリッドの下に置く「選び方ガイド」。上部を軽くする代わりに、
+  SEO資産（見出し・比較表・FAQ・内部リンク）と購買の判断材料をここへ集約する。
+
+  構成
+    1. 3軸で選ぶ（コレクションごとの内容。`all` はカテゴリ一覧）
+    2. 価格帯から選ぶ（Liquidで実数を集計）
+    3. 比較表（先頭8点を自動生成：サイズ／色／価格／納期）
+    4. よくある質問（コレクションごと）＋ FAQPage JSON-LD
+    5. 関連コラム
+    6. 納期・送料・返品の3点（/pages/guide のアンカーへ）
+    7. 隣接コレクション
+    8. 既存のコレクション説明文（テンプレート化したものは非表示）
+  構造化データ: BreadcrumbList / ItemList / FAQPage をここで出力
+{% endcomment %}
+
+{%- liquid
+  assign cg_has_content = true
+  assign cg_title = '選び方ガイド'
+  assign cg_intro = ''
+  assign cg_axes = ''
+  assign cg_faq = ''
+  assign cg_cols = ''
+  assign cg_next = ''
+  assign cg_hide_desc = false
+  assign cg_show_categories = false
+
+  case collection.handle
+    when 'collections-chairs'
+      assign cg_hide_desc = true
+      assign cg_title = 'ラタンチェアの選び方'
+      assign cg_intro = '同じ「ラタンチェア」でも、ダイニングで使うものと、リビングでくつろぐものは形が違います。用途・座面の高さ・素材の3つで絞り込むと、45点から数点に絞れます。'
+      assign cg_axes = '用途で選ぶ|ダイニングは座面40〜45cm、リビングのラウンジ型は34〜40cm。2人掛けベンチはダイニングの片側に向きます。|#compare|比較表で見る###座面の高さで選ぶ|テーブル（H75cm）に合わせるなら座面40〜45cm。ソファ横でくつろぐなら34〜40cm。スツールは45cm前後です。|/blogs/6johan-magazine/rattan-dining-chair-guide|座面高の記事を読む###素材で選ぶ|ラタンは軽くて温かみ、無垢材は重厚、レザー・ファブリックは座り心地優先。用途に合わせて選べます。|/blogs/6johan-magazine/leather-lounge-chair-guide|素材の記事を読む'
+      assign cg_faq = 'ラタンチェアは屋外で使えますか？||屋内でのご使用をおすすめします。直射日光や雨に当たると、傷みや色あせの原因になります。ベランダで使う場合は、風通しのよい日陰に置いてください。###座面の高さはどのくらいですか？||ダイニング用は約40〜45cm、ラウンジ型は約34〜40cmです。商品ページの寸法に座面高を記載しています。テーブルの高さ75cmに対して、座面40〜45cmが食事のしやすい組み合わせです。###2人掛けベンチはダイニングテーブルに使えますか？||使えます。座面高40〜45cmのベンチを選び、テーブルの天板（H75cm）との差が30cm前後になるようにすると、食事の姿勢が楽になります。奥行きは45cm前後が目安です。###受注生産の商品は何ヶ月かかりますか？||約2〜3ヶ月です。在庫品は最短7日で発送します。同じカートに在庫品と受注生産品が混在する場合は、商品ごとに納期が異なります。###送料はいくらですか？||商品の梱包サイズとお届け地域で決まります。たとえば120サイズは全国一律2,250円、240サイズは関東で5,500円・北海道で7,750円です。詳しくはショッピングガイドの送料表をご確認ください。###返品はできますか？||商品到着後30日以内であれば、理由を問わず返品できます。お客様都合の場合は返送料のみご負担、不良品・誤配送は当社が負担して交換します。'
+      assign cg_cols = 'ラタンチェアの選び方（ダイニング・リビング別）|/blogs/6johan-magazine/rattan-dining-chair-guide###レザーチェア・ラウンジチェアの素材と座り心地|/blogs/6johan-magazine/leather-lounge-chair-guide###ラタンベンチの使い方と2人掛けの寸法|/blogs/6johan-magazine/rattan-bench-guide'
+      assign cg_next = 'デスク・テーブル|/collections/collections-desks-tables###サイドテーブル・ローテーブル|/collections/collections-side-tables-low-tables###ソファ|/collections/ソファ'
+
+    when 'collections-cabinets-sideboards'
+      assign cg_hide_desc = true
+      assign cg_title = 'キャビネット・サイドボードの選び方'
+      assign cg_intro = '置く場所の高さで、役割が変わります。ローキャビネットはテレビ台やベンチ収納に、サイドボードは食器と配線隠しに向きます。高さ・奥行・扉の3つで選んでください。'
+      assign cg_axes = '高さで選ぶ|ロー（45〜50cm）はテレビ台・ベンチ収納、ミドル（60〜71cm）は作業台を兼ね、ハイ（75〜80cm）は食器の出し入れが楽です。|#compare|高さ別の比較を見る###奥行で選ぶ|35〜38cmは通路を圧迫せず、リビングや廊下向き。40〜45cmは大皿や家電の収納に向きます。|#compare|奥行きの比較を見る###扉と配線で選ぶ|格子・ラタン扉は通気性がよく目隠しにもなります。テレビ台にするなら背面の配線穴があるかを確認してください。|/blogs/6johan-magazine/low-cabinet-tvboard-guide|ローキャビネットの記事を読む'
+      assign cg_faq = 'ローキャビネットとは何ですか？||高さ45〜50cm前後の低い収納家具です。テレビ台、ベンチ、ローボードとして使えます。6JOHANのナチュラルローキャビネットは幅100×奥行35×高さ45cmで、テレビ台としても腰掛けとしても使えます。###テレビ台として使えますか？||使えます。テレビの幅に対してキャビネットの幅が同等以上、天板の耐荷重と背面の配線穴を確認してください。ヴィンテージウッドアプリアンスサイドボードやアーチウッドローボードはテレビ台として選ばれています。###サイドボードに食器はどのくらい入りますか？||奥行き36〜40cmのモデルなら、直径27cm前後の大皿を立てて収納できます。棚板の間隔と可動かどうかを商品ページでご確認ください。###ラタン扉は湿気に強いですか？||ラタンは通気性がよく、密閉しすぎないため蒸れにくい素材です。ただし直射日光や水濡れには弱いため、屋内の乾燥した場所に置いてください。###受注生産の納期は？||約2〜3ヶ月です。在庫品は最短7日で発送します。###送料はいくらですか？||梱包サイズと地域で決まります。キャビネットは140〜200サイズが中心で、関東あたりで2,500〜3,630円が目安です。詳しくはショッピングガイドの送料表をご覧ください。'
+      assign cg_cols = 'ローキャビネット・テレビボードの選び方|/blogs/6johan-magazine/low-cabinet-tvboard-guide###ラタンサイドボードの収納と寸法|/blogs/6johan-magazine/rattan-sideboard-guide'
+      assign cg_next = 'シェルフ・本棚|/collections/collections-shelves-bookshelves###チェスト|/collections/collections-chests###テレビボード・テレビ台|/collections/collections-tv-boards'
+
+    when 'collections-desks-tables'
+      assign cg_hide_desc = true
+      assign cg_title = 'ダイニングテーブル・デスクの選び方'
+      assign cg_intro = '天板の形と高さ、そして何人で使うかで決まります。丸テーブルは2〜3人に、ロングテーブルは4人以上に。デスクは奥行60〜70cmが作業の目安です。'
+      assign cg_axes = '形で選ぶ|丸は角がなく通路を確保しやすく、2〜3人向き。角・ロングは壁付けしやすく4人以上に向きます。|#compare|形別の比較を見る###人数と高さで選ぶ|ダイニングはH75cmが基準。2人ならΦ60〜80cm、4人ならW120〜160cmが目安です。|/blogs/6johan-magazine/dining-table-guide|ダイニングテーブルの記事を読む###デスクとして使う|ノートPCなら奥行60cm、モニターを置くなら70cm以上。チェアの座面高40〜45cmと合わせてください。|#compare|デスクの比較を見る'
+      assign cg_faq = '4人で座れるテーブルの幅はどのくらいですか？||1人あたり幅60cmが目安なので、4人でW120〜140cm、ゆったり座るならW160cmです。片側にベンチを使うと、席数を保ちながら圧迫感を抑えられます。###丸テーブルは狭い部屋でも使えますか？||使えます。角がないぶん人の動線を確保しやすく、Φ60cmで2人、Φ80cmで3〜4人が目安です。6JOHANのシンプルラウンドテーブルはΦ60cmから選べます。###ダイニングテーブルの高さは？||一般的なダイニングテーブルは高さ70〜75cmです。チェアの座面高は40〜45cmが組み合わせの目安になります。###デスクの奥行きの目安は？||ノートPCでの作業なら60cm、デスクトップやモニターを置くなら70cm以上あると窮屈になりません。配線を通す穴や裏面のスペースもご確認ください。###天板は無垢材ですか？||商品によって天然木突板・無垢材・ガラスがございます。各商品ページの素材欄をご確認ください。###送料はいくらですか？||梱包サイズと地域で決まります。テーブルは160〜240サイズが中心です。詳しくはショッピングガイドの送料表をご覧ください。'
+      assign cg_cols = 'ダイニングテーブルのサイズと人数の決め方|/blogs/6johan-magazine/dining-table-guide###ローテーブル・サイドテーブルの高さの決め方|/blogs/6johan-magazine/low-table-side-table-guide###ラタンチェアと合わせるテーブルの選び方|/blogs/6johan-magazine/rattan-dining-chair-guide'
+      assign cg_next = 'チェア・椅子|/collections/collections-chairs###サイドテーブル・ローテーブル|/collections/collections-side-tables-low-tables'
+
+    when 'collections-side-tables-low-tables'
+      assign cg_hide_desc = true
+      assign cg_title = 'サイドテーブル・ローテーブルの選び方'
+      assign cg_intro = 'ソファ横は座面より少し高い45〜55cm、ベッド横は50〜60cm。置く場所の高さに合わせると、手を伸ばす位置に天板が来ます。'
+      assign cg_axes = '高さで選ぶ|ソファ横は45〜55cm、ベッド横は50〜60cm、ローテーブルはH40cm前後。座面高＋0〜5cmが目安です。|#compare|高さ別の比較を見る###形と大きさで選ぶ|丸は動かしやすくΦ40〜60cm、角・長方形は作業や配膳に向きます。狭い部屋は奥行30cm台が収まります。|#compare|サイズの比較を見る###素材で選ぶ|ガラス天板は床やラグが透けて軽やか、ラタンは温かみ、無垢材は経年変化を楽しめます。|/blogs/6johan-magazine/low-table-side-table-guide|ローテーブルの記事を読む'
+      assign cg_faq = 'ソファ横のサイドテーブルの高さは？||ソファの座面高＋0〜5cmが目安で、一般的には45〜55cmです。座面より低すぎると物が取りにくく、高すぎると圧迫感が出ます。###ローテーブルとコーヒーテーブルの違いは？||基本的には同じもので、高さ40cm前後の低いテーブルを指します。ソファ前に置くセンターテーブルとして使う場合は、ソファの座面高と横幅に合わせて選んでください。###ガラス天板は安全ですか？||当店のガラス天板は強化ガラスを使用しています。角に衝撃が集中しないよう、角をカバーするかラグの上に置くと安心です。###狭い部屋でも置けますか？||直径40〜50cm、奥行き30cm台のモデルなら、6畳の部屋でも動線を残して置けます。シルバーフレームラタンミニテーブルはΦ45cm前後です。###受注生産の納期は？||約2〜3ヶ月です。在庫品は最短7日で発送します。###送料はいくらですか？||梱包サイズと地域で決まります。サイドテーブルは120〜160サイズが中心です。詳しくはショッピングガイドの送料表をご覧ください。'
+      assign cg_cols = 'ローテーブル・サイドテーブルの高さの決め方|/blogs/6johan-magazine/low-table-side-table-guide###ソファの選び方とリビングの寸法|/blogs/6johan-magazine/sofa-guide###ダイニングテーブルと合わせる高さの考え方|/blogs/6johan-magazine/dining-table-guide'
+      assign cg_next = 'ソファ|/collections/ソファ###デスク・テーブル|/collections/collections-desks-tables###チェア・椅子|/collections/collections-chairs'
+
+    when 'all'
+      assign cg_hide_desc = true
+      assign cg_show_categories = true
+      assign cg_title = 'すべての商品から選ぶ'
+      assign cg_intro = '6JOHANの全144点です。カテゴリから探すか、予算と納期で絞り込むと早く見つかります。在庫品は最短7日で発送、受注生産は約2〜3ヶ月です。'
+      assign cg_faq = '即納品と受注生産品はどう見分けますか？||商品カードと商品ページのバッジでご確認いただけます。「最短7日で発送」が在庫品、「約2〜3ヶ月」が受注生産品です。絞り込みで「即納商品」コレクションもご利用いただけます。###在庫品と受注生産品を一緒に買うと届くのはいつですか？||商品ごとに出荷するため、在庫品が先に届き、受注生産品は製造後にお届けします。まとめて届けたい場合はご注文前にチャットでご相談ください。###送料はいくらですか？||商品の梱包サイズとお届け地域で決まります。120サイズは全国一律2,250円、240サイズは関東5,500円・北海道7,750円など、サイズが大きくなるほど高くなります。詳しくはショッピングガイドの送料表をご覧ください。###返品はできますか？||商品到着後30日以内であれば、理由を問わず返品できます。お客様都合は返送料のみご負担、不良品・誤配送は当社負担で交換します。###法人・商業施設で購入できますか？||できます。法人・商業施設様には納品後1年間の製品保証をお付けしています。見積もりは法人・業務用のお客様へからご依頼ください。###商品のサイズはどこで確認できますか？||一覧の商品カードに寸法の1行を表示しています。詳しい寸法は各商品ページの「サイズ・寸法」に記載しています。'
+      assign cg_cols = 'ダイニングテーブルのサイズと人数の決め方|/blogs/6johan-magazine/dining-table-guide###ラタンチェアの選び方（ダイニング・リビング別）|/blogs/6johan-magazine/rattan-dining-chair-guide###ローキャビネット・テレビボードの選び方|/blogs/6johan-magazine/low-cabinet-tvboard-guide'
+      assign cg_next = 'チェア・椅子|/collections/collections-chairs###デスク・テーブル|/collections/collections-desks-tables###キャビネット・サイドボード|/collections/collections-cabinets-sideboards###ソファ|/collections/ソファ'
+
+    else
+      assign cg_title = collection.title | append: 'の選び方'
+      if collection.description != blank
+        assign cg_intro = collection.description | strip_html | strip_newlines | truncate: 110
+      endif
+      assign cg_next = 'すべての商品|/collections/all###チェア・椅子|/collections/collections-chairs###デスク・テーブル|/collections/collections-desks-tables'
+  endcase
+
+  assign cg_scan_all = false
+  if collection.products.size >= collection.all_products_count
+    assign cg_scan_all = true
+  endif
+-%}
+
+<section id="collection-guide" class="j6cg">
+  <div class="j6cg__inner">
+    <header class="j6cg__head">
+      <p class="j6cg__label">Buying Guide</p>
+      <h2 class="j6cg__title">{{ cg_title }}</h2>
+      {%- if cg_intro != blank -%}
+        <p class="j6cg__intro">{{ cg_intro }}</p>
+      {%- endif -%}
+    </header>
+
+    {%- comment -%} 1. 3軸（`all` はカテゴリ一覧） {%- endcomment -%}
+    {%- if cg_show_categories -%}
+      <div class="j6cg__axes">
+        {%- assign cg_cat_handles = 'collections-chairs,collections-desks-tables,collections-side-tables-low-tables,collections-cabinets-sideboards,collections-shelves-bookshelves,collections-chests,collections-tv-boards,collections-mirrors,collections-interior-goods,ソファ' | split: ',' -%}
+        {%- for ch in cg_cat_handles -%}
+          {%- assign cc = collections[ch] -%}
+          {%- if cc != blank and cc.all_products_count > 0 -%}
+            <a class="j6cg-axis" href="{{ cc.url }}">
+              <span class="j6cg-axis__no">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+              <span class="j6cg-axis__title">{{ cc.title }}</span>
+              <span class="j6cg-axis__text">{{ cc.all_products_count }}点から選ぶ</span>
+              <span class="j6cg-axis__link">見る →</span>
+            </a>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- elsif cg_axes != blank -%}
+      <div class="j6cg__axes">
+        {%- assign cg_axes_items = cg_axes | split: '###' -%}
+        {%- for item in cg_axes_items -%}
+          {%- assign f = item | split: '|' -%}
+          <a class="j6cg-axis" href="{{ f[2] }}">
+            <span class="j6cg-axis__no">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+            <span class="j6cg-axis__title">{{ f[0] }}</span>
+            <span class="j6cg-axis__text">{{ f[1] }}</span>
+            <span class="j6cg-axis__link">{{ f[3] }} →</span>
+          </a>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} 2. 価格帯 {%- endcomment -%}
+    <div class="j6cg__block" id="price">
+      <h3 class="j6cg__blocktitle">価格帯から選ぶ <small>税込・商品価格</small></h3>
+      {%- liquid
+        assign band1 = 0
+        assign band2 = 0
+        assign band3 = 0
+        assign band4 = 0
+        for p in collection.products
+          if p.price_min < 30000
+            assign band1 = band1 | plus: 1
+          elsif p.price_min < 50000
+            assign band2 = band2 | plus: 1
+          elsif p.price_min < 100000
+            assign band3 = band3 | plus: 1
+          else
+            assign band4 = band4 | plus: 1
+          endif
+        endfor
+      -%}
+      <div class="j6cg__bands">
+        {%- assign cg_base = collection.url -%}
+        {%- if collection.handle == 'all' -%}{%- assign cg_base = '/collections/all' -%}{%- endif -%}
+        <a class="j6cg-band" href="{{ cg_base }}?filter.v.price.gte=0&amp;filter.v.price.lte=30000">
+          <span class="j6cg-band__price">〜¥30,000</span>
+          <span class="j6cg-band__count">{{ band1 }}点{% unless cg_scan_all %}〜{% endunless %}</span>
+          <span class="j6cg-band__arrow">見る →</span>
+        </a>
+        <a class="j6cg-band" href="{{ cg_base }}?filter.v.price.gte=30000&amp;filter.v.price.lte=50000">
+          <span class="j6cg-band__price">¥30,000〜¥50,000</span>
+          <span class="j6cg-band__count">{{ band2 }}点{% unless cg_scan_all %}〜{% endunless %}</span>
+          <span class="j6cg-band__arrow">見る →</span>
+        </a>
+        <a class="j6cg-band" href="{{ cg_base }}?filter.v.price.gte=50000&amp;filter.v.price.lte=100000">
+          <span class="j6cg-band__price">¥50,000〜¥100,000</span>
+          <span class="j6cg-band__count">{{ band3 }}点{% unless cg_scan_all %}〜{% endunless %}</span>
+          <span class="j6cg-band__arrow">見る →</span>
+        </a>
+        <a class="j6cg-band" href="{{ cg_base }}?filter.v.price.gte=100000">
+          <span class="j6cg-band__price">¥100,000〜</span>
+          <span class="j6cg-band__count">{{ band4 }}点{% unless cg_scan_all %}〜{% endunless %}</span>
+          <span class="j6cg-band__arrow">見る →</span>
+        </a>
+      </div>
+    </div>
+
+    {%- comment -%} 3. 比較表 {%- endcomment -%}
+    {%- if collection.products.size > 0 -%}
+      <div class="j6cg__block" id="compare">
+        <h3 class="j6cg__blocktitle">
+          {{ collection.title }}の比較
+          <small>サイズ・色・価格・納期</small>
+        </h3>
+        <div class="j6cg__tablewrap">
+          <table class="j6cg-table">
+            <thead>
+              <tr>
+                <th scope="col">商品</th>
+                <th scope="col">サイズ（W×D×H）</th>
+                <th scope="col">色</th>
+                <th scope="col">価格（税込）</th>
+                <th scope="col">納期</th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {%- for p in collection.products limit: 8 -%}
+                {%- liquid
+                  assign _size_raw = p.metafields.custom.measurements.value | default: p.metafields.custom.measurements
+                  assign _size = ''
+                  if _size_raw != blank
+                    assign _size = _size_raw | strip | newline_to_br | split: '<br />' | first | strip
+                    assign _size_first = _size | slice: 0
+                    if _size_first == '・' or _size_first == '·' or _size_first == '、' or _size_first == '-' or _size_first == '*'
+                      assign _size = _size | slice: 1, 200 | strip
+                    endif
+                    assign _size = _size | truncate: 30
+                  endif
+
+                  assign _colors = 0
+                  for o in p.options_with_values
+                    assign _oname = o.name | downcase
+                    if o.name contains '色' or o.name contains 'カラー' or _oname contains 'color'
+                      assign _colors = o.values.size
+                      break
+                    endif
+                  endfor
+
+                  assign _tags = p.tags | join: ','
+                  assign _mat = ''
+                  if _tags contains 'ラタン'
+                    assign _mat = 'ラタン'
+                  elsif _tags contains '無垢材'
+                    assign _mat = '無垢材'
+                  elsif _tags contains 'レザー'
+                    assign _mat = 'レザー'
+                  elsif _tags contains 'ガラス'
+                    assign _mat = 'ガラス'
+                  elsif _tags contains 'アイアン'
+                    assign _mat = 'アイアン'
+                  elsif _tags contains '木製'
+                    assign _mat = '木製'
+                  endif
+
+                  capture _pds
+                    render '6johan-delivery-state', product: p
+                  endcapture
+                  assign _pds = _pds | split: '|'
+                -%}
+                <tr>
+                  <td class="j6cg-table__name">
+                    <a href="{{ p.url }}">{{ p.title }}</a>
+                    {%- if _mat != blank %} <span class="j6cg__note">{{ _mat }}</span>{% endif -%}
+                  </td>
+                  <td>{% if _size != blank %}{{ _size }}{% else %}—{% endif %}</td>
+                  <td>{% if _colors > 1 %}{{ _colors }}色{% elsif _colors == 1 %}1色{% else %}—{% endif %}</td>
+                  <td>{{ p.price_min | money }}{% if p.price_varies %}〜{% endif %}</td>
+                  <td>
+                    {%- if _pds[0] == 'instock' -%}
+                      <span class="j6cg-table__lead">最短7日</span>
+                    {%- elsif _pds[0] == 'backorder' -%}
+                      <span class="j6cg-table__lead j6cg-table__lead--back">{{ _pds[1] }}</span>
+                    {%- else -%}
+                      <span class="j6cg-table__lead j6cg-table__lead--back">在庫切れ</span>
+                    {%- endif -%}
+                  </td>
+                  <td><a class="j6cg-table__cta" href="{{ p.url }}">見る</a></td>
+                </tr>
+              {%- endfor -%}
+            </tbody>
+          </table>
+        </div>
+        <p class="j6cg__note">
+          サイズは幅×奥行×高さ（cm）。色数はカラー展開の数です。価格は税込・最小構成の価格で、オプションにより変わります。
+          {%- if collection.all_products_count > 8 %} 上位8点を表示しています（全{{ collection.all_products_count }}点）。{% endif %}
+        </p>
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} 4. FAQ {%- endcomment -%}
+    {%- if cg_faq != blank -%}
+      <div class="j6cg__block" id="faq">
+        <h3 class="j6cg__blocktitle">よくある質問 <small>{{ cg_faq | split: '###' | size }}問</small></h3>
+        <div class="j6cg__faq">
+          {%- assign cg_faq_items = cg_faq | split: '###' -%}
+          {%- for item in cg_faq_items -%}
+            {%- assign qa = item | split: '||' -%}
+            <details class="j6cg-faq">
+              <summary>{{ qa[0] }}</summary>
+              <div class="j6cg-faq__body"><p>{{ qa[1] }}</p></div>
+            </details>
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} 5. 関連コラム {%- endcomment -%}
+    {%- if cg_cols != blank -%}
+      <div class="j6cg__block">
+        <h3 class="j6cg__blocktitle">あわせて読みたい記事</h3>
+        <div class="j6cg__articles">
+          {%- assign cg_cols_items = cg_cols | split: '###' -%}
+          {%- for item in cg_cols_items -%}
+            {%- assign f = item | split: '|' -%}
+            <a class="j6cg-article" href="{{ f[1] }}">
+              <span class="j6cg-article__label">6JOHAN MAGAZINE</span>
+              <span class="j6cg-article__title">{{ f[0] }}</span>
+            </a>
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} 6. 納期・送料・返品 {%- endcomment -%}
+    <div class="j6cg__block">
+      <h3 class="j6cg__blocktitle">納期・送料・返品</h3>
+      <div class="j6cg__facts">
+        <div class="j6cg-fact">
+          <p class="j6cg-fact__title">納期</p>
+          <p class="j6cg-fact__text">在庫品は最短7日で発送。受注生産は約2〜3ヶ月です。</p>
+          <a class="j6cg-fact__link" href="/pages/guide#leadtime">納期の目安を見る</a>
+        </div>
+        <div class="j6cg-fact">
+          <p class="j6cg-fact__title">送料</p>
+          <p class="j6cg-fact__text">梱包サイズ×お届け地域で決まります。120サイズは全国一律¥2,250。</p>
+          <a class="j6cg-fact__link" href="/pages/guide#shipping">送料表を見る</a>
+        </div>
+        <div class="j6cg-fact">
+          <p class="j6cg-fact__title">返品・保証</p>
+          <p class="j6cg-fact__text">30日間返品OK。法人・商業施設は納品後1年間の製品保証付き。</p>
+          <a class="j6cg-fact__link" href="/pages/guide#return">返品と保証を見る</a>
+        </div>
+      </div>
+    </div>
+
+    {%- comment -%} 7. 隣接コレクション {%- endcomment -%}
+    {%- if cg_next != blank -%}
+      <div class="j6cg__block">
+        <h3 class="j6cg__blocktitle">あわせて選びたい家具</h3>
+        <div class="j6cg__next">
+          {%- assign cg_next_items = cg_next | split: '###' -%}
+          {%- for item in cg_next_items -%}
+            {%- assign f = item | split: '|' -%}
+            <a class="j6cg-next" href="{{ f[1] }}">{{ f[0] }} <span>→</span></a>
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} 8. 既存の説明文（テンプレート化したコレクションでは非表示） {%- endcomment -%}
+    {%- unless cg_hide_desc -%}
+      {%- if collection.description != blank -%}
+        <div class="j6cg__desc rte">
+          {{ collection.description }}
+        </div>
+      {%- endif -%}
+    {%- endunless -%}
+  </div>
+</section>
+
+{%- comment -%} 構造化データ（BreadcrumbList / ItemList / FAQPage） {%- endcomment -%}
+{%- liquid
+  assign cg_min_price = 0
+  assign cg_max_price = 0
+  if collection.products.size > 0
+    assign cg_min_price = collection.products.first.price_min
+    assign cg_max_price = collection.products.first.price_max
+    for p in collection.products
+      if p.price_min < cg_min_price
+        assign cg_min_price = p.price_min
+      endif
+      if p.price_max > cg_max_price
+        assign cg_max_price = p.price_max
+      endif
+    endfor
+  endif
+-%}
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "ホーム", "item": {{ shop.url | append: '/' | json }} },
+      { "@type": "ListItem", "position": 2, "name": {{ collection.title | json }}, "item": {{ shop.url | append: collection.url | json }} }
+    ]
+  }
+</script>
+{%- if collection.products.size > 0 -%}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      "name": {{ collection.title | append: 'の商品一覧' | json }},
+      "numberOfItems": {{ collection.products.size }},
+      "itemListElement": [
+        {%- for p in collection.products limit: 24 -%}
+          {
+            "@type": "ListItem",
+            "position": {{ forloop.index }},
+            "name": {{ p.title | json }},
+            "url": {{ shop.url | append: p.url | json }}
+          }{%- unless forloop.last -%},{%- endunless -%}
+        {%- endfor -%}
+      ]
+    }
+  </script>
+{%- endif -%}
+{%- if cg_faq != blank -%}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {%- assign cg_faq_json = cg_faq | split: '###' -%}
+        {%- for item in cg_faq_json -%}
+          {%- assign qa = item | split: '||' -%}
+          {
+            "@type": "Question",
+            "name": {{ qa[0] | json }},
+            "acceptedAnswer": { "@type": "Answer", "text": {{ qa[1] | json }} }
+          }{%- unless forloop.last -%},{%- endunless -%}
+        {%- endfor -%}
+      ]
+    }
+  </script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "6JOHAN 選び方ガイド",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "コレクションの内容に応じて、選び方・価格帯・比較表・FAQ・記事導線を自動で出力します。本文はテーマ側（sections/6johan-collection-guide.liquid）で管理しています。"
+    }
+  ],
+  "presets": [{ "name": "6JOHAN 選び方ガイド" }]
+}
+{% endschema %}

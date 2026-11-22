@@ -198,7 +198,10 @@
   {%- endif -%}
 </div>
 
-{% render '6johan-collection-description', mode: 'body' %}
+{%- comment -%}
+  Phase 2: 説明文の本文はグリッド下の「選び方ガイド」セクション
+  （sections/6johan-collection-guide.liquid）へ移した。ここでは描画しない。
+{%- endcomment -%}
 
 {% schema %}
 {

@@ -1,0 +1,84 @@
+{%- comment -%}
+  6JOHAN Collection Lead（Phase 2 / 2026-11-23）
+
+  コレクション上部を「1行サマリ＋数値＋ガイドへのアンカー」にスリム化する。
+  これまで説明文のH2＋長文（約107字）がグリッドを押し下げていたため、
+  1行だけをここに出し、本文はグリッド下の選び方ガイド（#collection-guide）へ移す。
+
+  使い方: sections/main-collection-banner.liquid から
+          {% render '6johan-collection-lead' %}
+{%- endcomment -%}
+
+{%- liquid
+  assign lead_text = ''
+
+  case collection.handle
+    when 'collections-chairs'
+      assign lead_text = 'ラタンチェア・ラタン椅子・ベンチを45点。在庫品は最短7日、受注生産は約2〜3ヶ月です。'
+    when 'collections-cabinets-sideboards'
+      assign lead_text = 'ローキャビネット・サイドボードを8点。高さ45〜80cm、奥行35〜45cmで選べます。'
+    when 'collections-desks-tables'
+      assign lead_text = 'ダイニングテーブル・デスク・丸テーブルを27点。天板のサイズと高さで選べます。'
+    when 'collections-side-tables-low-tables'
+      assign lead_text = 'サイドテーブル・ローテーブルを23点。ソファ横は高さ45〜55cmが目安です。'
+    when 'all'
+      assign lead_text = '6JOHANの全144点。チェア・テーブル・収納・ソファをサイズと予算から選べます。'
+    when 'ソファ'
+      assign lead_text = 'ソファを5点。2人掛けからゆったり3人掛けまで、設置寸法で選べます。'
+    when 'collections-shelves-bookshelves'
+      assign lead_text = 'シェルフ・本棚を6点。壁面に沿わせる幅と、本の高さに合う棚板で選べます。'
+    else
+      if collection.description != blank
+        assign lead_text = collection.description | strip_html | strip_newlines | truncate: 64
+      endif
+  endcase
+
+  assign scan_all = false
+  if collection.products.size >= collection.all_products_count
+    assign scan_all = true
+  endif
+
+  assign price_min = 999999999
+  assign price_max = 0
+  assign instock_count = 0
+  for p in collection.products
+    if p.price_min < price_min
+      assign price_min = p.price_min
+    endif
+    if p.price_max > price_max
+      assign price_max = p.price_max
+    endif
+    capture _lead_ds
+      render '6johan-delivery-state', product: p
+    endcapture
+    assign _lead_ds = _lead_ds | split: '|'
+    if _lead_ds[0] == 'instock'
+      assign instock_count = instock_count | plus: 1
+    endif
+  endfor
+  if price_min == 999999999
+    assign price_min = 0
+  endif
+-%}
+
+<div class="j6lead">
+  {%- if lead_text != blank -%}
+    <p class="j6lead__text">{{ lead_text }}</p>
+  {%- endif -%}
+
+  <div class="j6lead__meta">
+    <span>{{ collection.all_products_count }}点</span>
+    {%- if price_min > 0 -%}
+      <span>
+        {{ price_min | money }}
+        {%- if scan_all and price_max > price_min %}〜{{ price_max | money }}{% else %}〜{% endif -%}
+      </span>
+    {%- endif -%}
+    {%- if scan_all and instock_count > 0 -%}
+      <span>うち即納{{ instock_count }}点</span>
+    {%- endif -%}
+    <span>在庫品は最短7日発送</span>
+  </div>
+
+  <a class="j6lead__anchor" href="#collection-guide">選び方・サイズ早見表を見る <span aria-hidden="true">↓</span></a>
+</div>

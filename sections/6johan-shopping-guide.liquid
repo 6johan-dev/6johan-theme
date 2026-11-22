@@ -1,0 +1,545 @@
+{% comment %}
+  6JOHAN Shopping Guide（Phase 2 / 2026-11-23）
+  /pages/guide を「買う前の案内所」として10ブロックで構成する。
+   1 ヒーロー / 2 3分でわかる / 3 商品の探し方 / 4 サイズの決め方
+   5 納期カレンダー / 6 送料 / 7 返品・保証 / 8 支払い方法
+   9 よくある質問（12問・FAQPage JSON-LD） / 10 最後のCTA
+  送料は assets/6johan-shipping.js（単一ソース）から描画する。
+  アンカー: #size #leadtime #shipping #return #payment #faq
+{% endcomment %}
+
+{{ '6johan-phase2.css' | asset_url | stylesheet_tag }}
+<script src="{{ '6johan-shipping.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign g_faq = '配送は玄関先までですか？||玄関先（集合住宅は建物の指定場所）までの配送です。開梱や設置、梱包材の回収は承っておりません。設置が必要な場合はご注文前にチャットでご相談ください。###日時指定はできますか？||できます。出荷時に佐川急便の追跡番号をメールでお知らせするので、配達日時の指定・変更が可能です。受注生産品は製造完了後に出荷のご案内をします。###組み立ては必要ですか？||多くの商品は完成品でお届けします。組み立てが必要な商品は、商品ページにその旨と必要な工具を記載しています。###在庫品と受注生産品を一緒に買うとどうなりますか？||商品ごとに出荷するため、在庫品が先に届き、受注生産品は約2〜3ヶ月後にお届けします。まとめて受け取りたい場合は、ご注文前にチャットでご相談ください。###送料はいくらですか？||商品の梱包サイズとお届け地域で決まります。120サイズは全国一律2,250円、160サイズは関東2,750円・北海道3,750円、240サイズは関東5,500円・北海道7,750円です。下の送料表でご確認ください。沖縄県は個別にご案内します。###返品はできますか？||商品到着後30日以内であれば、理由を問わず返品できます。返品をご希望の場合は、メールまたはチャットでご連絡ください。###返品の送料は誰が負担しますか？||お客様都合の返品は返送料のみお客様負担、不良品・誤配送の場合は当社負担で交換または返金します。###法人・商業施設でも購入できますか？||購入できます。見積書・請求書の発行に対応し、納品後1年間の製品保証をお付けしています。法人・業務用のお客様へからお問い合わせください。###法人向けの1年保証の対象は？||通常のご使用における構造上の不具合・破損（フレームや接合部のガタつき・破損など）を無償で交換または修理します。天然素材の節・木目・色味の違い、ささくれ、経年変化、過度な荷重や衝撃による破損は対象外です。###サイズが合わないときはどうすればいいですか？||到着後30日以内であれば返品できます。購入前なら、設置場所の寸法をチャットでお知らせいただければ、収まるサイズをご案内します。###支払い方法は何がありますか？||クレジットカード（Visa / Mastercard / American Express / JCB）、Shop Pay、Apple Pay、Google Pay、コンビニ決済、あと払い（ペイディ）、PayPay、メルペイがご利用いただけます。###在庫切れの商品は買えますか？||受注生産でお受けできる場合があります。商品ページの案内からLINEまたはチャットでご相談ください。'
+-%}
+
+<div class="j6g">
+  {%- comment -%} 1. ヒーロー {%- endcomment -%}
+  <section class="j6g-hero">
+    {%- if section.settings.hero_image != blank -%}
+      <div class="j6g-hero__media">
+        <img
+          src="{{ section.settings.hero_image | image_url: width: 1600 }}"
+          srcset="
+            {{ section.settings.hero_image | image_url: width: 750 }} 750w,
+            {{ section.settings.hero_image | image_url: width: 1100 }} 1100w,
+            {{ section.settings.hero_image | image_url: width: 1600 }} 1600w
+          "
+          sizes="100vw"
+          alt="6JOHANの家具を置いたリビング"
+          width="{{ section.settings.hero_image.width }}"
+          height="{{ section.settings.hero_image.height }}"
+          fetchpriority="high"
+        >
+      </div>
+    {%- endif -%}
+    <div class="j6g-hero__body">
+      <div class="j6g-hero__card">
+        <p class="j6g__label">{{ section.settings.hero_label }}</p>
+        <h1 class="j6g-hero__title">{{ section.settings.hero_title }}</h1>
+        <p class="j6g-hero__text">{{ section.settings.hero_text }}</p>
+        <ul class="j6g-promises">
+          <li><strong>最短7日で発送</strong>在庫品はご注文から7日以内</li>
+          <li><strong>30日間返品OK</strong>理由を問わず返品できます</li>
+          <li><strong>受注生産は約2〜3ヶ月</strong>ご注文後に職人が製作</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} 2. 3分でわかる6JOHAN {%- endcomment -%}
+  <section class="j6g__section">
+    <div class="j6g__wrap">
+      <p class="j6g__label">3 minutes</p>
+      <h2 class="j6g__h2">3分でわかる6JOHAN</h2>
+      <p class="j6g__lead">素材・サイズ・納期。この3つだけ押さえれば、はじめての家具選びで迷いません。</p>
+      <div class="j6g-grid3">
+        <div class="j6g-card">
+          <p class="j6g-card__no">01 / MATERIAL</p>
+          <p class="j6g-card__title">素材は4つ</p>
+          <p class="j6g-card__text">
+            天然木・ラタン（籐）・レザー・ペーパーコード。木は経年変化を、ラタンは軽さと通気性を、レザーは座り心地を重視する方に。
+          </p>
+          <div class="j6g-card__figure">
+            <svg viewBox="0 0 300 120" role="img" aria-label="素材の4分類">
+              <g fill="none" stroke="#B9B0A2" stroke-width="1.2">
+                <rect x="8" y="20" width="64" height="64" rx="2" />
+                <rect x="80" y="20" width="64" height="64" rx="2" />
+                <rect x="152" y="20" width="64" height="64" rx="2" />
+                <rect x="224" y="20" width="64" height="64" rx="2" />
+              </g>
+              <g fill="#C9BFAE">
+                <rect x="18" y="30" width="44" height="6" />
+                <rect x="18" y="42" width="44" height="6" />
+                <rect x="18" y="54" width="44" height="6" />
+                <path d="M92 34h40M92 44h40M92 54h40M92 64h40" stroke="#B9B0A2" stroke-width="1" />
+                <path d="M160 32h48v40h-48z" stroke="#B9B0A2" stroke-width="1" fill="none" />
+                <circle cx="256" cy="52" r="18" stroke="#B9B0A2" stroke-width="1" fill="none" />
+              </g>
+              <g fill="#807C76" font-size="9" font-family="sans-serif" text-anchor="middle">
+                <text x="40" y="104">天然木</text>
+                <text x="112" y="104">ラタン</text>
+                <text x="184" y="104">レザー</text>
+                <text x="256" y="104">ペーパーコード</text>
+              </g>
+            </svg>
+          </div>
+        </div>
+        <div class="j6g-card">
+          <p class="j6g-card__no">02 / SIZE</p>
+          <p class="j6g-card__title">6畳から収まる寸法</p>
+          <p class="j6g-card__text">
+            6畳（約2.6×3.5m）にソファとローテーブルを置いても、通路60cmが残るラインナップです。カードと商品ページに寸法を表示しています。
+          </p>
+          <div class="j6g-card__figure">
+            <svg viewBox="0 0 300 120" role="img" aria-label="6畳の間取りに家具を配置した図">
+              <g fill="none" stroke="#B9B0A2" stroke-width="1.2">
+                <rect x="30" y="10" width="240" height="100" />
+                <rect x="46" y="26" width="140" height="46" />
+                <rect x="200" y="26" width="52" height="52" />
+                <rect x="46" y="82" width="206" height="18" />
+              </g>
+              <g fill="#807C76" font-size="8" font-family="sans-serif">
+                <text x="60" y="54">ソファ</text>
+                <text x="206" y="54">テーブル</text>
+                <text x="60" y="94">通路 60cm 以上</text>
+              </g>
+            </svg>
+          </div>
+        </div>
+        <div class="j6g-card">
+          <p class="j6g-card__no">03 / DELIVERY</p>
+          <p class="j6g-card__title">納期は2種類</p>
+          <p class="j6g-card__text">
+            在庫品は最短7日で発送。受注生産品は職人が製作し、約2〜3ヶ月でお届けします。どちらかは商品ページのバッジで分かります。
+          </p>
+          <div class="j6g-card__figure">
+            <svg viewBox="0 0 300 120" role="img" aria-label="在庫品と受注生産の納期">
+              <g stroke="#B9B0A2" stroke-width="1.2" fill="none">
+                <line x1="20" y1="40" x2="280" y2="40" />
+                <line x1="20" y1="86" x2="280" y2="86" />
+              </g>
+              <circle cx="60" cy="40" r="4" fill="#6B5B4F" />
+              <circle cx="120" cy="40" r="4" fill="#B9B0A2" />
+              <circle cx="60" cy="86" r="4" fill="#6B5B4F" />
+              <circle cx="250" cy="86" r="4" fill="#B9B0A2" />
+              <g fill="#807C76" font-size="9" font-family="sans-serif">
+                <text x="130" y="30">在庫品：ご注文 → 最短7日で発送</text>
+                <text x="130" y="106">受注生産：ご注文 → 製作2〜3ヶ月 → 発送</text>
+              </g>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} 3. 商品の探し方（4導線） {%- endcomment -%}
+  <section class="j6g__section j6g__section--muted">
+    <div class="j6g__wrap">
+      <p class="j6g__label">Find your furniture</p>
+      <h2 class="j6g__h2">商品の探し方</h2>
+      <p class="j6g__lead">アイテム・予算・用途・即納。いちばん近い入口からどうぞ。</p>
+      <div class="j6g-links">
+        <a class="j6g-link" href="/collections">
+          <span>
+            <span class="j6g-link__title">アイテムで探す</span>
+            <span class="j6g-link__sub">チェア／テーブル／収納／ソファ／雑貨</span>
+          </span>
+          <span class="j6g-link__arrow" aria-hidden="true">→</span>
+        </a>
+        <a class="j6g-link" href="/collections/5万円以下">
+          <span>
+            <span class="j6g-link__title">予算で探す</span>
+            <span class="j6g-link__sub">5万円以下／5〜10万円／10万円以上</span>
+          </span>
+          <span class="j6g-link__arrow" aria-hidden="true">→</span>
+        </a>
+        <a class="j6g-link" href="/collections/ソファ">
+          <span>
+            <span class="j6g-link__title">用途で探す</span>
+            <span class="j6g-link__sub">リビング／ダイニング／ワークスペース</span>
+          </span>
+          <span class="j6g-link__arrow" aria-hidden="true">→</span>
+        </a>
+        <a class="j6g-link" href="/collections/express-deliver">
+          <span>
+            <span class="j6g-link__title">すぐ届く家具から探す</span>
+            <span class="j6g-link__sub">即納商品だけをまとめて表示</span>
+          </span>
+          <span class="j6g-link__arrow" aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} 4. サイズの決め方 {%- endcomment -%}
+  <section class="j6g__section" id="size">
+    <div class="j6g__wrap">
+      <p class="j6g__label">Size guide</p>
+      <h2 class="j6g__h2">サイズの決め方</h2>
+      <p class="j6g__lead">
+        寸法は「W（幅）×D（奥行）×H（高さ）」の順で書かれています。置く場所の幅と奥行きを測り、家具の寸法に「余白」を足して判断してください。
+      </p>
+      <div class="j6g-tablewrap">
+        <table class="j6g-table">
+          <thead>
+            <tr>
+              <th scope="col">場面</th>
+              <th scope="col">目安</th>
+              <th scope="col">理由</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>テーブルとチェアの高さ</td>
+              <td>天板と座面の差 25〜30cm</td>
+              <td>H75cmのテーブルに座面40〜45cmのチェアが合います</td>
+            </tr>
+            <tr>
+              <td>チェアを引くスペース</td>
+              <td>テーブル端から60〜75cm</td>
+              <td>椅子を引いて立つための奥行きです</td>
+            </tr>
+            <tr>
+              <td>ソファとローテーブル</td>
+              <td>35〜45cm</td>
+              <td>手を伸ばして取れる距離。狭すぎると窮屈に感じます</td>
+            </tr>
+            <tr>
+              <td>ソファ横のサイドテーブル</td>
+              <td>座面高＋0〜5cm（45〜55cm）</td>
+              <td>立ち上がらずに物を取れる高さです</td>
+            </tr>
+            <tr>
+              <td>ベッド横のサイドテーブル</td>
+              <td>高さ50〜60cm</td>
+              <td>寝たまま手が届く高さの目安です</td>
+            </tr>
+            <tr>
+              <td>通路</td>
+              <td>60cm以上（できれば80cm）</td>
+              <td>人がすれ違える幅。6畳でもここを残すと窮屈になりません</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <h3 class="j6g__h3">測るときの3ステップ</h3>
+      <ol class="j6g__text">
+        <li>置きたい場所の幅と奥行きを、壁から壁までメジャーで測る（巾木の出っ張りも含める）。</li>
+        <li>ドア・廊下・エレベーターの開口部の幅を測る（搬入できるかの確認）。</li>
+        <li>家具の寸法＋余白（10cm前後）が収まるかを確認する。迷ったらチャットで寸法をお送りください。</li>
+      </ol>
+    </div>
+  </section>
+
+  {%- comment -%} 5. 納期カレンダー {%- endcomment -%}
+  <section class="j6g__section j6g__section--muted" id="leadtime">
+    <div class="j6g__wrap">
+      <p class="j6g__label">Lead time</p>
+      <h2 class="j6g__h2">納期の目安</h2>
+      <p class="j6g__lead">在庫品と受注生産品で、お届けまでの流れが変わります。</p>
+      <h3 class="j6g__h3">在庫品：ご注文から最短7日</h3>
+      <ol class="j6g-timeline">
+        <li>
+          <span class="j6g-timeline__step">STEP 01</span>
+          <span class="j6g-timeline__title">ご注文</span>
+          <span class="j6g-timeline__text">ご注文当日〜翌営業日に確認メールをお送りします。</span>
+        </li>
+        <li>
+          <span class="j6g-timeline__step">STEP 02</span>
+          <span class="j6g-timeline__title">出荷（7日以内）</span>
+          <span class="j6g-timeline__text">佐川急便で発送し、追跡番号をメールでお知らせします。</span>
+        </li>
+        <li>
+          <span class="j6g-timeline__step">STEP 03</span>
+          <span class="j6g-timeline__title">配達日時の指定</span>
+          <span class="j6g-timeline__text">追跡番号から、ご都合のよい日時を指定できます。</span>
+        </li>
+        <li>
+          <span class="j6g-timeline__step">STEP 04</span>
+          <span class="j6g-timeline__title">お届け</span>
+          <span class="j6g-timeline__text">玄関先までのお届けです。設置のご相談は事前にチャットへ。</span>
+        </li>
+      </ol>
+      <div class="j6g-band">
+        <strong>受注生産品：ご注文から約2〜3ヶ月</strong><br>
+        ご注文 → 職人が製作（約2〜3ヶ月）→ 出荷 → お届け。製作状況はチャットでいつでもお問い合わせいただけます。同じカートに在庫品と受注生産品がある場合は、商品ごとに出荷します。
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} 6. 送料 {%- endcomment -%}
+  <section class="j6g__section" id="shipping">
+    <div class="j6g__wrap">
+      <p class="j6g__label">Shipping</p>
+      <h2 class="j6g__h2">送料</h2>
+      <p class="j6g__lead">
+        送料は「梱包サイズ × お届け地域」で決まります。同じ商品の複数点は4点分までを加算し、5点以上は4点分の送料です。沖縄県は個別にご案内します。
+      </p>
+      <div class="j6g-pref">
+        <label for="j6g-pref-select">お届け先：</label>
+        <select id="j6g-pref-select" aria-label="お届け先の都道府県"></select>
+        <span id="j6g-pref-summary" aria-live="polite"></span>
+      </div>
+      <div class="j6g-tablewrap">
+        <table class="j6g-table" id="j6g-shipping-table">
+          <thead>
+            <tr>
+              <th scope="col">梱包サイズ</th>
+              <th scope="col" data-area="hokkaido">北海道</th>
+              <th scope="col" data-area="tohoku">東北</th>
+              <th scope="col" data-area="kanto">関東</th>
+              <th scope="col" data-area="chubu">信越・東海・北陸</th>
+              <th scope="col" data-area="kansai">関西</th>
+              <th scope="col" data-area="chushikoku">四国・中国</th>
+              <th scope="col" data-area="kyushu">九州</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <p class="j6g-fine">
+        表示は1点あたりの税込送料です。実際の送料はカートと購入手続き画面で確定します。商品の梱包サイズは各商品ページに記載しています。
+      </p>
+    </div>
+  </section>
+
+  {%- comment -%} 7. 返品・保証 {%- endcomment -%}
+  <section class="j6g__section j6g__section--muted" id="return">
+    <div class="j6g__wrap">
+      <p class="j6g__label">Return &amp; warranty</p>
+      <h2 class="j6g__h2">返品・保証</h2>
+      <p class="j6g__lead">商品到着後30日以内は、理由を問わず返品できます。</p>
+      <div class="j6g-grid3">
+        <div class="j6g-card">
+          <p class="j6g-card__no">01 / RETURN</p>
+          <p class="j6g-card__title">30日間返品</p>
+          <p class="j6g-card__text">
+            お客様都合の返品は返送料のみご負担、不良品・誤配送は当社負担で交換または返金します。手続きはメールかチャットで承ります。
+          </p>
+        </div>
+        <div class="j6g-card">
+          <p class="j6g-card__no">02 / BUSINESS</p>
+          <p class="j6g-card__title">法人・商業施設は1年保証</p>
+          <p class="j6g-card__text">
+            納品日より1年間、通常のご使用における構造上の不具合・破損（フレームや接合部のガタつきなど）を無償で交換または修理します。
+          </p>
+        </div>
+        <div class="j6g-card">
+          <p class="j6g-card__no">03 / EXCEPTION</p>
+          <p class="j6g-card__title">保証の対象外</p>
+          <p class="j6g-card__text">
+            天然素材（ラタン・無垢材）の節・木目・色味の違い、ささくれ、経年変化、過度な荷重や衝撃、屋外・水濡れによる劣化は対象外です。
+          </p>
+        </div>
+      </div>
+      <h3 class="j6g__h3">返品の流れ</h3>
+      <ol class="j6g__text">
+        <li>到着後30日以内に、メールまたはチャットでご連絡ください（ご注文番号とお写真をお願いします）。</li>
+        <li>返送先と方法をご案内します。不良品の場合は当社が引き取りを手配します。</li>
+        <li>商品の確認後、交換または返金（ご利用の決済方法へ）をいたします。</li>
+      </ol>
+      <p class="j6g-fine">
+        詳しい条件は<a href="/pages/trust">安心してお買い物いただくために</a>と<a href="/policies/refund-policy">返金ポリシー</a>をご確認ください。法人のお客様は<a href="/pages/business">法人・業務用のお客様へ</a>もご覧ください。
+      </p>
+    </div>
+  </section>
+
+  {%- comment -%} 8. 支払い方法 {%- endcomment -%}
+  <section class="j6g__section" id="payment">
+    <div class="j6g__wrap">
+      <p class="j6g__label">Payment</p>
+      <h2 class="j6g__h2">お支払い方法</h2>
+      <p class="j6g__lead">次の決済方法をご利用いただけます。すべて税込価格でのお支払いです。</p>
+      <ul class="j6g-pay">
+        <li>クレジットカード（Visa / Mastercard / American Express / JCB）</li>
+        <li>Shop Pay</li>
+        <li>Apple Pay</li>
+        <li>Google Pay</li>
+        <li>コンビニ決済</li>
+        <li>あと払い（ペイディ）</li>
+        <li>PayPay</li>
+        <li>メルペイ</li>
+      </ul>
+    </div>
+  </section>
+
+  {%- comment -%} 9. よくある質問 {%- endcomment -%}
+  <section class="j6g__section j6g__section--muted" id="faq">
+    <div class="j6g__wrap">
+      <p class="j6g__label">FAQ</p>
+      <h2 class="j6g__h2">よくある質問</h2>
+      {%- assign g_faq_items = g_faq | split: '###' -%}
+      <div class="j6g-faq">
+        {%- for item in g_faq_items -%}
+          {%- assign qa = item | split: '||' -%}
+          <details class="j6g-faq__item">
+            <summary>{{ qa[0] }}</summary>
+            <div class="j6g-faq__body"><p>{{ qa[1] }}</p></div>
+          </details>
+        {%- endfor -%}
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} 10. 最後のCTA {%- endcomment -%}
+  <section class="j6g__section">
+    <div class="j6g__wrap">
+      <h2 class="j6g__h2">さあ、サイズの合う家具を。</h2>
+      <p class="j6g__lead">予算からでも、即納からでも、人気ランキングからでも。迷ったらチャットでご相談ください。</p>
+      <div class="j6g-cta">
+        <a class="j6g-btn" href="/collections/all">すべての商品を見る</a>
+        <a class="j6g-btn j6g-btn--ghost" href="/collections/5万円以下">予算で選ぶ</a>
+        <a class="j6g-btn j6g-btn--ghost" href="/collections/express-deliver">即納から選ぶ</a>
+      </div>
+      <p class="j6g-fine">ご相談はページ右下のチャット、またはLINEから。営業時間内に順次お返事します。</p>
+    </div>
+  </section>
+</div>
+
+{%- comment -%} 構造化データ {%- endcomment -%}
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "ホーム", "item": {{ shop.url | append: '/' | json }} },
+      { "@type": "ListItem", "position": 2, "name": {{ page.title | json }}, "item": {{ shop.url | append: page.url | json }} }
+    ]
+  }
+</script>
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {%- assign g_faq_json = g_faq | split: '###' -%}
+      {%- for item in g_faq_json -%}
+        {%- assign qa = item | split: '||' -%}
+        {
+          "@type": "Question",
+          "name": {{ qa[0] | json }},
+          "acceptedAnswer": { "@type": "Answer", "text": {{ qa[1] | json }} }
+        }{%- unless forloop.last -%},{%- endunless -%}
+      {%- endfor -%}
+    ]
+  }
+</script>
+
+<script>
+  (function () {
+    function ready(fn) {
+      if (document.readyState !== 'loading') fn();
+      else document.addEventListener('DOMContentLoaded', fn);
+    }
+    ready(function () {
+      var S = window.SixjShipping;
+      var table = document.getElementById('j6g-shipping-table');
+      if (!S || !table) return;
+
+      var tbody = table.querySelector('tbody');
+      var areas = ['hokkaido', 'tohoku', 'kanto', 'chubu', 'kansai', 'chushikoku', 'kyushu'];
+      var sizes = Object.keys(S.TABLE).map(Number).sort(function (a, b) { return a - b; });
+
+      sizes.forEach(function (size) {
+        var row = document.createElement('tr');
+        var th = document.createElement('th');
+        th.scope = 'row';
+        th.textContent = size + 'サイズ';
+        row.appendChild(th);
+        var rowData = S.TABLE[size];
+        areas.forEach(function (area) {
+          var td = document.createElement('td');
+          td.className = 'j6g-table__num';
+          td.setAttribute('data-area', area);
+          if (rowData.flat != null) {
+            td.textContent = S.yen(rowData.flat);
+          } else if (rowData[area] != null) {
+            td.textContent = S.yen(rowData[area]);
+          } else {
+            td.textContent = '—';
+          }
+          row.appendChild(td);
+        });
+        tbody.appendChild(row);
+      });
+
+      // 都道府県セレクト
+      var select = document.getElementById('j6g-pref-select');
+      var summary = document.getElementById('j6g-pref-summary');
+      var prefs = ['東京都'].concat(Object.keys(S.PREF_AREA).filter(function (p) { return p !== '東京都'; }));
+      prefs.push('沖縄県');
+
+      prefs.forEach(function (pref) {
+        var opt = document.createElement('option');
+        opt.value = pref;
+        opt.textContent = pref;
+        select.appendChild(opt);
+      });
+
+      var saved = S.readPref();
+      if (saved) select.value = saved;
+
+      function highlight() {
+        var pref = select.value;
+        var area = S.PREF_AREA[pref];
+        table.querySelectorAll('th[data-area], td[data-area]').forEach(function (cell) {
+          var on = area && cell.getAttribute('data-area') === area;
+          cell.classList.toggle('is-active', !!on);
+        });
+        if (!area) {
+          summary.textContent = pref + 'は個別にご案内します（チャットへ）';
+          return;
+        }
+        var sample = [120, 160, 240].map(function (size) {
+          var fee = S.lookupFee(size, pref);
+          return size + 'サイズ ' + (fee ? S.yen(fee.fee) : '—');
+        });
+        summary.textContent = pref + 'なら：' + sample.join(' / ');
+      }
+
+      select.addEventListener('change', function () {
+        S.writePref(select.value);
+        highlight();
+      });
+      highlight();
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "6JOHAN ショッピングガイド",
+  "tag": "div",
+  "class": "section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "ヒーロー画像（暮らしの一場面）"
+    },
+    {
+      "type": "text",
+      "id": "hero_label",
+      "label": "ラベル",
+      "default": "Shopping Guide"
+    },
+    {
+      "type": "text",
+      "id": "hero_title",
+      "label": "見出し",
+      "default": "家具を買う前に、知っておきたいこと。"
+    },
+    {
+      "type": "textarea",
+      "id": "hero_text",
+      "label": "本文",
+      "default": "サイズの決め方、納期、送料、返品まで。はじめての家具選びで迷わないように、買う前の情報を1ページにまとめました。"
+    }
+  ],
+  "presets": [{ "name": "6JOHAN ショッピングガイド" }]
+}
+{% endschema %}

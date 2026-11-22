@@ -58,6 +58,21 @@
         style="--ratio-percent: {{ 1 | divided_by: ratio | times: 100 }}%;"
       >
         {%- if card_product.featured_media -%}
+          {%- liquid
+            comment
+              Phase 2: 画像altは「商品名＋色」。既存の長文alt（暮らしの提案文）は
+              検索・読み上げの双方で商品を指さないため、カードでは商品名を優先する。
+            endcomment
+            assign _card_alt = card_product.title
+            for _opt in card_product.options_with_values
+              assign _opt_name = _opt.name | downcase
+              if _opt.name contains '色' or _opt.name contains 'カラー' or _opt_name contains 'color'
+                assign _card_colors = _opt.values | join: '・'
+                assign _card_alt = _card_alt | append: '（' | append: _card_colors | append: '）'
+                break
+              endif
+            endfor
+          -%}
           <div class="card__media{% if image_shape and image_shape != 'default' %} shape--{{ image_shape }} color-{{ settings.card_color_scheme }} gradient{% endif %}">
             {%- render '6johan-card-badges', product: card_product -%}
             <div class="media media--transparent media--hover-effect">
@@ -74,7 +89,7 @@
                 "
                 src="{{ card_product.featured_media | image_url: width: 533 }}"
                 sizes="(min-width: {{ settings.page_width }}px) {{ settings.page_width | minus: 130 | divided_by: 4 }}px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)"
-                alt="{{ card_product.featured_media.alt | escape }}"
+                alt="{{ _card_alt | escape }}"
                 class="motion-reduce"
                 {% unless lazy_load == false %}
                   loading="lazy"
@@ -97,7 +112,7 @@
                   "
                   src="{{ card_product.media[1] | image_url: width: 533 }}"
                   sizes="(min-width: {{ settings.page_width }}px) {{ settings.page_width | minus: 130 | divided_by: 4 }}px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)"
-                  alt="{{ card_product.media[1].alt | escape }}"
+                  alt="{{ _card_alt | escape }}"
                   class="motion-reduce"
                   loading="lazy"
                   width="{{ card_product.media[1].width }}"
@@ -189,6 +204,9 @@
             {%- endif -%}
 
             {% render 'price', product: card_product, price_class: '', show_compare_at_price: true %}
+
+            {%- comment -%} 6JOHAN Phase 2: 寸法の1行（クリック前に大きさを判断できるように） {%- endcomment -%}
+            {%- render '6johan-card-size', product: card_product -%}
 
             {%- comment -%} 6JOHAN: カラー数ドットとレビュー星の枠（Phase 1） {%- endcomment -%}
             {%- render '6johan-card-meta', product: card_product -%}
