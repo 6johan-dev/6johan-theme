@@ -14,19 +14,19 @@
 
   case collection.handle
     when 'collections-chairs'
-      assign lead_text = 'ラタンチェア・ラタン椅子・ベンチを45点。在庫品は最短7日、受注生産は約2〜3ヶ月です。'
+      assign lead_text = 'ラタンチェア・ラタン椅子・ベンチを' | append: collection.all_products_count | append: '点。在庫品は最短7日、受注生産は約2〜3ヶ月です。'
     when 'collections-cabinets-sideboards'
-      assign lead_text = 'ローキャビネット・サイドボードを8点。高さ45〜80cm、奥行35〜45cmで選べます。'
+      assign lead_text = 'ローキャビネット・サイドボードを' | append: collection.all_products_count | append: '点。高さ45〜80cm、奥行35〜45cmで選べます。'
     when 'collections-desks-tables'
-      assign lead_text = 'ダイニングテーブル・デスク・丸テーブルを27点。天板のサイズと高さで選べます。'
+      assign lead_text = 'ダイニングテーブル・デスク・丸テーブルを' | append: collection.all_products_count | append: '点。天板のサイズと高さで選べます。'
     when 'collections-side-tables-low-tables'
-      assign lead_text = 'サイドテーブル・ローテーブルを23点。ソファ横は高さ45〜55cmが目安です。'
+      assign lead_text = 'サイドテーブル・ローテーブルを' | append: collection.all_products_count | append: '点。ソファ横は高さ45〜55cmが目安です。'
     when 'all'
-      assign lead_text = '6JOHANの全144点。チェア・テーブル・収納・ソファをサイズと予算から選べます。'
+      assign lead_text = '6JOHANの全' | append: collection.all_products_count | append: '点。チェア・テーブル・収納・ソファをサイズと予算から選べます。'
     when 'ソファ'
-      assign lead_text = 'ソファを5点。2人掛けからゆったり3人掛けまで、設置寸法で選べます。'
+      assign lead_text = 'ソファを' | append: collection.all_products_count | append: '点。2人掛けからゆったり3人掛けまで、設置寸法で選べます。'
     when 'collections-shelves-bookshelves'
-      assign lead_text = 'シェルフ・本棚を6点。壁面に沿わせる幅と、本の高さに合う棚板で選べます。'
+      assign lead_text = 'シェルフ・本棚を' | append: collection.all_products_count | append: '点。壁面に沿わせる幅と、本の高さに合う棚板で選べます。'
     else
       if collection.description != blank
         assign lead_text = collection.description | strip_html | strip_newlines | truncate: 64
