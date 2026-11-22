@@ -69,10 +69,7 @@
   <div class="j6lead__meta">
     <span>{{ collection.all_products_count }}点</span>
     {%- if price_min > 0 -%}
-      <span>
-        {{ price_min | money }}
-        {%- if scan_all and price_max > price_min %}〜{{ price_max | money }}{% else %}〜{% endif -%}
-      </span>
+      <span>{{ price_min | money }}{% if scan_all and price_max > price_min %}〜{{ price_max | money }}{% else %}〜{% endif %}</span>
     {%- endif -%}
     {%- if scan_all and instock_count > 0 -%}
       <span>うち即納{{ instock_count }}点</span>
