@@ -116,6 +116,17 @@
     .blp-tier__rate { font-size: 40px; }
   }
 
+  /* Warranty */
+  .blp-warranty-section { border-top: 1px solid var(--6j-sand, #E8E5DC); }
+  .blp-warranty { max-width: 960px; margin: 0 auto; }
+  .blp-warranty__lead { font-size: 15px; line-height: 1.9; color: var(--6j-earth, #6B6B5E); text-align: center; max-width: 640px; margin: 0 auto 32px; text-wrap: balance; }
+  .blp-warranty__grid { display: grid; gap: 16px; }
+  .blp-warranty__card { background: #fff; border: 1px solid var(--6j-sand, #E8E5DC); border-radius: 4px; padding: 22px 20px; }
+  .blp-warranty__label { font-size: 12px; letter-spacing: .08em; color: #6B5B4F; margin-bottom: 8px; }
+  .blp-warranty__text { font-size: 14px; line-height: 1.8; color: var(--6j-charcoal, #2C2C24); }
+  .blp-warranty__note { font-size: 12px; line-height: 1.8; color: var(--6j-stone, #8A8A7A); margin: 24px auto 0; max-width: 720px; }
+  @media (min-width: 750px) { .blp-warranty__grid { grid-template-columns: repeat(3, 1fr); gap: 20px; } }
+
   /* Flow */
   .blp-flow { display: grid; gap: 24px; list-style: none; margin: 0; padding: 0; counter-reset: step; max-width: 960px; margin: 0 auto; }
   .blp-flow__item { position: relative; padding-left: 52px; }
@@ -285,6 +296,34 @@
       </div>
     </section>
   {%- endif -%}
+
+  {%- comment -%} ========== WARRANTY ========== {%- endcomment -%}
+  {%- assign warranty_blocks = section.blocks | where: 'type', 'warranty' -%}
+  {%- for b in warranty_blocks -%}
+    <section class="blp__section blp-warranty-section" id="blp-warranty" {{ b.shopify_attributes }}>
+      <div class="blp__wrap">
+        <h2 class="blp__h2">{{ b.settings.title }}</h2>
+        {%- if b.settings.lead != blank -%}<p class="blp-warranty__lead">{{ b.settings.lead | newline_to_br }}</p>{%- endif -%}
+        <div class="blp-warranty">
+          <div class="blp-warranty__grid">
+            {%- for i in (1..3) -%}
+              {%- assign w_title_key = 'item' | append: i | append: '_title' -%}
+              {%- assign w_text_key = 'item' | append: i | append: '_text' -%}
+              {%- assign w_title = b.settings[w_title_key] -%}
+              {%- assign w_text = b.settings[w_text_key] -%}
+              {%- if w_title != blank or w_text != blank -%}
+                <div class="blp-warranty__card">
+                  {%- if w_title != blank -%}<div class="blp-warranty__label">{{ w_title }}</div>{%- endif -%}
+                  {%- if w_text != blank -%}<div class="blp-warranty__text">{{ w_text | newline_to_br }}</div>{%- endif -%}
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+          {%- if b.settings.note != blank -%}<p class="blp-warranty__note">{{ b.settings.note | newline_to_br }}</p>{%- endif -%}
+        </div>
+      </div>
+    </section>
+  {%- endfor -%}
 
   {%- comment -%} ========== FLOW ========== {%- endcomment -%}
   {%- assign flow_blocks = section.blocks | where: 'type', 'flow' -%}
@@ -530,6 +569,20 @@
       "settings": [
         { "type": "text", "id": "title", "label": "見出し", "default": "お問い合わせ" },
         { "type": "textarea", "id": "text", "label": "本文", "default": "フォームから案件内容をお知らせください。" }
+      ]
+    },
+    {
+      "type": "warranty", "name": "製品保証", "limit": 1,
+      "settings": [
+        { "type": "text", "id": "title", "label": "見出し", "default": "納品後1年間の製品保証" },
+        { "type": "textarea", "id": "lead", "label": "リード文", "default": "ホテル・店舗・サロン・オフィスなど、法人・商業施設様のご導入には、納品日より1年間の製品保証をお付けしています。" },
+        { "type": "text", "id": "item1_title", "label": "項目1 見出し", "default": "保証期間" },
+        { "type": "textarea", "id": "item1_text", "label": "項目1 本文", "default": "納品日より1年間" },
+        { "type": "text", "id": "item2_title", "label": "項目2 見出し", "default": "保証対象" },
+        { "type": "textarea", "id": "item2_text", "label": "項目2 本文", "default": "通常のご使用における構造上の不具合・破損（フレームや接合部のガタつき・破損など）は、無償で交換または修理いたします。" },
+        { "type": "text", "id": "item3_title", "label": "項目3 見出し", "default": "保証対象外" },
+        { "type": "textarea", "id": "item3_text", "label": "項目3 本文", "default": "天然素材（ラタン・無垢材）特有の節・木目・色味の違い、ささくれ、経年変化\n過度な荷重や衝撃、本来の用途以外でのご使用による破損\n屋外や水濡れ等、屋内の通常使用環境以外での劣化・破損" },
+        { "type": "textarea", "id": "note", "label": "注記", "default": "※ 個人のお客様は、商品到着後30日以内の返品・交換（理由を問わず／不良品・誤配送は当社送料負担）で対応いたします。法人様の1年保証は、この返品・交換とは別に適用されます。" }
       ]
     },
     {
