@@ -88,9 +88,24 @@
             "url": "shopify://blogs/ニュース/summer-switch-さらりと過ごす-夏の家具",
             "overlay_light": false
           }
+        },
+        "banner_lN3wS5": {
+          "type": "banner",
+          "settings": {
+            "image": "shopify://shop_images/banner_top_pc_1600x800.png",
+            "image_mobile": "shopify://shop_images/banner_top_sp_1080x1080.png",
+            "hide_overlay": true,
+            "label": "",
+            "title": "",
+            "subtitle": "",
+            "cta_text": "詳しく見る",
+            "url": "shopify://blogs/information/035",
+            "overlay_light": false
+          }
         }
       },
       "block_order": [
+        "banner_lN3wS5",
         "banner_mykBrA",
         "banner_eeFgaB",
         "banner_R6XptY",
