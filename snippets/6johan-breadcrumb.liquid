@@ -50,8 +50,10 @@
       </li>
 
     {%- elsif template contains 'page' -%}
+      {%- assign j6_crumb_page = page.title -%}
+      {%- if page.handle == 'guide' -%}{%- assign j6_crumb_page = '家具の買い方ガイド' -%}{%- endif -%}
       <li class="sixj-breadcrumb__item sixj-breadcrumb__current" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-        <span itemprop="name">{{ page.title }}</span>
+        <span itemprop="name">{{ j6_crumb_page }}</span>
         <meta itemprop="position" content="2" />
       </li>
 
