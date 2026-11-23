@@ -5,7 +5,8 @@
   記事ハンドルごとに同じ文言をここへ定義している。本文のQ&Aを変更したらここも更新する。
   出力は sections/6johan-article-b.liquid の Article 構造化データの直後。
 {% endcomment %}
-{%- case article.handle -%}
+{%- assign faq_art_handle = article.handle | split: '/' | last -%}
+{%- case faq_art_handle -%}
 {%- when 'dining-table-guide' -%}
 <script type="application/ld+json">
 {
