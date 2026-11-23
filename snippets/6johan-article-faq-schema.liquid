@@ -1,0 +1,507 @@
+{% comment %}
+  6JOHAN Article FAQ — FAQPage 構造化データ（AIO対策① / 2026-11-23）
+  記事本文の「よくある質問」（.jhb-faq）と同じQ&AをJSON-LDで出力する。
+  本文のQ&Aは記事側（Shopify管理画面）にあり、テーマからは読み取れないため、
+  記事ハンドルごとに同じ文言をここへ定義している。本文のQ&Aを変更したらここも更新する。
+  出力は sections/6johan-article-b.liquid の Article 構造化データの直後。
+{% endcomment %}
+{%- case article.handle -%}
+{%- when 'dining-table-guide' -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "url": {{ request.origin | append: article.url | json }},
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "2人暮らしなら直径60cmと80cm、どちらがいいですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "2人で向かい合って食事をするなら直径80cmをおすすめします。皿2枚と取り皿1枚を並べると、直径60cmでは端がはみ出します。直径80cmなら中央に取り皿を置いても余裕があり、来客時に3人目が座ることもできます。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "4人で直径130cmの丸テーブルは窮屈ですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "直径130cmの円周は約408cmなので、4人ならひとりあたり約102cm、6人でも約68cmの幅が取れます。4人では十分ゆったり、6人でも並んで座れます。ただし中央の取り皿までは手が届きにくくなるため、取り皿は各自の前に置くか、回転台を使うと取りやすくなります。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "天板高75cmに座面高43cmの椅子は合いますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "差が32cmで、目安の28〜32cmに収まる組み合わせです。肘を天板に自然に置けて、食事のときに肩が上がりません。座面高45cmの椅子なら差は30cm。座面高が40cmを下回ると、天板が高く感じて前かがみになりやすくなります。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "受注生産の商品はなぜ2〜3ヶ月かかるのですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "ご注文をいただいてから天板の加工と脚の組み立てを行うためです。在庫を持つと品質が落ちる天然木の商品は、受注生産でお作りしています。在庫がある商品は最短7日で発送します。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "組み立ては必要ですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "商品によって異なります。脚の取り付けが必要なモデルは、付属の工具で15〜20分ほどです。同梱の説明書に手順を記載しています。不安な場合はご注文前後にチャットでご相談ください。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "天板に傷がついたときの手入れは？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "日常は乾いた柔らかい布で乾拭きしてください。水拭きする場合は固く絞った布で軽く拭き、すぐに乾拭きします。無垢材は半年に一度ほど家具用オイルで栄養を補うと、艶と色が長持ちします。熱い鍋はコースターを敷いてください。"
+      }
+    }
+  ]
+}
+</script>
+{%- when 'leather-lounge-chair-guide' -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "url": {{ request.origin | append: article.url | json }},
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "フェイクレザーは安っぽく見えませんか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "最近のフェイクレザーは質感が向上しており、均一でマットな表情はモダンな空間によく合います。本革のような経年変化はありませんが、色あせしにくく、手入れも簡単です。質感の違いは実際に触れると分かりやすいので、チャットでご相談ください。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "ソファと同じ色のレザーチェアを選べますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "当店のレザーチェアはホワイト・ブラウン・ブラックが中心です。ソファと完全に同じ色を揃えるより、1〜2段階濃い色を選ぶと、並べたときに奥行きが出てまとまりやすくなります。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "座面高37cmは低すぎませんか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "低めの設計ですが、背もたれが67cmの高さまであり、もたれると身体が包まれます。立ち座りが多い場所ではなく、読書やテレビなど長く座る場所に向いています。膝や腰に不安がある場合は、座面高44〜45cmのモデルが立ち座りしやすいです。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "片持ち（カンチレバー）は倒れませんか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "体重をかけると後方が沈む構造ですが、接地面が広く設計されているため通常の使用で倒れることはありません。椅子の後方に人が通る動線を作らない、接地面にフェルトを貼るなどで、より安定して使えます。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "届くまでどれくらいかかりますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "在庫品はご注文から7日以内に発送します。受注生産の場合はお届けまで約2〜3ヶ月です。商品ごとに区分が異なるため、最新の状況は各商品ページでご確認ください。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "送料はいくらですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "送料はお届け先の都道府県と梱包サイズで決まります。商品ページで都道府県を選ぶと、送料込みの合計金額が表示されます。2点以上のご購入で商品代金から5%OFFが自動適用されます。"
+      }
+    }
+  ]
+}
+</script>
+{%- when 'low-cabinet-tvboard-guide' -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "url": {{ request.origin | append: article.url | json }},
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "テレビボードの高さは何cmがいいですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "45〜53cmが目安です。ソファに座ったときの目線は100〜110cmで、画面の中心がそこに来るか少し下になる高さが疲れにくいといわれます。55V型なら台の高さ45〜53cmで、画面中心はおおむね80〜95cmに収まります。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "奥行35cmでレコーダーは載りますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "薄型のBlu-rayレコーダーやゲーム機は奥行30cm前後なので、背面に配線の余白を5cm見込めば収まります。旧型のAVアンプなど奥行のある機器を使う場合は、奥行40cmのアーチウッドローボードやヴィンテージモダンサイドボードが安心です。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "引き戸とスライド扉は何が違いますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "どちらも手前に開かない扉で、収納の前を人が通る場所に向いています。当店ではナチュラルローキャビネットをスライド扉、ヴィンテージウッドアプリアンスサイドボードを左右に滑る引き戸として表記しています。観音開きのような開閉スペースが要らないのが利点です。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "配線は隠せますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "アーチウッドローボードは背面に配線孔があり、AV機器のコードを裏に回せます。ほかのモデルは背面が塞がっているため、壁と収納のあいだに配線を落とすか、配線カバーを使ってください。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "受注生産の商品は、届くまでどのくらいかかりますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "ご注文から約2〜3ヶ月です。チェスト2台（ナチュラルブラックハンドルチェスト ミディアム・ナチュラルテクスチャーチェスト）は在庫があり、最短7日で発送します。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "耐荷重はどのくらいですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "商品ごとに異なるため、ご使用のテレビの重量とあわせてチャットでご相談ください。設置面の水平と、脚の調整で安定させると、扉の開閉も滑らかになります。"
+      }
+    }
+  ]
+}
+</script>
+{%- when 'low-table-side-table-guide' -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "url": {{ request.origin | append: article.url | json }},
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "ソファの座面高が分かりません。どう測ればいいですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "座面のクッションが沈まない位置に定規を当て、床から座面までの高さを測ります。一般的なソファは40〜43cmです。測った高さから2〜4cm引いた数字が、ローテーブルの天板高の目安になります。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "ローテーブルとサイドテーブル、両方必要ですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "ソファで食事や作業をするならローテーブル、飲み物やスマホをすぐ置きたいならサイドテーブルが便利です。1台で済ませるなら、天板が広く高さ50cm前後のサイド寄りのテーブルを選ぶと兼用できます。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "ガラス天板は子どもがいても大丈夫ですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "当店のガラス天板は強化ガラスを使用しています。角に衝撃が集中しないよう、テーブルの角をカバーするか、ラグの上に置くと安心です。ひびが入った場合は使用を中止し、交換をご相談ください。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "組み立ては必要ですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "商品によって異なります。脚の取り付けが必要なモデルは、付属の工具で15〜20分ほどです。詳しい手順は商品ページと同梱の説明書に記載しています。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "届くまでどれくらいかかりますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "在庫のある商品はご注文から7日以内に発送します。受注生産となる場合はお届けまで約2〜3ヶ月です。最新の状況は各商品ページでご確認ください。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "送料はいくらですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "送料はお届け先の都道府県と梱包サイズで決まります。商品ページで都道府県を選ぶと、送料込みの合計金額が表示されます。2点以上のご購入で商品代金から5%OFFが自動適用されます。"
+      }
+    }
+  ]
+}
+</script>
+{%- when 'rattan-bench-guide' -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "url": {{ request.origin | append: article.url | json }},
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "2人掛けと3人掛け、どちらを選べばいいですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "毎日座る場所なら、1人あたり座面幅60cm以上あると窮屈に感じません。2人掛けは幅120cm前後、3人でゆったり座るなら幅135cm以上が目安です。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "玄関に置けますか？ 奥行はどのくらい必要ですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "奥行38〜40cmのモデルなら、一般的な玄関でも扉の開閉を妨げにくいサイズです。設置前に、扉を開けた状態の軌道と靴箱の前の通り幅を測ってください。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "色は写真と同じですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "天然ラタン・無垢材は個体差があり、光の当たり方でも表情が変わります。各カラーの写真を商品ページに掲載していますので、あわせてご確認ください。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "届くまでどれくらいかかりますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "在庫品は最短7日で発送します。受注生産品はお届けまで約2〜3ヶ月です。最新の納期は各商品ページの表示をご確認ください。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "送料はいくらですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "送料はお届け先の都道府県と梱包サイズで決まります。商品ページで都道府県を選ぶと、送料込みの合計金額が表示されます。"
+      }
+    }
+  ]
+}
+</script>
+{%- when 'rattan-dining-chair-guide' -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "url": {{ request.origin | append: article.url | json }},
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "天板高75cmのテーブルに合う座面高は？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "座面高45cm前後が目安です。天板75cmとの差が30cmになり、肘をテーブルに置いても肩が上がりません。43〜46cmの範囲なら、座面クッションの有無で微調整できます。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "アームありの椅子はテーブルの下に入りますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "座面と脚は入りますが、アームが天板の高さに当たるため奥まで寄せられないことがあります。4脚を食卓にきっちり寄せたい場合はアームなしを選ぶか、アームありは両端に配置してください。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "カンチレバーは安定しますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "後ろ脚がない構造のため、体重をかけると後方が少し沈みます。これはアイアンのしなりを活かした設計で、座り心地の一部です。接地面にフェルトを貼ると床を傷めにくく、安定感も増します。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "籐張りは夏に蒸れませんか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "ラタンは編み目のすき間から空気が抜けるため、板座や合皮座面より蒸れにくい素材です。冬は座面にクッションを足すと、通気性を保ったまま暖かく使えます。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "届くまでどれくらいかかりますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "在庫品はご注文から7日以内に発送します。受注生産の場合はお届けまで約2〜3ヶ月、シルバーフレームラタンチェアが受注生産となった場合は約4ヶ月です。カラーによって納期が異なるため、最新の状況は各商品ページでご確認ください。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "送料はいくらですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "送料はお届け先の都道府県と梱包サイズで決まります。商品ページで都道府県を選ぶと、送料込みの合計金額が表示されます。2点以上のご購入で商品代金から5%OFFが自動適用されます。"
+      }
+    }
+  ]
+}
+</script>
+{%- when 'rattan-sideboard-guide' -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "url": {{ request.origin | append: article.url | json }},
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "奥行36cmだと、収納する物が限られませんか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "4ファイル（奥行30cm）やレコード（31cm）、文庫本は余裕を持って収まります。奥行45cm前後の大型家電や鍋をまとめて収める場合は、奥行45.5cmのラタンドッキングサイドボードが向いています。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "テレビ台として使えますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "天板にテレビを置く場合は、画面サイズとスタンドの設置面積を確認し、転倒防止策を併せてご検討ください。配線は背面の隙間を通すと壁付けでも収まりやすくなります。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "木製戸とラタン戸、どちらがおすすめですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "中身を隠してすっきり見せたいなら木製戸、通気性と軽やかさを重視するならラタン戸です。リビングのメイン収納には木製戸、ディスプレイ収納にはラタン戸が向いています。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "届くまでどれくらいかかりますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "ラタンドッキングサイドボードは在庫品で最短7日発送、ベーシックナチュラルサイドボードは受注生産で約2〜3ヶ月です。最新の納期は各商品ページの表示をご確認ください。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "送料はいくらですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "送料はお届け先の都道府県と梱包サイズで決まります。商品ページで都道府県を選ぶと、送料込みの合計金額が表示されます。"
+      }
+    }
+  ]
+}
+</script>
+{%- when 'sofa-guide' -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "url": {{ request.origin | append: article.url | json }},
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "2人掛けと3人掛けは、どう選べばいいですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "普段座る人数で選ぶのが基本です。2人なら幅127〜160cm、3人なら幅210cm。来客時だけ3人になるなら、2人掛けにオットマンやチェアを足すほうが、普段のリビングが広く使えます。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "ブロックソファは2台並べて2人掛けにできますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "できます。幅85cmを2台で170cm、幅105cmを2台で210cmになり、2人掛けやワイドソファとして使えます。L字に組むこともでき、引っ越しや家族構成の変化に合わせてレイアウトを変えられます。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "座面高40cmは低すぎませんか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "床座に近い高さなので、脚を伸ばしてくつろぐには向いていますが、立ち上がるときは膝に力が要ります。足腰に不安がある場合は、座面高43cmのナチュラルレザーソファや、ダイニングチェアに近い高さのソファを選ぶと楽です。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "マンションのエレベーターに3人掛けは入りますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "エレベーターの扉幅・かごの奥行・高さで決まります。幅210cmのソファは斜めにしても入らないことがあるため、内寸を測ってご注文前にチャットでご相談ください。搬入経路が分かれば、入るかどうかを確認できます。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "受注生産だと、届くまでどのくらいかかりますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "ご注文から約2〜3ヶ月です。ソファはご注文後に張地の裁断と組み立てを行うため、この期間をいただいています。ブロックソファは在庫があり、最短7日で発送します。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "組み立ては必要ですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "脚の取り付けが必要なモデルがあります。付属の工具で15〜20分ほどで、同梱の説明書に手順を記載しています。ブロックソファは脚の取り付けのみです。"
+      }
+    }
+  ]
+}
+</script>
+{%- when 'wooden-lounge-chair-guide' -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "url": {{ request.origin | append: article.url | json }},
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "ソファと並べても高さは合いますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "ソファの座面高は40〜42cmが一般的です。ラウンジチェアの座面高36〜40cmなら、並べたときに極端な段差が出ず、会話もしやすくなります。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "ペーパーコードは座り心地が硬くないですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "張りのある編み込みのため、最初はやや硬めに感じます。使い込むうちに身体に沿うように馴染みます。座面にクッションを足すと、より柔らかく使えます。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "リビングに1脚だけ置いても浮きませんか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "無垢材とラタン・ペーパーコードの自然素材は、既存の家具と馴染みやすい色味です。ソファやテーブルと同じ系統の木色を選ぶとまとまりやすくなります。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "届くまでどれくらいかかりますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "在庫のあるカラーは最短7日で発送します。受注生産カラーはお届けまで約2〜3ヶ月です。カラーによって納期が異なるため、最新の状況は各商品ページの表示をご確認ください。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "送料はいくらですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "送料はお届け先の都道府県と梱包サイズで決まります。商品ページで都道府県を選ぶと、送料込みの合計金額が表示されます。"
+      }
+    }
+  ]
+}
+</script>
+{%- endcase -%}

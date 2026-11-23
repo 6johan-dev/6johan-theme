@@ -125,6 +125,10 @@
         "title": ""
       }
     },
+    "6johan_product_faq": {
+      "type": "6johan-product-faq",
+      "settings": {}
+    },
     "6johan_product_guides_gdA1k7": {
       "type": "6johan-product-guides",
       "name": "選び方ガイド（記事）",
@@ -221,6 +225,7 @@
   "order": [
     "main",
     "6johan_product_story",
+    "6johan_product_faq",
     "6johan_set_coordinate",
     "6johan_product_coordinate_UiNUH3",
     "related-products",
