@@ -249,7 +249,7 @@
         {%- for item in faq_items -%}
           {%- assign qa = item | split: '||' -%}
           {%- if qa.size == 2 -%}
-            <details class="j6faq__item">
+            <details class="j6faq__item"{% if forloop.index == 1 %} open{% endif %}>
               <summary>
                 <span class="j6faq__q">Q</span>
                 <span class="j6faq__qtext">{{ qa[0] | strip }}</span>
@@ -261,7 +261,7 @@
         {%- endfor -%}
       </div>
 
-      <p class="j6faq__note">※ サイズ・素材は2026年11月時点の仕様です。価格・在庫・最新の納期は商品ページ上部の表示をご確認ください。</p>
+      <p class="j6faq__note">※ サイズ・素材は{{ 'now' | date: '%Y年%-m月' }}時点の仕様です。価格・在庫・最新の納期は商品ページ上部の表示をご確認ください。</p>
     </div>
   </section>
 
