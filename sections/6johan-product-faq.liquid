@@ -18,6 +18,7 @@
 
 {%- capture j6faq_json -%}{% render '6johan-product-faq-data' %}{%- endcapture -%}
 <!--J6DBG raw={{ j6faq_json.size }} strip={{ j6faq_json | strip | size }}-->
+<!--J6DBG inline={{ '{"a":1,"b":{"c":2}}' | parse_json | size }} file={%- capture t3 -%}{% render 'j6dbg-data' %}{%- endcapture -%}{{ t3 | strip | parse_json | size }} f4={%- assign h4 = j6faq_json | strip | parse_json -%}{{ h4.first.first }}-->
 {%- assign j6faq_all = j6faq_json | strip | parse_json -%}
 <!--J6DBG parsed={{ j6faq_all.size }} handle={{ product.handle }} item={{ j6faq_all[product.handle].size }} lead={{ j6faq_all[product.handle].lead | size }}-->
 {%- assign faq = j6faq_all[product.handle] -%}
