@@ -167,6 +167,14 @@ p, li, td, th, label, input, select, textarea {
   font-size: clamp(22px, 4vw, 30px);
 }
 
+/* 商品タイトル（SEO用H1含む）の折り返し: 語中で切らず、スペース区切りで改行する */
+.product__title > h1,
+.product__title > a > h2 {
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+  line-break: strict;
+}
+
 /* Product price */
 .product__info-container .price {
   font-size: 22px;
