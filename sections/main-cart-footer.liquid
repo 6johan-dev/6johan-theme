@@ -184,46 +184,24 @@
                 {%- endif -%}
               </div>
             {%- else -%}
-              {%- comment -%} 6JOHAN 注文同意チェックボックス（お届け時期＋ショッピングガイドの同意を1本化） {%- endcomment -%}
-              <div class="sixj-cart-agree" style="margin-bottom: 16px; font-size: 13px; color: #2C2C24; line-height: 1.6;">
-                <p class="sixj-cart-agree__hint" style="margin: 0 0 8px; font-size: 12px; color: #6B6B5E; line-height: 1.6;">※ 下の同意チェックを入れると、購入手続きにお進みいただけます。</p>
-                <label style="display: flex; align-items: flex-start; gap: 8px; cursor: pointer; margin-bottom: 10px;">
-                  <input type="checkbox" id="sixj-agree-guide" style="margin-top: 3px; width: 16px; height: 16px; accent-color: #6B5B4F; flex-shrink: 0;">
-                  <span>お届け時期（商品ページ記載）と<a href="/pages/guide" target="_blank" style="color: #6B5B4F; text-decoration: underline;">ショッピングガイド</a>に同意して注文する</span>
-                </label>
-              </div>
-
-              <script>
-              (function() {
-                function init() {
-                  var guideBox = document.getElementById('sixj-agree-guide');
-                  var checkoutBtn = document.getElementById('checkout');
-                  var dynamicBtns = document.querySelector('.cart__dynamic-checkout-buttons');
-
-                  function updateCheckout() {
-                    var ok = !!(guideBox && guideBox.checked);
-                    if (checkoutBtn) {
-                      checkoutBtn.disabled = !ok;
-                      checkoutBtn.style.opacity = ok ? '1' : '0.4';
-                      checkoutBtn.style.pointerEvents = ok ? 'auto' : 'none';
-                    }
-                    if (dynamicBtns) {
-                      dynamicBtns.style.opacity = ok ? '1' : '0.4';
-                      dynamicBtns.style.pointerEvents = ok ? 'auto' : 'none';
-                    }
-                  }
-
-                  if (guideBox) guideBox.addEventListener('change', updateCheckout);
-                  updateCheckout();
-                }
-
-                if (document.readyState === 'loading') {
-                  document.addEventListener('DOMContentLoaded', init);
-                } else {
-                  init();
-                }
-              })();
-              </script>
+              {%- comment -%}
+                6JOHAN 購入前のご案内（2026-11-23）
+                同意チェックボックスは廃止し、CTA押下をもって同意とみなす注意書きに変更。
+                ボタンはカートが空のときだけ無効（Dawn標準の挙動）。
+              {%- endcomment -%}
+              <p
+                class="sixj-cart-agree"
+                style="margin: 0 0 12px; font-size: 12px; color: #6B6B5E; line-height: 1.7;"
+              >
+                「購入手続きに進む」を押すことで、<a
+                  href="/pages/guide#leadtime"
+                  target="_blank"
+                  style="color: #6B5B4F; text-decoration: underline;"
+                  >お届け時期</a
+                >と<a href="/pages/guide" target="_blank" style="color: #6B5B4F; text-decoration: underline;"
+                  >ショッピングガイド</a
+                >（送料・返品について）に同意したものとみなします。
+              </p>
 
               <div class="cart__ctas" {{ block.shopify_attributes }}>
                 <button
@@ -231,7 +209,7 @@
                   id="checkout"
                   class="cart__checkout-button button"
                   name="checkout"
-                  disabled
+                  {% if cart == empty %}disabled{% endif %}
                   form="cart"
                 >
                   {{ 'sections.cart.checkout' | t }}
@@ -239,7 +217,7 @@
               </div>
 
               {%- if additional_checkout_buttons -%}
-                <div class="cart__dynamic-checkout-buttons additional-checkout-buttons" style="opacity: 0.4; pointer-events: none;">
+                <div class="cart__dynamic-checkout-buttons additional-checkout-buttons">
                   {{ content_for_additional_checkout_buttons }}
                 </div>
               {%- endif -%}
