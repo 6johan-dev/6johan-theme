@@ -1,62 +1,26 @@
 {% comment %}
   6JOHAN Product FAQ — 「選び方＋よくある質問」＋ FAQPage 構造化データ
-  2026-11-23 / AIO対策①
+  2026-11-23 / AIO対策①（アクセス上位20商品へ横展開）
 
   目的:
     AI検索（AI Overviews・ChatGPT・Perplexity等）がそのまま引用できるよう、
     商品ページに「結論→スペック→1問1答」を1ブロックで用意する。
 
   データ:
-    商品ハンドルごとに、実際の商品スペック（サイズ・素材・納期）と
-    6JOHANの実データ（送料・返品・お手入れ）だけを記載する。
+    snippets/6johan-product-faq-data.liquid（素のJSON）にハンドル別で定義。
+    21商品ぶんのサイズ・素材・納期・用途は各商品ページの実データのみ。
     該当ハンドル以外では何も出力しない（空枠を作らない）。
 
   使い方:
-    templates/product.json の order に "6johan_product_faq" を追加。
+    templates/product.json の order に "6johan_product_faq" を追加（設定済み）。
+    商品の追加・修正は data ファイルだけを編集すればよい。
 {% endcomment %}
 
-{%- liquid
-  assign faq_lead = ''
-  assign spec_size = ''
-  assign spec_material = ''
-  assign spec_use = ''
-  assign spec_delivery = ''
-  assign faq_raw = ''
+{%- capture j6faq_json -%}{% render '6johan-product-faq-data' %}{%- endcapture -%}
+{%- assign j6faq_all = j6faq_json | strip | parse_json -%}
+{%- assign faq = j6faq_all[product.handle] -%}
 
-  case product.handle
-    when 'texture-day-bed'
-      assign faq_lead = '幅76cm・長さ160cmのデイベッドです。6畳（約2.6×3.5m）の部屋でも長辺の壁に沿って置け、ソファ代わりにも昼寝用にも使えます。アッシュ材のフレームに人工カシミヤ生地を合わせた1台で、受注生産のためお届けまで約2〜3ヶ月です。'
-      assign spec_size = '幅76cm × 奥行（長さ）160cm × 高さ86cm／座面高40cm'
-      assign spec_material = 'フレーム：アッシュウッド／張地：人工カシミヤ生地'
-      assign spec_use = '2人がけのソファとしても、昼寝用のベッドとしても（1人あたり約80cm）'
-      assign spec_delivery = '受注生産：ご注文から約2〜3ヶ月（在庫品は最短7日発送）'
-      assign faq_raw = '何畳の部屋に合いますか？||幅76cm×長さ160cmです。6畳（約2.6×3.5m）の部屋なら、長辺3.5mの壁に沿って置いても約1.9mが残るため、リビングの窓際や壁面に沿わせて置けます。奥行が76cmなので、部屋の中央に置くより壁づけのほうが通路を確保しやすい家具です。@@何人で使えますか？||幅160cm・座面高40cmなので、2人が並んで座れます（1人あたり約80cm）。背もたれにもたれて座るソファとしても、横になって昼寝するベッドとしても使えるロータイプです。@@素材は何ですか？||フレームはアッシュウッド、張地は人工カシミヤ生地です。天然木のため木目や色味には個体差があり、使い込むほどに飴色へ変化します。人工カシミヤは本物のカシミヤに近い柔らかな質感を持ちながら、日常使いに耐える耐久性を備えた生地です。@@納期はどれくらいかかりますか？||この商品は受注生産のため、ご注文からお届けまで約2〜3ヶ月です。在庫品は最短7日で発送します。製作状況はチャットでいつでもお問い合わせいただけます。@@送料と配送方法を教えてください||送料は梱包サイズとお届け地域で決まり、商品ページで都道府県を選ぶと送料込みの合計が表示されます。佐川急便（大型家具便）で玄関先までお届けします（一部離島を除く全国）。沖縄県は個別にご案内します。@@返品はできますか？||商品到着から30日以内であれば、理由を問わず返品・返金できます。お客様都合の返品は返送料をご負担いただき、不良品・誤配送は当社負担で交換または返金します。@@お手入れ方法は？||日常は乾いた柔らかい布で拭いてください。人工カシミヤ生地は柔らかいブラシで毛並みを整え、汚れた場合は薄めた中性洗剤で軽く叩くように拭き取ります。アッシュ材のフレームは半年に一度、家具用オイルを馴染ませた布で拭き上げると乾燥を防げます。直射日光やエアコンの風が直接当たる場所は避け、湿度40〜60%を保ってください。'
-
-    when 'natural-low-cabinet'
-      assign faq_lead = '幅100cm・奥行35cm・高さ45cmのロータイプのキャビネットです。6畳のリビングでも壁面に沿って置け、テレビ台にもサイドボードにも使えます。パイン材の木目を活かした3色展開で、受注生産のためお届けまで約2〜3ヶ月です。'
-      assign spec_size = '幅100cm × 奥行35cm × 高さ45cm'
-      assign spec_material = 'ウッド（パイン材）／カラー：チェリー・ウォールナット・ナチュラル'
-      assign spec_use = 'テレビ台、サイドボード、シューズボックス代わりの収納に'
-      assign spec_delivery = '受注生産：ご注文から約2〜3ヶ月（在庫品は最短7日発送）'
-      assign faq_raw = '何畳の部屋に合いますか？||幅100cm×奥行35cm×高さ45cmです。6畳（約2.6×3.5m）の部屋でも長辺の壁に沿って置け、奥行が35cmと浅いため通路を圧迫しません。高さ45cmのローキャビネットは、ソファやローテーブルと同じ目線の高さでまとまりやすい家具です。@@テレビ台として使えますか？||高さ45cm・奥行35cmなので、テレビボードの高さの目安とされる45〜53cmに収まります。天板にテレビを置く場合は、画面サイズとスタンドの設置面積を確認し、転倒防止策も併せてご検討ください。耐荷重は商品ごとに異なるため、テレビの重量とあわせてチャットでご相談いただけます。@@何が収納できますか？||奥行35cmなので、A4ファイル（奥行約30cm）や文庫本、リモコン、ケーブル類の収納に向いています。天板はディスプレイスペースとしても使え、観葉植物やフォトフレームを置くと部屋の印象が変わります。@@カラーは選べますか？||チェリー・ウォールナット・ナチュラルの3色展開です。いずれも木目を活かした仕上げで、経年変化によって味わいが増します。@@素材は何ですか？||パイン材を使用しています。木目の美しさをそのまま活かしたデザインで、天然木のため色味や木目には個体差があります。@@納期はどれくらいかかりますか？||この商品は受注生産のため、ご注文からお届けまで約2〜3ヶ月です。在庫品は最短7日で発送します。カラーによって状況が変わる場合があるため、最新の納期は商品ページ上部の表示をご確認ください。@@送料と返品について教えてください||送料は梱包サイズとお届け地域で決まり、商品ページで都道府県を選ぶと合計金額が表示されます。佐川急便（大型家具便）で玄関先までお届けします（一部離島を除く全国、沖縄県は個別案内）。商品到着から30日以内は理由を問わず返品でき、お客様都合の返送料のみご負担いただきます。@@お手入れ方法は？||乾いた柔らかい布で拭き、水拭きする場合は固く絞った布で軽く拭いてすぐ乾拭きします。直射日光やエアコンの風が直接当たる場所を避け、湿度40〜60%を保つと木の反りを防げます。'
-
-    when 'simple-round-table'
-      assign faq_lead = '直径60・70・80cm、高さ74cmの丸テーブルです。1人なら直径60〜70cm、2人で向かい合うなら直径80cmが目安で、円形なので角度を選ばず椅子を置けます。天板はホワイトのMDF、脚はスチールで、在庫品は最短7日で発送します。'
-      assign spec_size = 'Small：直径60cm／Medium：直径70cm／Large：直径80cm（高さ74cm・天板厚2cm・ベース直径50cmは3サイズ共通）'
-      assign spec_material = '天板：MDF（ウッド板材）ホワイト／脚：スチール'
-      assign spec_use = '1人なら直径60〜70cm、2人で向かい合うなら直径80cm'
-      assign spec_delivery = '在庫品：最短7日で発送（サイズにより在庫状況が異なります）'
-      assign faq_raw = '何畳の部屋に合いますか？||直径60・70・80cm、高さ74cmです。円形なので角がなく、6畳（約2.6×3.5m）の部屋でも圧迫感が出にくい形です。1人で使うなら直径60〜70cm、2人で向かい合って食事をするなら直径80cmが目安です。@@椅子は何脚入りますか？||直径70cmで2脚、直径80cmなら3脚まで囲めます（1脚あたりの間隔は約80cm）。円形の天板は角度を選ばずに椅子を設置でき、壁際に置いても椅子を出し入れしやすいのが利点です。@@ダイニングチェアの高さは合いますか？||天板高は74cmです。座面高42〜45cmのチェアと組み合わせると、天板と座面の差が29〜32cmとなり、目安の28〜32cmに収まります。@@サイズと素材を教えてください||天板は直径60・70・80cmの3サイズ、高さ74cm・天板厚2cm・ベース直径50cmは3サイズ共通です。天板はホワイトのMDF（ウッド板材）、脚はスチール製です。@@納期はどれくらいかかりますか？||在庫があるサイズは最短7日で発送します。サイズによって在庫状況が異なるため、最新の状況は商品ページ上部の表示をご確認ください。@@送料と返品について教えてください||送料は梱包サイズとお届け地域で決まり、商品ページで都道府県を選ぶと送料込みの合計が表示されます。佐川急便（大型家具便）で玄関先までお届けします（一部離島を除く全国、沖縄県は個別案内）。商品到着から30日以内は理由を問わず返品でき、お客様都合の返送料のみご負担いただきます。@@お手入れ方法は？||乾いた柔らかい布で乾拭きしてください。水拭きする場合は固く絞った布で軽く拭き、すぐに乾拭きします。熱い鍋や湯呑みはコースターを敷き、直射日光やエアコンの風が直接当たる場所は避けてください。'
-  endcase
-
-  assign faq_items = faq_raw | split: '@@'
-  assign has_faq = false
-  if faq_lead != blank and faq_items.size > 0
-    assign has_faq = true
-  endif
--%}
-
-{%- if has_faq -%}
+{%- if faq != nil and faq.lead != blank -%}
   <style>
     .j6faq {
       background: #fff;
@@ -228,36 +192,26 @@
     <div class="j6faq__wrap">
       <span class="j6faq__label">Q &amp; A</span>
       <h2 class="j6faq__title" id="j6faq-title-{{ section.id }}">選び方とよくある質問</h2>
-      <p class="j6faq__conclusion">{{ faq_lead }}</p>
+      <p class="j6faq__conclusion">{{ faq.lead }}</p>
 
       <dl class="j6faq__specs">
-        {%- if spec_size != blank -%}
-          <div class="j6faq__spec"><dt>サイズ</dt><dd>{{ spec_size }}</dd></div>
-        {%- endif -%}
-        {%- if spec_material != blank -%}
-          <div class="j6faq__spec"><dt>素材</dt><dd>{{ spec_material }}</dd></div>
-        {%- endif -%}
-        {%- if spec_use != blank -%}
-          <div class="j6faq__spec"><dt>人数・用途</dt><dd>{{ spec_use }}</dd></div>
-        {%- endif -%}
-        {%- if spec_delivery != blank -%}
-          <div class="j6faq__spec"><dt>納期</dt><dd>{{ spec_delivery }}</dd></div>
-        {%- endif -%}
+        {%- for spec in faq.specs -%}
+          {%- if spec[1] != blank -%}
+            <div class="j6faq__spec"><dt>{{ spec[0] }}</dt><dd>{{ spec[1] }}</dd></div>
+          {%- endif -%}
+        {%- endfor -%}
       </dl>
 
       <div class="j6faq__list">
-        {%- for item in faq_items -%}
-          {%- assign qa = item | split: '||' -%}
-          {%- if qa.size == 2 -%}
-            <details class="j6faq__item"{% if forloop.index == 1 %} open{% endif %}>
-              <summary>
-                <span class="j6faq__q">Q</span>
-                <span class="j6faq__qtext">{{ qa[0] | strip }}</span>
-                <span class="j6faq__mark" aria-hidden="true"></span>
-              </summary>
-              <div class="j6faq__a"><p>{{ qa[1] | strip }}</p></div>
-            </details>
-          {%- endif -%}
+        {%- for qa in faq.qa -%}
+          <details class="j6faq__item">
+            <summary>
+              <span class="j6faq__q">Q</span>
+              <span class="j6faq__qtext">{{ qa[0] }}</span>
+              <span class="j6faq__mark" aria-hidden="true"></span>
+            </summary>
+            <div class="j6faq__a"><p>{{ qa[1] }}</p></div>
+          </details>
         {%- endfor -%}
       </div>
 
@@ -274,20 +228,17 @@
       "name": {{ product.title | append: ' の選び方とよくある質問' | json }},
       "mainEntity": [
         {%- assign printed = 0 -%}
-        {%- for item in faq_items -%}
-          {%- assign qa = item | split: '||' -%}
-          {%- if qa.size == 2 -%}
-            {%- if printed > 0 %},{% endif -%}
-            {
-              "@type": "Question",
-              "name": {{ qa[0] | strip | json }},
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": {{ qa[1] | strip | json }}
-              }
+        {%- for qa in faq.qa -%}
+          {%- if printed > 0 %},{% endif -%}
+          {
+            "@type": "Question",
+            "name": {{ qa[0] | json }},
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": {{ qa[1] | json }}
             }
-            {%- assign printed = printed | plus: 1 -%}
-          {%- endif -%}
+          }
+          {%- assign printed = printed | plus: 1 -%}
         {%- endfor -%}
       ]
     }
@@ -300,7 +251,7 @@
   "settings": [
     {
       "type": "paragraph",
-      "content": "商品ハンドル（texture-day-bed / natural-low-cabinet / simple-round-table）に応じて、選び方の結論・スペック・Q&A・FAQPage構造化データを出力します。データはセクションファイル内に定義しています。"
+      "content": "snippets/6johan-product-faq-data.liquid のハンドル別データに応じて、選び方の結論・スペック・Q&A・FAQPage構造化データを出力します。未登録の商品では何も表示しません。"
     }
   ],
   "presets": [
